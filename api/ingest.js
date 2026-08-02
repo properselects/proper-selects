@@ -84,37 +84,39 @@ async function ytSearch(channelId) {
 
 // Venue detection from title — routes sets to proper festival_id/city
 // Ordered by specificity (most specific patterns first)
+// vibe MUST be set on every route — this is the authoritative region source.
+// When a title match fires, the channel's default vibe is ignored entirely.
 const VENUE_ROUTES = [
-  { re: /EDC\s+Orlando/i,           festival_id: 'edc-orlando',         festival_name: 'EDC Orlando',           city: 'Orlando' },
-  { re: /EDC\s+Mexico/i,            festival_id: 'edc-mexico',          festival_name: 'EDC Mexico',            city: 'Mexico City' },
-  { re: /H(ï|i)\s+ibiza/i,          festival_id: 'hi-ibiza',            festival_name: 'Hï Ibiza',              city: 'Ibiza' },
-  { re: /Knockdown\s+Center/i,      festival_id: 'knockdown-nyc',       festival_name: 'Knockdown Center',      city: 'New York' },
-  { re: /ARC\s+(Chicago|Music)/i,   festival_id: 'arc-chicago',         festival_name: 'ARC Music Festival',    city: 'Chicago' },
-  { re: /LAROC/i,                   festival_id: 'laroc',               festival_name: 'Laroc Club',            city: 'Itupeva' },
-  { re: /Universo\s+Paralello/i,    festival_id: 'universo-paralello',  festival_name: 'Universo Paralello',    city: 'Bahia' },
-  { re: /Concourse\s+Project/i,     festival_id: 'concourse',           festival_name: 'The Concourse Project', city: 'Austin' },
-  { re: /Destino.*Ibiza|Ibiza.*Destino/i, festival_id: 'dc10',          festival_name: 'DC-10',                 city: 'Ibiza' },
-  { re: /TRIIIPLE/i,                 festival_id: 'triiple',      festival_name: 'TRIIIPLE Festival',     city: 'Valinhos' },
-  { re: /SO\s+TRACK\s+BOA/i,          festival_id: 'sotrackboa',   festival_name: 'SO TRACK BOA',          city: 'São Paulo' },
-  { re: /PARQUE\s+DO\s+POVO/i,        festival_id: 'parque-povo',  festival_name: 'Parque do Povo',        city: 'São Paulo' },
-  { re: /D-EDGE/i,                    festival_id: 'dblock',       festival_name: 'D-Edge',                city: 'São Paulo' },
-  { re: /@beatport\s+Live/i,        festival_id: 'beatport-live',       festival_name: 'Beatport Live',         city: 'Los Angeles' },
-  { re: /Motion\s+Festival.*Lima/i, festival_id: 'motion-lima',         festival_name: 'Motion Festival',       city: 'Lima' },
-  { re: /Re:frame/i,                festival_id: 'reframe-la',          festival_name: 'Re:frame LA',           city: 'Los Angeles' },
-  { re: /Selected\s+Sessions/i,     festival_id: 'selected-sessions',   festival_name: 'Selected Sessions',     city: 'Amsterdam' },
-  { re: /Monsoon/i,                 festival_id: 'monsoon',             festival_name: 'Monsoon',               city: 'Peru' },
-  { re: /Hellbent/i,                festival_id: 'hellbent-la',         festival_name: 'Hellbent',              city: 'Los Angeles' },
-  { re: /Superior\s+Ingredients/i,  festival_id: 'superior-ny',         festival_name: 'Superior Ingredients',  city: 'New York' },
-  { re: /Off\s+Week/i,              festival_id: 'off-week',            festival_name: 'Off Week',              city: 'Barcelona' },
-  { re: /(Sde\s+Boker|Dead\s+Sea|Hanokdim)/i, festival_id: 'tlv-desert', festival_name: 'Sde Boker Desert Sessions', city: 'Sde Boker' },
-  { re: /Glastonbury/i,             festival_id: 'glastonbury',         festival_name: 'Glastonbury Festival',  city: 'Glastonbury' },
-  { re: /Intercell/i,               festival_id: 'intercell',           festival_name: 'Intercell',             city: 'Rotterdam' },
-  { re: /Pacha\s+New\s+York|Pacha\s+NYC/i, festival_id: 'pacha-nyc',    festival_name: 'Pacha New York',        city: 'New York' },
+  { re: /EDC\s+Orlando/i,           festival_id: 'edc-orlando',         festival_name: 'EDC Orlando',                  city: 'Orlando',      vibe: 'americas' },
+  { re: /EDC\s+Mexico/i,            festival_id: 'edc-mexico',          festival_name: 'EDC Mexico',                   city: 'Mexico City',  vibe: 'americas' },
+  { re: /H(ï|i)\s+ibiza/i,          festival_id: 'hi-ibiza',            festival_name: 'Hï Ibiza',                     city: 'Ibiza',        vibe: 'europe' },
+  { re: /Knockdown\s+Center/i,      festival_id: 'knockdown-nyc',       festival_name: 'Knockdown Center',             city: 'New York',     vibe: 'americas' },
+  { re: /ARC\s+(Chicago|Music)/i,   festival_id: 'arc-chicago',         festival_name: 'ARC Music Festival',           city: 'Chicago',      vibe: 'americas' },
+  { re: /LAROC/i,                   festival_id: 'laroc',               festival_name: 'Laroc Club',                   city: 'Itupeva',      vibe: 'americas' },
+  { re: /Universo\s+Paralello/i,    festival_id: 'universo-paralello',  festival_name: 'Universo Paralello',           city: 'Bahia',        vibe: 'americas' },
+  { re: /Concourse\s+Project/i,     festival_id: 'concourse',           festival_name: 'The Concourse Project',        city: 'Austin',       vibe: 'americas' },
+  { re: /Destino.*Ibiza|Ibiza.*Destino/i, festival_id: 'dc10',          festival_name: 'DC-10',                        city: 'Ibiza',        vibe: 'europe' },
+  { re: /TRIIIPLE/i,                festival_id: 'triiple',             festival_name: 'TRIIIPLE Festival',            city: 'Valinhos',     vibe: 'americas' },
+  { re: /SO\s+TRACK\s+BOA/i,        festival_id: 'sotrackboa',          festival_name: 'SO TRACK BOA',                 city: 'São Paulo',    vibe: 'americas' },
+  { re: /PARQUE\s+DO\s+POVO/i,      festival_id: 'parque-povo',         festival_name: 'Parque do Povo',               city: 'São Paulo',    vibe: 'americas' },
+  { re: /D-EDGE/i,                  festival_id: 'dblock',              festival_name: 'D-Edge',                       city: 'São Paulo',    vibe: 'americas' },
+  { re: /@beatport\s+Live/i,        festival_id: 'beatport-live',       festival_name: 'Beatport Live',                city: 'Los Angeles',  vibe: 'americas' },
+  { re: /Motion\s+Festival.*Lima/i, festival_id: 'motion-lima',         festival_name: 'Motion Festival',              city: 'Lima',         vibe: 'americas' },
+  { re: /Re:frame/i,                festival_id: 'reframe-la',          festival_name: 'Re:frame LA',                  city: 'Los Angeles',  vibe: 'americas' },
+  { re: /Selected\s+Sessions/i,     festival_id: 'selected-sessions',   festival_name: 'Selected Sessions',            city: 'Amsterdam',    vibe: 'europe' },
+  { re: /Monsoon/i,                 festival_id: 'monsoon',             festival_name: 'Monsoon',                      city: 'Peru',         vibe: 'americas' },
+  { re: /Hellbent/i,                festival_id: 'hellbent-la',         festival_name: 'Hellbent',                     city: 'Los Angeles',  vibe: 'americas' },
+  { re: /Superior\s+Ingredients/i,  festival_id: 'superior-ny',         festival_name: 'Superior Ingredients',         city: 'New York',     vibe: 'americas' },
+  { re: /Off\s+Week/i,              festival_id: 'off-week',            festival_name: 'Off Week',                     city: 'Barcelona',    vibe: 'europe' },
+  { re: /(Sde\s+Boker|Dead\s+Sea|Hanokdim)/i, festival_id: 'tlv-desert', festival_name: 'Sde Boker Desert Sessions',  city: 'Sde Boker',    vibe: 'europe' },
+  { re: /Glastonbury/i,             festival_id: 'glastonbury',         festival_name: 'Glastonbury Festival',         city: 'Glastonbury',  vibe: 'europe' },
+  { re: /Intercell/i,               festival_id: 'intercell',           festival_name: 'Intercell',                    city: 'Rotterdam',    vibe: 'europe' },
+  { re: /Pacha\s+New\s+York|Pacha\s+NYC/i, festival_id: 'pacha-nyc',    festival_name: 'Pacha New York',              city: 'New York',     vibe: 'americas' },
 ];
 
 function routeByTitle(title, defaultCh) {
   for (const r of VENUE_ROUTES) {
-    if (r.re.test(title)) return { ...defaultCh, festival_id: r.festival_id, festival_name: r.festival_name, city: r.city };
+    if (r.re.test(title)) return { ...defaultCh, festival_id: r.festival_id, festival_name: r.festival_name, city: r.city, vibe: r.vibe };
   }
   return defaultCh;
 }
