@@ -23,7 +23,7 @@ const CHANNELS = [
   { channelId: 'UCT1Tq7SDg9kd4XgFjc47_4Q', festival_id: 'iii-points',   festival_name: 'III Points',            city: 'Miami',       vibe: 'americas' },
   { channelId: 'UCFXhLNpftXbCi9W58CJLrJQ', festival_id: 'crssd',         festival_name: 'CRSSD Festival',        city: 'San Diego',   vibe: 'americas' },
   { channelId: 'UCDZELNPHzTdvB9Nu5-s--4w', festival_id: 'exchange-la',   festival_name: 'Exchange LA',           city: 'Los Angeles', vibe: 'americas' },
-  { channelId: 'UC2iQ3op3Xar4TLX03oEmJYg', festival_id: 'seismic',       festival_name: 'Seismic Dance Event',   city: 'Austin',      vibe: 'americas' },
+  { channelId: 'UC2iQ3op3Xar4TLX03oEmJYg', festival_id: 'concourse',     festival_name: 'The Concourse Project', city: 'Austin',      vibe: 'americas' },
   { channelId: 'UCdIjpGkpXGw9WJ_5reM-5WQ', festival_id: 'academy-la',   festival_name: 'Academy LA',            city: 'Los Angeles', vibe: 'americas' },
 ];
 
@@ -123,7 +123,7 @@ const VENUE_ROUTES = [
   { re: /III\s+Points/i,                festival_id: 'iii-points',          festival_name: 'III Points',              city: 'Miami',        vibe: 'americas' },
   { re: /CRSSD/i,                       festival_id: 'crssd',               festival_name: 'CRSSD Festival',          city: 'San Diego',    vibe: 'americas' },
   { re: /Exchange\s+(LA|Los Angeles)/i, festival_id: 'exchange-la',         festival_name: 'Exchange LA',             city: 'Los Angeles',  vibe: 'americas' },
-  { re: /Seismic\s+Dance/i,             festival_id: 'seismic',             festival_name: 'Seismic Dance Event',     city: 'Austin',       vibe: 'americas' },
+  { re: /Seismic\s+Dance/i,             festival_id: 'concourse',           festival_name: 'The Concourse Project',   city: 'Austin',       vibe: 'americas' },
   { re: /Academy\s+(LA|Hollywood)/i,    festival_id: 'academy-la',          festival_name: 'Academy LA',              city: 'Los Angeles',  vibe: 'americas' },
 ];
 
