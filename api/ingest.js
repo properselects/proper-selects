@@ -47,6 +47,22 @@ const NON_MUSICAL_PATTERNS = [
   /\bepisode\s*\d+/i,          // Episode 12 etc — usually podcast/radio
   /\b\d{4}\s+\d{2}\s+\d{2}\s+\d{2}\s+\d{2}/,  // radio-style timestamps (2025 02 25 14 03)
   /\binjected\b/i,
+  // Non-house/techno genres
+  /\bhip\s*[- ]?hop\b/i,
+  /\bhiphop\b/i,
+  /\bneo\s+soul\b/i,
+  /\bnu\s*soul\b/i,
+  /\br\s*&\s*b\b/i,
+  /\brnb\b/i,
+  /\brap\s+(mix|set|dj)\b/i,
+  /\blo-?fi\b/i,
+  /\bchillhop\b/i,
+  /\btrap\s+(mix|set)\b/i,
+  /\bdrill\b/i,
+  /\bafrobeat(s)?\s+(mix|top|hit)/i,
+  /\breggaeton\b/i,
+  /\bdancehall\b/i,
+  /\bjazz\s+(mix|hits)/i,
 ];
 
 function isNonMusicalContent(title) {
