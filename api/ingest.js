@@ -82,6 +82,38 @@ async function ytSearch(channelId) {
   return (d.items||[]).map(i => ({ video_id: i.id.videoId, title: i.snippet.title, published_at: i.snippet.publishedAt }));
 }
 
+// Venue detection from title — routes sets to proper festival_id/city
+// Ordered by specificity (most specific patterns first)
+const VENUE_ROUTES = [
+  { re: /EDC\s+Orlando/i,           festival_id: 'edc-orlando',         festival_name: 'EDC Orlando',           city: 'Orlando' },
+  { re: /EDC\s+Mexico/i,            festival_id: 'edc-mexico',          festival_name: 'EDC Mexico',            city: 'Mexico City' },
+  { re: /H(ï|i)\s+ibiza/i,          festival_id: 'hi-ibiza',            festival_name: 'Hï Ibiza',              city: 'Ibiza' },
+  { re: /Knockdown\s+Center/i,      festival_id: 'knockdown-nyc',       festival_name: 'Knockdown Center',      city: 'New York' },
+  { re: /ARC\s+(Chicago|Music)/i,   festival_id: 'arc-chicago',         festival_name: 'ARC Music Festival',    city: 'Chicago' },
+  { re: /LAROC/i,                   festival_id: 'laroc',               festival_name: 'Laroc Club',            city: 'Itupeva' },
+  { re: /Universo\s+Paralello/i,    festival_id: 'universo-paralello',  festival_name: 'Universo Paralello',    city: 'Bahia' },
+  { re: /Concourse\s+Project/i,     festival_id: 'concourse',           festival_name: 'The Concourse Project', city: 'Austin' },
+  { re: /Destino.*Ibiza|Ibiza.*Destino/i, festival_id: 'dc10',          festival_name: 'DC-10',                 city: 'Ibiza' },
+  { re: /(SO\s+TRACK\s+BOA|TRIIIPLE|PARQUE\s+DO\s+POVO|D-EDGE)/i, festival_id: 'dc10', festival_name: 'DC-10', city: 'São Paulo' },
+  { re: /@beatport\s+Live/i,        festival_id: 'beatport-live',       festival_name: 'Beatport Live',         city: 'Los Angeles' },
+  { re: /Motion\s+Festival.*Lima/i, festival_id: 'motion-lima',         festival_name: 'Motion Festival',       city: 'Lima' },
+  { re: /Re:frame/i,                festival_id: 'reframe-la',          festival_name: 'Re:frame LA',           city: 'Los Angeles' },
+  { re: /Selected\s+Sessions/i,     festival_id: 'selected-sessions',   festival_name: 'Selected Sessions',     city: 'Amsterdam' },
+  { re: /Monsoon/i,                 festival_id: 'monsoon',             festival_name: 'Monsoon',               city: 'Peru' },
+  { re: /Hellbent/i,                festival_id: 'hellbent-la',         festival_name: 'Hellbent',              city: 'Los Angeles' },
+  { re: /Superior\s+Ingredients/i,  festival_id: 'superior-ny',         festival_name: 'Superior Ingredients',  city: 'New York' },
+  { re: /Off\s+Week/i,              festival_id: 'off-week',            festival_name: 'Off Week',              city: 'Barcelona' },
+  { re: /(Sde\s+Boker|Dead\s+Sea|Hanokdim)/i, festival_id: 'tlv-desert', festival_name: 'Sde Boker Desert Sessions', city: 'Sde Boker' },
+  { re: /Glastonbury/i,             festival_id: 'glastonbury',         festival_name: 'Glastonbury Festival',  city: 'Glastonbury' },
+];
+
+function routeByTitle(title, defaultCh) {
+  for (const r of VENUE_ROUTES) {
+    if (r.re.test(title)) return { ...defaultCh, festival_id: r.festival_id, festival_name: r.festival_name, city: r.city };
+  }
+  return defaultCh;
+}
+
 async function ytDurations(ids) {
   const r = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${ids.join(',')}&key=${YOUTUBE_API_KEY}`);
   const d = await r.json();
@@ -119,7 +151,8 @@ export default async function handler(req, res) {
       for (const v of videos) {
         if ((durs[v.video_id]||0) < MIN_SECS) continue;
         if (isNonMusicalContent(v.title)) continue;
-        toInsert.push({ video_id: v.video_id, festival_id: ch.festival_id, festival_name: ch.festival_name, city: ch.city, vibe: ch.vibe, artist: v.title, source: 'youtube', published_at: v.published_at, accent: null });
+        const routed = routeByTitle(v.title, ch);
+        toInsert.push({ video_id: v.video_id, festival_id: routed.festival_id, festival_name: routed.festival_name, city: routed.city, vibe: routed.vibe || ch.vibe, artist: v.title, source: 'youtube', published_at: v.published_at, accent: null });
       }
     } catch (e) {
       console.error(ch.festival_name, e.message);
