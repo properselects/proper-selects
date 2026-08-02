@@ -8,16 +8,23 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
 const CHANNELS = [
-  { channelId: 'UCGCoc4fAMC4wvp1vgEOpFzA', festival_id: 'boilerroom',        festival_name: 'Boiler Room',        city: 'Chicago',   vibe: 'americas' },
-  { channelId: 'UCl2CLatrfJiU6OqmHZNUDNg', festival_id: 'dekmantel',         festival_name: 'Dekmantel',          city: 'Amsterdam', vibe: 'europe' },
-  { channelId: 'UCDHvlud7Hf86FxFsogrBcMg', festival_id: 'ra',                festival_name: 'Resident Advisor',   city: 'London',    vibe: 'europe' },
-  { channelId: 'UCOlJBEcHjFpQ0SQlNNqEuIA', festival_id: 'cercle',            festival_name: 'Cercle',             city: 'Worldwide', vibe: 'worldwide' },
-  { channelId: 'UCGbDh9LIjFRrMEO0sxvKVyA', festival_id: 'thuishaven',        festival_name: 'Thuishaven',         city: 'Amsterdam', vibe: 'europe' },
-  { channelId: 'UCNKR0GnJRSqMcKx6JWXBhwA', festival_id: 'yoyaku',           festival_name: 'Yoyaku',             city: 'Paris',     vibe: 'europe' },
-  { channelId: 'UCwmFOfFuvRPI112vR5DN8vQ', festival_id: 'rawcuts',           festival_name: 'Raw Cuts',           city: 'New York',  vibe: 'americas' },
-  { channelId: 'UC3ifTl5zKiCAhHIBQYcaTrg', festival_id: 'greenvalley',       festival_name: 'Green Valley',       city: 'Camboriú',  vibe: 'americas' },
-  { channelId: 'UCp_MbSA-jJzGjsBBgYZTmjA', festival_id: 'dc10',             festival_name: 'DC-10',              city: 'Ibiza',     vibe: 'europe' },
-  { channelId: 'UCaSjh0kdrd3xEn0zqcjbiDg', festival_id: 'concourse',         festival_name: 'The Concourse Project', city: 'Austin',   vibe: 'americas' },
+  { channelId: 'UCGCoc4fAMC4wvp1vgEOpFzA', festival_id: 'boilerroom',   festival_name: 'Boiler Room',           city: 'Chicago',     vibe: 'americas' },
+  { channelId: 'UCl2CLatrfJiU6OqmHZNUDNg', festival_id: 'dekmantel',    festival_name: 'Dekmantel',             city: 'Amsterdam',   vibe: 'europe' },
+  { channelId: 'UCDHvlud7Hf86FxFsogrBcMg', festival_id: 'ra',           festival_name: 'Resident Advisor',      city: 'London',      vibe: 'europe' },
+  { channelId: 'UCOlJBEcHjFpQ0SQlNNqEuIA', festival_id: 'cercle',       festival_name: 'Cercle',                city: 'Worldwide',   vibe: 'worldwide' },
+  { channelId: 'UCGbDh9LIjFRrMEO0sxvKVyA', festival_id: 'thuishaven',   festival_name: 'Thuishaven',            city: 'Amsterdam',   vibe: 'europe' },
+  { channelId: 'UCNKR0GnJRSqMcKx6JWXBhwA', festival_id: 'yoyaku',       festival_name: 'Yoyaku',                city: 'Paris',       vibe: 'europe' },
+  { channelId: 'UCwmFOfFuvRPI112vR5DN8vQ', festival_id: 'rawcuts',       festival_name: 'Raw Cuts',              city: 'New York',    vibe: 'americas' },
+  { channelId: 'UC3ifTl5zKiCAhHIBQYcaTrg', festival_id: 'greenvalley',   festival_name: 'Green Valley',          city: 'Camboriú',    vibe: 'americas' },
+  { channelId: 'UCp_MbSA-jJzGjsBBgYZTmjA', festival_id: 'dc10',          festival_name: 'DC-10',                 city: 'Ibiza',       vibe: 'europe' },
+  { channelId: 'UCaSjh0kdrd3xEn0zqcjbiDg', festival_id: 'concourse',     festival_name: 'The Concourse Project', city: 'Austin',      vibe: 'americas' },
+  // USA venues added 2026-08-02
+  { channelId: 'UCnf2atji58GrDey0R4AOKVg', festival_id: 'movement',      festival_name: 'Movement Festival',     city: 'Detroit',     vibe: 'americas' },
+  { channelId: 'UCT1Tq7SDg9kd4XgFjc47_4Q', festival_id: 'iii-points',   festival_name: 'III Points',            city: 'Miami',       vibe: 'americas' },
+  { channelId: 'UCFXhLNpftXbCi9W58CJLrJQ', festival_id: 'crssd',         festival_name: 'CRSSD Festival',        city: 'San Diego',   vibe: 'americas' },
+  { channelId: 'UCDZELNPHzTdvB9Nu5-s--4w', festival_id: 'exchange-la',   festival_name: 'Exchange LA',           city: 'Los Angeles', vibe: 'americas' },
+  { channelId: 'UC2iQ3op3Xar4TLX03oEmJYg', festival_id: 'seismic',       festival_name: 'Seismic Dance Event',   city: 'Austin',      vibe: 'americas' },
+  { channelId: 'UCdIjpGkpXGw9WJ_5reM-5WQ', festival_id: 'academy-la',   festival_name: 'Academy LA',            city: 'Los Angeles', vibe: 'americas' },
 ];
 
 const MIN_SECS = 45 * 60;
@@ -112,6 +119,12 @@ const VENUE_ROUTES = [
   { re: /Glastonbury/i,             festival_id: 'glastonbury',         festival_name: 'Glastonbury Festival',         city: 'Glastonbury',  vibe: 'europe' },
   { re: /Intercell/i,               festival_id: 'intercell',           festival_name: 'Intercell',                    city: 'Rotterdam',    vibe: 'europe' },
   { re: /Pacha\s+New\s+York|Pacha\s+NYC/i, festival_id: 'pacha-nyc',    festival_name: 'Pacha New York',              city: 'New York',     vibe: 'americas' },
+  { re: /Movement\s+(Festival|Detroit|Music)/i, festival_id: 'movement',   festival_name: 'Movement Festival',       city: 'Detroit',      vibe: 'americas' },
+  { re: /III\s+Points/i,                festival_id: 'iii-points',          festival_name: 'III Points',              city: 'Miami',        vibe: 'americas' },
+  { re: /CRSSD/i,                       festival_id: 'crssd',               festival_name: 'CRSSD Festival',          city: 'San Diego',    vibe: 'americas' },
+  { re: /Exchange\s+(LA|Los Angeles)/i, festival_id: 'exchange-la',         festival_name: 'Exchange LA',             city: 'Los Angeles',  vibe: 'americas' },
+  { re: /Seismic\s+Dance/i,             festival_id: 'seismic',             festival_name: 'Seismic Dance Event',     city: 'Austin',       vibe: 'americas' },
+  { re: /Academy\s+(LA|Hollywood)/i,    festival_id: 'academy-la',          festival_name: 'Academy LA',              city: 'Los Angeles',  vibe: 'americas' },
 ];
 
 function routeByTitle(title, defaultCh) {
