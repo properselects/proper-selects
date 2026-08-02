@@ -17,6 +17,7 @@ const CHANNELS = [
   { channelId: 'UCwmFOfFuvRPI112vR5DN8vQ', festival_id: 'rawcuts',           festival_name: 'Raw Cuts',           city: 'New York',  vibe: 'americas' },
   { channelId: 'UC3ifTl5zKiCAhHIBQYcaTrg', festival_id: 'greenvalley',       festival_name: 'Green Valley',       city: 'Camboriú',  vibe: 'americas' },
   { channelId: 'UCp_MbSA-jJzGjsBBgYZTmjA', festival_id: 'dc10',             festival_name: 'DC-10',              city: 'Ibiza',     vibe: 'europe' },
+  { channelId: 'UCaSjh0kdrd3xEn0zqcjbiDg', festival_id: 'concourse',         festival_name: 'The Concourse Project', city: 'Austin',   vibe: 'americas' },
 ];
 
 const MIN_SECS = 45 * 60;
