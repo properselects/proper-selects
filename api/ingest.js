@@ -22,6 +22,38 @@ const CHANNELS = [
 
 const MIN_SECS = 45 * 60;
 
+// Non-musical content patterns — panels, talks, radio streams, aftermovies, interviews
+const NON_MUSICAL_PATTERNS = [
+  /\bpanel\b/i,
+  /\bdiscussion\b/i,
+  /\binterview\b/i,
+  /\bconference\b/i,
+  /\bnetworking\b/i,
+  /\bresearch\b/i,
+  /\blab finale\b/i,
+  /\bresynthesising\b/i,
+  /\baftermovie\b/i,
+  /\brecap\b/i,
+  /\btrailer\b/i,
+  /\bteaser\b/i,
+  /\bdocumentary\b/i,
+  /\bpodcast\b/i,
+  /\bmasterclass\b/i,
+  /\bworkshop\b/i,
+  /\btalk\b/i,
+  /\bkeynote\b/i,
+  /\bq\s*&\s*a\b/i,
+  /\bbehind the scenes\b/i,
+  /\bepisode\s*\d+/i,          // Episode 12 etc — usually podcast/radio
+  /\b\d{4}\s+\d{2}\s+\d{2}\s+\d{2}\s+\d{2}/,  // radio-style timestamps (2025 02 25 14 03)
+  /\binjected\b/i,
+];
+
+function isNonMusicalContent(title) {
+  if (!title) return true;
+  return NON_MUSICAL_PATTERNS.some(re => re.test(title));
+}
+
 function parseDuration(d) {
   const m = d.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
   if (!m) return 0;
@@ -70,6 +102,7 @@ export default async function handler(req, res) {
       const durs = await ytDurations(videos.map(v => v.video_id));
       for (const v of videos) {
         if ((durs[v.video_id]||0) < MIN_SECS) continue;
+        if (isNonMusicalContent(v.title)) continue;
         toInsert.push({ video_id: v.video_id, festival_id: ch.festival_id, festival_name: ch.festival_name, city: ch.city, vibe: ch.vibe, artist: v.title, source: 'youtube', published_at: v.published_at, accent: null });
       }
     } catch (e) {
