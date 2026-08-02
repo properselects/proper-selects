@@ -105,6 +105,8 @@ const VENUE_ROUTES = [
   { re: /Off\s+Week/i,              festival_id: 'off-week',            festival_name: 'Off Week',              city: 'Barcelona' },
   { re: /(Sde\s+Boker|Dead\s+Sea|Hanokdim)/i, festival_id: 'tlv-desert', festival_name: 'Sde Boker Desert Sessions', city: 'Sde Boker' },
   { re: /Glastonbury/i,             festival_id: 'glastonbury',         festival_name: 'Glastonbury Festival',  city: 'Glastonbury' },
+  { re: /Intercell/i,               festival_id: 'intercell',           festival_name: 'Intercell',             city: 'Rotterdam' },
+  { re: /Pacha\s+New\s+York|Pacha\s+NYC/i, festival_id: 'pacha-nyc',    festival_name: 'Pacha New York',        city: 'New York' },
 ];
 
 function routeByTitle(title, defaultCh) {
@@ -152,7 +154,7 @@ export default async function handler(req, res) {
         if ((durs[v.video_id]||0) < MIN_SECS) continue;
         if (isNonMusicalContent(v.title)) continue;
         const routed = routeByTitle(v.title, ch);
-        toInsert.push({ video_id: v.video_id, festival_id: routed.festival_id, festival_name: routed.festival_name, city: routed.city, vibe: routed.vibe || ch.vibe, artist: v.title, source: 'youtube', published_at: v.published_at, accent: null });
+        toInsert.push({ video_id: v.video_id, festival_id: routed.festival_id, festival_name: routed.festival_name, city: routed.city, vibe: routed.vibe || ch.vibe, artist: v.title, title: v.title, source: 'youtube', duration_sec: durs[v.video_id] || null, status: 'live', embeddable: true, published_at: v.published_at, accent: null });
       }
     } catch (e) {
       console.error(ch.festival_name, e.message);
