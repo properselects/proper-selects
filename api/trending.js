@@ -10,13 +10,38 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
 // Search queries — targeted at the exact type of content we want
 const DISCOVERY_QUERIES = [
+  // Genre + year (broad)
   'house DJ set full 2026',
   'tech house festival full set 2026',
   'techno warehouse set 2026',
-  'melodic house festival 2026',
+  'melodic house techno set 2026',
+  'afro house festival 2026',
+  'deep house set 2026',
+  'minimal house dj set 2026',
+  'italo disco dj set 2026',
+  // Venue/event specific
   'circoloco ibiza dj set 2026',
   'ADE amsterdam full set 2026',
   'boiler room 2026 full set',
+  'awakenings 2026 full set',
+  'dekmantel 2026 dj set',
+  'time warp 2026 full set',
+  'club space miami full set 2026',
+  'thuishaven 2026 dj set',
+  'nibiru romania 2026 set',
+  'sonar barcelona 2026 dj set',
+  'movement detroit 2026 dj set',
+  'green valley brazil 2026 set',
+  'exit festival 2026 dance arena',
+  'creamfields 2026 full set',
+  'hi ibiza full set 2026',
+  'pacha ibiza 2026 dj set',
+  'shelter amsterdam 2026 set',
+  // Recent big-name artists
+  'chris stussy 2026 dj set',
+  'anyma 2026 dj set',
+  'mochakk 2026 dj set',
+  'i hate models 2026 techno set',
 ];
 
 const MIN_SECS = 45 * 60;
@@ -55,6 +80,19 @@ const VENUE_ROUTES = [
   { re: /Intercell/i, festival_id: 'intercell', festival_name: 'Intercell', city: 'Rotterdam' },
   { re: /MODE\s+Festival/i, festival_id: 'mode', festival_name: 'MODE Festival', city: 'Sydney' },
   { re: /Nibiru/i, festival_id: 'nibiru', festival_name: 'Nibiru Universe', city: 'Costinești' },
+  { re: /Club\s+Space|Space\s+Miami/i, festival_id: 'clubspace', festival_name: 'Club Space', city: 'Miami' },
+  { re: /Time\s+Warp/i, festival_id: 'timewarp', festival_name: 'Time Warp', city: 'Mannheim' },
+  { re: /S(ó|o)nar/i, festival_id: 'sonarfest', festival_name: 'Sónar', city: 'Barcelona' },
+  { re: /Movement\s+(Festival|Detroit)/i, festival_id: 'movement', festival_name: 'Movement Festival', city: 'Detroit' },
+  { re: /Exit\s+Festival|Dance\s+Arena/i, festival_id: 'exit', festival_name: 'EXIT Festival', city: 'Novi Sad' },
+  { re: /Creamfields/i, festival_id: 'creamfields', festival_name: 'Creamfields', city: 'Warrington' },
+  { re: /Shelter\s+Amsterdam/i, festival_id: 'shelter-ams', festival_name: 'Shelter Amsterdam', city: 'Amsterdam' },
+  { re: /Junction\s+2/i, festival_id: 'junction2', festival_name: 'Junction 2', city: 'London' },
+  { re: /Printworks/i, festival_id: 'printworks', festival_name: 'Printworks', city: 'London' },
+  { re: /Fabric/i, festival_id: 'fabriclondon', festival_name: 'fabric', city: 'London' },
+  { re: /Watergate/i, festival_id: 'watergate', festival_name: 'Watergate', city: 'Berlin' },
+  { re: /Tresor/i, festival_id: 'tresor', festival_name: 'Tresor', city: 'Berlin' },
+  { re: /Berghain/i, festival_id: 'berghain', festival_name: 'Berghain', city: 'Berlin' },
 ];
 
 function parseDuration(d) {
