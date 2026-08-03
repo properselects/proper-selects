@@ -18,6 +18,18 @@ const CHANNELS = [
   { channelId: 'UC3ifTl5zKiCAhHIBQYcaTrg', festival_id: 'greenvalley',   festival_name: 'Green Valley',          city: 'Camboriú',    vibe: 'americas' },
   { channelId: 'UCp_MbSA-jJzGjsBBgYZTmjA', festival_id: 'dc10',          festival_name: 'DC-10',                 city: 'Ibiza',       vibe: 'europe' },
   { channelId: 'UCaSjh0kdrd3xEn0zqcjbiDg', festival_id: 'concourse',     festival_name: 'The Concourse Project', city: 'Austin',      vibe: 'americas' },
+  // EU/Worldwide venues added 2026-08-02
+  { channelId: 'UCV6qd2kF9ShJj_vaej6AJ9Q', festival_id: 'awakenings',  festival_name: 'Awakenings',           city: 'Amsterdam',   vibe: 'europe' },
+  { channelId: 'UCU7wcDDNY1KkgAXfiShfNiQ', festival_id: 'amnesia',      festival_name: 'Amnesia',              city: 'Ibiza',       vibe: 'europe' },
+  { channelId: 'UC7RZ3YtxzlR61_3kfjdolAA', festival_id: 'creamfields',  festival_name: 'Creamfields',          city: 'Warrington',  vibe: 'europe' },
+  { channelId: 'UC3SQZc2g5eUXgJ-X0jkPChQ', festival_id: 'junction2',    festival_name: 'Junction 2',           city: 'London',      vibe: 'europe' },
+  { channelId: 'UCjbDDt1C0iIXkhf7cxcHijg', festival_id: 'pacha',        festival_name: 'Pacha Ibiza',          city: 'Ibiza',       vibe: 'europe' },
+  { channelId: 'UCWWOjDKnb2iZGlL12afBYzg', festival_id: 'printworks',   festival_name: 'Printworks',           city: 'London',      vibe: 'europe' },
+  { channelId: 'UCgTcFmoQx7cA7gVZRbI450g', festival_id: 'sonus',        festival_name: 'Sonus Festival',       city: 'Tisno',       vibe: 'europe' },
+  { channelId: 'UCAuKLTxRav0b5VGslSABLrw', festival_id: 'timewarp',     festival_name: 'Time Warp',            city: 'Mannheim',    vibe: 'europe' },
+  { channelId: 'UCTy2NM-Gdpmz_1667ZXoZ6A', festival_id: 'tresor',       festival_name: 'Tresor',               city: 'Berlin',      vibe: 'europe' },
+  { channelId: 'UCmmTMyfN0Euv0xiSzYXy4NQ', festival_id: 'dimensions',   festival_name: 'Dimensions Festival',  city: 'Pula',        vibe: 'worldwide' },
+  { channelId: 'UCbjjpsKbWU_CwvgjTtO6CDA', festival_id: 'womb',         festival_name: 'Womb',                 city: 'Tokyo',       vibe: 'worldwide' },
   // USA venues added 2026-08-02
   { channelId: 'UCnf2atji58GrDey0R4AOKVg', festival_id: 'movement',      festival_name: 'Movement Festival',     city: 'Detroit',     vibe: 'americas' },
   { channelId: 'UCT1Tq7SDg9kd4XgFjc47_4Q', festival_id: 'iii-points',   festival_name: 'III Points',            city: 'Miami',       vibe: 'americas' },
