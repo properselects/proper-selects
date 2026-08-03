@@ -46,6 +46,10 @@ const MIN_SECS = 45 * 60;
 const NON_MUSICAL_PATTERNS = [
   /\bpanel\b/i,
   /\bdiscussion\b/i,
+  /\bonline panel\b/i,
+  /\bcreative scenes\b/i,
+  /@beatport\s+live\b/i,
+  /\bfree version\b/i,
   /\binterview\b/i,
   /\bconference\b/i,
   /\bnetworking\b/i,
@@ -124,10 +128,11 @@ const VENUE_ROUTES = [
   { re: /SO\s+TRACK\s+BOA/i,        festival_id: 'sotrackboa',          festival_name: 'SO TRACK BOA',                 city: 'São Paulo',    vibe: 'americas' },
   { re: /PARQUE\s+DO\s+POVO/i,      festival_id: 'parque-povo',         festival_name: 'Parque do Povo',               city: 'São Paulo',    vibe: 'americas' },
   { re: /D-EDGE/i,                  festival_id: 'dblock',              festival_name: 'D-Edge',                       city: 'São Paulo',    vibe: 'americas' },
-  { re: /@beatport\s+Live/i,        festival_id: 'beatport-live',       festival_name: 'Beatport Live',                city: 'Los Angeles',  vibe: 'americas' },
+  // NOTE: @beatport Live / The Circuit removed — brand streams not venue sets
+  // { re: /@beatport\s+Live/i, festival_id: 'beatport-live' },
   { re: /Motion\s+Festival.*Lima/i, festival_id: 'motion-lima',         festival_name: 'Motion Festival',              city: 'Lima',         vibe: 'americas' },
   { re: /Re:frame/i,                festival_id: 'reframe-la',          festival_name: 'Re:frame LA',                  city: 'Los Angeles',  vibe: 'americas' },
-  { re: /Selected\s+Sessions/i,     festival_id: 'selected-sessions',   festival_name: 'Selected Sessions',            city: 'Amsterdam',    vibe: 'europe' },
+  // { re: /Selected\s+Sessions/i, festival_id: 'selected-sessions' }, // removed — not a proper venue
   { re: /Monsoon/i,                 festival_id: 'monsoon',             festival_name: 'Monsoon',                      city: 'Peru',         vibe: 'americas' },
   { re: /Hellbent/i,                festival_id: 'hellbent-la',         festival_name: 'Hellbent',                     city: 'Los Angeles',  vibe: 'americas' },
   { re: /Superior\s+Ingredients/i,  festival_id: 'superior-ny',         festival_name: 'Superior Ingredients',         city: 'New York',     vibe: 'americas' },
