@@ -54,6 +54,10 @@ const NON_MUSICAL_PATTERNS = [
   /\bepisode\s*\d+/i,          // Episode 12 etc — usually podcast/radio
   /\b\d{4}\s+\d{2}\s+\d{2}\s+\d{2}\s+\d{2}/,  // radio-style timestamps (2025 02 25 14 03)
   /\binjected\b/i,
+  /\bkhao\s+san\b/i,               // radio beach party streams
+  /Mixmag\s+Lab.*Bonobo|Bonobo.*Mixmag/i,
+  /Ezra\s+Collective/i,
+  /\bjazz\s+session/i,
   // Non-house/techno genres
   /\bhip\s*[- ]?hop\b/i,
   /\bhiphop\b/i,
