@@ -157,6 +157,24 @@ async function insertSets(sets) {
   return r.ok;
 }
 
+import { parseDescription } from './hot-tracks.js';
+
+async function ytDescriptions(ids) {
+  if (!ids.length) return {};
+  const r = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${ids.join(',')}&key=${YOUTUBE_API_KEY}`);
+  const d = await r.json();
+  return Object.fromEntries((d.items||[]).map(i => [i.id, i.snippet?.description ?? '']));
+}
+
+async function insertTracks(tracks) {
+  if (!tracks.length) return;
+  await fetch(`${SUPABASE_URL}/rest/v1/tracks`, {
+    method: 'POST',
+    headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal,resolution=ignore-duplicates' },
+    body: JSON.stringify(tracks),
+  });
+}
+
 export default async function handler(req, res) {
   if (!YOUTUBE_API_KEY || !SUPABASE_KEY) return res.status(500).json({ error: 'Missing env vars' });
 
@@ -179,6 +197,24 @@ export default async function handler(req, res) {
     }
   }
 
-  if (toInsert.length) await insertSets(toInsert);
+  if (toInsert.length) {
+    await insertSets(toInsert);
+
+    // Fetch descriptions and parse tracklists for new sets
+    try {
+      const ids = toInsert.map(s => s.video_id);
+      const descs = await ytDescriptions(ids);
+      const allTracks = [];
+      for (const s of toInsert) {
+        const parsed = parseDescription(descs[s.video_id] || '', s.video_id);
+        allTracks.push(...parsed);
+      }
+      if (allTracks.length) await insertTracks(allTracks);
+      console.log(`Parsed ${allTracks.length} track entries from ${toInsert.length} new sets`);
+    } catch (e) {
+      console.error('Tracklist parse error:', e.message);
+    }
+  }
+
   res.json({ inserted: toInsert.length, checked: CHANNELS.length });
 }
