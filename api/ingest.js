@@ -30,6 +30,7 @@ const CHANNELS = [
   { channelId: 'UCTy2NM-Gdpmz_1667ZXoZ6A', festival_id: 'tresor',       festival_name: 'Tresor',               city: 'Berlin',      vibe: 'europe' },
   { channelId: 'UCmmTMyfN0Euv0xiSzYXy4NQ', festival_id: 'dimensions',   festival_name: 'Dimensions Festival',  city: 'Pula',        vibe: 'worldwide' },
   { channelId: 'UCbjjpsKbWU_CwvgjTtO6CDA', festival_id: 'womb',         festival_name: 'Womb',                 city: 'Tokyo',       vibe: 'worldwide' },
+  { channelId: 'UCGxYxFFsENVa3y3L3kkQ4QA', festival_id: 'trotamundo',   festival_name: 'Trotamundo @ Lost Beach Club', city: 'Montañita', vibe: 'americas' },
   // USA venues added 2026-08-02
   { channelId: 'UCnf2atji58GrDey0R4AOKVg', festival_id: 'movement',      festival_name: 'Movement Festival',     city: 'Detroit',     vibe: 'americas' },
   { channelId: 'UCT1Tq7SDg9kd4XgFjc47_4Q', festival_id: 'iii-points',   festival_name: 'III Points',            city: 'Miami',       vibe: 'americas' },
@@ -141,6 +142,7 @@ const VENUE_ROUTES = [
   { re: /Exchange\s+(LA|Los Angeles)/i, festival_id: 'exchange-la',         festival_name: 'Exchange LA',             city: 'Los Angeles',  vibe: 'americas' },
   { re: /Seismic\s+Dance/i,             festival_id: 'concourse',           festival_name: 'The Concourse Project',   city: 'Austin',       vibe: 'americas' },
   { re: /Academy\s+(LA|Hollywood)/i,    festival_id: 'academy-la',          festival_name: 'Academy LA',              city: 'Los Angeles',  vibe: 'americas' },
+  { re: /Trotamundo|Lost\s+Beach\s+Club|Montañita/i, festival_id: 'trotamundo', festival_name: 'Trotamundo @ Lost Beach Club', city: 'Montañita', vibe: 'americas' },
 ];
 
 function routeByTitle(title, defaultCh) {
