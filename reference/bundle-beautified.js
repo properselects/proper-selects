@@ -2428,4 +2428,12251 @@ function lf() {
       isTrusted: 0,
     },
     li = Ze(mn),
-    Jn = v({}, mn, { view: 
+    Jn = v({}, mn, { view: 0, detail: 0 }),
+    Ec = Ze(Jn),
+    ii,
+    oi,
+    Kn,
+    Ar = v({}, Jn, {
+      screenX: 0,
+      screenY: 0,
+      clientX: 0,
+      clientY: 0,
+      pageX: 0,
+      pageY: 0,
+      ctrlKey: 0,
+      shiftKey: 0,
+      altKey: 0,
+      metaKey: 0,
+      getModifierState: si,
+      button: 0,
+      buttons: 0,
+      relatedTarget: function (e) {
+        return e.relatedTarget === void 0
+          ? e.fromElement === e.srcElement
+            ? e.toElement
+            : e.fromElement
+          : e.relatedTarget;
+      },
+      movementX: function (e) {
+        return "movementX" in e
+          ? e.movementX
+          : (e !== Kn &&
+              (Kn && e.type === "mousemove"
+                ? ((ii = e.screenX - Kn.screenX), (oi = e.screenY - Kn.screenY))
+                : (oi = ii = 0),
+              (Kn = e)),
+            ii);
+      },
+      movementY: function (e) {
+        return "movementY" in e ? e.movementY : oi;
+      },
+    }),
+    Sa = Ze(Ar),
+    Nc = v({}, Ar, { dataTransfer: 0 }),
+    bc = Ze(Nc),
+    zc = v({}, Jn, { relatedTarget: 0 }),
+    ai = Ze(zc),
+    Pc = v({}, mn, { animationName: 0, elapsedTime: 0, pseudoElement: 0 }),
+    Tc = Ze(Pc),
+    Ic = v({}, mn, {
+      clipboardData: function (e) {
+        return "clipboardData" in e ? e.clipboardData : window.clipboardData;
+      },
+    }),
+    Rc = Ze(Ic),
+    Lc = v({}, mn, { data: 0 }),
+    _a = Ze(Lc),
+    Mc = {
+      Esc: "Escape",
+      Spacebar: " ",
+      Left: "ArrowLeft",
+      Up: "ArrowUp",
+      Right: "ArrowRight",
+      Down: "ArrowDown",
+      Del: "Delete",
+      Win: "OS",
+      Menu: "ContextMenu",
+      Apps: "ContextMenu",
+      Scroll: "ScrollLock",
+      MozPrintableKey: "Unidentified",
+    },
+    Dc = {
+      8: "Backspace",
+      9: "Tab",
+      12: "Clear",
+      13: "Enter",
+      16: "Shift",
+      17: "Control",
+      18: "Alt",
+      19: "Pause",
+      20: "CapsLock",
+      27: "Escape",
+      32: " ",
+      33: "PageUp",
+      34: "PageDown",
+      35: "End",
+      36: "Home",
+      37: "ArrowLeft",
+      38: "ArrowUp",
+      39: "ArrowRight",
+      40: "ArrowDown",
+      45: "Insert",
+      46: "Delete",
+      112: "F1",
+      113: "F2",
+      114: "F3",
+      115: "F4",
+      116: "F5",
+      117: "F6",
+      118: "F7",
+      119: "F8",
+      120: "F9",
+      121: "F10",
+      122: "F11",
+      123: "F12",
+      144: "NumLock",
+      145: "ScrollLock",
+      224: "Meta",
+    },
+    Fc = {
+      Alt: "altKey",
+      Control: "ctrlKey",
+      Meta: "metaKey",
+      Shift: "shiftKey",
+    };
+  function Oc(e) {
+    var t = this.nativeEvent;
+    return t.getModifierState
+      ? t.getModifierState(e)
+      : (e = Fc[e])
+        ? !!t[e]
+        : !1;
+  }
+  function si() {
+    return Oc;
+  }
+  var Ac = v({}, Jn, {
+      key: function (e) {
+        if (e.key) {
+          var t = Mc[e.key] || e.key;
+          if (t !== "Unidentified") return t;
+        }
+        return e.type === "keypress"
+          ? ((e = Fr(e)), e === 13 ? "Enter" : String.fromCharCode(e))
+          : e.type === "keydown" || e.type === "keyup"
+            ? Dc[e.keyCode] || "Unidentified"
+            : "";
+      },
+      code: 0,
+      location: 0,
+      ctrlKey: 0,
+      shiftKey: 0,
+      altKey: 0,
+      metaKey: 0,
+      repeat: 0,
+      locale: 0,
+      getModifierState: si,
+      charCode: function (e) {
+        return e.type === "keypress" ? Fr(e) : 0;
+      },
+      keyCode: function (e) {
+        return e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
+      },
+      which: function (e) {
+        return e.type === "keypress"
+          ? Fr(e)
+          : e.type === "keydown" || e.type === "keyup"
+            ? e.keyCode
+            : 0;
+      },
+    }),
+    Uc = Ze(Ac),
+    Bc = v({}, Ar, {
+      pointerId: 0,
+      width: 0,
+      height: 0,
+      pressure: 0,
+      tangentialPressure: 0,
+      tiltX: 0,
+      tiltY: 0,
+      twist: 0,
+      pointerType: 0,
+      isPrimary: 0,
+    }),
+    ja = Ze(Bc),
+    $c = v({}, Jn, {
+      touches: 0,
+      targetTouches: 0,
+      changedTouches: 0,
+      altKey: 0,
+      metaKey: 0,
+      ctrlKey: 0,
+      shiftKey: 0,
+      getModifierState: si,
+    }),
+    Vc = Ze($c),
+    Hc = v({}, mn, { propertyName: 0, elapsedTime: 0, pseudoElement: 0 }),
+    Wc = Ze(Hc),
+    Yc = v({}, Ar, {
+      deltaX: function (e) {
+        return "deltaX" in e
+          ? e.deltaX
+          : "wheelDeltaX" in e
+            ? -e.wheelDeltaX
+            : 0;
+      },
+      deltaY: function (e) {
+        return "deltaY" in e
+          ? e.deltaY
+          : "wheelDeltaY" in e
+            ? -e.wheelDeltaY
+            : "wheelDelta" in e
+              ? -e.wheelDelta
+              : 0;
+      },
+      deltaZ: 0,
+      deltaMode: 0,
+    }),
+    Qc = Ze(Yc),
+    Jc = [9, 13, 27, 32],
+    ui = U && "CompositionEvent" in window,
+    Xn = null;
+  U && "documentMode" in document && (Xn = document.documentMode);
+  var Kc = U && "TextEvent" in window && !Xn,
+    Ca = U && (!ui || (Xn && 8 < Xn && 11 >= Xn)),
+    Ea = " ",
+    Na = !1;
+  function ba(e, t) {
+    switch (e) {
+      case "keyup":
+        return Jc.indexOf(t.keyCode) !== -1;
+      case "keydown":
+        return t.keyCode !== 229;
+      case "keypress":
+      case "mousedown":
+      case "focusout":
+        return !0;
+      default:
+        return !1;
+    }
+  }
+  function za(e) {
+    return (
+      (e = e.detail),
+      typeof e == "object" && "data" in e ? e.data : null
+    );
+  }
+  var hn = !1;
+  function Xc(e, t) {
+    switch (e) {
+      case "compositionend":
+        return za(t);
+      case "keypress":
+        return t.which !== 32 ? null : ((Na = !0), Ea);
+      case "textInput":
+        return ((e = t.data), e === Ea && Na ? null : e);
+      default:
+        return null;
+    }
+  }
+  function Gc(e, t) {
+    if (hn)
+      return e === "compositionend" || (!ui && ba(e, t))
+        ? ((e = wa()), (Dr = ri = Mt = null), (hn = !1), e)
+        : null;
+    switch (e) {
+      case "paste":
+        return null;
+      case "keypress":
+        if (!(t.ctrlKey || t.altKey || t.metaKey) || (t.ctrlKey && t.altKey)) {
+          if (t.char && 1 < t.char.length) return t.char;
+          if (t.which) return String.fromCharCode(t.which);
+        }
+        return null;
+      case "compositionend":
+        return Ca && t.locale !== "ko" ? null : t.data;
+      default:
+        return null;
+    }
+  }
+  var Zc = {
+    color: !0,
+    date: !0,
+    datetime: !0,
+    "datetime-local": !0,
+    email: !0,
+    month: !0,
+    number: !0,
+    password: !0,
+    range: !0,
+    search: !0,
+    tel: !0,
+    text: !0,
+    time: !0,
+    url: !0,
+    week: !0,
+  };
+  function Pa(e) {
+    var t = e && e.nodeName && e.nodeName.toLowerCase();
+    return t === "input" ? !!Zc[e.type] : t === "textarea";
+  }
+  function Ta(e, t, n, r) {
+    (Go(r),
+      (t = Hr(t, "onChange")),
+      0 < t.length &&
+        ((n = new li("onChange", "change", null, n, r)),
+        e.push({ event: n, listeners: t })));
+  }
+  var Gn = null,
+    Zn = null;
+  function qc(e) {
+    Ka(e, 0);
+  }
+  function Ur(e) {
+    var t = wn(e);
+    if (Ao(t)) return e;
+  }
+  function ed(e, t) {
+    if (e === "change") return t;
+  }
+  var Ia = !1;
+  if (U) {
+    var ci;
+    if (U) {
+      var di = "oninput" in document;
+      if (!di) {
+        var Ra = document.createElement("div");
+        (Ra.setAttribute("oninput", "return;"),
+          (di = typeof Ra.oninput == "function"));
+      }
+      ci = di;
+    } else ci = !1;
+    Ia = ci && (!document.documentMode || 9 < document.documentMode);
+  }
+  function La() {
+    Gn && (Gn.detachEvent("onpropertychange", Ma), (Zn = Gn = null));
+  }
+  function Ma(e) {
+    if (e.propertyName === "value" && Ur(Zn)) {
+      var t = [];
+      (Ta(t, Zn, e, Hl(e)), ta(qc, t));
+    }
+  }
+  function td(e, t, n) {
+    e === "focusin"
+      ? (La(), (Gn = t), (Zn = n), Gn.attachEvent("onpropertychange", Ma))
+      : e === "focusout" && La();
+  }
+  function nd(e) {
+    if (e === "selectionchange" || e === "keyup" || e === "keydown")
+      return Ur(Zn);
+  }
+  function rd(e, t) {
+    if (e === "click") return Ur(t);
+  }
+  function ld(e, t) {
+    if (e === "input" || e === "change") return Ur(t);
+  }
+  function id(e, t) {
+    return (e === t && (e !== 0 || 1 / e === 1 / t)) || (e !== e && t !== t);
+  }
+  var dt = typeof Object.is == "function" ? Object.is : id;
+  function qn(e, t) {
+    if (dt(e, t)) return !0;
+    if (
+      typeof e != "object" ||
+      e === null ||
+      typeof t != "object" ||
+      t === null
+    )
+      return !1;
+    var n = Object.keys(e),
+      r = Object.keys(t);
+    if (n.length !== r.length) return !1;
+    for (r = 0; r < n.length; r++) {
+      var l = n[r];
+      if (!C.call(t, l) || !dt(e[l], t[l])) return !1;
+    }
+    return !0;
+  }
+  function Da(e) {
+    for (; e && e.firstChild;) e = e.firstChild;
+    return e;
+  }
+  function Fa(e, t) {
+    var n = Da(e);
+    e = 0;
+    for (var r; n;) {
+      if (n.nodeType === 3) {
+        if (((r = e + n.textContent.length), e <= t && r >= t))
+          return { node: n, offset: t - e };
+        e = r;
+      }
+      e: {
+        for (; n;) {
+          if (n.nextSibling) {
+            n = n.nextSibling;
+            break e;
+          }
+          n = n.parentNode;
+        }
+        n = void 0;
+      }
+      n = Da(n);
+    }
+  }
+  function Oa(e, t) {
+    return e && t
+      ? e === t
+        ? !0
+        : e && e.nodeType === 3
+          ? !1
+          : t && t.nodeType === 3
+            ? Oa(e, t.parentNode)
+            : "contains" in e
+              ? e.contains(t)
+              : e.compareDocumentPosition
+                ? !!(e.compareDocumentPosition(t) & 16)
+                : !1
+      : !1;
+  }
+  function Aa() {
+    for (var e = window, t = _r(); t instanceof e.HTMLIFrameElement;) {
+      try {
+        var n = typeof t.contentWindow.location.href == "string";
+      } catch {
+        n = !1;
+      }
+      if (n) e = t.contentWindow;
+      else break;
+      t = _r(e.document);
+    }
+    return t;
+  }
+  function fi(e) {
+    var t = e && e.nodeName && e.nodeName.toLowerCase();
+    return (
+      t &&
+      ((t === "input" &&
+        (e.type === "text" ||
+          e.type === "search" ||
+          e.type === "tel" ||
+          e.type === "url" ||
+          e.type === "password")) ||
+        t === "textarea" ||
+        e.contentEditable === "true")
+    );
+  }
+  function od(e) {
+    var t = Aa(),
+      n = e.focusedElem,
+      r = e.selectionRange;
+    if (
+      t !== n &&
+      n &&
+      n.ownerDocument &&
+      Oa(n.ownerDocument.documentElement, n)
+    ) {
+      if (r !== null && fi(n)) {
+        if (
+          ((t = r.start),
+          (e = r.end),
+          e === void 0 && (e = t),
+          "selectionStart" in n)
+        )
+          ((n.selectionStart = t),
+            (n.selectionEnd = Math.min(e, n.value.length)));
+        else if (
+          ((e = ((t = n.ownerDocument || document) && t.defaultView) || window),
+          e.getSelection)
+        ) {
+          e = e.getSelection();
+          var l = n.textContent.length,
+            i = Math.min(r.start, l);
+          ((r = r.end === void 0 ? i : Math.min(r.end, l)),
+            !e.extend && i > r && ((l = r), (r = i), (i = l)),
+            (l = Fa(n, i)));
+          var o = Fa(n, r);
+          l &&
+            o &&
+            (e.rangeCount !== 1 ||
+              e.anchorNode !== l.node ||
+              e.anchorOffset !== l.offset ||
+              e.focusNode !== o.node ||
+              e.focusOffset !== o.offset) &&
+            ((t = t.createRange()),
+            t.setStart(l.node, l.offset),
+            e.removeAllRanges(),
+            i > r
+              ? (e.addRange(t), e.extend(o.node, o.offset))
+              : (t.setEnd(o.node, o.offset), e.addRange(t)));
+        }
+      }
+      for (t = [], e = n; (e = e.parentNode);)
+        e.nodeType === 1 &&
+          t.push({ element: e, left: e.scrollLeft, top: e.scrollTop });
+      for (typeof n.focus == "function" && n.focus(), n = 0; n < t.length; n++)
+        ((e = t[n]),
+          (e.element.scrollLeft = e.left),
+          (e.element.scrollTop = e.top));
+    }
+  }
+  var ad = U && "documentMode" in document && 11 >= document.documentMode,
+    gn = null,
+    pi = null,
+    er = null,
+    mi = !1;
+  function Ua(e, t, n) {
+    var r =
+      n.window === n ? n.document : n.nodeType === 9 ? n : n.ownerDocument;
+    mi ||
+      gn == null ||
+      gn !== _r(r) ||
+      ((r = gn),
+      "selectionStart" in r && fi(r)
+        ? (r = { start: r.selectionStart, end: r.selectionEnd })
+        : ((r = (
+            (r.ownerDocument && r.ownerDocument.defaultView) ||
+            window
+          ).getSelection()),
+          (r = {
+            anchorNode: r.anchorNode,
+            anchorOffset: r.anchorOffset,
+            focusNode: r.focusNode,
+            focusOffset: r.focusOffset,
+          })),
+      (er && qn(er, r)) ||
+        ((er = r),
+        (r = Hr(pi, "onSelect")),
+        0 < r.length &&
+          ((t = new li("onSelect", "select", null, t, n)),
+          e.push({ event: t, listeners: r }),
+          (t.target = gn))));
+  }
+  function Br(e, t) {
+    var n = {};
+    return (
+      (n[e.toLowerCase()] = t.toLowerCase()),
+      (n["Webkit" + e] = "webkit" + t),
+      (n["Moz" + e] = "moz" + t),
+      n
+    );
+  }
+  var yn = {
+      animationend: Br("Animation", "AnimationEnd"),
+      animationiteration: Br("Animation", "AnimationIteration"),
+      animationstart: Br("Animation", "AnimationStart"),
+      transitionend: Br("Transition", "TransitionEnd"),
+    },
+    hi = {},
+    Ba = {};
+  U &&
+    ((Ba = document.createElement("div").style),
+    "AnimationEvent" in window ||
+      (delete yn.animationend.animation,
+      delete yn.animationiteration.animation,
+      delete yn.animationstart.animation),
+    "TransitionEvent" in window || delete yn.transitionend.transition);
+  function $r(e) {
+    if (hi[e]) return hi[e];
+    if (!yn[e]) return e;
+    var t = yn[e],
+      n;
+    for (n in t) if (t.hasOwnProperty(n) && n in Ba) return (hi[e] = t[n]);
+    return e;
+  }
+  var $a = $r("animationend"),
+    Va = $r("animationiteration"),
+    Ha = $r("animationstart"),
+    Wa = $r("transitionend"),
+    Ya = new Map(),
+    Qa =
+      "abort auxClick cancel canPlay canPlayThrough click close contextMenu copy cut drag dragEnd dragEnter dragExit dragLeave dragOver dragStart drop durationChange emptied encrypted ended error gotPointerCapture input invalid keyDown keyPress keyUp load loadedData loadedMetadata loadStart lostPointerCapture mouseDown mouseMove mouseOut mouseOver mouseUp paste pause play playing pointerCancel pointerDown pointerMove pointerOut pointerOver pointerUp progress rateChange reset resize seeked seeking stalled submit suspend timeUpdate touchCancel touchEnd touchStart volumeChange scroll toggle touchMove waiting wheel".split(
+        " ",
+      );
+  function Dt(e, t) {
+    (Ya.set(e, t), z(t, [e]));
+  }
+  for (var gi = 0; gi < Qa.length; gi++) {
+    var yi = Qa[gi],
+      sd = yi.toLowerCase(),
+      ud = yi[0].toUpperCase() + yi.slice(1);
+    Dt(sd, "on" + ud);
+  }
+  (Dt($a, "onAnimationEnd"),
+    Dt(Va, "onAnimationIteration"),
+    Dt(Ha, "onAnimationStart"),
+    Dt("dblclick", "onDoubleClick"),
+    Dt("focusin", "onFocus"),
+    Dt("focusout", "onBlur"),
+    Dt(Wa, "onTransitionEnd"),
+    b("onMouseEnter", ["mouseout", "mouseover"]),
+    b("onMouseLeave", ["mouseout", "mouseover"]),
+    b("onPointerEnter", ["pointerout", "pointerover"]),
+    b("onPointerLeave", ["pointerout", "pointerover"]),
+    z(
+      "onChange",
+      "change click focusin focusout input keydown keyup selectionchange".split(
+        " ",
+      ),
+    ),
+    z(
+      "onSelect",
+      "focusout contextmenu dragend focusin keydown keyup mousedown mouseup selectionchange".split(
+        " ",
+      ),
+    ),
+    z("onBeforeInput", ["compositionend", "keypress", "textInput", "paste"]),
+    z(
+      "onCompositionEnd",
+      "compositionend focusout keydown keypress keyup mousedown".split(" "),
+    ),
+    z(
+      "onCompositionStart",
+      "compositionstart focusout keydown keypress keyup mousedown".split(" "),
+    ),
+    z(
+      "onCompositionUpdate",
+      "compositionupdate focusout keydown keypress keyup mousedown".split(" "),
+    ));
+  var tr =
+      "abort canplay canplaythrough durationchange emptied encrypted ended error loadeddata loadedmetadata loadstart pause play playing progress ratechange resize seeked seeking stalled suspend timeupdate volumechange waiting".split(
+        " ",
+      ),
+    cd = new Set(
+      "cancel close invalid load scroll toggle".split(" ").concat(tr),
+    );
+  function Ja(e, t, n) {
+    var r = e.type || "unknown-event";
+    ((e.currentTarget = n), sc(r, t, void 0, e), (e.currentTarget = null));
+  }
+  function Ka(e, t) {
+    t = (t & 4) !== 0;
+    for (var n = 0; n < e.length; n++) {
+      var r = e[n],
+        l = r.event;
+      r = r.listeners;
+      e: {
+        var i = void 0;
+        if (t)
+          for (var o = r.length - 1; 0 <= o; o--) {
+            var a = r[o],
+              c = a.instance,
+              g = a.currentTarget;
+            if (((a = a.listener), c !== i && l.isPropagationStopped()))
+              break e;
+            (Ja(l, a, g), (i = c));
+          }
+        else
+          for (o = 0; o < r.length; o++) {
+            if (
+              ((a = r[o]),
+              (c = a.instance),
+              (g = a.currentTarget),
+              (a = a.listener),
+              c !== i && l.isPropagationStopped())
+            )
+              break e;
+            (Ja(l, a, g), (i = c));
+          }
+      }
+    }
+    if (Er) throw ((e = Jl), (Er = !1), (Jl = null), e);
+  }
+  function fe(e, t) {
+    var n = t[Ci];
+    n === void 0 && (n = t[Ci] = new Set());
+    var r = e + "__bubble";
+    n.has(r) || (Xa(t, e, 2, !1), n.add(r));
+  }
+  function vi(e, t, n) {
+    var r = 0;
+    (t && (r |= 4), Xa(n, e, r, t));
+  }
+  var Vr = "_reactListening" + Math.random().toString(36).slice(2);
+  function nr(e) {
+    if (!e[Vr]) {
+      ((e[Vr] = !0),
+        I.forEach(function (n) {
+          n !== "selectionchange" && (cd.has(n) || vi(n, !1, e), vi(n, !0, e));
+        }));
+      var t = e.nodeType === 9 ? e : e.ownerDocument;
+      t === null || t[Vr] || ((t[Vr] = !0), vi("selectionchange", !1, t));
+    }
+  }
+  function Xa(e, t, n, r) {
+    switch (xa(t)) {
+      case 1:
+        var l = jc;
+        break;
+      case 4:
+        l = Cc;
+        break;
+      default:
+        l = ti;
+    }
+    ((n = l.bind(null, t, n, e)),
+      (l = void 0),
+      !Ql ||
+        (t !== "touchstart" && t !== "touchmove" && t !== "wheel") ||
+        (l = !0),
+      r
+        ? l !== void 0
+          ? e.addEventListener(t, n, { capture: !0, passive: l })
+          : e.addEventListener(t, n, !0)
+        : l !== void 0
+          ? e.addEventListener(t, n, { passive: l })
+          : e.addEventListener(t, n, !1));
+  }
+  function xi(e, t, n, r, l) {
+    var i = r;
+    if ((t & 1) === 0 && (t & 2) === 0 && r !== null)
+      e: for (;;) {
+        if (r === null) return;
+        var o = r.tag;
+        if (o === 3 || o === 4) {
+          var a = r.stateNode.containerInfo;
+          if (a === l || (a.nodeType === 8 && a.parentNode === l)) break;
+          if (o === 4)
+            for (o = r.return; o !== null;) {
+              var c = o.tag;
+              if (
+                (c === 3 || c === 4) &&
+                ((c = o.stateNode.containerInfo),
+                c === l || (c.nodeType === 8 && c.parentNode === l))
+              )
+                return;
+              o = o.return;
+            }
+          for (; a !== null;) {
+            if (((o = Gt(a)), o === null)) return;
+            if (((c = o.tag), c === 5 || c === 6)) {
+              r = i = o;
+              continue e;
+            }
+            a = a.parentNode;
+          }
+        }
+        r = r.return;
+      }
+    ta(function () {
+      var g = i,
+        k = Hl(n),
+        S = [];
+      e: {
+        var w = Ya.get(e);
+        if (w !== void 0) {
+          var T = li,
+            D = e;
+          switch (e) {
+            case "keypress":
+              if (Fr(n) === 0) break e;
+            case "keydown":
+            case "keyup":
+              T = Uc;
+              break;
+            case "focusin":
+              ((D = "focus"), (T = ai));
+              break;
+            case "focusout":
+              ((D = "blur"), (T = ai));
+              break;
+            case "beforeblur":
+            case "afterblur":
+              T = ai;
+              break;
+            case "click":
+              if (n.button === 2) break e;
+            case "auxclick":
+            case "dblclick":
+            case "mousedown":
+            case "mousemove":
+            case "mouseup":
+            case "mouseout":
+            case "mouseover":
+            case "contextmenu":
+              T = Sa;
+              break;
+            case "drag":
+            case "dragend":
+            case "dragenter":
+            case "dragexit":
+            case "dragleave":
+            case "dragover":
+            case "dragstart":
+            case "drop":
+              T = bc;
+              break;
+            case "touchcancel":
+            case "touchend":
+            case "touchmove":
+            case "touchstart":
+              T = Vc;
+              break;
+            case $a:
+            case Va:
+            case Ha:
+              T = Tc;
+              break;
+            case Wa:
+              T = Wc;
+              break;
+            case "scroll":
+              T = Ec;
+              break;
+            case "wheel":
+              T = Qc;
+              break;
+            case "copy":
+            case "cut":
+            case "paste":
+              T = Rc;
+              break;
+            case "gotpointercapture":
+            case "lostpointercapture":
+            case "pointercancel":
+            case "pointerdown":
+            case "pointermove":
+            case "pointerout":
+            case "pointerover":
+            case "pointerup":
+              T = ja;
+          }
+          var F = (t & 4) !== 0,
+            Se = !F && e === "scroll",
+            m = F ? (w !== null ? w + "Capture" : null) : w;
+          F = [];
+          for (var f = g, h; f !== null;) {
+            h = f;
+            var j = h.stateNode;
+            if (
+              (h.tag === 5 &&
+                j !== null &&
+                ((h = j),
+                m !== null &&
+                  ((j = On(f, m)), j != null && F.push(rr(f, j, h)))),
+              Se)
+            )
+              break;
+            f = f.return;
+          }
+          0 < F.length &&
+            ((w = new T(w, D, null, n, k)), S.push({ event: w, listeners: F }));
+        }
+      }
+      if ((t & 7) === 0) {
+        e: {
+          if (
+            ((w = e === "mouseover" || e === "pointerover"),
+            (T = e === "mouseout" || e === "pointerout"),
+            w &&
+              n !== Vl &&
+              (D = n.relatedTarget || n.fromElement) &&
+              (Gt(D) || D[St]))
+          )
+            break e;
+          if (
+            (T || w) &&
+            ((w =
+              k.window === k
+                ? k
+                : (w = k.ownerDocument)
+                  ? w.defaultView || w.parentWindow
+                  : window),
+            T
+              ? ((D = n.relatedTarget || n.toElement),
+                (T = g),
+                (D = D ? Gt(D) : null),
+                D !== null &&
+                  ((Se = Xt(D)), D !== Se || (D.tag !== 5 && D.tag !== 6)) &&
+                  (D = null))
+              : ((T = null), (D = g)),
+            T !== D)
+          ) {
+            if (
+              ((F = Sa),
+              (j = "onMouseLeave"),
+              (m = "onMouseEnter"),
+              (f = "mouse"),
+              (e === "pointerout" || e === "pointerover") &&
+                ((F = ja),
+                (j = "onPointerLeave"),
+                (m = "onPointerEnter"),
+                (f = "pointer")),
+              (Se = T == null ? w : wn(T)),
+              (h = D == null ? w : wn(D)),
+              (w = new F(j, f + "leave", T, n, k)),
+              (w.target = Se),
+              (w.relatedTarget = h),
+              (j = null),
+              Gt(k) === g &&
+                ((F = new F(m, f + "enter", D, n, k)),
+                (F.target = h),
+                (F.relatedTarget = Se),
+                (j = F)),
+              (Se = j),
+              T && D)
+            )
+              t: {
+                for (F = T, m = D, f = 0, h = F; h; h = vn(h)) f++;
+                for (h = 0, j = m; j; j = vn(j)) h++;
+                for (; 0 < f - h;) ((F = vn(F)), f--);
+                for (; 0 < h - f;) ((m = vn(m)), h--);
+                for (; f--;) {
+                  if (F === m || (m !== null && F === m.alternate)) break t;
+                  ((F = vn(F)), (m = vn(m)));
+                }
+                F = null;
+              }
+            else F = null;
+            (T !== null && Ga(S, w, T, F, !1),
+              D !== null && Se !== null && Ga(S, Se, D, F, !0));
+          }
+        }
+        e: {
+          if (
+            ((w = g ? wn(g) : window),
+            (T = w.nodeName && w.nodeName.toLowerCase()),
+            T === "select" || (T === "input" && w.type === "file"))
+          )
+            var A = ed;
+          else if (Pa(w))
+            if (Ia) A = ld;
+            else {
+              A = nd;
+              var Q = td;
+            }
+          else
+            (T = w.nodeName) &&
+              T.toLowerCase() === "input" &&
+              (w.type === "checkbox" || w.type === "radio") &&
+              (A = rd);
+          if (A && (A = A(e, g))) {
+            Ta(S, A, n, k);
+            break e;
+          }
+          (Q && Q(e, w, g),
+            e === "focusout" &&
+              (Q = w._wrapperState) &&
+              Q.controlled &&
+              w.type === "number" &&
+              Ol(w, "number", w.value));
+        }
+        switch (((Q = g ? wn(g) : window), e)) {
+          case "focusin":
+            (Pa(Q) || Q.contentEditable === "true") &&
+              ((gn = Q), (pi = g), (er = null));
+            break;
+          case "focusout":
+            er = pi = gn = null;
+            break;
+          case "mousedown":
+            mi = !0;
+            break;
+          case "contextmenu":
+          case "mouseup":
+          case "dragend":
+            ((mi = !1), Ua(S, n, k));
+            break;
+          case "selectionchange":
+            if (ad) break;
+          case "keydown":
+          case "keyup":
+            Ua(S, n, k);
+        }
+        var J;
+        if (ui)
+          e: {
+            switch (e) {
+              case "compositionstart":
+                var K = "onCompositionStart";
+                break e;
+              case "compositionend":
+                K = "onCompositionEnd";
+                break e;
+              case "compositionupdate":
+                K = "onCompositionUpdate";
+                break e;
+            }
+            K = void 0;
+          }
+        else
+          hn
+            ? ba(e, n) && (K = "onCompositionEnd")
+            : e === "keydown" &&
+              n.keyCode === 229 &&
+              (K = "onCompositionStart");
+        (K &&
+          (Ca &&
+            n.locale !== "ko" &&
+            (hn || K !== "onCompositionStart"
+              ? K === "onCompositionEnd" && hn && (J = wa())
+              : ((Mt = k),
+                (ri = "value" in Mt ? Mt.value : Mt.textContent),
+                (hn = !0))),
+          (Q = Hr(g, K)),
+          0 < Q.length &&
+            ((K = new _a(K, e, null, n, k)),
+            S.push({ event: K, listeners: Q }),
+            J ? (K.data = J) : ((J = za(n)), J !== null && (K.data = J)))),
+          (J = Kc ? Xc(e, n) : Gc(e, n)) &&
+            ((g = Hr(g, "onBeforeInput")),
+            0 < g.length &&
+              ((k = new _a("onBeforeInput", "beforeinput", null, n, k)),
+              S.push({ event: k, listeners: g }),
+              (k.data = J))));
+      }
+      Ka(S, t);
+    });
+  }
+  function rr(e, t, n) {
+    return { instance: e, listener: t, currentTarget: n };
+  }
+  function Hr(e, t) {
+    for (var n = t + "Capture", r = []; e !== null;) {
+      var l = e,
+        i = l.stateNode;
+      (l.tag === 5 &&
+        i !== null &&
+        ((l = i),
+        (i = On(e, n)),
+        i != null && r.unshift(rr(e, i, l)),
+        (i = On(e, t)),
+        i != null && r.push(rr(e, i, l))),
+        (e = e.return));
+    }
+    return r;
+  }
+  function vn(e) {
+    if (e === null) return null;
+    do e = e.return;
+    while (e && e.tag !== 5);
+    return e || null;
+  }
+  function Ga(e, t, n, r, l) {
+    for (var i = t._reactName, o = []; n !== null && n !== r;) {
+      var a = n,
+        c = a.alternate,
+        g = a.stateNode;
+      if (c !== null && c === r) break;
+      (a.tag === 5 &&
+        g !== null &&
+        ((a = g),
+        l
+          ? ((c = On(n, i)), c != null && o.unshift(rr(n, c, a)))
+          : l || ((c = On(n, i)), c != null && o.push(rr(n, c, a)))),
+        (n = n.return));
+    }
+    o.length !== 0 && e.push({ event: t, listeners: o });
+  }
+  var dd = /\r\n?/g,
+    fd = /\u0000|\uFFFD/g;
+  function Za(e) {
+    return (typeof e == "string" ? e : "" + e)
+      .replace(
+        dd,
+        `
+`,
+      )
+      .replace(fd, "");
+  }
+  function Wr(e, t, n) {
+    if (((t = Za(t)), Za(e) !== t && n)) throw Error(s(425));
+  }
+  function Yr() {}
+  var wi = null,
+    ki = null;
+  function Si(e, t) {
+    return (
+      e === "textarea" ||
+      e === "noscript" ||
+      typeof t.children == "string" ||
+      typeof t.children == "number" ||
+      (typeof t.dangerouslySetInnerHTML == "object" &&
+        t.dangerouslySetInnerHTML !== null &&
+        t.dangerouslySetInnerHTML.__html != null)
+    );
+  }
+  var _i = typeof setTimeout == "function" ? setTimeout : void 0,
+    pd = typeof clearTimeout == "function" ? clearTimeout : void 0,
+    qa = typeof Promise == "function" ? Promise : void 0,
+    md =
+      typeof queueMicrotask == "function"
+        ? queueMicrotask
+        : typeof qa < "u"
+          ? function (e) {
+              return qa.resolve(null).then(e).catch(hd);
+            }
+          : _i;
+  function hd(e) {
+    setTimeout(function () {
+      throw e;
+    });
+  }
+  function ji(e, t) {
+    var n = t,
+      r = 0;
+    do {
+      var l = n.nextSibling;
+      if ((e.removeChild(n), l && l.nodeType === 8))
+        if (((n = l.data), n === "/$")) {
+          if (r === 0) {
+            (e.removeChild(l), Qn(t));
+            return;
+          }
+          r--;
+        } else (n !== "$" && n !== "$?" && n !== "$!") || r++;
+      n = l;
+    } while (n);
+    Qn(t);
+  }
+  function Ft(e) {
+    for (; e != null; e = e.nextSibling) {
+      var t = e.nodeType;
+      if (t === 1 || t === 3) break;
+      if (t === 8) {
+        if (((t = e.data), t === "$" || t === "$!" || t === "$?")) break;
+        if (t === "/$") return null;
+      }
+    }
+    return e;
+  }
+  function es(e) {
+    e = e.previousSibling;
+    for (var t = 0; e;) {
+      if (e.nodeType === 8) {
+        var n = e.data;
+        if (n === "$" || n === "$!" || n === "$?") {
+          if (t === 0) return e;
+          t--;
+        } else n === "/$" && t++;
+      }
+      e = e.previousSibling;
+    }
+    return null;
+  }
+  var xn = Math.random().toString(36).slice(2),
+    vt = "__reactFiber$" + xn,
+    lr = "__reactProps$" + xn,
+    St = "__reactContainer$" + xn,
+    Ci = "__reactEvents$" + xn,
+    gd = "__reactListeners$" + xn,
+    yd = "__reactHandles$" + xn;
+  function Gt(e) {
+    var t = e[vt];
+    if (t) return t;
+    for (var n = e.parentNode; n;) {
+      if ((t = n[St] || n[vt])) {
+        if (
+          ((n = t.alternate),
+          t.child !== null || (n !== null && n.child !== null))
+        )
+          for (e = es(e); e !== null;) {
+            if ((n = e[vt])) return n;
+            e = es(e);
+          }
+        return t;
+      }
+      ((e = n), (n = e.parentNode));
+    }
+    return null;
+  }
+  function ir(e) {
+    return (
+      (e = e[vt] || e[St]),
+      !e || (e.tag !== 5 && e.tag !== 6 && e.tag !== 13 && e.tag !== 3)
+        ? null
+        : e
+    );
+  }
+  function wn(e) {
+    if (e.tag === 5 || e.tag === 6) return e.stateNode;
+    throw Error(s(33));
+  }
+  function Qr(e) {
+    return e[lr] || null;
+  }
+  var Ei = [],
+    kn = -1;
+  function Ot(e) {
+    return { current: e };
+  }
+  function pe(e) {
+    0 > kn || ((e.current = Ei[kn]), (Ei[kn] = null), kn--);
+  }
+  function ce(e, t) {
+    (kn++, (Ei[kn] = e.current), (e.current = t));
+  }
+  var At = {},
+    Fe = Ot(At),
+    He = Ot(!1),
+    Zt = At;
+  function Sn(e, t) {
+    var n = e.type.contextTypes;
+    if (!n) return At;
+    var r = e.stateNode;
+    if (r && r.__reactInternalMemoizedUnmaskedChildContext === t)
+      return r.__reactInternalMemoizedMaskedChildContext;
+    var l = {},
+      i;
+    for (i in n) l[i] = t[i];
+    return (
+      r &&
+        ((e = e.stateNode),
+        (e.__reactInternalMemoizedUnmaskedChildContext = t),
+        (e.__reactInternalMemoizedMaskedChildContext = l)),
+      l
+    );
+  }
+  function We(e) {
+    return ((e = e.childContextTypes), e != null);
+  }
+  function Jr() {
+    (pe(He), pe(Fe));
+  }
+  function ts(e, t, n) {
+    if (Fe.current !== At) throw Error(s(168));
+    (ce(Fe, t), ce(He, n));
+  }
+  function ns(e, t, n) {
+    var r = e.stateNode;
+    if (((t = t.childContextTypes), typeof r.getChildContext != "function"))
+      return n;
+    r = r.getChildContext();
+    for (var l in r) if (!(l in t)) throw Error(s(108, se(e) || "Unknown", l));
+    return v({}, n, r);
+  }
+  function Kr(e) {
+    return (
+      (e =
+        ((e = e.stateNode) && e.__reactInternalMemoizedMergedChildContext) ||
+        At),
+      (Zt = Fe.current),
+      ce(Fe, e),
+      ce(He, He.current),
+      !0
+    );
+  }
+  function rs(e, t, n) {
+    var r = e.stateNode;
+    if (!r) throw Error(s(169));
+    (n
+      ? ((e = ns(e, t, Zt)),
+        (r.__reactInternalMemoizedMergedChildContext = e),
+        pe(He),
+        pe(Fe),
+        ce(Fe, e))
+      : pe(He),
+      ce(He, n));
+  }
+  var _t = null,
+    Xr = !1,
+    Ni = !1;
+  function ls(e) {
+    _t === null ? (_t = [e]) : _t.push(e);
+  }
+  function vd(e) {
+    ((Xr = !0), ls(e));
+  }
+  function Ut() {
+    if (!Ni && _t !== null) {
+      Ni = !0;
+      var e = 0,
+        t = ae;
+      try {
+        var n = _t;
+        for (ae = 1; e < n.length; e++) {
+          var r = n[e];
+          do r = r(!0);
+          while (r !== null);
+        }
+        ((_t = null), (Xr = !1));
+      } catch (l) {
+        throw (_t !== null && (_t = _t.slice(e + 1)), oa(Kl, Ut), l);
+      } finally {
+        ((ae = t), (Ni = !1));
+      }
+    }
+    return null;
+  }
+  var _n = [],
+    jn = 0,
+    Gr = null,
+    Zr = 0,
+    lt = [],
+    it = 0,
+    qt = null,
+    jt = 1,
+    Ct = "";
+  function en(e, t) {
+    ((_n[jn++] = Zr), (_n[jn++] = Gr), (Gr = e), (Zr = t));
+  }
+  function is(e, t, n) {
+    ((lt[it++] = jt), (lt[it++] = Ct), (lt[it++] = qt), (qt = e));
+    var r = jt;
+    e = Ct;
+    var l = 32 - ct(r) - 1;
+    ((r &= ~(1 << l)), (n += 1));
+    var i = 32 - ct(t) + l;
+    if (30 < i) {
+      var o = l - (l % 5);
+      ((i = (r & ((1 << o) - 1)).toString(32)),
+        (r >>= o),
+        (l -= o),
+        (jt = (1 << (32 - ct(t) + l)) | (n << l) | r),
+        (Ct = i + e));
+    } else ((jt = (1 << i) | (n << l) | r), (Ct = e));
+  }
+  function bi(e) {
+    e.return !== null && (en(e, 1), is(e, 1, 0));
+  }
+  function zi(e) {
+    for (; e === Gr;)
+      ((Gr = _n[--jn]), (_n[jn] = null), (Zr = _n[--jn]), (_n[jn] = null));
+    for (; e === qt;)
+      ((qt = lt[--it]),
+        (lt[it] = null),
+        (Ct = lt[--it]),
+        (lt[it] = null),
+        (jt = lt[--it]),
+        (lt[it] = null));
+  }
+  var qe = null,
+    et = null,
+    ge = !1,
+    ft = null;
+  function os(e, t) {
+    var n = ut(5, null, null, 0);
+    ((n.elementType = "DELETED"),
+      (n.stateNode = t),
+      (n.return = e),
+      (t = e.deletions),
+      t === null ? ((e.deletions = [n]), (e.flags |= 16)) : t.push(n));
+  }
+  function as(e, t) {
+    switch (e.tag) {
+      case 5:
+        var n = e.type;
+        return (
+          (t =
+            t.nodeType !== 1 || n.toLowerCase() !== t.nodeName.toLowerCase()
+              ? null
+              : t),
+          t !== null
+            ? ((e.stateNode = t), (qe = e), (et = Ft(t.firstChild)), !0)
+            : !1
+        );
+      case 6:
+        return (
+          (t = e.pendingProps === "" || t.nodeType !== 3 ? null : t),
+          t !== null ? ((e.stateNode = t), (qe = e), (et = null), !0) : !1
+        );
+      case 13:
+        return (
+          (t = t.nodeType !== 8 ? null : t),
+          t !== null
+            ? ((n = qt !== null ? { id: jt, overflow: Ct } : null),
+              (e.memoizedState = {
+                dehydrated: t,
+                treeContext: n,
+                retryLane: 1073741824,
+              }),
+              (n = ut(18, null, null, 0)),
+              (n.stateNode = t),
+              (n.return = e),
+              (e.child = n),
+              (qe = e),
+              (et = null),
+              !0)
+            : !1
+        );
+      default:
+        return !1;
+    }
+  }
+  function Pi(e) {
+    return (e.mode & 1) !== 0 && (e.flags & 128) === 0;
+  }
+  function Ti(e) {
+    if (ge) {
+      var t = et;
+      if (t) {
+        var n = t;
+        if (!as(e, t)) {
+          if (Pi(e)) throw Error(s(418));
+          t = Ft(n.nextSibling);
+          var r = qe;
+          t && as(e, t)
+            ? os(r, n)
+            : ((e.flags = (e.flags & -4097) | 2), (ge = !1), (qe = e));
+        }
+      } else {
+        if (Pi(e)) throw Error(s(418));
+        ((e.flags = (e.flags & -4097) | 2), (ge = !1), (qe = e));
+      }
+    }
+  }
+  function ss(e) {
+    for (
+      e = e.return;
+      e !== null && e.tag !== 5 && e.tag !== 3 && e.tag !== 13;
+    )
+      e = e.return;
+    qe = e;
+  }
+  function qr(e) {
+    if (e !== qe) return !1;
+    if (!ge) return (ss(e), (ge = !0), !1);
+    var t;
+    if (
+      ((t = e.tag !== 3) &&
+        !(t = e.tag !== 5) &&
+        ((t = e.type),
+        (t = t !== "head" && t !== "body" && !Si(e.type, e.memoizedProps))),
+      t && (t = et))
+    ) {
+      if (Pi(e)) throw (us(), Error(s(418)));
+      for (; t;) (os(e, t), (t = Ft(t.nextSibling)));
+    }
+    if ((ss(e), e.tag === 13)) {
+      if (((e = e.memoizedState), (e = e !== null ? e.dehydrated : null), !e))
+        throw Error(s(317));
+      e: {
+        for (e = e.nextSibling, t = 0; e;) {
+          if (e.nodeType === 8) {
+            var n = e.data;
+            if (n === "/$") {
+              if (t === 0) {
+                et = Ft(e.nextSibling);
+                break e;
+              }
+              t--;
+            } else (n !== "$" && n !== "$!" && n !== "$?") || t++;
+          }
+          e = e.nextSibling;
+        }
+        et = null;
+      }
+    } else et = qe ? Ft(e.stateNode.nextSibling) : null;
+    return !0;
+  }
+  function us() {
+    for (var e = et; e;) e = Ft(e.nextSibling);
+  }
+  function Cn() {
+    ((et = qe = null), (ge = !1));
+  }
+  function Ii(e) {
+    ft === null ? (ft = [e]) : ft.push(e);
+  }
+  var xd = W.ReactCurrentBatchConfig;
+  function or(e, t, n) {
+    if (
+      ((e = n.ref),
+      e !== null && typeof e != "function" && typeof e != "object")
+    ) {
+      if (n._owner) {
+        if (((n = n._owner), n)) {
+          if (n.tag !== 1) throw Error(s(309));
+          var r = n.stateNode;
+        }
+        if (!r) throw Error(s(147, e));
+        var l = r,
+          i = "" + e;
+        return t !== null &&
+          t.ref !== null &&
+          typeof t.ref == "function" &&
+          t.ref._stringRef === i
+          ? t.ref
+          : ((t = function (o) {
+              var a = l.refs;
+              o === null ? delete a[i] : (a[i] = o);
+            }),
+            (t._stringRef = i),
+            t);
+      }
+      if (typeof e != "string") throw Error(s(284));
+      if (!n._owner) throw Error(s(290, e));
+    }
+    return e;
+  }
+  function el(e, t) {
+    throw (
+      (e = Object.prototype.toString.call(t)),
+      Error(
+        s(
+          31,
+          e === "[object Object]"
+            ? "object with keys {" + Object.keys(t).join(", ") + "}"
+            : e,
+        ),
+      )
+    );
+  }
+  function cs(e) {
+    var t = e._init;
+    return t(e._payload);
+  }
+  function ds(e) {
+    function t(m, f) {
+      if (e) {
+        var h = m.deletions;
+        h === null ? ((m.deletions = [f]), (m.flags |= 16)) : h.push(f);
+      }
+    }
+    function n(m, f) {
+      if (!e) return null;
+      for (; f !== null;) (t(m, f), (f = f.sibling));
+      return null;
+    }
+    function r(m, f) {
+      for (m = new Map(); f !== null;)
+        (f.key !== null ? m.set(f.key, f) : m.set(f.index, f), (f = f.sibling));
+      return m;
+    }
+    function l(m, f) {
+      return ((m = Jt(m, f)), (m.index = 0), (m.sibling = null), m);
+    }
+    function i(m, f, h) {
+      return (
+        (m.index = h),
+        e
+          ? ((h = m.alternate),
+            h !== null
+              ? ((h = h.index), h < f ? ((m.flags |= 2), f) : h)
+              : ((m.flags |= 2), f))
+          : ((m.flags |= 1048576), f)
+      );
+    }
+    function o(m) {
+      return (e && m.alternate === null && (m.flags |= 2), m);
+    }
+    function a(m, f, h, j) {
+      return f === null || f.tag !== 6
+        ? ((f = jo(h, m.mode, j)), (f.return = m), f)
+        : ((f = l(f, h)), (f.return = m), f);
+    }
+    function c(m, f, h, j) {
+      var A = h.type;
+      return A === ye
+        ? k(m, f, h.props.children, j, h.key)
+        : f !== null &&
+            (f.elementType === A ||
+              (typeof A == "object" &&
+                A !== null &&
+                A.$$typeof === Le &&
+                cs(A) === f.type))
+          ? ((j = l(f, h.props)), (j.ref = or(m, f, h)), (j.return = m), j)
+          : ((j = jl(h.type, h.key, h.props, null, m.mode, j)),
+            (j.ref = or(m, f, h)),
+            (j.return = m),
+            j);
+    }
+    function g(m, f, h, j) {
+      return f === null ||
+        f.tag !== 4 ||
+        f.stateNode.containerInfo !== h.containerInfo ||
+        f.stateNode.implementation !== h.implementation
+        ? ((f = Co(h, m.mode, j)), (f.return = m), f)
+        : ((f = l(f, h.children || [])), (f.return = m), f);
+    }
+    function k(m, f, h, j, A) {
+      return f === null || f.tag !== 7
+        ? ((f = un(h, m.mode, j, A)), (f.return = m), f)
+        : ((f = l(f, h)), (f.return = m), f);
+    }
+    function S(m, f, h) {
+      if ((typeof f == "string" && f !== "") || typeof f == "number")
+        return ((f = jo("" + f, m.mode, h)), (f.return = m), f);
+      if (typeof f == "object" && f !== null) {
+        switch (f.$$typeof) {
+          case G:
+            return (
+              (h = jl(f.type, f.key, f.props, null, m.mode, h)),
+              (h.ref = or(m, null, f)),
+              (h.return = m),
+              h
+            );
+          case ue:
+            return ((f = Co(f, m.mode, h)), (f.return = m), f);
+          case Le:
+            var j = f._init;
+            return S(m, j(f._payload), h);
+        }
+        if (Mn(f) || Y(f))
+          return ((f = un(f, m.mode, h, null)), (f.return = m), f);
+        el(m, f);
+      }
+      return null;
+    }
+    function w(m, f, h, j) {
+      var A = f !== null ? f.key : null;
+      if ((typeof h == "string" && h !== "") || typeof h == "number")
+        return A !== null ? null : a(m, f, "" + h, j);
+      if (typeof h == "object" && h !== null) {
+        switch (h.$$typeof) {
+          case G:
+            return h.key === A ? c(m, f, h, j) : null;
+          case ue:
+            return h.key === A ? g(m, f, h, j) : null;
+          case Le:
+            return ((A = h._init), w(m, f, A(h._payload), j));
+        }
+        if (Mn(h) || Y(h)) return A !== null ? null : k(m, f, h, j, null);
+        el(m, h);
+      }
+      return null;
+    }
+    function T(m, f, h, j, A) {
+      if ((typeof j == "string" && j !== "") || typeof j == "number")
+        return ((m = m.get(h) || null), a(f, m, "" + j, A));
+      if (typeof j == "object" && j !== null) {
+        switch (j.$$typeof) {
+          case G:
+            return (
+              (m = m.get(j.key === null ? h : j.key) || null),
+              c(f, m, j, A)
+            );
+          case ue:
+            return (
+              (m = m.get(j.key === null ? h : j.key) || null),
+              g(f, m, j, A)
+            );
+          case Le:
+            var Q = j._init;
+            return T(m, f, h, Q(j._payload), A);
+        }
+        if (Mn(j) || Y(j)) return ((m = m.get(h) || null), k(f, m, j, A, null));
+        el(f, j);
+      }
+      return null;
+    }
+    function D(m, f, h, j) {
+      for (
+        var A = null, Q = null, J = f, K = (f = 0), Re = null;
+        J !== null && K < h.length;
+        K++
+      ) {
+        J.index > K ? ((Re = J), (J = null)) : (Re = J.sibling);
+        var re = w(m, J, h[K], j);
+        if (re === null) {
+          J === null && (J = Re);
+          break;
+        }
+        (e && J && re.alternate === null && t(m, J),
+          (f = i(re, f, K)),
+          Q === null ? (A = re) : (Q.sibling = re),
+          (Q = re),
+          (J = Re));
+      }
+      if (K === h.length) return (n(m, J), ge && en(m, K), A);
+      if (J === null) {
+        for (; K < h.length; K++)
+          ((J = S(m, h[K], j)),
+            J !== null &&
+              ((f = i(J, f, K)),
+              Q === null ? (A = J) : (Q.sibling = J),
+              (Q = J)));
+        return (ge && en(m, K), A);
+      }
+      for (J = r(m, J); K < h.length; K++)
+        ((Re = T(J, m, K, h[K], j)),
+          Re !== null &&
+            (e &&
+              Re.alternate !== null &&
+              J.delete(Re.key === null ? K : Re.key),
+            (f = i(Re, f, K)),
+            Q === null ? (A = Re) : (Q.sibling = Re),
+            (Q = Re)));
+      return (
+        e &&
+          J.forEach(function (Kt) {
+            return t(m, Kt);
+          }),
+        ge && en(m, K),
+        A
+      );
+    }
+    function F(m, f, h, j) {
+      var A = Y(h);
+      if (typeof A != "function") throw Error(s(150));
+      if (((h = A.call(h)), h == null)) throw Error(s(151));
+      for (
+        var Q = (A = null), J = f, K = (f = 0), Re = null, re = h.next();
+        J !== null && !re.done;
+        K++, re = h.next()
+      ) {
+        J.index > K ? ((Re = J), (J = null)) : (Re = J.sibling);
+        var Kt = w(m, J, re.value, j);
+        if (Kt === null) {
+          J === null && (J = Re);
+          break;
+        }
+        (e && J && Kt.alternate === null && t(m, J),
+          (f = i(Kt, f, K)),
+          Q === null ? (A = Kt) : (Q.sibling = Kt),
+          (Q = Kt),
+          (J = Re));
+      }
+      if (re.done) return (n(m, J), ge && en(m, K), A);
+      if (J === null) {
+        for (; !re.done; K++, re = h.next())
+          ((re = S(m, re.value, j)),
+            re !== null &&
+              ((f = i(re, f, K)),
+              Q === null ? (A = re) : (Q.sibling = re),
+              (Q = re)));
+        return (ge && en(m, K), A);
+      }
+      for (J = r(m, J); !re.done; K++, re = h.next())
+        ((re = T(J, m, K, re.value, j)),
+          re !== null &&
+            (e &&
+              re.alternate !== null &&
+              J.delete(re.key === null ? K : re.key),
+            (f = i(re, f, K)),
+            Q === null ? (A = re) : (Q.sibling = re),
+            (Q = re)));
+      return (
+        e &&
+          J.forEach(function (Zd) {
+            return t(m, Zd);
+          }),
+        ge && en(m, K),
+        A
+      );
+    }
+    function Se(m, f, h, j) {
+      if (
+        (typeof h == "object" &&
+          h !== null &&
+          h.type === ye &&
+          h.key === null &&
+          (h = h.props.children),
+        typeof h == "object" && h !== null)
+      ) {
+        switch (h.$$typeof) {
+          case G:
+            e: {
+              for (var A = h.key, Q = f; Q !== null;) {
+                if (Q.key === A) {
+                  if (((A = h.type), A === ye)) {
+                    if (Q.tag === 7) {
+                      (n(m, Q.sibling),
+                        (f = l(Q, h.props.children)),
+                        (f.return = m),
+                        (m = f));
+                      break e;
+                    }
+                  } else if (
+                    Q.elementType === A ||
+                    (typeof A == "object" &&
+                      A !== null &&
+                      A.$$typeof === Le &&
+                      cs(A) === Q.type)
+                  ) {
+                    (n(m, Q.sibling),
+                      (f = l(Q, h.props)),
+                      (f.ref = or(m, Q, h)),
+                      (f.return = m),
+                      (m = f));
+                    break e;
+                  }
+                  n(m, Q);
+                  break;
+                } else t(m, Q);
+                Q = Q.sibling;
+              }
+              h.type === ye
+                ? ((f = un(h.props.children, m.mode, j, h.key)),
+                  (f.return = m),
+                  (m = f))
+                : ((j = jl(h.type, h.key, h.props, null, m.mode, j)),
+                  (j.ref = or(m, f, h)),
+                  (j.return = m),
+                  (m = j));
+            }
+            return o(m);
+          case ue:
+            e: {
+              for (Q = h.key; f !== null;) {
+                if (f.key === Q)
+                  if (
+                    f.tag === 4 &&
+                    f.stateNode.containerInfo === h.containerInfo &&
+                    f.stateNode.implementation === h.implementation
+                  ) {
+                    (n(m, f.sibling),
+                      (f = l(f, h.children || [])),
+                      (f.return = m),
+                      (m = f));
+                    break e;
+                  } else {
+                    n(m, f);
+                    break;
+                  }
+                else t(m, f);
+                f = f.sibling;
+              }
+              ((f = Co(h, m.mode, j)), (f.return = m), (m = f));
+            }
+            return o(m);
+          case Le:
+            return ((Q = h._init), Se(m, f, Q(h._payload), j));
+        }
+        if (Mn(h)) return D(m, f, h, j);
+        if (Y(h)) return F(m, f, h, j);
+        el(m, h);
+      }
+      return (typeof h == "string" && h !== "") || typeof h == "number"
+        ? ((h = "" + h),
+          f !== null && f.tag === 6
+            ? (n(m, f.sibling), (f = l(f, h)), (f.return = m), (m = f))
+            : (n(m, f), (f = jo(h, m.mode, j)), (f.return = m), (m = f)),
+          o(m))
+        : n(m, f);
+    }
+    return Se;
+  }
+  var En = ds(!0),
+    fs = ds(!1),
+    tl = Ot(null),
+    nl = null,
+    Nn = null,
+    Ri = null;
+  function Li() {
+    Ri = Nn = nl = null;
+  }
+  function Mi(e) {
+    var t = tl.current;
+    (pe(tl), (e._currentValue = t));
+  }
+  function Di(e, t, n) {
+    for (; e !== null;) {
+      var r = e.alternate;
+      if (
+        ((e.childLanes & t) !== t
+          ? ((e.childLanes |= t), r !== null && (r.childLanes |= t))
+          : r !== null && (r.childLanes & t) !== t && (r.childLanes |= t),
+        e === n)
+      )
+        break;
+      e = e.return;
+    }
+  }
+  function bn(e, t) {
+    ((nl = e),
+      (Ri = Nn = null),
+      (e = e.dependencies),
+      e !== null &&
+        e.firstContext !== null &&
+        ((e.lanes & t) !== 0 && (Ye = !0), (e.firstContext = null)));
+  }
+  function ot(e) {
+    var t = e._currentValue;
+    if (Ri !== e)
+      if (((e = { context: e, memoizedValue: t, next: null }), Nn === null)) {
+        if (nl === null) throw Error(s(308));
+        ((Nn = e), (nl.dependencies = { lanes: 0, firstContext: e }));
+      } else Nn = Nn.next = e;
+    return t;
+  }
+  var tn = null;
+  function Fi(e) {
+    tn === null ? (tn = [e]) : tn.push(e);
+  }
+  function ps(e, t, n, r) {
+    var l = t.interleaved;
+    return (
+      l === null ? ((n.next = n), Fi(t)) : ((n.next = l.next), (l.next = n)),
+      (t.interleaved = n),
+      Et(e, r)
+    );
+  }
+  function Et(e, t) {
+    e.lanes |= t;
+    var n = e.alternate;
+    for (n !== null && (n.lanes |= t), n = e, e = e.return; e !== null;)
+      ((e.childLanes |= t),
+        (n = e.alternate),
+        n !== null && (n.childLanes |= t),
+        (n = e),
+        (e = e.return));
+    return n.tag === 3 ? n.stateNode : null;
+  }
+  var Bt = !1;
+  function Oi(e) {
+    e.updateQueue = {
+      baseState: e.memoizedState,
+      firstBaseUpdate: null,
+      lastBaseUpdate: null,
+      shared: { pending: null, interleaved: null, lanes: 0 },
+      effects: null,
+    };
+  }
+  function ms(e, t) {
+    ((e = e.updateQueue),
+      t.updateQueue === e &&
+        (t.updateQueue = {
+          baseState: e.baseState,
+          firstBaseUpdate: e.firstBaseUpdate,
+          lastBaseUpdate: e.lastBaseUpdate,
+          shared: e.shared,
+          effects: e.effects,
+        }));
+  }
+  function Nt(e, t) {
+    return {
+      eventTime: e,
+      lane: t,
+      tag: 0,
+      payload: null,
+      callback: null,
+      next: null,
+    };
+  }
+  function $t(e, t, n) {
+    var r = e.updateQueue;
+    if (r === null) return null;
+    if (((r = r.shared), (ne & 2) !== 0)) {
+      var l = r.pending;
+      return (
+        l === null ? (t.next = t) : ((t.next = l.next), (l.next = t)),
+        (r.pending = t),
+        Et(e, n)
+      );
+    }
+    return (
+      (l = r.interleaved),
+      l === null ? ((t.next = t), Fi(r)) : ((t.next = l.next), (l.next = t)),
+      (r.interleaved = t),
+      Et(e, n)
+    );
+  }
+  function rl(e, t, n) {
+    if (
+      ((t = t.updateQueue), t !== null && ((t = t.shared), (n & 4194240) !== 0))
+    ) {
+      var r = t.lanes;
+      ((r &= e.pendingLanes), (n |= r), (t.lanes = n), Zl(e, n));
+    }
+  }
+  function hs(e, t) {
+    var n = e.updateQueue,
+      r = e.alternate;
+    if (r !== null && ((r = r.updateQueue), n === r)) {
+      var l = null,
+        i = null;
+      if (((n = n.firstBaseUpdate), n !== null)) {
+        do {
+          var o = {
+            eventTime: n.eventTime,
+            lane: n.lane,
+            tag: n.tag,
+            payload: n.payload,
+            callback: n.callback,
+            next: null,
+          };
+          (i === null ? (l = i = o) : (i = i.next = o), (n = n.next));
+        } while (n !== null);
+        i === null ? (l = i = t) : (i = i.next = t);
+      } else l = i = t;
+      ((n = {
+        baseState: r.baseState,
+        firstBaseUpdate: l,
+        lastBaseUpdate: i,
+        shared: r.shared,
+        effects: r.effects,
+      }),
+        (e.updateQueue = n));
+      return;
+    }
+    ((e = n.lastBaseUpdate),
+      e === null ? (n.firstBaseUpdate = t) : (e.next = t),
+      (n.lastBaseUpdate = t));
+  }
+  function ll(e, t, n, r) {
+    var l = e.updateQueue;
+    Bt = !1;
+    var i = l.firstBaseUpdate,
+      o = l.lastBaseUpdate,
+      a = l.shared.pending;
+    if (a !== null) {
+      l.shared.pending = null;
+      var c = a,
+        g = c.next;
+      ((c.next = null), o === null ? (i = g) : (o.next = g), (o = c));
+      var k = e.alternate;
+      k !== null &&
+        ((k = k.updateQueue),
+        (a = k.lastBaseUpdate),
+        a !== o &&
+          (a === null ? (k.firstBaseUpdate = g) : (a.next = g),
+          (k.lastBaseUpdate = c)));
+    }
+    if (i !== null) {
+      var S = l.baseState;
+      ((o = 0), (k = g = c = null), (a = i));
+      do {
+        var w = a.lane,
+          T = a.eventTime;
+        if ((r & w) === w) {
+          k !== null &&
+            (k = k.next =
+              {
+                eventTime: T,
+                lane: 0,
+                tag: a.tag,
+                payload: a.payload,
+                callback: a.callback,
+                next: null,
+              });
+          e: {
+            var D = e,
+              F = a;
+            switch (((w = t), (T = n), F.tag)) {
+              case 1:
+                if (((D = F.payload), typeof D == "function")) {
+                  S = D.call(T, S, w);
+                  break e;
+                }
+                S = D;
+                break e;
+              case 3:
+                D.flags = (D.flags & -65537) | 128;
+              case 0:
+                if (
+                  ((D = F.payload),
+                  (w = typeof D == "function" ? D.call(T, S, w) : D),
+                  w == null)
+                )
+                  break e;
+                S = v({}, S, w);
+                break e;
+              case 2:
+                Bt = !0;
+            }
+          }
+          a.callback !== null &&
+            a.lane !== 0 &&
+            ((e.flags |= 64),
+            (w = l.effects),
+            w === null ? (l.effects = [a]) : w.push(a));
+        } else
+          ((T = {
+            eventTime: T,
+            lane: w,
+            tag: a.tag,
+            payload: a.payload,
+            callback: a.callback,
+            next: null,
+          }),
+            k === null ? ((g = k = T), (c = S)) : (k = k.next = T),
+            (o |= w));
+        if (((a = a.next), a === null)) {
+          if (((a = l.shared.pending), a === null)) break;
+          ((w = a),
+            (a = w.next),
+            (w.next = null),
+            (l.lastBaseUpdate = w),
+            (l.shared.pending = null));
+        }
+      } while (!0);
+      if (
+        (k === null && (c = S),
+        (l.baseState = c),
+        (l.firstBaseUpdate = g),
+        (l.lastBaseUpdate = k),
+        (t = l.shared.interleaved),
+        t !== null)
+      ) {
+        l = t;
+        do ((o |= l.lane), (l = l.next));
+        while (l !== t);
+      } else i === null && (l.shared.lanes = 0);
+      ((ln |= o), (e.lanes = o), (e.memoizedState = S));
+    }
+  }
+  function gs(e, t, n) {
+    if (((e = t.effects), (t.effects = null), e !== null))
+      for (t = 0; t < e.length; t++) {
+        var r = e[t],
+          l = r.callback;
+        if (l !== null) {
+          if (((r.callback = null), (r = n), typeof l != "function"))
+            throw Error(s(191, l));
+          l.call(r);
+        }
+      }
+  }
+  var ar = {},
+    xt = Ot(ar),
+    sr = Ot(ar),
+    ur = Ot(ar);
+  function nn(e) {
+    if (e === ar) throw Error(s(174));
+    return e;
+  }
+  function Ai(e, t) {
+    switch ((ce(ur, t), ce(sr, e), ce(xt, ar), (e = t.nodeType), e)) {
+      case 9:
+      case 11:
+        t = (t = t.documentElement) ? t.namespaceURI : Ul(null, "");
+        break;
+      default:
+        ((e = e === 8 ? t.parentNode : t),
+          (t = e.namespaceURI || null),
+          (e = e.tagName),
+          (t = Ul(t, e)));
+    }
+    (pe(xt), ce(xt, t));
+  }
+  function zn() {
+    (pe(xt), pe(sr), pe(ur));
+  }
+  function ys(e) {
+    nn(ur.current);
+    var t = nn(xt.current),
+      n = Ul(t, e.type);
+    t !== n && (ce(sr, e), ce(xt, n));
+  }
+  function Ui(e) {
+    sr.current === e && (pe(xt), pe(sr));
+  }
+  var ve = Ot(0);
+  function il(e) {
+    for (var t = e; t !== null;) {
+      if (t.tag === 13) {
+        var n = t.memoizedState;
+        if (
+          n !== null &&
+          ((n = n.dehydrated), n === null || n.data === "$?" || n.data === "$!")
+        )
+          return t;
+      } else if (t.tag === 19 && t.memoizedProps.revealOrder !== void 0) {
+        if ((t.flags & 128) !== 0) return t;
+      } else if (t.child !== null) {
+        ((t.child.return = t), (t = t.child));
+        continue;
+      }
+      if (t === e) break;
+      for (; t.sibling === null;) {
+        if (t.return === null || t.return === e) return null;
+        t = t.return;
+      }
+      ((t.sibling.return = t.return), (t = t.sibling));
+    }
+    return null;
+  }
+  var Bi = [];
+  function $i() {
+    for (var e = 0; e < Bi.length; e++)
+      Bi[e]._workInProgressVersionPrimary = null;
+    Bi.length = 0;
+  }
+  var ol = W.ReactCurrentDispatcher,
+    Vi = W.ReactCurrentBatchConfig,
+    rn = 0,
+    xe = null,
+    be = null,
+    Te = null,
+    al = !1,
+    cr = !1,
+    dr = 0,
+    wd = 0;
+  function Oe() {
+    throw Error(s(321));
+  }
+  function Hi(e, t) {
+    if (t === null) return !1;
+    for (var n = 0; n < t.length && n < e.length; n++)
+      if (!dt(e[n], t[n])) return !1;
+    return !0;
+  }
+  function Wi(e, t, n, r, l, i) {
+    if (
+      ((rn = i),
+      (xe = t),
+      (t.memoizedState = null),
+      (t.updateQueue = null),
+      (t.lanes = 0),
+      (ol.current = e === null || e.memoizedState === null ? jd : Cd),
+      (e = n(r, l)),
+      cr)
+    ) {
+      i = 0;
+      do {
+        if (((cr = !1), (dr = 0), 25 <= i)) throw Error(s(301));
+        ((i += 1),
+          (Te = be = null),
+          (t.updateQueue = null),
+          (ol.current = Ed),
+          (e = n(r, l)));
+      } while (cr);
+    }
+    if (
+      ((ol.current = cl),
+      (t = be !== null && be.next !== null),
+      (rn = 0),
+      (Te = be = xe = null),
+      (al = !1),
+      t)
+    )
+      throw Error(s(300));
+    return e;
+  }
+  function Yi() {
+    var e = dr !== 0;
+    return ((dr = 0), e);
+  }
+  function wt() {
+    var e = {
+      memoizedState: null,
+      baseState: null,
+      baseQueue: null,
+      queue: null,
+      next: null,
+    };
+    return (Te === null ? (xe.memoizedState = Te = e) : (Te = Te.next = e), Te);
+  }
+  function at() {
+    if (be === null) {
+      var e = xe.alternate;
+      e = e !== null ? e.memoizedState : null;
+    } else e = be.next;
+    var t = Te === null ? xe.memoizedState : Te.next;
+    if (t !== null) ((Te = t), (be = e));
+    else {
+      if (e === null) throw Error(s(310));
+      ((be = e),
+        (e = {
+          memoizedState: be.memoizedState,
+          baseState: be.baseState,
+          baseQueue: be.baseQueue,
+          queue: be.queue,
+          next: null,
+        }),
+        Te === null ? (xe.memoizedState = Te = e) : (Te = Te.next = e));
+    }
+    return Te;
+  }
+  function fr(e, t) {
+    return typeof t == "function" ? t(e) : t;
+  }
+  function Qi(e) {
+    var t = at(),
+      n = t.queue;
+    if (n === null) throw Error(s(311));
+    n.lastRenderedReducer = e;
+    var r = be,
+      l = r.baseQueue,
+      i = n.pending;
+    if (i !== null) {
+      if (l !== null) {
+        var o = l.next;
+        ((l.next = i.next), (i.next = o));
+      }
+      ((r.baseQueue = l = i), (n.pending = null));
+    }
+    if (l !== null) {
+      ((i = l.next), (r = r.baseState));
+      var a = (o = null),
+        c = null,
+        g = i;
+      do {
+        var k = g.lane;
+        if ((rn & k) === k)
+          (c !== null &&
+            (c = c.next =
+              {
+                lane: 0,
+                action: g.action,
+                hasEagerState: g.hasEagerState,
+                eagerState: g.eagerState,
+                next: null,
+              }),
+            (r = g.hasEagerState ? g.eagerState : e(r, g.action)));
+        else {
+          var S = {
+            lane: k,
+            action: g.action,
+            hasEagerState: g.hasEagerState,
+            eagerState: g.eagerState,
+            next: null,
+          };
+          (c === null ? ((a = c = S), (o = r)) : (c = c.next = S),
+            (xe.lanes |= k),
+            (ln |= k));
+        }
+        g = g.next;
+      } while (g !== null && g !== i);
+      (c === null ? (o = r) : (c.next = a),
+        dt(r, t.memoizedState) || (Ye = !0),
+        (t.memoizedState = r),
+        (t.baseState = o),
+        (t.baseQueue = c),
+        (n.lastRenderedState = r));
+    }
+    if (((e = n.interleaved), e !== null)) {
+      l = e;
+      do ((i = l.lane), (xe.lanes |= i), (ln |= i), (l = l.next));
+      while (l !== e);
+    } else l === null && (n.lanes = 0);
+    return [t.memoizedState, n.dispatch];
+  }
+  function Ji(e) {
+    var t = at(),
+      n = t.queue;
+    if (n === null) throw Error(s(311));
+    n.lastRenderedReducer = e;
+    var r = n.dispatch,
+      l = n.pending,
+      i = t.memoizedState;
+    if (l !== null) {
+      n.pending = null;
+      var o = (l = l.next);
+      do ((i = e(i, o.action)), (o = o.next));
+      while (o !== l);
+      (dt(i, t.memoizedState) || (Ye = !0),
+        (t.memoizedState = i),
+        t.baseQueue === null && (t.baseState = i),
+        (n.lastRenderedState = i));
+    }
+    return [i, r];
+  }
+  function vs() {}
+  function xs(e, t) {
+    var n = xe,
+      r = at(),
+      l = t(),
+      i = !dt(r.memoizedState, l);
+    if (
+      (i && ((r.memoizedState = l), (Ye = !0)),
+      (r = r.queue),
+      Ki(Ss.bind(null, n, r, e), [e]),
+      r.getSnapshot !== t || i || (Te !== null && Te.memoizedState.tag & 1))
+    ) {
+      if (
+        ((n.flags |= 2048),
+        pr(9, ks.bind(null, n, r, l, t), void 0, null),
+        Ie === null)
+      )
+        throw Error(s(349));
+      (rn & 30) !== 0 || ws(n, t, l);
+    }
+    return l;
+  }
+  function ws(e, t, n) {
+    ((e.flags |= 16384),
+      (e = { getSnapshot: t, value: n }),
+      (t = xe.updateQueue),
+      t === null
+        ? ((t = { lastEffect: null, stores: null }),
+          (xe.updateQueue = t),
+          (t.stores = [e]))
+        : ((n = t.stores), n === null ? (t.stores = [e]) : n.push(e)));
+  }
+  function ks(e, t, n, r) {
+    ((t.value = n), (t.getSnapshot = r), _s(t) && js(e));
+  }
+  function Ss(e, t, n) {
+    return n(function () {
+      _s(t) && js(e);
+    });
+  }
+  function _s(e) {
+    var t = e.getSnapshot;
+    e = e.value;
+    try {
+      var n = t();
+      return !dt(e, n);
+    } catch {
+      return !0;
+    }
+  }
+  function js(e) {
+    var t = Et(e, 1);
+    t !== null && gt(t, e, 1, -1);
+  }
+  function Cs(e) {
+    var t = wt();
+    return (
+      typeof e == "function" && (e = e()),
+      (t.memoizedState = t.baseState = e),
+      (e = {
+        pending: null,
+        interleaved: null,
+        lanes: 0,
+        dispatch: null,
+        lastRenderedReducer: fr,
+        lastRenderedState: e,
+      }),
+      (t.queue = e),
+      (e = e.dispatch = _d.bind(null, xe, e)),
+      [t.memoizedState, e]
+    );
+  }
+  function pr(e, t, n, r) {
+    return (
+      (e = { tag: e, create: t, destroy: n, deps: r, next: null }),
+      (t = xe.updateQueue),
+      t === null
+        ? ((t = { lastEffect: null, stores: null }),
+          (xe.updateQueue = t),
+          (t.lastEffect = e.next = e))
+        : ((n = t.lastEffect),
+          n === null
+            ? (t.lastEffect = e.next = e)
+            : ((r = n.next), (n.next = e), (e.next = r), (t.lastEffect = e))),
+      e
+    );
+  }
+  function Es() {
+    return at().memoizedState;
+  }
+  function sl(e, t, n, r) {
+    var l = wt();
+    ((xe.flags |= e),
+      (l.memoizedState = pr(1 | t, n, void 0, r === void 0 ? null : r)));
+  }
+  function ul(e, t, n, r) {
+    var l = at();
+    r = r === void 0 ? null : r;
+    var i = void 0;
+    if (be !== null) {
+      var o = be.memoizedState;
+      if (((i = o.destroy), r !== null && Hi(r, o.deps))) {
+        l.memoizedState = pr(t, n, i, r);
+        return;
+      }
+    }
+    ((xe.flags |= e), (l.memoizedState = pr(1 | t, n, i, r)));
+  }
+  function Ns(e, t) {
+    return sl(8390656, 8, e, t);
+  }
+  function Ki(e, t) {
+    return ul(2048, 8, e, t);
+  }
+  function bs(e, t) {
+    return ul(4, 2, e, t);
+  }
+  function zs(e, t) {
+    return ul(4, 4, e, t);
+  }
+  function Ps(e, t) {
+    if (typeof t == "function")
+      return (
+        (e = e()),
+        t(e),
+        function () {
+          t(null);
+        }
+      );
+    if (t != null)
+      return (
+        (e = e()),
+        (t.current = e),
+        function () {
+          t.current = null;
+        }
+      );
+  }
+  function Ts(e, t, n) {
+    return (
+      (n = n != null ? n.concat([e]) : null),
+      ul(4, 4, Ps.bind(null, t, e), n)
+    );
+  }
+  function Xi() {}
+  function Is(e, t) {
+    var n = at();
+    t = t === void 0 ? null : t;
+    var r = n.memoizedState;
+    return r !== null && t !== null && Hi(t, r[1])
+      ? r[0]
+      : ((n.memoizedState = [e, t]), e);
+  }
+  function Rs(e, t) {
+    var n = at();
+    t = t === void 0 ? null : t;
+    var r = n.memoizedState;
+    return r !== null && t !== null && Hi(t, r[1])
+      ? r[0]
+      : ((e = e()), (n.memoizedState = [e, t]), e);
+  }
+  function Ls(e, t, n) {
+    return (rn & 21) === 0
+      ? (e.baseState && ((e.baseState = !1), (Ye = !0)), (e.memoizedState = n))
+      : (dt(n, t) ||
+          ((n = ca()), (xe.lanes |= n), (ln |= n), (e.baseState = !0)),
+        t);
+  }
+  function kd(e, t) {
+    var n = ae;
+    ((ae = n !== 0 && 4 > n ? n : 4), e(!0));
+    var r = Vi.transition;
+    Vi.transition = {};
+    try {
+      (e(!1), t());
+    } finally {
+      ((ae = n), (Vi.transition = r));
+    }
+  }
+  function Ms() {
+    return at().memoizedState;
+  }
+  function Sd(e, t, n) {
+    var r = Yt(e);
+    if (
+      ((n = {
+        lane: r,
+        action: n,
+        hasEagerState: !1,
+        eagerState: null,
+        next: null,
+      }),
+      Ds(e))
+    )
+      Fs(t, n);
+    else if (((n = ps(e, t, n, r)), n !== null)) {
+      var l = Ve();
+      (gt(n, e, r, l), Os(n, t, r));
+    }
+  }
+  function _d(e, t, n) {
+    var r = Yt(e),
+      l = {
+        lane: r,
+        action: n,
+        hasEagerState: !1,
+        eagerState: null,
+        next: null,
+      };
+    if (Ds(e)) Fs(t, l);
+    else {
+      var i = e.alternate;
+      if (
+        e.lanes === 0 &&
+        (i === null || i.lanes === 0) &&
+        ((i = t.lastRenderedReducer), i !== null)
+      )
+        try {
+          var o = t.lastRenderedState,
+            a = i(o, n);
+          if (((l.hasEagerState = !0), (l.eagerState = a), dt(a, o))) {
+            var c = t.interleaved;
+            (c === null
+              ? ((l.next = l), Fi(t))
+              : ((l.next = c.next), (c.next = l)),
+              (t.interleaved = l));
+            return;
+          }
+        } catch {
+        } finally {
+        }
+      ((n = ps(e, t, l, r)),
+        n !== null && ((l = Ve()), gt(n, e, r, l), Os(n, t, r)));
+    }
+  }
+  function Ds(e) {
+    var t = e.alternate;
+    return e === xe || (t !== null && t === xe);
+  }
+  function Fs(e, t) {
+    cr = al = !0;
+    var n = e.pending;
+    (n === null ? (t.next = t) : ((t.next = n.next), (n.next = t)),
+      (e.pending = t));
+  }
+  function Os(e, t, n) {
+    if ((n & 4194240) !== 0) {
+      var r = t.lanes;
+      ((r &= e.pendingLanes), (n |= r), (t.lanes = n), Zl(e, n));
+    }
+  }
+  var cl = {
+      readContext: ot,
+      useCallback: Oe,
+      useContext: Oe,
+      useEffect: Oe,
+      useImperativeHandle: Oe,
+      useInsertionEffect: Oe,
+      useLayoutEffect: Oe,
+      useMemo: Oe,
+      useReducer: Oe,
+      useRef: Oe,
+      useState: Oe,
+      useDebugValue: Oe,
+      useDeferredValue: Oe,
+      useTransition: Oe,
+      useMutableSource: Oe,
+      useSyncExternalStore: Oe,
+      useId: Oe,
+      unstable_isNewReconciler: !1,
+    },
+    jd = {
+      readContext: ot,
+      useCallback: function (e, t) {
+        return ((wt().memoizedState = [e, t === void 0 ? null : t]), e);
+      },
+      useContext: ot,
+      useEffect: Ns,
+      useImperativeHandle: function (e, t, n) {
+        return (
+          (n = n != null ? n.concat([e]) : null),
+          sl(4194308, 4, Ps.bind(null, t, e), n)
+        );
+      },
+      useLayoutEffect: function (e, t) {
+        return sl(4194308, 4, e, t);
+      },
+      useInsertionEffect: function (e, t) {
+        return sl(4, 2, e, t);
+      },
+      useMemo: function (e, t) {
+        var n = wt();
+        return (
+          (t = t === void 0 ? null : t),
+          (e = e()),
+          (n.memoizedState = [e, t]),
+          e
+        );
+      },
+      useReducer: function (e, t, n) {
+        var r = wt();
+        return (
+          (t = n !== void 0 ? n(t) : t),
+          (r.memoizedState = r.baseState = t),
+          (e = {
+            pending: null,
+            interleaved: null,
+            lanes: 0,
+            dispatch: null,
+            lastRenderedReducer: e,
+            lastRenderedState: t,
+          }),
+          (r.queue = e),
+          (e = e.dispatch = Sd.bind(null, xe, e)),
+          [r.memoizedState, e]
+        );
+      },
+      useRef: function (e) {
+        var t = wt();
+        return ((e = { current: e }), (t.memoizedState = e));
+      },
+      useState: Cs,
+      useDebugValue: Xi,
+      useDeferredValue: function (e) {
+        return (wt().memoizedState = e);
+      },
+      useTransition: function () {
+        var e = Cs(!1),
+          t = e[0];
+        return ((e = kd.bind(null, e[1])), (wt().memoizedState = e), [t, e]);
+      },
+      useMutableSource: function () {},
+      useSyncExternalStore: function (e, t, n) {
+        var r = xe,
+          l = wt();
+        if (ge) {
+          if (n === void 0) throw Error(s(407));
+          n = n();
+        } else {
+          if (((n = t()), Ie === null)) throw Error(s(349));
+          (rn & 30) !== 0 || ws(r, t, n);
+        }
+        l.memoizedState = n;
+        var i = { value: n, getSnapshot: t };
+        return (
+          (l.queue = i),
+          Ns(Ss.bind(null, r, i, e), [e]),
+          (r.flags |= 2048),
+          pr(9, ks.bind(null, r, i, n, t), void 0, null),
+          n
+        );
+      },
+      useId: function () {
+        var e = wt(),
+          t = Ie.identifierPrefix;
+        if (ge) {
+          var n = Ct,
+            r = jt;
+          ((n = (r & ~(1 << (32 - ct(r) - 1))).toString(32) + n),
+            (t = ":" + t + "R" + n),
+            (n = dr++),
+            0 < n && (t += "H" + n.toString(32)),
+            (t += ":"));
+        } else ((n = wd++), (t = ":" + t + "r" + n.toString(32) + ":"));
+        return (e.memoizedState = t);
+      },
+      unstable_isNewReconciler: !1,
+    },
+    Cd = {
+      readContext: ot,
+      useCallback: Is,
+      useContext: ot,
+      useEffect: Ki,
+      useImperativeHandle: Ts,
+      useInsertionEffect: bs,
+      useLayoutEffect: zs,
+      useMemo: Rs,
+      useReducer: Qi,
+      useRef: Es,
+      useState: function () {
+        return Qi(fr);
+      },
+      useDebugValue: Xi,
+      useDeferredValue: function (e) {
+        var t = at();
+        return Ls(t, be.memoizedState, e);
+      },
+      useTransition: function () {
+        var e = Qi(fr)[0],
+          t = at().memoizedState;
+        return [e, t];
+      },
+      useMutableSource: vs,
+      useSyncExternalStore: xs,
+      useId: Ms,
+      unstable_isNewReconciler: !1,
+    },
+    Ed = {
+      readContext: ot,
+      useCallback: Is,
+      useContext: ot,
+      useEffect: Ki,
+      useImperativeHandle: Ts,
+      useInsertionEffect: bs,
+      useLayoutEffect: zs,
+      useMemo: Rs,
+      useReducer: Ji,
+      useRef: Es,
+      useState: function () {
+        return Ji(fr);
+      },
+      useDebugValue: Xi,
+      useDeferredValue: function (e) {
+        var t = at();
+        return be === null ? (t.memoizedState = e) : Ls(t, be.memoizedState, e);
+      },
+      useTransition: function () {
+        var e = Ji(fr)[0],
+          t = at().memoizedState;
+        return [e, t];
+      },
+      useMutableSource: vs,
+      useSyncExternalStore: xs,
+      useId: Ms,
+      unstable_isNewReconciler: !1,
+    };
+  function pt(e, t) {
+    if (e && e.defaultProps) {
+      ((t = v({}, t)), (e = e.defaultProps));
+      for (var n in e) t[n] === void 0 && (t[n] = e[n]);
+      return t;
+    }
+    return t;
+  }
+  function Gi(e, t, n, r) {
+    ((t = e.memoizedState),
+      (n = n(r, t)),
+      (n = n == null ? t : v({}, t, n)),
+      (e.memoizedState = n),
+      e.lanes === 0 && (e.updateQueue.baseState = n));
+  }
+  var dl = {
+    isMounted: function (e) {
+      return (e = e._reactInternals) ? Xt(e) === e : !1;
+    },
+    enqueueSetState: function (e, t, n) {
+      e = e._reactInternals;
+      var r = Ve(),
+        l = Yt(e),
+        i = Nt(r, l);
+      ((i.payload = t),
+        n != null && (i.callback = n),
+        (t = $t(e, i, l)),
+        t !== null && (gt(t, e, l, r), rl(t, e, l)));
+    },
+    enqueueReplaceState: function (e, t, n) {
+      e = e._reactInternals;
+      var r = Ve(),
+        l = Yt(e),
+        i = Nt(r, l);
+      ((i.tag = 1),
+        (i.payload = t),
+        n != null && (i.callback = n),
+        (t = $t(e, i, l)),
+        t !== null && (gt(t, e, l, r), rl(t, e, l)));
+    },
+    enqueueForceUpdate: function (e, t) {
+      e = e._reactInternals;
+      var n = Ve(),
+        r = Yt(e),
+        l = Nt(n, r);
+      ((l.tag = 2),
+        t != null && (l.callback = t),
+        (t = $t(e, l, r)),
+        t !== null && (gt(t, e, r, n), rl(t, e, r)));
+    },
+  };
+  function As(e, t, n, r, l, i, o) {
+    return (
+      (e = e.stateNode),
+      typeof e.shouldComponentUpdate == "function"
+        ? e.shouldComponentUpdate(r, i, o)
+        : t.prototype && t.prototype.isPureReactComponent
+          ? !qn(n, r) || !qn(l, i)
+          : !0
+    );
+  }
+  function Us(e, t, n) {
+    var r = !1,
+      l = At,
+      i = t.contextType;
+    return (
+      typeof i == "object" && i !== null
+        ? (i = ot(i))
+        : ((l = We(t) ? Zt : Fe.current),
+          (r = t.contextTypes),
+          (i = (r = r != null) ? Sn(e, l) : At)),
+      (t = new t(n, i)),
+      (e.memoizedState =
+        t.state !== null && t.state !== void 0 ? t.state : null),
+      (t.updater = dl),
+      (e.stateNode = t),
+      (t._reactInternals = e),
+      r &&
+        ((e = e.stateNode),
+        (e.__reactInternalMemoizedUnmaskedChildContext = l),
+        (e.__reactInternalMemoizedMaskedChildContext = i)),
+      t
+    );
+  }
+  function Bs(e, t, n, r) {
+    ((e = t.state),
+      typeof t.componentWillReceiveProps == "function" &&
+        t.componentWillReceiveProps(n, r),
+      typeof t.UNSAFE_componentWillReceiveProps == "function" &&
+        t.UNSAFE_componentWillReceiveProps(n, r),
+      t.state !== e && dl.enqueueReplaceState(t, t.state, null));
+  }
+  function Zi(e, t, n, r) {
+    var l = e.stateNode;
+    ((l.props = n), (l.state = e.memoizedState), (l.refs = {}), Oi(e));
+    var i = t.contextType;
+    (typeof i == "object" && i !== null
+      ? (l.context = ot(i))
+      : ((i = We(t) ? Zt : Fe.current), (l.context = Sn(e, i))),
+      (l.state = e.memoizedState),
+      (i = t.getDerivedStateFromProps),
+      typeof i == "function" && (Gi(e, t, i, n), (l.state = e.memoizedState)),
+      typeof t.getDerivedStateFromProps == "function" ||
+        typeof l.getSnapshotBeforeUpdate == "function" ||
+        (typeof l.UNSAFE_componentWillMount != "function" &&
+          typeof l.componentWillMount != "function") ||
+        ((t = l.state),
+        typeof l.componentWillMount == "function" && l.componentWillMount(),
+        typeof l.UNSAFE_componentWillMount == "function" &&
+          l.UNSAFE_componentWillMount(),
+        t !== l.state && dl.enqueueReplaceState(l, l.state, null),
+        ll(e, n, l, r),
+        (l.state = e.memoizedState)),
+      typeof l.componentDidMount == "function" && (e.flags |= 4194308));
+  }
+  function Pn(e, t) {
+    try {
+      var n = "",
+        r = t;
+      do ((n += Z(r)), (r = r.return));
+      while (r);
+      var l = n;
+    } catch (i) {
+      l =
+        `
+Error generating stack: ` +
+        i.message +
+        `
+` +
+        i.stack;
+    }
+    return { value: e, source: t, stack: l, digest: null };
+  }
+  function qi(e, t, n) {
+    return { value: e, source: null, stack: n ?? null, digest: t ?? null };
+  }
+  function eo(e, t) {
+    try {
+      console.error(t.value);
+    } catch (n) {
+      setTimeout(function () {
+        throw n;
+      });
+    }
+  }
+  var Nd = typeof WeakMap == "function" ? WeakMap : Map;
+  function $s(e, t, n) {
+    ((n = Nt(-1, n)), (n.tag = 3), (n.payload = { element: null }));
+    var r = t.value;
+    return (
+      (n.callback = function () {
+        (vl || ((vl = !0), (go = r)), eo(e, t));
+      }),
+      n
+    );
+  }
+  function Vs(e, t, n) {
+    ((n = Nt(-1, n)), (n.tag = 3));
+    var r = e.type.getDerivedStateFromError;
+    if (typeof r == "function") {
+      var l = t.value;
+      ((n.payload = function () {
+        return r(l);
+      }),
+        (n.callback = function () {
+          eo(e, t);
+        }));
+    }
+    var i = e.stateNode;
+    return (
+      i !== null &&
+        typeof i.componentDidCatch == "function" &&
+        (n.callback = function () {
+          (eo(e, t),
+            typeof r != "function" &&
+              (Ht === null ? (Ht = new Set([this])) : Ht.add(this)));
+          var o = t.stack;
+          this.componentDidCatch(t.value, {
+            componentStack: o !== null ? o : "",
+          });
+        }),
+      n
+    );
+  }
+  function Hs(e, t, n) {
+    var r = e.pingCache;
+    if (r === null) {
+      r = e.pingCache = new Nd();
+      var l = new Set();
+      r.set(t, l);
+    } else ((l = r.get(t)), l === void 0 && ((l = new Set()), r.set(t, l)));
+    l.has(n) || (l.add(n), (e = Bd.bind(null, e, t, n)), t.then(e, e));
+  }
+  function Ws(e) {
+    do {
+      var t;
+      if (
+        ((t = e.tag === 13) &&
+          ((t = e.memoizedState),
+          (t = t !== null ? t.dehydrated !== null : !0)),
+        t)
+      )
+        return e;
+      e = e.return;
+    } while (e !== null);
+    return null;
+  }
+  function Ys(e, t, n, r, l) {
+    return (e.mode & 1) === 0
+      ? (e === t
+          ? (e.flags |= 65536)
+          : ((e.flags |= 128),
+            (n.flags |= 131072),
+            (n.flags &= -52805),
+            n.tag === 1 &&
+              (n.alternate === null
+                ? (n.tag = 17)
+                : ((t = Nt(-1, 1)), (t.tag = 2), $t(n, t, 1))),
+            (n.lanes |= 1)),
+        e)
+      : ((e.flags |= 65536), (e.lanes = l), e);
+  }
+  var bd = W.ReactCurrentOwner,
+    Ye = !1;
+  function $e(e, t, n, r) {
+    t.child = e === null ? fs(t, null, n, r) : En(t, e.child, n, r);
+  }
+  function Qs(e, t, n, r, l) {
+    n = n.render;
+    var i = t.ref;
+    return (
+      bn(t, l),
+      (r = Wi(e, t, n, r, i, l)),
+      (n = Yi()),
+      e !== null && !Ye
+        ? ((t.updateQueue = e.updateQueue),
+          (t.flags &= -2053),
+          (e.lanes &= ~l),
+          bt(e, t, l))
+        : (ge && n && bi(t), (t.flags |= 1), $e(e, t, r, l), t.child)
+    );
+  }
+  function Js(e, t, n, r, l) {
+    if (e === null) {
+      var i = n.type;
+      return typeof i == "function" &&
+        !_o(i) &&
+        i.defaultProps === void 0 &&
+        n.compare === null &&
+        n.defaultProps === void 0
+        ? ((t.tag = 15), (t.type = i), Ks(e, t, i, r, l))
+        : ((e = jl(n.type, null, r, t, t.mode, l)),
+          (e.ref = t.ref),
+          (e.return = t),
+          (t.child = e));
+    }
+    if (((i = e.child), (e.lanes & l) === 0)) {
+      var o = i.memoizedProps;
+      if (
+        ((n = n.compare), (n = n !== null ? n : qn), n(o, r) && e.ref === t.ref)
+      )
+        return bt(e, t, l);
+    }
+    return (
+      (t.flags |= 1),
+      (e = Jt(i, r)),
+      (e.ref = t.ref),
+      (e.return = t),
+      (t.child = e)
+    );
+  }
+  function Ks(e, t, n, r, l) {
+    if (e !== null) {
+      var i = e.memoizedProps;
+      if (qn(i, r) && e.ref === t.ref)
+        if (((Ye = !1), (t.pendingProps = r = i), (e.lanes & l) !== 0))
+          (e.flags & 131072) !== 0 && (Ye = !0);
+        else return ((t.lanes = e.lanes), bt(e, t, l));
+    }
+    return to(e, t, n, r, l);
+  }
+  function Xs(e, t, n) {
+    var r = t.pendingProps,
+      l = r.children,
+      i = e !== null ? e.memoizedState : null;
+    if (r.mode === "hidden")
+      if ((t.mode & 1) === 0)
+        ((t.memoizedState = {
+          baseLanes: 0,
+          cachePool: null,
+          transitions: null,
+        }),
+          ce(In, tt),
+          (tt |= n));
+      else {
+        if ((n & 1073741824) === 0)
+          return (
+            (e = i !== null ? i.baseLanes | n : n),
+            (t.lanes = t.childLanes = 1073741824),
+            (t.memoizedState = {
+              baseLanes: e,
+              cachePool: null,
+              transitions: null,
+            }),
+            (t.updateQueue = null),
+            ce(In, tt),
+            (tt |= e),
+            null
+          );
+        ((t.memoizedState = {
+          baseLanes: 0,
+          cachePool: null,
+          transitions: null,
+        }),
+          (r = i !== null ? i.baseLanes : n),
+          ce(In, tt),
+          (tt |= r));
+      }
+    else
+      (i !== null ? ((r = i.baseLanes | n), (t.memoizedState = null)) : (r = n),
+        ce(In, tt),
+        (tt |= r));
+    return ($e(e, t, l, n), t.child);
+  }
+  function Gs(e, t) {
+    var n = t.ref;
+    ((e === null && n !== null) || (e !== null && e.ref !== n)) &&
+      ((t.flags |= 512), (t.flags |= 2097152));
+  }
+  function to(e, t, n, r, l) {
+    var i = We(n) ? Zt : Fe.current;
+    return (
+      (i = Sn(t, i)),
+      bn(t, l),
+      (n = Wi(e, t, n, r, i, l)),
+      (r = Yi()),
+      e !== null && !Ye
+        ? ((t.updateQueue = e.updateQueue),
+          (t.flags &= -2053),
+          (e.lanes &= ~l),
+          bt(e, t, l))
+        : (ge && r && bi(t), (t.flags |= 1), $e(e, t, n, l), t.child)
+    );
+  }
+  function Zs(e, t, n, r, l) {
+    if (We(n)) {
+      var i = !0;
+      Kr(t);
+    } else i = !1;
+    if ((bn(t, l), t.stateNode === null))
+      (pl(e, t), Us(t, n, r), Zi(t, n, r, l), (r = !0));
+    else if (e === null) {
+      var o = t.stateNode,
+        a = t.memoizedProps;
+      o.props = a;
+      var c = o.context,
+        g = n.contextType;
+      typeof g == "object" && g !== null
+        ? (g = ot(g))
+        : ((g = We(n) ? Zt : Fe.current), (g = Sn(t, g)));
+      var k = n.getDerivedStateFromProps,
+        S =
+          typeof k == "function" ||
+          typeof o.getSnapshotBeforeUpdate == "function";
+      (S ||
+        (typeof o.UNSAFE_componentWillReceiveProps != "function" &&
+          typeof o.componentWillReceiveProps != "function") ||
+        ((a !== r || c !== g) && Bs(t, o, r, g)),
+        (Bt = !1));
+      var w = t.memoizedState;
+      ((o.state = w),
+        ll(t, r, o, l),
+        (c = t.memoizedState),
+        a !== r || w !== c || He.current || Bt
+          ? (typeof k == "function" && (Gi(t, n, k, r), (c = t.memoizedState)),
+            (a = Bt || As(t, n, a, r, w, c, g))
+              ? (S ||
+                  (typeof o.UNSAFE_componentWillMount != "function" &&
+                    typeof o.componentWillMount != "function") ||
+                  (typeof o.componentWillMount == "function" &&
+                    o.componentWillMount(),
+                  typeof o.UNSAFE_componentWillMount == "function" &&
+                    o.UNSAFE_componentWillMount()),
+                typeof o.componentDidMount == "function" &&
+                  (t.flags |= 4194308))
+              : (typeof o.componentDidMount == "function" &&
+                  (t.flags |= 4194308),
+                (t.memoizedProps = r),
+                (t.memoizedState = c)),
+            (o.props = r),
+            (o.state = c),
+            (o.context = g),
+            (r = a))
+          : (typeof o.componentDidMount == "function" && (t.flags |= 4194308),
+            (r = !1)));
+    } else {
+      ((o = t.stateNode),
+        ms(e, t),
+        (a = t.memoizedProps),
+        (g = t.type === t.elementType ? a : pt(t.type, a)),
+        (o.props = g),
+        (S = t.pendingProps),
+        (w = o.context),
+        (c = n.contextType),
+        typeof c == "object" && c !== null
+          ? (c = ot(c))
+          : ((c = We(n) ? Zt : Fe.current), (c = Sn(t, c))));
+      var T = n.getDerivedStateFromProps;
+      ((k =
+        typeof T == "function" ||
+        typeof o.getSnapshotBeforeUpdate == "function") ||
+        (typeof o.UNSAFE_componentWillReceiveProps != "function" &&
+          typeof o.componentWillReceiveProps != "function") ||
+        ((a !== S || w !== c) && Bs(t, o, r, c)),
+        (Bt = !1),
+        (w = t.memoizedState),
+        (o.state = w),
+        ll(t, r, o, l));
+      var D = t.memoizedState;
+      a !== S || w !== D || He.current || Bt
+        ? (typeof T == "function" && (Gi(t, n, T, r), (D = t.memoizedState)),
+          (g = Bt || As(t, n, g, r, w, D, c) || !1)
+            ? (k ||
+                (typeof o.UNSAFE_componentWillUpdate != "function" &&
+                  typeof o.componentWillUpdate != "function") ||
+                (typeof o.componentWillUpdate == "function" &&
+                  o.componentWillUpdate(r, D, c),
+                typeof o.UNSAFE_componentWillUpdate == "function" &&
+                  o.UNSAFE_componentWillUpdate(r, D, c)),
+              typeof o.componentDidUpdate == "function" && (t.flags |= 4),
+              typeof o.getSnapshotBeforeUpdate == "function" &&
+                (t.flags |= 1024))
+            : (typeof o.componentDidUpdate != "function" ||
+                (a === e.memoizedProps && w === e.memoizedState) ||
+                (t.flags |= 4),
+              typeof o.getSnapshotBeforeUpdate != "function" ||
+                (a === e.memoizedProps && w === e.memoizedState) ||
+                (t.flags |= 1024),
+              (t.memoizedProps = r),
+              (t.memoizedState = D)),
+          (o.props = r),
+          (o.state = D),
+          (o.context = c),
+          (r = g))
+        : (typeof o.componentDidUpdate != "function" ||
+            (a === e.memoizedProps && w === e.memoizedState) ||
+            (t.flags |= 4),
+          typeof o.getSnapshotBeforeUpdate != "function" ||
+            (a === e.memoizedProps && w === e.memoizedState) ||
+            (t.flags |= 1024),
+          (r = !1));
+    }
+    return no(e, t, n, r, i, l);
+  }
+  function no(e, t, n, r, l, i) {
+    Gs(e, t);
+    var o = (t.flags & 128) !== 0;
+    if (!r && !o) return (l && rs(t, n, !1), bt(e, t, i));
+    ((r = t.stateNode), (bd.current = t));
+    var a =
+      o && typeof n.getDerivedStateFromError != "function" ? null : r.render();
+    return (
+      (t.flags |= 1),
+      e !== null && o
+        ? ((t.child = En(t, e.child, null, i)), (t.child = En(t, null, a, i)))
+        : $e(e, t, a, i),
+      (t.memoizedState = r.state),
+      l && rs(t, n, !0),
+      t.child
+    );
+  }
+  function qs(e) {
+    var t = e.stateNode;
+    (t.pendingContext
+      ? ts(e, t.pendingContext, t.pendingContext !== t.context)
+      : t.context && ts(e, t.context, !1),
+      Ai(e, t.containerInfo));
+  }
+  function eu(e, t, n, r, l) {
+    return (Cn(), Ii(l), (t.flags |= 256), $e(e, t, n, r), t.child);
+  }
+  var ro = { dehydrated: null, treeContext: null, retryLane: 0 };
+  function lo(e) {
+    return { baseLanes: e, cachePool: null, transitions: null };
+  }
+  function tu(e, t, n) {
+    var r = t.pendingProps,
+      l = ve.current,
+      i = !1,
+      o = (t.flags & 128) !== 0,
+      a;
+    if (
+      ((a = o) ||
+        (a = e !== null && e.memoizedState === null ? !1 : (l & 2) !== 0),
+      a
+        ? ((i = !0), (t.flags &= -129))
+        : (e === null || e.memoizedState !== null) && (l |= 1),
+      ce(ve, l & 1),
+      e === null)
+    )
+      return (
+        Ti(t),
+        (e = t.memoizedState),
+        e !== null && ((e = e.dehydrated), e !== null)
+          ? ((t.mode & 1) === 0
+              ? (t.lanes = 1)
+              : e.data === "$!"
+                ? (t.lanes = 8)
+                : (t.lanes = 1073741824),
+            null)
+          : ((o = r.children),
+            (e = r.fallback),
+            i
+              ? ((r = t.mode),
+                (i = t.child),
+                (o = { mode: "hidden", children: o }),
+                (r & 1) === 0 && i !== null
+                  ? ((i.childLanes = 0), (i.pendingProps = o))
+                  : (i = Cl(o, r, 0, null)),
+                (e = un(e, r, n, null)),
+                (i.return = t),
+                (e.return = t),
+                (i.sibling = e),
+                (t.child = i),
+                (t.child.memoizedState = lo(n)),
+                (t.memoizedState = ro),
+                e)
+              : io(t, o))
+      );
+    if (((l = e.memoizedState), l !== null && ((a = l.dehydrated), a !== null)))
+      return zd(e, t, o, r, a, l, n);
+    if (i) {
+      ((i = r.fallback), (o = t.mode), (l = e.child), (a = l.sibling));
+      var c = { mode: "hidden", children: r.children };
+      return (
+        (o & 1) === 0 && t.child !== l
+          ? ((r = t.child),
+            (r.childLanes = 0),
+            (r.pendingProps = c),
+            (t.deletions = null))
+          : ((r = Jt(l, c)), (r.subtreeFlags = l.subtreeFlags & 14680064)),
+        a !== null ? (i = Jt(a, i)) : ((i = un(i, o, n, null)), (i.flags |= 2)),
+        (i.return = t),
+        (r.return = t),
+        (r.sibling = i),
+        (t.child = r),
+        (r = i),
+        (i = t.child),
+        (o = e.child.memoizedState),
+        (o =
+          o === null
+            ? lo(n)
+            : {
+                baseLanes: o.baseLanes | n,
+                cachePool: null,
+                transitions: o.transitions,
+              }),
+        (i.memoizedState = o),
+        (i.childLanes = e.childLanes & ~n),
+        (t.memoizedState = ro),
+        r
+      );
+    }
+    return (
+      (i = e.child),
+      (e = i.sibling),
+      (r = Jt(i, { mode: "visible", children: r.children })),
+      (t.mode & 1) === 0 && (r.lanes = n),
+      (r.return = t),
+      (r.sibling = null),
+      e !== null &&
+        ((n = t.deletions),
+        n === null ? ((t.deletions = [e]), (t.flags |= 16)) : n.push(e)),
+      (t.child = r),
+      (t.memoizedState = null),
+      r
+    );
+  }
+  function io(e, t) {
+    return (
+      (t = Cl({ mode: "visible", children: t }, e.mode, 0, null)),
+      (t.return = e),
+      (e.child = t)
+    );
+  }
+  function fl(e, t, n, r) {
+    return (
+      r !== null && Ii(r),
+      En(t, e.child, null, n),
+      (e = io(t, t.pendingProps.children)),
+      (e.flags |= 2),
+      (t.memoizedState = null),
+      e
+    );
+  }
+  function zd(e, t, n, r, l, i, o) {
+    if (n)
+      return t.flags & 256
+        ? ((t.flags &= -257), (r = qi(Error(s(422)))), fl(e, t, o, r))
+        : t.memoizedState !== null
+          ? ((t.child = e.child), (t.flags |= 128), null)
+          : ((i = r.fallback),
+            (l = t.mode),
+            (r = Cl({ mode: "visible", children: r.children }, l, 0, null)),
+            (i = un(i, l, o, null)),
+            (i.flags |= 2),
+            (r.return = t),
+            (i.return = t),
+            (r.sibling = i),
+            (t.child = r),
+            (t.mode & 1) !== 0 && En(t, e.child, null, o),
+            (t.child.memoizedState = lo(o)),
+            (t.memoizedState = ro),
+            i);
+    if ((t.mode & 1) === 0) return fl(e, t, o, null);
+    if (l.data === "$!") {
+      if (((r = l.nextSibling && l.nextSibling.dataset), r)) var a = r.dgst;
+      return (
+        (r = a),
+        (i = Error(s(419))),
+        (r = qi(i, r, void 0)),
+        fl(e, t, o, r)
+      );
+    }
+    if (((a = (o & e.childLanes) !== 0), Ye || a)) {
+      if (((r = Ie), r !== null)) {
+        switch (o & -o) {
+          case 4:
+            l = 2;
+            break;
+          case 16:
+            l = 8;
+            break;
+          case 64:
+          case 128:
+          case 256:
+          case 512:
+          case 1024:
+          case 2048:
+          case 4096:
+          case 8192:
+          case 16384:
+          case 32768:
+          case 65536:
+          case 131072:
+          case 262144:
+          case 524288:
+          case 1048576:
+          case 2097152:
+          case 4194304:
+          case 8388608:
+          case 16777216:
+          case 33554432:
+          case 67108864:
+            l = 32;
+            break;
+          case 536870912:
+            l = 268435456;
+            break;
+          default:
+            l = 0;
+        }
+        ((l = (l & (r.suspendedLanes | o)) !== 0 ? 0 : l),
+          l !== 0 &&
+            l !== i.retryLane &&
+            ((i.retryLane = l), Et(e, l), gt(r, e, l, -1)));
+      }
+      return (So(), (r = qi(Error(s(421)))), fl(e, t, o, r));
+    }
+    return l.data === "$?"
+      ? ((t.flags |= 128),
+        (t.child = e.child),
+        (t = $d.bind(null, e)),
+        (l._reactRetry = t),
+        null)
+      : ((e = i.treeContext),
+        (et = Ft(l.nextSibling)),
+        (qe = t),
+        (ge = !0),
+        (ft = null),
+        e !== null &&
+          ((lt[it++] = jt),
+          (lt[it++] = Ct),
+          (lt[it++] = qt),
+          (jt = e.id),
+          (Ct = e.overflow),
+          (qt = t)),
+        (t = io(t, r.children)),
+        (t.flags |= 4096),
+        t);
+  }
+  function nu(e, t, n) {
+    e.lanes |= t;
+    var r = e.alternate;
+    (r !== null && (r.lanes |= t), Di(e.return, t, n));
+  }
+  function oo(e, t, n, r, l) {
+    var i = e.memoizedState;
+    i === null
+      ? (e.memoizedState = {
+          isBackwards: t,
+          rendering: null,
+          renderingStartTime: 0,
+          last: r,
+          tail: n,
+          tailMode: l,
+        })
+      : ((i.isBackwards = t),
+        (i.rendering = null),
+        (i.renderingStartTime = 0),
+        (i.last = r),
+        (i.tail = n),
+        (i.tailMode = l));
+  }
+  function ru(e, t, n) {
+    var r = t.pendingProps,
+      l = r.revealOrder,
+      i = r.tail;
+    if (($e(e, t, r.children, n), (r = ve.current), (r & 2) !== 0))
+      ((r = (r & 1) | 2), (t.flags |= 128));
+    else {
+      if (e !== null && (e.flags & 128) !== 0)
+        e: for (e = t.child; e !== null;) {
+          if (e.tag === 13) e.memoizedState !== null && nu(e, n, t);
+          else if (e.tag === 19) nu(e, n, t);
+          else if (e.child !== null) {
+            ((e.child.return = e), (e = e.child));
+            continue;
+          }
+          if (e === t) break e;
+          for (; e.sibling === null;) {
+            if (e.return === null || e.return === t) break e;
+            e = e.return;
+          }
+          ((e.sibling.return = e.return), (e = e.sibling));
+        }
+      r &= 1;
+    }
+    if ((ce(ve, r), (t.mode & 1) === 0)) t.memoizedState = null;
+    else
+      switch (l) {
+        case "forwards":
+          for (n = t.child, l = null; n !== null;)
+            ((e = n.alternate),
+              e !== null && il(e) === null && (l = n),
+              (n = n.sibling));
+          ((n = l),
+            n === null
+              ? ((l = t.child), (t.child = null))
+              : ((l = n.sibling), (n.sibling = null)),
+            oo(t, !1, l, n, i));
+          break;
+        case "backwards":
+          for (n = null, l = t.child, t.child = null; l !== null;) {
+            if (((e = l.alternate), e !== null && il(e) === null)) {
+              t.child = l;
+              break;
+            }
+            ((e = l.sibling), (l.sibling = n), (n = l), (l = e));
+          }
+          oo(t, !0, n, null, i);
+          break;
+        case "together":
+          oo(t, !1, null, null, void 0);
+          break;
+        default:
+          t.memoizedState = null;
+      }
+    return t.child;
+  }
+  function pl(e, t) {
+    (t.mode & 1) === 0 &&
+      e !== null &&
+      ((e.alternate = null), (t.alternate = null), (t.flags |= 2));
+  }
+  function bt(e, t, n) {
+    if (
+      (e !== null && (t.dependencies = e.dependencies),
+      (ln |= t.lanes),
+      (n & t.childLanes) === 0)
+    )
+      return null;
+    if (e !== null && t.child !== e.child) throw Error(s(153));
+    if (t.child !== null) {
+      for (
+        e = t.child, n = Jt(e, e.pendingProps), t.child = n, n.return = t;
+        e.sibling !== null;
+      )
+        ((e = e.sibling),
+          (n = n.sibling = Jt(e, e.pendingProps)),
+          (n.return = t));
+      n.sibling = null;
+    }
+    return t.child;
+  }
+  function Pd(e, t, n) {
+    switch (t.tag) {
+      case 3:
+        (qs(t), Cn());
+        break;
+      case 5:
+        ys(t);
+        break;
+      case 1:
+        We(t.type) && Kr(t);
+        break;
+      case 4:
+        Ai(t, t.stateNode.containerInfo);
+        break;
+      case 10:
+        var r = t.type._context,
+          l = t.memoizedProps.value;
+        (ce(tl, r._currentValue), (r._currentValue = l));
+        break;
+      case 13:
+        if (((r = t.memoizedState), r !== null))
+          return r.dehydrated !== null
+            ? (ce(ve, ve.current & 1), (t.flags |= 128), null)
+            : (n & t.child.childLanes) !== 0
+              ? tu(e, t, n)
+              : (ce(ve, ve.current & 1),
+                (e = bt(e, t, n)),
+                e !== null ? e.sibling : null);
+        ce(ve, ve.current & 1);
+        break;
+      case 19:
+        if (((r = (n & t.childLanes) !== 0), (e.flags & 128) !== 0)) {
+          if (r) return ru(e, t, n);
+          t.flags |= 128;
+        }
+        if (
+          ((l = t.memoizedState),
+          l !== null &&
+            ((l.rendering = null), (l.tail = null), (l.lastEffect = null)),
+          ce(ve, ve.current),
+          r)
+        )
+          break;
+        return null;
+      case 22:
+      case 23:
+        return ((t.lanes = 0), Xs(e, t, n));
+    }
+    return bt(e, t, n);
+  }
+  var lu, ao, iu, ou;
+  ((lu = function (e, t) {
+    for (var n = t.child; n !== null;) {
+      if (n.tag === 5 || n.tag === 6) e.appendChild(n.stateNode);
+      else if (n.tag !== 4 && n.child !== null) {
+        ((n.child.return = n), (n = n.child));
+        continue;
+      }
+      if (n === t) break;
+      for (; n.sibling === null;) {
+        if (n.return === null || n.return === t) return;
+        n = n.return;
+      }
+      ((n.sibling.return = n.return), (n = n.sibling));
+    }
+  }),
+    (ao = function () {}),
+    (iu = function (e, t, n, r) {
+      var l = e.memoizedProps;
+      if (l !== r) {
+        ((e = t.stateNode), nn(xt.current));
+        var i = null;
+        switch (n) {
+          case "input":
+            ((l = Dl(e, l)), (r = Dl(e, r)), (i = []));
+            break;
+          case "select":
+            ((l = v({}, l, { value: void 0 })),
+              (r = v({}, r, { value: void 0 })),
+              (i = []));
+            break;
+          case "textarea":
+            ((l = Al(e, l)), (r = Al(e, r)), (i = []));
+            break;
+          default:
+            typeof l.onClick != "function" &&
+              typeof r.onClick == "function" &&
+              (e.onclick = Yr);
+        }
+        Bl(n, r);
+        var o;
+        n = null;
+        for (g in l)
+          if (!r.hasOwnProperty(g) && l.hasOwnProperty(g) && l[g] != null)
+            if (g === "style") {
+              var a = l[g];
+              for (o in a) a.hasOwnProperty(o) && (n || (n = {}), (n[o] = ""));
+            } else
+              g !== "dangerouslySetInnerHTML" &&
+                g !== "children" &&
+                g !== "suppressContentEditableWarning" &&
+                g !== "suppressHydrationWarning" &&
+                g !== "autoFocus" &&
+                (_.hasOwnProperty(g)
+                  ? i || (i = [])
+                  : (i = i || []).push(g, null));
+        for (g in r) {
+          var c = r[g];
+          if (
+            ((a = l != null ? l[g] : void 0),
+            r.hasOwnProperty(g) && c !== a && (c != null || a != null))
+          )
+            if (g === "style")
+              if (a) {
+                for (o in a)
+                  !a.hasOwnProperty(o) ||
+                    (c && c.hasOwnProperty(o)) ||
+                    (n || (n = {}), (n[o] = ""));
+                for (o in c)
+                  c.hasOwnProperty(o) &&
+                    a[o] !== c[o] &&
+                    (n || (n = {}), (n[o] = c[o]));
+              } else (n || (i || (i = []), i.push(g, n)), (n = c));
+            else
+              g === "dangerouslySetInnerHTML"
+                ? ((c = c ? c.__html : void 0),
+                  (a = a ? a.__html : void 0),
+                  c != null && a !== c && (i = i || []).push(g, c))
+                : g === "children"
+                  ? (typeof c != "string" && typeof c != "number") ||
+                    (i = i || []).push(g, "" + c)
+                  : g !== "suppressContentEditableWarning" &&
+                    g !== "suppressHydrationWarning" &&
+                    (_.hasOwnProperty(g)
+                      ? (c != null && g === "onScroll" && fe("scroll", e),
+                        i || a === c || (i = []))
+                      : (i = i || []).push(g, c));
+        }
+        n && (i = i || []).push("style", n);
+        var g = i;
+        (t.updateQueue = g) && (t.flags |= 4);
+      }
+    }),
+    (ou = function (e, t, n, r) {
+      n !== r && (t.flags |= 4);
+    }));
+  function mr(e, t) {
+    if (!ge)
+      switch (e.tailMode) {
+        case "hidden":
+          t = e.tail;
+          for (var n = null; t !== null;)
+            (t.alternate !== null && (n = t), (t = t.sibling));
+          n === null ? (e.tail = null) : (n.sibling = null);
+          break;
+        case "collapsed":
+          n = e.tail;
+          for (var r = null; n !== null;)
+            (n.alternate !== null && (r = n), (n = n.sibling));
+          r === null
+            ? t || e.tail === null
+              ? (e.tail = null)
+              : (e.tail.sibling = null)
+            : (r.sibling = null);
+      }
+  }
+  function Ae(e) {
+    var t = e.alternate !== null && e.alternate.child === e.child,
+      n = 0,
+      r = 0;
+    if (t)
+      for (var l = e.child; l !== null;)
+        ((n |= l.lanes | l.childLanes),
+          (r |= l.subtreeFlags & 14680064),
+          (r |= l.flags & 14680064),
+          (l.return = e),
+          (l = l.sibling));
+    else
+      for (l = e.child; l !== null;)
+        ((n |= l.lanes | l.childLanes),
+          (r |= l.subtreeFlags),
+          (r |= l.flags),
+          (l.return = e),
+          (l = l.sibling));
+    return ((e.subtreeFlags |= r), (e.childLanes = n), t);
+  }
+  function Td(e, t, n) {
+    var r = t.pendingProps;
+    switch ((zi(t), t.tag)) {
+      case 2:
+      case 16:
+      case 15:
+      case 0:
+      case 11:
+      case 7:
+      case 8:
+      case 12:
+      case 9:
+      case 14:
+        return (Ae(t), null);
+      case 1:
+        return (We(t.type) && Jr(), Ae(t), null);
+      case 3:
+        return (
+          (r = t.stateNode),
+          zn(),
+          pe(He),
+          pe(Fe),
+          $i(),
+          r.pendingContext &&
+            ((r.context = r.pendingContext), (r.pendingContext = null)),
+          (e === null || e.child === null) &&
+            (qr(t)
+              ? (t.flags |= 4)
+              : e === null ||
+                (e.memoizedState.isDehydrated && (t.flags & 256) === 0) ||
+                ((t.flags |= 1024), ft !== null && (xo(ft), (ft = null)))),
+          ao(e, t),
+          Ae(t),
+          null
+        );
+      case 5:
+        Ui(t);
+        var l = nn(ur.current);
+        if (((n = t.type), e !== null && t.stateNode != null))
+          (iu(e, t, n, r, l),
+            e.ref !== t.ref && ((t.flags |= 512), (t.flags |= 2097152)));
+        else {
+          if (!r) {
+            if (t.stateNode === null) throw Error(s(166));
+            return (Ae(t), null);
+          }
+          if (((e = nn(xt.current)), qr(t))) {
+            ((r = t.stateNode), (n = t.type));
+            var i = t.memoizedProps;
+            switch (((r[vt] = t), (r[lr] = i), (e = (t.mode & 1) !== 0), n)) {
+              case "dialog":
+                (fe("cancel", r), fe("close", r));
+                break;
+              case "iframe":
+              case "object":
+              case "embed":
+                fe("load", r);
+                break;
+              case "video":
+              case "audio":
+                for (l = 0; l < tr.length; l++) fe(tr[l], r);
+                break;
+              case "source":
+                fe("error", r);
+                break;
+              case "img":
+              case "image":
+              case "link":
+                (fe("error", r), fe("load", r));
+                break;
+              case "details":
+                fe("toggle", r);
+                break;
+              case "input":
+                (Uo(r, i), fe("invalid", r));
+                break;
+              case "select":
+                ((r._wrapperState = { wasMultiple: !!i.multiple }),
+                  fe("invalid", r));
+                break;
+              case "textarea":
+                (Vo(r, i), fe("invalid", r));
+            }
+            (Bl(n, i), (l = null));
+            for (var o in i)
+              if (i.hasOwnProperty(o)) {
+                var a = i[o];
+                o === "children"
+                  ? typeof a == "string"
+                    ? r.textContent !== a &&
+                      (i.suppressHydrationWarning !== !0 &&
+                        Wr(r.textContent, a, e),
+                      (l = ["children", a]))
+                    : typeof a == "number" &&
+                      r.textContent !== "" + a &&
+                      (i.suppressHydrationWarning !== !0 &&
+                        Wr(r.textContent, a, e),
+                      (l = ["children", "" + a]))
+                  : _.hasOwnProperty(o) &&
+                    a != null &&
+                    o === "onScroll" &&
+                    fe("scroll", r);
+              }
+            switch (n) {
+              case "input":
+                (Sr(r), $o(r, i, !0));
+                break;
+              case "textarea":
+                (Sr(r), Wo(r));
+                break;
+              case "select":
+              case "option":
+                break;
+              default:
+                typeof i.onClick == "function" && (r.onclick = Yr);
+            }
+            ((r = l), (t.updateQueue = r), r !== null && (t.flags |= 4));
+          } else {
+            ((o = l.nodeType === 9 ? l : l.ownerDocument),
+              e === "http://www.w3.org/1999/xhtml" && (e = Yo(n)),
+              e === "http://www.w3.org/1999/xhtml"
+                ? n === "script"
+                  ? ((e = o.createElement("div")),
+                    (e.innerHTML = "<script><\/script>"),
+                    (e = e.removeChild(e.firstChild)))
+                  : typeof r.is == "string"
+                    ? (e = o.createElement(n, { is: r.is }))
+                    : ((e = o.createElement(n)),
+                      n === "select" &&
+                        ((o = e),
+                        r.multiple
+                          ? (o.multiple = !0)
+                          : r.size && (o.size = r.size)))
+                : (e = o.createElementNS(e, n)),
+              (e[vt] = t),
+              (e[lr] = r),
+              lu(e, t, !1, !1),
+              (t.stateNode = e));
+            e: {
+              switch (((o = $l(n, r)), n)) {
+                case "dialog":
+                  (fe("cancel", e), fe("close", e), (l = r));
+                  break;
+                case "iframe":
+                case "object":
+                case "embed":
+                  (fe("load", e), (l = r));
+                  break;
+                case "video":
+                case "audio":
+                  for (l = 0; l < tr.length; l++) fe(tr[l], e);
+                  l = r;
+                  break;
+                case "source":
+                  (fe("error", e), (l = r));
+                  break;
+                case "img":
+                case "image":
+                case "link":
+                  (fe("error", e), fe("load", e), (l = r));
+                  break;
+                case "details":
+                  (fe("toggle", e), (l = r));
+                  break;
+                case "input":
+                  (Uo(e, r), (l = Dl(e, r)), fe("invalid", e));
+                  break;
+                case "option":
+                  l = r;
+                  break;
+                case "select":
+                  ((e._wrapperState = { wasMultiple: !!r.multiple }),
+                    (l = v({}, r, { value: void 0 })),
+                    fe("invalid", e));
+                  break;
+                case "textarea":
+                  (Vo(e, r), (l = Al(e, r)), fe("invalid", e));
+                  break;
+                default:
+                  l = r;
+              }
+              (Bl(n, l), (a = l));
+              for (i in a)
+                if (a.hasOwnProperty(i)) {
+                  var c = a[i];
+                  i === "style"
+                    ? Ko(e, c)
+                    : i === "dangerouslySetInnerHTML"
+                      ? ((c = c ? c.__html : void 0), c != null && Qo(e, c))
+                      : i === "children"
+                        ? typeof c == "string"
+                          ? (n !== "textarea" || c !== "") && Dn(e, c)
+                          : typeof c == "number" && Dn(e, "" + c)
+                        : i !== "suppressContentEditableWarning" &&
+                          i !== "suppressHydrationWarning" &&
+                          i !== "autoFocus" &&
+                          (_.hasOwnProperty(i)
+                            ? c != null && i === "onScroll" && fe("scroll", e)
+                            : c != null && _e(e, i, c, o));
+                }
+              switch (n) {
+                case "input":
+                  (Sr(e), $o(e, r, !1));
+                  break;
+                case "textarea":
+                  (Sr(e), Wo(e));
+                  break;
+                case "option":
+                  r.value != null && e.setAttribute("value", "" + oe(r.value));
+                  break;
+                case "select":
+                  ((e.multiple = !!r.multiple),
+                    (i = r.value),
+                    i != null
+                      ? cn(e, !!r.multiple, i, !1)
+                      : r.defaultValue != null &&
+                        cn(e, !!r.multiple, r.defaultValue, !0));
+                  break;
+                default:
+                  typeof l.onClick == "function" && (e.onclick = Yr);
+              }
+              switch (n) {
+                case "button":
+                case "input":
+                case "select":
+                case "textarea":
+                  r = !!r.autoFocus;
+                  break e;
+                case "img":
+                  r = !0;
+                  break e;
+                default:
+                  r = !1;
+              }
+            }
+            r && (t.flags |= 4);
+          }
+          t.ref !== null && ((t.flags |= 512), (t.flags |= 2097152));
+        }
+        return (Ae(t), null);
+      case 6:
+        if (e && t.stateNode != null) ou(e, t, e.memoizedProps, r);
+        else {
+          if (typeof r != "string" && t.stateNode === null) throw Error(s(166));
+          if (((n = nn(ur.current)), nn(xt.current), qr(t))) {
+            if (
+              ((r = t.stateNode),
+              (n = t.memoizedProps),
+              (r[vt] = t),
+              (i = r.nodeValue !== n) && ((e = qe), e !== null))
+            )
+              switch (e.tag) {
+                case 3:
+                  Wr(r.nodeValue, n, (e.mode & 1) !== 0);
+                  break;
+                case 5:
+                  e.memoizedProps.suppressHydrationWarning !== !0 &&
+                    Wr(r.nodeValue, n, (e.mode & 1) !== 0);
+              }
+            i && (t.flags |= 4);
+          } else
+            ((r = (n.nodeType === 9 ? n : n.ownerDocument).createTextNode(r)),
+              (r[vt] = t),
+              (t.stateNode = r));
+        }
+        return (Ae(t), null);
+      case 13:
+        if (
+          (pe(ve),
+          (r = t.memoizedState),
+          e === null ||
+            (e.memoizedState !== null && e.memoizedState.dehydrated !== null))
+        ) {
+          if (ge && et !== null && (t.mode & 1) !== 0 && (t.flags & 128) === 0)
+            (us(), Cn(), (t.flags |= 98560), (i = !1));
+          else if (((i = qr(t)), r !== null && r.dehydrated !== null)) {
+            if (e === null) {
+              if (!i) throw Error(s(318));
+              if (
+                ((i = t.memoizedState),
+                (i = i !== null ? i.dehydrated : null),
+                !i)
+              )
+                throw Error(s(317));
+              i[vt] = t;
+            } else
+              (Cn(),
+                (t.flags & 128) === 0 && (t.memoizedState = null),
+                (t.flags |= 4));
+            (Ae(t), (i = !1));
+          } else (ft !== null && (xo(ft), (ft = null)), (i = !0));
+          if (!i) return t.flags & 65536 ? t : null;
+        }
+        return (t.flags & 128) !== 0
+          ? ((t.lanes = n), t)
+          : ((r = r !== null),
+            r !== (e !== null && e.memoizedState !== null) &&
+              r &&
+              ((t.child.flags |= 8192),
+              (t.mode & 1) !== 0 &&
+                (e === null || (ve.current & 1) !== 0
+                  ? ze === 0 && (ze = 3)
+                  : So())),
+            t.updateQueue !== null && (t.flags |= 4),
+            Ae(t),
+            null);
+      case 4:
+        return (
+          zn(),
+          ao(e, t),
+          e === null && nr(t.stateNode.containerInfo),
+          Ae(t),
+          null
+        );
+      case 10:
+        return (Mi(t.type._context), Ae(t), null);
+      case 17:
+        return (We(t.type) && Jr(), Ae(t), null);
+      case 19:
+        if ((pe(ve), (i = t.memoizedState), i === null)) return (Ae(t), null);
+        if (((r = (t.flags & 128) !== 0), (o = i.rendering), o === null))
+          if (r) mr(i, !1);
+          else {
+            if (ze !== 0 || (e !== null && (e.flags & 128) !== 0))
+              for (e = t.child; e !== null;) {
+                if (((o = il(e)), o !== null)) {
+                  for (
+                    t.flags |= 128,
+                      mr(i, !1),
+                      r = o.updateQueue,
+                      r !== null && ((t.updateQueue = r), (t.flags |= 4)),
+                      t.subtreeFlags = 0,
+                      r = n,
+                      n = t.child;
+                    n !== null;
+                  )
+                    ((i = n),
+                      (e = r),
+                      (i.flags &= 14680066),
+                      (o = i.alternate),
+                      o === null
+                        ? ((i.childLanes = 0),
+                          (i.lanes = e),
+                          (i.child = null),
+                          (i.subtreeFlags = 0),
+                          (i.memoizedProps = null),
+                          (i.memoizedState = null),
+                          (i.updateQueue = null),
+                          (i.dependencies = null),
+                          (i.stateNode = null))
+                        : ((i.childLanes = o.childLanes),
+                          (i.lanes = o.lanes),
+                          (i.child = o.child),
+                          (i.subtreeFlags = 0),
+                          (i.deletions = null),
+                          (i.memoizedProps = o.memoizedProps),
+                          (i.memoizedState = o.memoizedState),
+                          (i.updateQueue = o.updateQueue),
+                          (i.type = o.type),
+                          (e = o.dependencies),
+                          (i.dependencies =
+                            e === null
+                              ? null
+                              : {
+                                  lanes: e.lanes,
+                                  firstContext: e.firstContext,
+                                })),
+                      (n = n.sibling));
+                  return (ce(ve, (ve.current & 1) | 2), t.child);
+                }
+                e = e.sibling;
+              }
+            i.tail !== null &&
+              ke() > Rn &&
+              ((t.flags |= 128), (r = !0), mr(i, !1), (t.lanes = 4194304));
+          }
+        else {
+          if (!r)
+            if (((e = il(o)), e !== null)) {
+              if (
+                ((t.flags |= 128),
+                (r = !0),
+                (n = e.updateQueue),
+                n !== null && ((t.updateQueue = n), (t.flags |= 4)),
+                mr(i, !0),
+                i.tail === null &&
+                  i.tailMode === "hidden" &&
+                  !o.alternate &&
+                  !ge)
+              )
+                return (Ae(t), null);
+            } else
+              2 * ke() - i.renderingStartTime > Rn &&
+                n !== 1073741824 &&
+                ((t.flags |= 128), (r = !0), mr(i, !1), (t.lanes = 4194304));
+          i.isBackwards
+            ? ((o.sibling = t.child), (t.child = o))
+            : ((n = i.last),
+              n !== null ? (n.sibling = o) : (t.child = o),
+              (i.last = o));
+        }
+        return i.tail !== null
+          ? ((t = i.tail),
+            (i.rendering = t),
+            (i.tail = t.sibling),
+            (i.renderingStartTime = ke()),
+            (t.sibling = null),
+            (n = ve.current),
+            ce(ve, r ? (n & 1) | 2 : n & 1),
+            t)
+          : (Ae(t), null);
+      case 22:
+      case 23:
+        return (
+          ko(),
+          (r = t.memoizedState !== null),
+          e !== null && (e.memoizedState !== null) !== r && (t.flags |= 8192),
+          r && (t.mode & 1) !== 0
+            ? (tt & 1073741824) !== 0 &&
+              (Ae(t), t.subtreeFlags & 6 && (t.flags |= 8192))
+            : Ae(t),
+          null
+        );
+      case 24:
+        return null;
+      case 25:
+        return null;
+    }
+    throw Error(s(156, t.tag));
+  }
+  function Id(e, t) {
+    switch ((zi(t), t.tag)) {
+      case 1:
+        return (
+          We(t.type) && Jr(),
+          (e = t.flags),
+          e & 65536 ? ((t.flags = (e & -65537) | 128), t) : null
+        );
+      case 3:
+        return (
+          zn(),
+          pe(He),
+          pe(Fe),
+          $i(),
+          (e = t.flags),
+          (e & 65536) !== 0 && (e & 128) === 0
+            ? ((t.flags = (e & -65537) | 128), t)
+            : null
+        );
+      case 5:
+        return (Ui(t), null);
+      case 13:
+        if (
+          (pe(ve), (e = t.memoizedState), e !== null && e.dehydrated !== null)
+        ) {
+          if (t.alternate === null) throw Error(s(340));
+          Cn();
+        }
+        return (
+          (e = t.flags),
+          e & 65536 ? ((t.flags = (e & -65537) | 128), t) : null
+        );
+      case 19:
+        return (pe(ve), null);
+      case 4:
+        return (zn(), null);
+      case 10:
+        return (Mi(t.type._context), null);
+      case 22:
+      case 23:
+        return (ko(), null);
+      case 24:
+        return null;
+      default:
+        return null;
+    }
+  }
+  var ml = !1,
+    Ue = !1,
+    Rd = typeof WeakSet == "function" ? WeakSet : Set,
+    L = null;
+  function Tn(e, t) {
+    var n = e.ref;
+    if (n !== null)
+      if (typeof n == "function")
+        try {
+          n(null);
+        } catch (r) {
+          we(e, t, r);
+        }
+      else n.current = null;
+  }
+  function so(e, t, n) {
+    try {
+      n();
+    } catch (r) {
+      we(e, t, r);
+    }
+  }
+  var au = !1;
+  function Ld(e, t) {
+    if (((wi = Lr), (e = Aa()), fi(e))) {
+      if ("selectionStart" in e)
+        var n = { start: e.selectionStart, end: e.selectionEnd };
+      else
+        e: {
+          n = ((n = e.ownerDocument) && n.defaultView) || window;
+          var r = n.getSelection && n.getSelection();
+          if (r && r.rangeCount !== 0) {
+            n = r.anchorNode;
+            var l = r.anchorOffset,
+              i = r.focusNode;
+            r = r.focusOffset;
+            try {
+              (n.nodeType, i.nodeType);
+            } catch {
+              n = null;
+              break e;
+            }
+            var o = 0,
+              a = -1,
+              c = -1,
+              g = 0,
+              k = 0,
+              S = e,
+              w = null;
+            t: for (;;) {
+              for (
+                var T;
+                S !== n || (l !== 0 && S.nodeType !== 3) || (a = o + l),
+                  S !== i || (r !== 0 && S.nodeType !== 3) || (c = o + r),
+                  S.nodeType === 3 && (o += S.nodeValue.length),
+                  (T = S.firstChild) !== null;
+              )
+                ((w = S), (S = T));
+              for (;;) {
+                if (S === e) break t;
+                if (
+                  (w === n && ++g === l && (a = o),
+                  w === i && ++k === r && (c = o),
+                  (T = S.nextSibling) !== null)
+                )
+                  break;
+                ((S = w), (w = S.parentNode));
+              }
+              S = T;
+            }
+            n = a === -1 || c === -1 ? null : { start: a, end: c };
+          } else n = null;
+        }
+      n = n || { start: 0, end: 0 };
+    } else n = null;
+    for (
+      ki = { focusedElem: e, selectionRange: n }, Lr = !1, L = t;
+      L !== null;
+    )
+      if (((t = L), (e = t.child), (t.subtreeFlags & 1028) !== 0 && e !== null))
+        ((e.return = t), (L = e));
+      else
+        for (; L !== null;) {
+          t = L;
+          try {
+            var D = t.alternate;
+            if ((t.flags & 1024) !== 0)
+              switch (t.tag) {
+                case 0:
+                case 11:
+                case 15:
+                  break;
+                case 1:
+                  if (D !== null) {
+                    var F = D.memoizedProps,
+                      Se = D.memoizedState,
+                      m = t.stateNode,
+                      f = m.getSnapshotBeforeUpdate(
+                        t.elementType === t.type ? F : pt(t.type, F),
+                        Se,
+                      );
+                    m.__reactInternalSnapshotBeforeUpdate = f;
+                  }
+                  break;
+                case 3:
+                  var h = t.stateNode.containerInfo;
+                  h.nodeType === 1
+                    ? (h.textContent = "")
+                    : h.nodeType === 9 &&
+                      h.documentElement &&
+                      h.removeChild(h.documentElement);
+                  break;
+                case 5:
+                case 6:
+                case 4:
+                case 17:
+                  break;
+                default:
+                  throw Error(s(163));
+              }
+          } catch (j) {
+            we(t, t.return, j);
+          }
+          if (((e = t.sibling), e !== null)) {
+            ((e.return = t.return), (L = e));
+            break;
+          }
+          L = t.return;
+        }
+    return ((D = au), (au = !1), D);
+  }
+  function hr(e, t, n) {
+    var r = t.updateQueue;
+    if (((r = r !== null ? r.lastEffect : null), r !== null)) {
+      var l = (r = r.next);
+      do {
+        if ((l.tag & e) === e) {
+          var i = l.destroy;
+          ((l.destroy = void 0), i !== void 0 && so(t, n, i));
+        }
+        l = l.next;
+      } while (l !== r);
+    }
+  }
+  function hl(e, t) {
+    if (
+      ((t = t.updateQueue), (t = t !== null ? t.lastEffect : null), t !== null)
+    ) {
+      var n = (t = t.next);
+      do {
+        if ((n.tag & e) === e) {
+          var r = n.create;
+          n.destroy = r();
+        }
+        n = n.next;
+      } while (n !== t);
+    }
+  }
+  function uo(e) {
+    var t = e.ref;
+    if (t !== null) {
+      var n = e.stateNode;
+      switch (e.tag) {
+        case 5:
+          e = n;
+          break;
+        default:
+          e = n;
+      }
+      typeof t == "function" ? t(e) : (t.current = e);
+    }
+  }
+  function su(e) {
+    var t = e.alternate;
+    (t !== null && ((e.alternate = null), su(t)),
+      (e.child = null),
+      (e.deletions = null),
+      (e.sibling = null),
+      e.tag === 5 &&
+        ((t = e.stateNode),
+        t !== null &&
+          (delete t[vt],
+          delete t[lr],
+          delete t[Ci],
+          delete t[gd],
+          delete t[yd])),
+      (e.stateNode = null),
+      (e.return = null),
+      (e.dependencies = null),
+      (e.memoizedProps = null),
+      (e.memoizedState = null),
+      (e.pendingProps = null),
+      (e.stateNode = null),
+      (e.updateQueue = null));
+  }
+  function uu(e) {
+    return e.tag === 5 || e.tag === 3 || e.tag === 4;
+  }
+  function cu(e) {
+    e: for (;;) {
+      for (; e.sibling === null;) {
+        if (e.return === null || uu(e.return)) return null;
+        e = e.return;
+      }
+      for (
+        e.sibling.return = e.return, e = e.sibling;
+        e.tag !== 5 && e.tag !== 6 && e.tag !== 18;
+      ) {
+        if (e.flags & 2 || e.child === null || e.tag === 4) continue e;
+        ((e.child.return = e), (e = e.child));
+      }
+      if (!(e.flags & 2)) return e.stateNode;
+    }
+  }
+  function co(e, t, n) {
+    var r = e.tag;
+    if (r === 5 || r === 6)
+      ((e = e.stateNode),
+        t
+          ? n.nodeType === 8
+            ? n.parentNode.insertBefore(e, t)
+            : n.insertBefore(e, t)
+          : (n.nodeType === 8
+              ? ((t = n.parentNode), t.insertBefore(e, n))
+              : ((t = n), t.appendChild(e)),
+            (n = n._reactRootContainer),
+            n != null || t.onclick !== null || (t.onclick = Yr)));
+    else if (r !== 4 && ((e = e.child), e !== null))
+      for (co(e, t, n), e = e.sibling; e !== null;)
+        (co(e, t, n), (e = e.sibling));
+  }
+  function fo(e, t, n) {
+    var r = e.tag;
+    if (r === 5 || r === 6)
+      ((e = e.stateNode), t ? n.insertBefore(e, t) : n.appendChild(e));
+    else if (r !== 4 && ((e = e.child), e !== null))
+      for (fo(e, t, n), e = e.sibling; e !== null;)
+        (fo(e, t, n), (e = e.sibling));
+  }
+  var Me = null,
+    mt = !1;
+  function Vt(e, t, n) {
+    for (n = n.child; n !== null;) (du(e, t, n), (n = n.sibling));
+  }
+  function du(e, t, n) {
+    if (yt && typeof yt.onCommitFiberUnmount == "function")
+      try {
+        yt.onCommitFiberUnmount(br, n);
+      } catch {}
+    switch (n.tag) {
+      case 5:
+        Ue || Tn(n, t);
+      case 6:
+        var r = Me,
+          l = mt;
+        ((Me = null),
+          Vt(e, t, n),
+          (Me = r),
+          (mt = l),
+          Me !== null &&
+            (mt
+              ? ((e = Me),
+                (n = n.stateNode),
+                e.nodeType === 8
+                  ? e.parentNode.removeChild(n)
+                  : e.removeChild(n))
+              : Me.removeChild(n.stateNode)));
+        break;
+      case 18:
+        Me !== null &&
+          (mt
+            ? ((e = Me),
+              (n = n.stateNode),
+              e.nodeType === 8
+                ? ji(e.parentNode, n)
+                : e.nodeType === 1 && ji(e, n),
+              Qn(e))
+            : ji(Me, n.stateNode));
+        break;
+      case 4:
+        ((r = Me),
+          (l = mt),
+          (Me = n.stateNode.containerInfo),
+          (mt = !0),
+          Vt(e, t, n),
+          (Me = r),
+          (mt = l));
+        break;
+      case 0:
+      case 11:
+      case 14:
+      case 15:
+        if (
+          !Ue &&
+          ((r = n.updateQueue), r !== null && ((r = r.lastEffect), r !== null))
+        ) {
+          l = r = r.next;
+          do {
+            var i = l,
+              o = i.destroy;
+            ((i = i.tag),
+              o !== void 0 && ((i & 2) !== 0 || (i & 4) !== 0) && so(n, t, o),
+              (l = l.next));
+          } while (l !== r);
+        }
+        Vt(e, t, n);
+        break;
+      case 1:
+        if (
+          !Ue &&
+          (Tn(n, t),
+          (r = n.stateNode),
+          typeof r.componentWillUnmount == "function")
+        )
+          try {
+            ((r.props = n.memoizedProps),
+              (r.state = n.memoizedState),
+              r.componentWillUnmount());
+          } catch (a) {
+            we(n, t, a);
+          }
+        Vt(e, t, n);
+        break;
+      case 21:
+        Vt(e, t, n);
+        break;
+      case 22:
+        n.mode & 1
+          ? ((Ue = (r = Ue) || n.memoizedState !== null), Vt(e, t, n), (Ue = r))
+          : Vt(e, t, n);
+        break;
+      default:
+        Vt(e, t, n);
+    }
+  }
+  function fu(e) {
+    var t = e.updateQueue;
+    if (t !== null) {
+      e.updateQueue = null;
+      var n = e.stateNode;
+      (n === null && (n = e.stateNode = new Rd()),
+        t.forEach(function (r) {
+          var l = Vd.bind(null, e, r);
+          n.has(r) || (n.add(r), r.then(l, l));
+        }));
+    }
+  }
+  function ht(e, t) {
+    var n = t.deletions;
+    if (n !== null)
+      for (var r = 0; r < n.length; r++) {
+        var l = n[r];
+        try {
+          var i = e,
+            o = t,
+            a = o;
+          e: for (; a !== null;) {
+            switch (a.tag) {
+              case 5:
+                ((Me = a.stateNode), (mt = !1));
+                break e;
+              case 3:
+                ((Me = a.stateNode.containerInfo), (mt = !0));
+                break e;
+              case 4:
+                ((Me = a.stateNode.containerInfo), (mt = !0));
+                break e;
+            }
+            a = a.return;
+          }
+          if (Me === null) throw Error(s(160));
+          (du(i, o, l), (Me = null), (mt = !1));
+          var c = l.alternate;
+          (c !== null && (c.return = null), (l.return = null));
+        } catch (g) {
+          we(l, t, g);
+        }
+      }
+    if (t.subtreeFlags & 12854)
+      for (t = t.child; t !== null;) (pu(t, e), (t = t.sibling));
+  }
+  function pu(e, t) {
+    var n = e.alternate,
+      r = e.flags;
+    switch (e.tag) {
+      case 0:
+      case 11:
+      case 14:
+      case 15:
+        if ((ht(t, e), kt(e), r & 4)) {
+          try {
+            (hr(3, e, e.return), hl(3, e));
+          } catch (F) {
+            we(e, e.return, F);
+          }
+          try {
+            hr(5, e, e.return);
+          } catch (F) {
+            we(e, e.return, F);
+          }
+        }
+        break;
+      case 1:
+        (ht(t, e), kt(e), r & 512 && n !== null && Tn(n, n.return));
+        break;
+      case 5:
+        if (
+          (ht(t, e),
+          kt(e),
+          r & 512 && n !== null && Tn(n, n.return),
+          e.flags & 32)
+        ) {
+          var l = e.stateNode;
+          try {
+            Dn(l, "");
+          } catch (F) {
+            we(e, e.return, F);
+          }
+        }
+        if (r & 4 && ((l = e.stateNode), l != null)) {
+          var i = e.memoizedProps,
+            o = n !== null ? n.memoizedProps : i,
+            a = e.type,
+            c = e.updateQueue;
+          if (((e.updateQueue = null), c !== null))
+            try {
+              (a === "input" &&
+                i.type === "radio" &&
+                i.name != null &&
+                Bo(l, i),
+                $l(a, o));
+              var g = $l(a, i);
+              for (o = 0; o < c.length; o += 2) {
+                var k = c[o],
+                  S = c[o + 1];
+                k === "style"
+                  ? Ko(l, S)
+                  : k === "dangerouslySetInnerHTML"
+                    ? Qo(l, S)
+                    : k === "children"
+                      ? Dn(l, S)
+                      : _e(l, k, S, g);
+              }
+              switch (a) {
+                case "input":
+                  Fl(l, i);
+                  break;
+                case "textarea":
+                  Ho(l, i);
+                  break;
+                case "select":
+                  var w = l._wrapperState.wasMultiple;
+                  l._wrapperState.wasMultiple = !!i.multiple;
+                  var T = i.value;
+                  T != null
+                    ? cn(l, !!i.multiple, T, !1)
+                    : w !== !!i.multiple &&
+                      (i.defaultValue != null
+                        ? cn(l, !!i.multiple, i.defaultValue, !0)
+                        : cn(l, !!i.multiple, i.multiple ? [] : "", !1));
+              }
+              l[lr] = i;
+            } catch (F) {
+              we(e, e.return, F);
+            }
+        }
+        break;
+      case 6:
+        if ((ht(t, e), kt(e), r & 4)) {
+          if (e.stateNode === null) throw Error(s(162));
+          ((l = e.stateNode), (i = e.memoizedProps));
+          try {
+            l.nodeValue = i;
+          } catch (F) {
+            we(e, e.return, F);
+          }
+        }
+        break;
+      case 3:
+        if (
+          (ht(t, e), kt(e), r & 4 && n !== null && n.memoizedState.isDehydrated)
+        )
+          try {
+            Qn(t.containerInfo);
+          } catch (F) {
+            we(e, e.return, F);
+          }
+        break;
+      case 4:
+        (ht(t, e), kt(e));
+        break;
+      case 13:
+        (ht(t, e),
+          kt(e),
+          (l = e.child),
+          l.flags & 8192 &&
+            ((i = l.memoizedState !== null),
+            (l.stateNode.isHidden = i),
+            !i ||
+              (l.alternate !== null && l.alternate.memoizedState !== null) ||
+              (ho = ke())),
+          r & 4 && fu(e));
+        break;
+      case 22:
+        if (
+          ((k = n !== null && n.memoizedState !== null),
+          e.mode & 1 ? ((Ue = (g = Ue) || k), ht(t, e), (Ue = g)) : ht(t, e),
+          kt(e),
+          r & 8192)
+        ) {
+          if (
+            ((g = e.memoizedState !== null),
+            (e.stateNode.isHidden = g) && !k && (e.mode & 1) !== 0)
+          )
+            for (L = e, k = e.child; k !== null;) {
+              for (S = L = k; L !== null;) {
+                switch (((w = L), (T = w.child), w.tag)) {
+                  case 0:
+                  case 11:
+                  case 14:
+                  case 15:
+                    hr(4, w, w.return);
+                    break;
+                  case 1:
+                    Tn(w, w.return);
+                    var D = w.stateNode;
+                    if (typeof D.componentWillUnmount == "function") {
+                      ((r = w), (n = w.return));
+                      try {
+                        ((t = r),
+                          (D.props = t.memoizedProps),
+                          (D.state = t.memoizedState),
+                          D.componentWillUnmount());
+                      } catch (F) {
+                        we(r, n, F);
+                      }
+                    }
+                    break;
+                  case 5:
+                    Tn(w, w.return);
+                    break;
+                  case 22:
+                    if (w.memoizedState !== null) {
+                      gu(S);
+                      continue;
+                    }
+                }
+                T !== null ? ((T.return = w), (L = T)) : gu(S);
+              }
+              k = k.sibling;
+            }
+          e: for (k = null, S = e; ;) {
+            if (S.tag === 5) {
+              if (k === null) {
+                k = S;
+                try {
+                  ((l = S.stateNode),
+                    g
+                      ? ((i = l.style),
+                        typeof i.setProperty == "function"
+                          ? i.setProperty("display", "none", "important")
+                          : (i.display = "none"))
+                      : ((a = S.stateNode),
+                        (c = S.memoizedProps.style),
+                        (o =
+                          c != null && c.hasOwnProperty("display")
+                            ? c.display
+                            : null),
+                        (a.style.display = Jo("display", o))));
+                } catch (F) {
+                  we(e, e.return, F);
+                }
+              }
+            } else if (S.tag === 6) {
+              if (k === null)
+                try {
+                  S.stateNode.nodeValue = g ? "" : S.memoizedProps;
+                } catch (F) {
+                  we(e, e.return, F);
+                }
+            } else if (
+              ((S.tag !== 22 && S.tag !== 23) ||
+                S.memoizedState === null ||
+                S === e) &&
+              S.child !== null
+            ) {
+              ((S.child.return = S), (S = S.child));
+              continue;
+            }
+            if (S === e) break e;
+            for (; S.sibling === null;) {
+              if (S.return === null || S.return === e) break e;
+              (k === S && (k = null), (S = S.return));
+            }
+            (k === S && (k = null),
+              (S.sibling.return = S.return),
+              (S = S.sibling));
+          }
+        }
+        break;
+      case 19:
+        (ht(t, e), kt(e), r & 4 && fu(e));
+        break;
+      case 21:
+        break;
+      default:
+        (ht(t, e), kt(e));
+    }
+  }
+  function kt(e) {
+    var t = e.flags;
+    if (t & 2) {
+      try {
+        e: {
+          for (var n = e.return; n !== null;) {
+            if (uu(n)) {
+              var r = n;
+              break e;
+            }
+            n = n.return;
+          }
+          throw Error(s(160));
+        }
+        switch (r.tag) {
+          case 5:
+            var l = r.stateNode;
+            r.flags & 32 && (Dn(l, ""), (r.flags &= -33));
+            var i = cu(e);
+            fo(e, i, l);
+            break;
+          case 3:
+          case 4:
+            var o = r.stateNode.containerInfo,
+              a = cu(e);
+            co(e, a, o);
+            break;
+          default:
+            throw Error(s(161));
+        }
+      } catch (c) {
+        we(e, e.return, c);
+      }
+      e.flags &= -3;
+    }
+    t & 4096 && (e.flags &= -4097);
+  }
+  function Md(e, t, n) {
+    ((L = e), mu(e));
+  }
+  function mu(e, t, n) {
+    for (var r = (e.mode & 1) !== 0; L !== null;) {
+      var l = L,
+        i = l.child;
+      if (l.tag === 22 && r) {
+        var o = l.memoizedState !== null || ml;
+        if (!o) {
+          var a = l.alternate,
+            c = (a !== null && a.memoizedState !== null) || Ue;
+          a = ml;
+          var g = Ue;
+          if (((ml = o), (Ue = c) && !g))
+            for (L = l; L !== null;)
+              ((o = L),
+                (c = o.child),
+                o.tag === 22 && o.memoizedState !== null
+                  ? yu(l)
+                  : c !== null
+                    ? ((c.return = o), (L = c))
+                    : yu(l));
+          for (; i !== null;) ((L = i), mu(i), (i = i.sibling));
+          ((L = l), (ml = a), (Ue = g));
+        }
+        hu(e);
+      } else
+        (l.subtreeFlags & 8772) !== 0 && i !== null
+          ? ((i.return = l), (L = i))
+          : hu(e);
+    }
+  }
+  function hu(e) {
+    for (; L !== null;) {
+      var t = L;
+      if ((t.flags & 8772) !== 0) {
+        var n = t.alternate;
+        try {
+          if ((t.flags & 8772) !== 0)
+            switch (t.tag) {
+              case 0:
+              case 11:
+              case 15:
+                Ue || hl(5, t);
+                break;
+              case 1:
+                var r = t.stateNode;
+                if (t.flags & 4 && !Ue)
+                  if (n === null) r.componentDidMount();
+                  else {
+                    var l =
+                      t.elementType === t.type
+                        ? n.memoizedProps
+                        : pt(t.type, n.memoizedProps);
+                    r.componentDidUpdate(
+                      l,
+                      n.memoizedState,
+                      r.__reactInternalSnapshotBeforeUpdate,
+                    );
+                  }
+                var i = t.updateQueue;
+                i !== null && gs(t, i, r);
+                break;
+              case 3:
+                var o = t.updateQueue;
+                if (o !== null) {
+                  if (((n = null), t.child !== null))
+                    switch (t.child.tag) {
+                      case 5:
+                        n = t.child.stateNode;
+                        break;
+                      case 1:
+                        n = t.child.stateNode;
+                    }
+                  gs(t, o, n);
+                }
+                break;
+              case 5:
+                var a = t.stateNode;
+                if (n === null && t.flags & 4) {
+                  n = a;
+                  var c = t.memoizedProps;
+                  switch (t.type) {
+                    case "button":
+                    case "input":
+                    case "select":
+                    case "textarea":
+                      c.autoFocus && n.focus();
+                      break;
+                    case "img":
+                      c.src && (n.src = c.src);
+                  }
+                }
+                break;
+              case 6:
+                break;
+              case 4:
+                break;
+              case 12:
+                break;
+              case 13:
+                if (t.memoizedState === null) {
+                  var g = t.alternate;
+                  if (g !== null) {
+                    var k = g.memoizedState;
+                    if (k !== null) {
+                      var S = k.dehydrated;
+                      S !== null && Qn(S);
+                    }
+                  }
+                }
+                break;
+              case 19:
+              case 17:
+              case 21:
+              case 22:
+              case 23:
+              case 25:
+                break;
+              default:
+                throw Error(s(163));
+            }
+          Ue || (t.flags & 512 && uo(t));
+        } catch (w) {
+          we(t, t.return, w);
+        }
+      }
+      if (t === e) {
+        L = null;
+        break;
+      }
+      if (((n = t.sibling), n !== null)) {
+        ((n.return = t.return), (L = n));
+        break;
+      }
+      L = t.return;
+    }
+  }
+  function gu(e) {
+    for (; L !== null;) {
+      var t = L;
+      if (t === e) {
+        L = null;
+        break;
+      }
+      var n = t.sibling;
+      if (n !== null) {
+        ((n.return = t.return), (L = n));
+        break;
+      }
+      L = t.return;
+    }
+  }
+  function yu(e) {
+    for (; L !== null;) {
+      var t = L;
+      try {
+        switch (t.tag) {
+          case 0:
+          case 11:
+          case 15:
+            var n = t.return;
+            try {
+              hl(4, t);
+            } catch (c) {
+              we(t, n, c);
+            }
+            break;
+          case 1:
+            var r = t.stateNode;
+            if (typeof r.componentDidMount == "function") {
+              var l = t.return;
+              try {
+                r.componentDidMount();
+              } catch (c) {
+                we(t, l, c);
+              }
+            }
+            var i = t.return;
+            try {
+              uo(t);
+            } catch (c) {
+              we(t, i, c);
+            }
+            break;
+          case 5:
+            var o = t.return;
+            try {
+              uo(t);
+            } catch (c) {
+              we(t, o, c);
+            }
+        }
+      } catch (c) {
+        we(t, t.return, c);
+      }
+      if (t === e) {
+        L = null;
+        break;
+      }
+      var a = t.sibling;
+      if (a !== null) {
+        ((a.return = t.return), (L = a));
+        break;
+      }
+      L = t.return;
+    }
+  }
+  var Dd = Math.ceil,
+    gl = W.ReactCurrentDispatcher,
+    po = W.ReactCurrentOwner,
+    st = W.ReactCurrentBatchConfig,
+    ne = 0,
+    Ie = null,
+    Ce = null,
+    De = 0,
+    tt = 0,
+    In = Ot(0),
+    ze = 0,
+    gr = null,
+    ln = 0,
+    yl = 0,
+    mo = 0,
+    yr = null,
+    Qe = null,
+    ho = 0,
+    Rn = 1 / 0,
+    zt = null,
+    vl = !1,
+    go = null,
+    Ht = null,
+    xl = !1,
+    Wt = null,
+    wl = 0,
+    vr = 0,
+    yo = null,
+    kl = -1,
+    Sl = 0;
+  function Ve() {
+    return (ne & 6) !== 0 ? ke() : kl !== -1 ? kl : (kl = ke());
+  }
+  function Yt(e) {
+    return (e.mode & 1) === 0
+      ? 1
+      : (ne & 2) !== 0 && De !== 0
+        ? De & -De
+        : xd.transition !== null
+          ? (Sl === 0 && (Sl = ca()), Sl)
+          : ((e = ae),
+            e !== 0 ||
+              ((e = window.event), (e = e === void 0 ? 16 : xa(e.type))),
+            e);
+  }
+  function gt(e, t, n, r) {
+    if (50 < vr) throw ((vr = 0), (yo = null), Error(s(185)));
+    ($n(e, n, r),
+      ((ne & 2) === 0 || e !== Ie) &&
+        (e === Ie && ((ne & 2) === 0 && (yl |= n), ze === 4 && Qt(e, De)),
+        Je(e, r),
+        n === 1 &&
+          ne === 0 &&
+          (t.mode & 1) === 0 &&
+          ((Rn = ke() + 500), Xr && Ut())));
+  }
+  function Je(e, t) {
+    var n = e.callbackNode;
+    xc(e, t);
+    var r = Tr(e, e === Ie ? De : 0);
+    if (r === 0)
+      (n !== null && aa(n), (e.callbackNode = null), (e.callbackPriority = 0));
+    else if (((t = r & -r), e.callbackPriority !== t)) {
+      if ((n != null && aa(n), t === 1))
+        (e.tag === 0 ? vd(xu.bind(null, e)) : ls(xu.bind(null, e)),
+          md(function () {
+            (ne & 6) === 0 && Ut();
+          }),
+          (n = null));
+      else {
+        switch (da(r)) {
+          case 1:
+            n = Kl;
+            break;
+          case 4:
+            n = sa;
+            break;
+          case 16:
+            n = Nr;
+            break;
+          case 536870912:
+            n = ua;
+            break;
+          default:
+            n = Nr;
+        }
+        n = Nu(n, vu.bind(null, e));
+      }
+      ((e.callbackPriority = t), (e.callbackNode = n));
+    }
+  }
+  function vu(e, t) {
+    if (((kl = -1), (Sl = 0), (ne & 6) !== 0)) throw Error(s(327));
+    var n = e.callbackNode;
+    if (Ln() && e.callbackNode !== n) return null;
+    var r = Tr(e, e === Ie ? De : 0);
+    if (r === 0) return null;
+    if ((r & 30) !== 0 || (r & e.expiredLanes) !== 0 || t) t = _l(e, r);
+    else {
+      t = r;
+      var l = ne;
+      ne |= 2;
+      var i = ku();
+      (Ie !== e || De !== t) && ((zt = null), (Rn = ke() + 500), an(e, t));
+      do
+        try {
+          Ad();
+          break;
+        } catch (a) {
+          wu(e, a);
+        }
+      while (!0);
+      (Li(),
+        (gl.current = i),
+        (ne = l),
+        Ce !== null ? (t = 0) : ((Ie = null), (De = 0), (t = ze)));
+    }
+    if (t !== 0) {
+      if (
+        (t === 2 && ((l = Xl(e)), l !== 0 && ((r = l), (t = vo(e, l)))),
+        t === 1)
+      )
+        throw ((n = gr), an(e, 0), Qt(e, r), Je(e, ke()), n);
+      if (t === 6) Qt(e, r);
+      else {
+        if (
+          ((l = e.current.alternate),
+          (r & 30) === 0 &&
+            !Fd(l) &&
+            ((t = _l(e, r)),
+            t === 2 && ((i = Xl(e)), i !== 0 && ((r = i), (t = vo(e, i)))),
+            t === 1))
+        )
+          throw ((n = gr), an(e, 0), Qt(e, r), Je(e, ke()), n);
+        switch (((e.finishedWork = l), (e.finishedLanes = r), t)) {
+          case 0:
+          case 1:
+            throw Error(s(345));
+          case 2:
+            sn(e, Qe, zt);
+            break;
+          case 3:
+            if (
+              (Qt(e, r),
+              (r & 130023424) === r && ((t = ho + 500 - ke()), 10 < t))
+            ) {
+              if (Tr(e, 0) !== 0) break;
+              if (((l = e.suspendedLanes), (l & r) !== r)) {
+                (Ve(), (e.pingedLanes |= e.suspendedLanes & l));
+                break;
+              }
+              e.timeoutHandle = _i(sn.bind(null, e, Qe, zt), t);
+              break;
+            }
+            sn(e, Qe, zt);
+            break;
+          case 4:
+            if ((Qt(e, r), (r & 4194240) === r)) break;
+            for (t = e.eventTimes, l = -1; 0 < r;) {
+              var o = 31 - ct(r);
+              ((i = 1 << o), (o = t[o]), o > l && (l = o), (r &= ~i));
+            }
+            if (
+              ((r = l),
+              (r = ke() - r),
+              (r =
+                (120 > r
+                  ? 120
+                  : 480 > r
+                    ? 480
+                    : 1080 > r
+                      ? 1080
+                      : 1920 > r
+                        ? 1920
+                        : 3e3 > r
+                          ? 3e3
+                          : 4320 > r
+                            ? 4320
+                            : 1960 * Dd(r / 1960)) - r),
+              10 < r)
+            ) {
+              e.timeoutHandle = _i(sn.bind(null, e, Qe, zt), r);
+              break;
+            }
+            sn(e, Qe, zt);
+            break;
+          case 5:
+            sn(e, Qe, zt);
+            break;
+          default:
+            throw Error(s(329));
+        }
+      }
+    }
+    return (Je(e, ke()), e.callbackNode === n ? vu.bind(null, e) : null);
+  }
+  function vo(e, t) {
+    var n = yr;
+    return (
+      e.current.memoizedState.isDehydrated && (an(e, t).flags |= 256),
+      (e = _l(e, t)),
+      e !== 2 && ((t = Qe), (Qe = n), t !== null && xo(t)),
+      e
+    );
+  }
+  function xo(e) {
+    Qe === null ? (Qe = e) : Qe.push.apply(Qe, e);
+  }
+  function Fd(e) {
+    for (var t = e; ;) {
+      if (t.flags & 16384) {
+        var n = t.updateQueue;
+        if (n !== null && ((n = n.stores), n !== null))
+          for (var r = 0; r < n.length; r++) {
+            var l = n[r],
+              i = l.getSnapshot;
+            l = l.value;
+            try {
+              if (!dt(i(), l)) return !1;
+            } catch {
+              return !1;
+            }
+          }
+      }
+      if (((n = t.child), t.subtreeFlags & 16384 && n !== null))
+        ((n.return = t), (t = n));
+      else {
+        if (t === e) break;
+        for (; t.sibling === null;) {
+          if (t.return === null || t.return === e) return !0;
+          t = t.return;
+        }
+        ((t.sibling.return = t.return), (t = t.sibling));
+      }
+    }
+    return !0;
+  }
+  function Qt(e, t) {
+    for (
+      t &= ~mo,
+        t &= ~yl,
+        e.suspendedLanes |= t,
+        e.pingedLanes &= ~t,
+        e = e.expirationTimes;
+      0 < t;
+    ) {
+      var n = 31 - ct(t),
+        r = 1 << n;
+      ((e[n] = -1), (t &= ~r));
+    }
+  }
+  function xu(e) {
+    if ((ne & 6) !== 0) throw Error(s(327));
+    Ln();
+    var t = Tr(e, 0);
+    if ((t & 1) === 0) return (Je(e, ke()), null);
+    var n = _l(e, t);
+    if (e.tag !== 0 && n === 2) {
+      var r = Xl(e);
+      r !== 0 && ((t = r), (n = vo(e, r)));
+    }
+    if (n === 1) throw ((n = gr), an(e, 0), Qt(e, t), Je(e, ke()), n);
+    if (n === 6) throw Error(s(345));
+    return (
+      (e.finishedWork = e.current.alternate),
+      (e.finishedLanes = t),
+      sn(e, Qe, zt),
+      Je(e, ke()),
+      null
+    );
+  }
+  function wo(e, t) {
+    var n = ne;
+    ne |= 1;
+    try {
+      return e(t);
+    } finally {
+      ((ne = n), ne === 0 && ((Rn = ke() + 500), Xr && Ut()));
+    }
+  }
+  function on(e) {
+    Wt !== null && Wt.tag === 0 && (ne & 6) === 0 && Ln();
+    var t = ne;
+    ne |= 1;
+    var n = st.transition,
+      r = ae;
+    try {
+      if (((st.transition = null), (ae = 1), e)) return e();
+    } finally {
+      ((ae = r), (st.transition = n), (ne = t), (ne & 6) === 0 && Ut());
+    }
+  }
+  function ko() {
+    ((tt = In.current), pe(In));
+  }
+  function an(e, t) {
+    ((e.finishedWork = null), (e.finishedLanes = 0));
+    var n = e.timeoutHandle;
+    if ((n !== -1 && ((e.timeoutHandle = -1), pd(n)), Ce !== null))
+      for (n = Ce.return; n !== null;) {
+        var r = n;
+        switch ((zi(r), r.tag)) {
+          case 1:
+            ((r = r.type.childContextTypes), r != null && Jr());
+            break;
+          case 3:
+            (zn(), pe(He), pe(Fe), $i());
+            break;
+          case 5:
+            Ui(r);
+            break;
+          case 4:
+            zn();
+            break;
+          case 13:
+            pe(ve);
+            break;
+          case 19:
+            pe(ve);
+            break;
+          case 10:
+            Mi(r.type._context);
+            break;
+          case 22:
+          case 23:
+            ko();
+        }
+        n = n.return;
+      }
+    if (
+      ((Ie = e),
+      (Ce = e = Jt(e.current, null)),
+      (De = tt = t),
+      (ze = 0),
+      (gr = null),
+      (mo = yl = ln = 0),
+      (Qe = yr = null),
+      tn !== null)
+    ) {
+      for (t = 0; t < tn.length; t++)
+        if (((n = tn[t]), (r = n.interleaved), r !== null)) {
+          n.interleaved = null;
+          var l = r.next,
+            i = n.pending;
+          if (i !== null) {
+            var o = i.next;
+            ((i.next = l), (r.next = o));
+          }
+          n.pending = r;
+        }
+      tn = null;
+    }
+    return e;
+  }
+  function wu(e, t) {
+    do {
+      var n = Ce;
+      try {
+        if ((Li(), (ol.current = cl), al)) {
+          for (var r = xe.memoizedState; r !== null;) {
+            var l = r.queue;
+            (l !== null && (l.pending = null), (r = r.next));
+          }
+          al = !1;
+        }
+        if (
+          ((rn = 0),
+          (Te = be = xe = null),
+          (cr = !1),
+          (dr = 0),
+          (po.current = null),
+          n === null || n.return === null)
+        ) {
+          ((ze = 1), (gr = t), (Ce = null));
+          break;
+        }
+        e: {
+          var i = e,
+            o = n.return,
+            a = n,
+            c = t;
+          if (
+            ((t = De),
+            (a.flags |= 32768),
+            c !== null && typeof c == "object" && typeof c.then == "function")
+          ) {
+            var g = c,
+              k = a,
+              S = k.tag;
+            if ((k.mode & 1) === 0 && (S === 0 || S === 11 || S === 15)) {
+              var w = k.alternate;
+              w
+                ? ((k.updateQueue = w.updateQueue),
+                  (k.memoizedState = w.memoizedState),
+                  (k.lanes = w.lanes))
+                : ((k.updateQueue = null), (k.memoizedState = null));
+            }
+            var T = Ws(o);
+            if (T !== null) {
+              ((T.flags &= -257),
+                Ys(T, o, a, i, t),
+                T.mode & 1 && Hs(i, g, t),
+                (t = T),
+                (c = g));
+              var D = t.updateQueue;
+              if (D === null) {
+                var F = new Set();
+                (F.add(c), (t.updateQueue = F));
+              } else D.add(c);
+              break e;
+            } else {
+              if ((t & 1) === 0) {
+                (Hs(i, g, t), So());
+                break e;
+              }
+              c = Error(s(426));
+            }
+          } else if (ge && a.mode & 1) {
+            var Se = Ws(o);
+            if (Se !== null) {
+              ((Se.flags & 65536) === 0 && (Se.flags |= 256),
+                Ys(Se, o, a, i, t),
+                Ii(Pn(c, a)));
+              break e;
+            }
+          }
+          ((i = c = Pn(c, a)),
+            ze !== 4 && (ze = 2),
+            yr === null ? (yr = [i]) : yr.push(i),
+            (i = o));
+          do {
+            switch (i.tag) {
+              case 3:
+                ((i.flags |= 65536), (t &= -t), (i.lanes |= t));
+                var m = $s(i, c, t);
+                hs(i, m);
+                break e;
+              case 1:
+                a = c;
+                var f = i.type,
+                  h = i.stateNode;
+                if (
+                  (i.flags & 128) === 0 &&
+                  (typeof f.getDerivedStateFromError == "function" ||
+                    (h !== null &&
+                      typeof h.componentDidCatch == "function" &&
+                      (Ht === null || !Ht.has(h))))
+                ) {
+                  ((i.flags |= 65536), (t &= -t), (i.lanes |= t));
+                  var j = Vs(i, a, t);
+                  hs(i, j);
+                  break e;
+                }
+            }
+            i = i.return;
+          } while (i !== null);
+        }
+        _u(n);
+      } catch (A) {
+        ((t = A), Ce === n && n !== null && (Ce = n = n.return));
+        continue;
+      }
+      break;
+    } while (!0);
+  }
+  function ku() {
+    var e = gl.current;
+    return ((gl.current = cl), e === null ? cl : e);
+  }
+  function So() {
+    ((ze === 0 || ze === 3 || ze === 2) && (ze = 4),
+      Ie === null ||
+        ((ln & 268435455) === 0 && (yl & 268435455) === 0) ||
+        Qt(Ie, De));
+  }
+  function _l(e, t) {
+    var n = ne;
+    ne |= 2;
+    var r = ku();
+    (Ie !== e || De !== t) && ((zt = null), an(e, t));
+    do
+      try {
+        Od();
+        break;
+      } catch (l) {
+        wu(e, l);
+      }
+    while (!0);
+    if ((Li(), (ne = n), (gl.current = r), Ce !== null)) throw Error(s(261));
+    return ((Ie = null), (De = 0), ze);
+  }
+  function Od() {
+    for (; Ce !== null;) Su(Ce);
+  }
+  function Ad() {
+    for (; Ce !== null && !cc();) Su(Ce);
+  }
+  function Su(e) {
+    var t = Eu(e.alternate, e, tt);
+    ((e.memoizedProps = e.pendingProps),
+      t === null ? _u(e) : (Ce = t),
+      (po.current = null));
+  }
+  function _u(e) {
+    var t = e;
+    do {
+      var n = t.alternate;
+      if (((e = t.return), (t.flags & 32768) === 0)) {
+        if (((n = Td(n, t, tt)), n !== null)) {
+          Ce = n;
+          return;
+        }
+      } else {
+        if (((n = Id(n, t)), n !== null)) {
+          ((n.flags &= 32767), (Ce = n));
+          return;
+        }
+        if (e !== null)
+          ((e.flags |= 32768), (e.subtreeFlags = 0), (e.deletions = null));
+        else {
+          ((ze = 6), (Ce = null));
+          return;
+        }
+      }
+      if (((t = t.sibling), t !== null)) {
+        Ce = t;
+        return;
+      }
+      Ce = t = e;
+    } while (t !== null);
+    ze === 0 && (ze = 5);
+  }
+  function sn(e, t, n) {
+    var r = ae,
+      l = st.transition;
+    try {
+      ((st.transition = null), (ae = 1), Ud(e, t, n, r));
+    } finally {
+      ((st.transition = l), (ae = r));
+    }
+    return null;
+  }
+  function Ud(e, t, n, r) {
+    do Ln();
+    while (Wt !== null);
+    if ((ne & 6) !== 0) throw Error(s(327));
+    n = e.finishedWork;
+    var l = e.finishedLanes;
+    if (n === null) return null;
+    if (((e.finishedWork = null), (e.finishedLanes = 0), n === e.current))
+      throw Error(s(177));
+    ((e.callbackNode = null), (e.callbackPriority = 0));
+    var i = n.lanes | n.childLanes;
+    if (
+      (wc(e, i),
+      e === Ie && ((Ce = Ie = null), (De = 0)),
+      ((n.subtreeFlags & 2064) === 0 && (n.flags & 2064) === 0) ||
+        xl ||
+        ((xl = !0),
+        Nu(Nr, function () {
+          return (Ln(), null);
+        })),
+      (i = (n.flags & 15990) !== 0),
+      (n.subtreeFlags & 15990) !== 0 || i)
+    ) {
+      ((i = st.transition), (st.transition = null));
+      var o = ae;
+      ae = 1;
+      var a = ne;
+      ((ne |= 4),
+        (po.current = null),
+        Ld(e, n),
+        pu(n, e),
+        od(ki),
+        (Lr = !!wi),
+        (ki = wi = null),
+        (e.current = n),
+        Md(n),
+        dc(),
+        (ne = a),
+        (ae = o),
+        (st.transition = i));
+    } else e.current = n;
+    if (
+      (xl && ((xl = !1), (Wt = e), (wl = l)),
+      (i = e.pendingLanes),
+      i === 0 && (Ht = null),
+      mc(n.stateNode),
+      Je(e, ke()),
+      t !== null)
+    )
+      for (r = e.onRecoverableError, n = 0; n < t.length; n++)
+        ((l = t[n]), r(l.value, { componentStack: l.stack, digest: l.digest }));
+    if (vl) throw ((vl = !1), (e = go), (go = null), e);
+    return (
+      (wl & 1) !== 0 && e.tag !== 0 && Ln(),
+      (i = e.pendingLanes),
+      (i & 1) !== 0 ? (e === yo ? vr++ : ((vr = 0), (yo = e))) : (vr = 0),
+      Ut(),
+      null
+    );
+  }
+  function Ln() {
+    if (Wt !== null) {
+      var e = da(wl),
+        t = st.transition,
+        n = ae;
+      try {
+        if (((st.transition = null), (ae = 16 > e ? 16 : e), Wt === null))
+          var r = !1;
+        else {
+          if (((e = Wt), (Wt = null), (wl = 0), (ne & 6) !== 0))
+            throw Error(s(331));
+          var l = ne;
+          for (ne |= 4, L = e.current; L !== null;) {
+            var i = L,
+              o = i.child;
+            if ((L.flags & 16) !== 0) {
+              var a = i.deletions;
+              if (a !== null) {
+                for (var c = 0; c < a.length; c++) {
+                  var g = a[c];
+                  for (L = g; L !== null;) {
+                    var k = L;
+                    switch (k.tag) {
+                      case 0:
+                      case 11:
+                      case 15:
+                        hr(8, k, i);
+                    }
+                    var S = k.child;
+                    if (S !== null) ((S.return = k), (L = S));
+                    else
+                      for (; L !== null;) {
+                        k = L;
+                        var w = k.sibling,
+                          T = k.return;
+                        if ((su(k), k === g)) {
+                          L = null;
+                          break;
+                        }
+                        if (w !== null) {
+                          ((w.return = T), (L = w));
+                          break;
+                        }
+                        L = T;
+                      }
+                  }
+                }
+                var D = i.alternate;
+                if (D !== null) {
+                  var F = D.child;
+                  if (F !== null) {
+                    D.child = null;
+                    do {
+                      var Se = F.sibling;
+                      ((F.sibling = null), (F = Se));
+                    } while (F !== null);
+                  }
+                }
+                L = i;
+              }
+            }
+            if ((i.subtreeFlags & 2064) !== 0 && o !== null)
+              ((o.return = i), (L = o));
+            else
+              e: for (; L !== null;) {
+                if (((i = L), (i.flags & 2048) !== 0))
+                  switch (i.tag) {
+                    case 0:
+                    case 11:
+                    case 15:
+                      hr(9, i, i.return);
+                  }
+                var m = i.sibling;
+                if (m !== null) {
+                  ((m.return = i.return), (L = m));
+                  break e;
+                }
+                L = i.return;
+              }
+          }
+          var f = e.current;
+          for (L = f; L !== null;) {
+            o = L;
+            var h = o.child;
+            if ((o.subtreeFlags & 2064) !== 0 && h !== null)
+              ((h.return = o), (L = h));
+            else
+              e: for (o = f; L !== null;) {
+                if (((a = L), (a.flags & 2048) !== 0))
+                  try {
+                    switch (a.tag) {
+                      case 0:
+                      case 11:
+                      case 15:
+                        hl(9, a);
+                    }
+                  } catch (A) {
+                    we(a, a.return, A);
+                  }
+                if (a === o) {
+                  L = null;
+                  break e;
+                }
+                var j = a.sibling;
+                if (j !== null) {
+                  ((j.return = a.return), (L = j));
+                  break e;
+                }
+                L = a.return;
+              }
+          }
+          if (
+            ((ne = l),
+            Ut(),
+            yt && typeof yt.onPostCommitFiberRoot == "function")
+          )
+            try {
+              yt.onPostCommitFiberRoot(br, e);
+            } catch {}
+          r = !0;
+        }
+        return r;
+      } finally {
+        ((ae = n), (st.transition = t));
+      }
+    }
+    return !1;
+  }
+  function ju(e, t, n) {
+    ((t = Pn(n, t)),
+      (t = $s(e, t, 1)),
+      (e = $t(e, t, 1)),
+      (t = Ve()),
+      e !== null && ($n(e, 1, t), Je(e, t)));
+  }
+  function we(e, t, n) {
+    if (e.tag === 3) ju(e, e, n);
+    else
+      for (; t !== null;) {
+        if (t.tag === 3) {
+          ju(t, e, n);
+          break;
+        } else if (t.tag === 1) {
+          var r = t.stateNode;
+          if (
+            typeof t.type.getDerivedStateFromError == "function" ||
+            (typeof r.componentDidCatch == "function" &&
+              (Ht === null || !Ht.has(r)))
+          ) {
+            ((e = Pn(n, e)),
+              (e = Vs(t, e, 1)),
+              (t = $t(t, e, 1)),
+              (e = Ve()),
+              t !== null && ($n(t, 1, e), Je(t, e)));
+            break;
+          }
+        }
+        t = t.return;
+      }
+  }
+  function Bd(e, t, n) {
+    var r = e.pingCache;
+    (r !== null && r.delete(t),
+      (t = Ve()),
+      (e.pingedLanes |= e.suspendedLanes & n),
+      Ie === e &&
+        (De & n) === n &&
+        (ze === 4 || (ze === 3 && (De & 130023424) === De && 500 > ke() - ho)
+          ? an(e, 0)
+          : (mo |= n)),
+      Je(e, t));
+  }
+  function Cu(e, t) {
+    t === 0 &&
+      ((e.mode & 1) === 0
+        ? (t = 1)
+        : ((t = Pr), (Pr <<= 1), (Pr & 130023424) === 0 && (Pr = 4194304)));
+    var n = Ve();
+    ((e = Et(e, t)), e !== null && ($n(e, t, n), Je(e, n)));
+  }
+  function $d(e) {
+    var t = e.memoizedState,
+      n = 0;
+    (t !== null && (n = t.retryLane), Cu(e, n));
+  }
+  function Vd(e, t) {
+    var n = 0;
+    switch (e.tag) {
+      case 13:
+        var r = e.stateNode,
+          l = e.memoizedState;
+        l !== null && (n = l.retryLane);
+        break;
+      case 19:
+        r = e.stateNode;
+        break;
+      default:
+        throw Error(s(314));
+    }
+    (r !== null && r.delete(t), Cu(e, n));
+  }
+  var Eu;
+  Eu = function (e, t, n) {
+    if (e !== null)
+      if (e.memoizedProps !== t.pendingProps || He.current) Ye = !0;
+      else {
+        if ((e.lanes & n) === 0 && (t.flags & 128) === 0)
+          return ((Ye = !1), Pd(e, t, n));
+        Ye = (e.flags & 131072) !== 0;
+      }
+    else ((Ye = !1), ge && (t.flags & 1048576) !== 0 && is(t, Zr, t.index));
+    switch (((t.lanes = 0), t.tag)) {
+      case 2:
+        var r = t.type;
+        (pl(e, t), (e = t.pendingProps));
+        var l = Sn(t, Fe.current);
+        (bn(t, n), (l = Wi(null, t, r, e, l, n)));
+        var i = Yi();
+        return (
+          (t.flags |= 1),
+          typeof l == "object" &&
+          l !== null &&
+          typeof l.render == "function" &&
+          l.$$typeof === void 0
+            ? ((t.tag = 1),
+              (t.memoizedState = null),
+              (t.updateQueue = null),
+              We(r) ? ((i = !0), Kr(t)) : (i = !1),
+              (t.memoizedState =
+                l.state !== null && l.state !== void 0 ? l.state : null),
+              Oi(t),
+              (l.updater = dl),
+              (t.stateNode = l),
+              (l._reactInternals = t),
+              Zi(t, r, e, n),
+              (t = no(null, t, r, !0, i, n)))
+            : ((t.tag = 0), ge && i && bi(t), $e(null, t, l, n), (t = t.child)),
+          t
+        );
+      case 16:
+        r = t.elementType;
+        e: {
+          switch (
+            (pl(e, t),
+            (e = t.pendingProps),
+            (l = r._init),
+            (r = l(r._payload)),
+            (t.type = r),
+            (l = t.tag = Wd(r)),
+            (e = pt(r, e)),
+            l)
+          ) {
+            case 0:
+              t = to(null, t, r, e, n);
+              break e;
+            case 1:
+              t = Zs(null, t, r, e, n);
+              break e;
+            case 11:
+              t = Qs(null, t, r, e, n);
+              break e;
+            case 14:
+              t = Js(null, t, r, pt(r.type, e), n);
+              break e;
+          }
+          throw Error(s(306, r, ""));
+        }
+        return t;
+      case 0:
+        return (
+          (r = t.type),
+          (l = t.pendingProps),
+          (l = t.elementType === r ? l : pt(r, l)),
+          to(e, t, r, l, n)
+        );
+      case 1:
+        return (
+          (r = t.type),
+          (l = t.pendingProps),
+          (l = t.elementType === r ? l : pt(r, l)),
+          Zs(e, t, r, l, n)
+        );
+      case 3:
+        e: {
+          if ((qs(t), e === null)) throw Error(s(387));
+          ((r = t.pendingProps),
+            (i = t.memoizedState),
+            (l = i.element),
+            ms(e, t),
+            ll(t, r, null, n));
+          var o = t.memoizedState;
+          if (((r = o.element), i.isDehydrated))
+            if (
+              ((i = {
+                element: r,
+                isDehydrated: !1,
+                cache: o.cache,
+                pendingSuspenseBoundaries: o.pendingSuspenseBoundaries,
+                transitions: o.transitions,
+              }),
+              (t.updateQueue.baseState = i),
+              (t.memoizedState = i),
+              t.flags & 256)
+            ) {
+              ((l = Pn(Error(s(423)), t)), (t = eu(e, t, r, n, l)));
+              break e;
+            } else if (r !== l) {
+              ((l = Pn(Error(s(424)), t)), (t = eu(e, t, r, n, l)));
+              break e;
+            } else
+              for (
+                et = Ft(t.stateNode.containerInfo.firstChild),
+                  qe = t,
+                  ge = !0,
+                  ft = null,
+                  n = fs(t, null, r, n),
+                  t.child = n;
+                n;
+              )
+                ((n.flags = (n.flags & -3) | 4096), (n = n.sibling));
+          else {
+            if ((Cn(), r === l)) {
+              t = bt(e, t, n);
+              break e;
+            }
+            $e(e, t, r, n);
+          }
+          t = t.child;
+        }
+        return t;
+      case 5:
+        return (
+          ys(t),
+          e === null && Ti(t),
+          (r = t.type),
+          (l = t.pendingProps),
+          (i = e !== null ? e.memoizedProps : null),
+          (o = l.children),
+          Si(r, l) ? (o = null) : i !== null && Si(r, i) && (t.flags |= 32),
+          Gs(e, t),
+          $e(e, t, o, n),
+          t.child
+        );
+      case 6:
+        return (e === null && Ti(t), null);
+      case 13:
+        return tu(e, t, n);
+      case 4:
+        return (
+          Ai(t, t.stateNode.containerInfo),
+          (r = t.pendingProps),
+          e === null ? (t.child = En(t, null, r, n)) : $e(e, t, r, n),
+          t.child
+        );
+      case 11:
+        return (
+          (r = t.type),
+          (l = t.pendingProps),
+          (l = t.elementType === r ? l : pt(r, l)),
+          Qs(e, t, r, l, n)
+        );
+      case 7:
+        return ($e(e, t, t.pendingProps, n), t.child);
+      case 8:
+        return ($e(e, t, t.pendingProps.children, n), t.child);
+      case 12:
+        return ($e(e, t, t.pendingProps.children, n), t.child);
+      case 10:
+        e: {
+          if (
+            ((r = t.type._context),
+            (l = t.pendingProps),
+            (i = t.memoizedProps),
+            (o = l.value),
+            ce(tl, r._currentValue),
+            (r._currentValue = o),
+            i !== null)
+          )
+            if (dt(i.value, o)) {
+              if (i.children === l.children && !He.current) {
+                t = bt(e, t, n);
+                break e;
+              }
+            } else
+              for (i = t.child, i !== null && (i.return = t); i !== null;) {
+                var a = i.dependencies;
+                if (a !== null) {
+                  o = i.child;
+                  for (var c = a.firstContext; c !== null;) {
+                    if (c.context === r) {
+                      if (i.tag === 1) {
+                        ((c = Nt(-1, n & -n)), (c.tag = 2));
+                        var g = i.updateQueue;
+                        if (g !== null) {
+                          g = g.shared;
+                          var k = g.pending;
+                          (k === null
+                            ? (c.next = c)
+                            : ((c.next = k.next), (k.next = c)),
+                            (g.pending = c));
+                        }
+                      }
+                      ((i.lanes |= n),
+                        (c = i.alternate),
+                        c !== null && (c.lanes |= n),
+                        Di(i.return, n, t),
+                        (a.lanes |= n));
+                      break;
+                    }
+                    c = c.next;
+                  }
+                } else if (i.tag === 10) o = i.type === t.type ? null : i.child;
+                else if (i.tag === 18) {
+                  if (((o = i.return), o === null)) throw Error(s(341));
+                  ((o.lanes |= n),
+                    (a = o.alternate),
+                    a !== null && (a.lanes |= n),
+                    Di(o, n, t),
+                    (o = i.sibling));
+                } else o = i.child;
+                if (o !== null) o.return = i;
+                else
+                  for (o = i; o !== null;) {
+                    if (o === t) {
+                      o = null;
+                      break;
+                    }
+                    if (((i = o.sibling), i !== null)) {
+                      ((i.return = o.return), (o = i));
+                      break;
+                    }
+                    o = o.return;
+                  }
+                i = o;
+              }
+          ($e(e, t, l.children, n), (t = t.child));
+        }
+        return t;
+      case 9:
+        return (
+          (l = t.type),
+          (r = t.pendingProps.children),
+          bn(t, n),
+          (l = ot(l)),
+          (r = r(l)),
+          (t.flags |= 1),
+          $e(e, t, r, n),
+          t.child
+        );
+      case 14:
+        return (
+          (r = t.type),
+          (l = pt(r, t.pendingProps)),
+          (l = pt(r.type, l)),
+          Js(e, t, r, l, n)
+        );
+      case 15:
+        return Ks(e, t, t.type, t.pendingProps, n);
+      case 17:
+        return (
+          (r = t.type),
+          (l = t.pendingProps),
+          (l = t.elementType === r ? l : pt(r, l)),
+          pl(e, t),
+          (t.tag = 1),
+          We(r) ? ((e = !0), Kr(t)) : (e = !1),
+          bn(t, n),
+          Us(t, r, l),
+          Zi(t, r, l, n),
+          no(null, t, r, !0, e, n)
+        );
+      case 19:
+        return ru(e, t, n);
+      case 22:
+        return Xs(e, t, n);
+    }
+    throw Error(s(156, t.tag));
+  };
+  function Nu(e, t) {
+    return oa(e, t);
+  }
+  function Hd(e, t, n, r) {
+    ((this.tag = e),
+      (this.key = n),
+      (this.sibling =
+        this.child =
+        this.return =
+        this.stateNode =
+        this.type =
+        this.elementType =
+          null),
+      (this.index = 0),
+      (this.ref = null),
+      (this.pendingProps = t),
+      (this.dependencies =
+        this.memoizedState =
+        this.updateQueue =
+        this.memoizedProps =
+          null),
+      (this.mode = r),
+      (this.subtreeFlags = this.flags = 0),
+      (this.deletions = null),
+      (this.childLanes = this.lanes = 0),
+      (this.alternate = null));
+  }
+  function ut(e, t, n, r) {
+    return new Hd(e, t, n, r);
+  }
+  function _o(e) {
+    return ((e = e.prototype), !(!e || !e.isReactComponent));
+  }
+  function Wd(e) {
+    if (typeof e == "function") return _o(e) ? 1 : 0;
+    if (e != null) {
+      if (((e = e.$$typeof), e === Ne)) return 11;
+      if (e === rt) return 14;
+    }
+    return 2;
+  }
+  function Jt(e, t) {
+    var n = e.alternate;
+    return (
+      n === null
+        ? ((n = ut(e.tag, t, e.key, e.mode)),
+          (n.elementType = e.elementType),
+          (n.type = e.type),
+          (n.stateNode = e.stateNode),
+          (n.alternate = e),
+          (e.alternate = n))
+        : ((n.pendingProps = t),
+          (n.type = e.type),
+          (n.flags = 0),
+          (n.subtreeFlags = 0),
+          (n.deletions = null)),
+      (n.flags = e.flags & 14680064),
+      (n.childLanes = e.childLanes),
+      (n.lanes = e.lanes),
+      (n.child = e.child),
+      (n.memoizedProps = e.memoizedProps),
+      (n.memoizedState = e.memoizedState),
+      (n.updateQueue = e.updateQueue),
+      (t = e.dependencies),
+      (n.dependencies =
+        t === null ? null : { lanes: t.lanes, firstContext: t.firstContext }),
+      (n.sibling = e.sibling),
+      (n.index = e.index),
+      (n.ref = e.ref),
+      n
+    );
+  }
+  function jl(e, t, n, r, l, i) {
+    var o = 2;
+    if (((r = e), typeof e == "function")) _o(e) && (o = 1);
+    else if (typeof e == "string") o = 5;
+    else
+      e: switch (e) {
+        case ye:
+          return un(n.children, l, i, t);
+        case Pe:
+          ((o = 8), (l |= 8));
+          break;
+        case Be:
+          return (
+            (e = ut(12, n, t, l | 2)),
+            (e.elementType = Be),
+            (e.lanes = i),
+            e
+          );
+        case de:
+          return (
+            (e = ut(13, n, t, l)),
+            (e.elementType = de),
+            (e.lanes = i),
+            e
+          );
+        case Xe:
+          return (
+            (e = ut(19, n, t, l)),
+            (e.elementType = Xe),
+            (e.lanes = i),
+            e
+          );
+        case me:
+          return Cl(n, l, i, t);
+        default:
+          if (typeof e == "object" && e !== null)
+            switch (e.$$typeof) {
+              case je:
+                o = 10;
+                break e;
+              case ee:
+                o = 9;
+                break e;
+              case Ne:
+                o = 11;
+                break e;
+              case rt:
+                o = 14;
+                break e;
+              case Le:
+                ((o = 16), (r = null));
+                break e;
+            }
+          throw Error(s(130, e == null ? e : typeof e, ""));
+      }
+    return (
+      (t = ut(o, n, t, l)),
+      (t.elementType = e),
+      (t.type = r),
+      (t.lanes = i),
+      t
+    );
+  }
+  function un(e, t, n, r) {
+    return ((e = ut(7, e, r, t)), (e.lanes = n), e);
+  }
+  function Cl(e, t, n, r) {
+    return (
+      (e = ut(22, e, r, t)),
+      (e.elementType = me),
+      (e.lanes = n),
+      (e.stateNode = { isHidden: !1 }),
+      e
+    );
+  }
+  function jo(e, t, n) {
+    return ((e = ut(6, e, null, t)), (e.lanes = n), e);
+  }
+  function Co(e, t, n) {
+    return (
+      (t = ut(4, e.children !== null ? e.children : [], e.key, t)),
+      (t.lanes = n),
+      (t.stateNode = {
+        containerInfo: e.containerInfo,
+        pendingChildren: null,
+        implementation: e.implementation,
+      }),
+      t
+    );
+  }
+  function Yd(e, t, n, r, l) {
+    ((this.tag = t),
+      (this.containerInfo = e),
+      (this.finishedWork =
+        this.pingCache =
+        this.current =
+        this.pendingChildren =
+          null),
+      (this.timeoutHandle = -1),
+      (this.callbackNode = this.pendingContext = this.context = null),
+      (this.callbackPriority = 0),
+      (this.eventTimes = Gl(0)),
+      (this.expirationTimes = Gl(-1)),
+      (this.entangledLanes =
+        this.finishedLanes =
+        this.mutableReadLanes =
+        this.expiredLanes =
+        this.pingedLanes =
+        this.suspendedLanes =
+        this.pendingLanes =
+          0),
+      (this.entanglements = Gl(0)),
+      (this.identifierPrefix = r),
+      (this.onRecoverableError = l),
+      (this.mutableSourceEagerHydrationData = null));
+  }
+  function Eo(e, t, n, r, l, i, o, a, c) {
+    return (
+      (e = new Yd(e, t, n, a, c)),
+      t === 1 ? ((t = 1), i === !0 && (t |= 8)) : (t = 0),
+      (i = ut(3, null, null, t)),
+      (e.current = i),
+      (i.stateNode = e),
+      (i.memoizedState = {
+        element: r,
+        isDehydrated: n,
+        cache: null,
+        transitions: null,
+        pendingSuspenseBoundaries: null,
+      }),
+      Oi(i),
+      e
+    );
+  }
+  function Qd(e, t, n) {
+    var r =
+      3 < arguments.length && arguments[3] !== void 0 ? arguments[3] : null;
+    return {
+      $$typeof: ue,
+      key: r == null ? null : "" + r,
+      children: e,
+      containerInfo: t,
+      implementation: n,
+    };
+  }
+  function bu(e) {
+    if (!e) return At;
+    e = e._reactInternals;
+    e: {
+      if (Xt(e) !== e || e.tag !== 1) throw Error(s(170));
+      var t = e;
+      do {
+        switch (t.tag) {
+          case 3:
+            t = t.stateNode.context;
+            break e;
+          case 1:
+            if (We(t.type)) {
+              t = t.stateNode.__reactInternalMemoizedMergedChildContext;
+              break e;
+            }
+        }
+        t = t.return;
+      } while (t !== null);
+      throw Error(s(171));
+    }
+    if (e.tag === 1) {
+      var n = e.type;
+      if (We(n)) return ns(e, n, t);
+    }
+    return t;
+  }
+  function zu(e, t, n, r, l, i, o, a, c) {
+    return (
+      (e = Eo(n, r, !0, e, l, i, o, a, c)),
+      (e.context = bu(null)),
+      (n = e.current),
+      (r = Ve()),
+      (l = Yt(n)),
+      (i = Nt(r, l)),
+      (i.callback = t ?? null),
+      $t(n, i, l),
+      (e.current.lanes = l),
+      $n(e, l, r),
+      Je(e, r),
+      e
+    );
+  }
+  function El(e, t, n, r) {
+    var l = t.current,
+      i = Ve(),
+      o = Yt(l);
+    return (
+      (n = bu(n)),
+      t.context === null ? (t.context = n) : (t.pendingContext = n),
+      (t = Nt(i, o)),
+      (t.payload = { element: e }),
+      (r = r === void 0 ? null : r),
+      r !== null && (t.callback = r),
+      (e = $t(l, t, o)),
+      e !== null && (gt(e, l, o, i), rl(e, l, o)),
+      o
+    );
+  }
+  function Nl(e) {
+    if (((e = e.current), !e.child)) return null;
+    switch (e.child.tag) {
+      case 5:
+        return e.child.stateNode;
+      default:
+        return e.child.stateNode;
+    }
+  }
+  function Pu(e, t) {
+    if (((e = e.memoizedState), e !== null && e.dehydrated !== null)) {
+      var n = e.retryLane;
+      e.retryLane = n !== 0 && n < t ? n : t;
+    }
+  }
+  function No(e, t) {
+    (Pu(e, t), (e = e.alternate) && Pu(e, t));
+  }
+  function Jd() {
+    return null;
+  }
+  var Tu =
+    typeof reportError == "function"
+      ? reportError
+      : function (e) {
+          console.error(e);
+        };
+  function bo(e) {
+    this._internalRoot = e;
+  }
+  ((bl.prototype.render = bo.prototype.render =
+    function (e) {
+      var t = this._internalRoot;
+      if (t === null) throw Error(s(409));
+      El(e, t, null, null);
+    }),
+    (bl.prototype.unmount = bo.prototype.unmount =
+      function () {
+        var e = this._internalRoot;
+        if (e !== null) {
+          this._internalRoot = null;
+          var t = e.containerInfo;
+          (on(function () {
+            El(null, e, null, null);
+          }),
+            (t[St] = null));
+        }
+      }));
+  function bl(e) {
+    this._internalRoot = e;
+  }
+  bl.prototype.unstable_scheduleHydration = function (e) {
+    if (e) {
+      var t = ma();
+      e = { blockedOn: null, target: e, priority: t };
+      for (var n = 0; n < Lt.length && t !== 0 && t < Lt[n].priority; n++);
+      (Lt.splice(n, 0, e), n === 0 && ya(e));
+    }
+  };
+  function zo(e) {
+    return !(!e || (e.nodeType !== 1 && e.nodeType !== 9 && e.nodeType !== 11));
+  }
+  function zl(e) {
+    return !(
+      !e ||
+      (e.nodeType !== 1 &&
+        e.nodeType !== 9 &&
+        e.nodeType !== 11 &&
+        (e.nodeType !== 8 || e.nodeValue !== " react-mount-point-unstable "))
+    );
+  }
+  function Iu() {}
+  function Kd(e, t, n, r, l) {
+    if (l) {
+      if (typeof r == "function") {
+        var i = r;
+        r = function () {
+          var g = Nl(o);
+          i.call(g);
+        };
+      }
+      var o = zu(t, r, e, 0, null, !1, !1, "", Iu);
+      return (
+        (e._reactRootContainer = o),
+        (e[St] = o.current),
+        nr(e.nodeType === 8 ? e.parentNode : e),
+        on(),
+        o
+      );
+    }
+    for (; (l = e.lastChild);) e.removeChild(l);
+    if (typeof r == "function") {
+      var a = r;
+      r = function () {
+        var g = Nl(c);
+        a.call(g);
+      };
+    }
+    var c = Eo(e, 0, !1, null, null, !1, !1, "", Iu);
+    return (
+      (e._reactRootContainer = c),
+      (e[St] = c.current),
+      nr(e.nodeType === 8 ? e.parentNode : e),
+      on(function () {
+        El(t, c, n, r);
+      }),
+      c
+    );
+  }
+  function Pl(e, t, n, r, l) {
+    var i = n._reactRootContainer;
+    if (i) {
+      var o = i;
+      if (typeof l == "function") {
+        var a = l;
+        l = function () {
+          var c = Nl(o);
+          a.call(c);
+        };
+      }
+      El(t, o, e, l);
+    } else o = Kd(n, t, e, l, r);
+    return Nl(o);
+  }
+  ((fa = function (e) {
+    switch (e.tag) {
+      case 3:
+        var t = e.stateNode;
+        if (t.current.memoizedState.isDehydrated) {
+          var n = Bn(t.pendingLanes);
+          n !== 0 &&
+            (Zl(t, n | 1),
+            Je(t, ke()),
+            (ne & 6) === 0 && ((Rn = ke() + 500), Ut()));
+        }
+        break;
+      case 13:
+        (on(function () {
+          var r = Et(e, 1);
+          if (r !== null) {
+            var l = Ve();
+            gt(r, e, 1, l);
+          }
+        }),
+          No(e, 1));
+    }
+  }),
+    (ql = function (e) {
+      if (e.tag === 13) {
+        var t = Et(e, 134217728);
+        if (t !== null) {
+          var n = Ve();
+          gt(t, e, 134217728, n);
+        }
+        No(e, 134217728);
+      }
+    }),
+    (pa = function (e) {
+      if (e.tag === 13) {
+        var t = Yt(e),
+          n = Et(e, t);
+        if (n !== null) {
+          var r = Ve();
+          gt(n, e, t, r);
+        }
+        No(e, t);
+      }
+    }),
+    (ma = function () {
+      return ae;
+    }),
+    (ha = function (e, t) {
+      var n = ae;
+      try {
+        return ((ae = e), t());
+      } finally {
+        ae = n;
+      }
+    }),
+    (Wl = function (e, t, n) {
+      switch (t) {
+        case "input":
+          if ((Fl(e, n), (t = n.name), n.type === "radio" && t != null)) {
+            for (n = e; n.parentNode;) n = n.parentNode;
+            for (
+              n = n.querySelectorAll(
+                "input[name=" + JSON.stringify("" + t) + '][type="radio"]',
+              ),
+                t = 0;
+              t < n.length;
+              t++
+            ) {
+              var r = n[t];
+              if (r !== e && r.form === e.form) {
+                var l = Qr(r);
+                if (!l) throw Error(s(90));
+                (Ao(r), Fl(r, l));
+              }
+            }
+          }
+          break;
+        case "textarea":
+          Ho(e, n);
+          break;
+        case "select":
+          ((t = n.value), t != null && cn(e, !!n.multiple, t, !1));
+      }
+    }),
+    (qo = wo),
+    (ea = on));
+  var Xd = { usingClientEntryPoint: !1, Events: [ir, wn, Qr, Go, Zo, wo] },
+    xr = {
+      findFiberByHostInstance: Gt,
+      bundleType: 0,
+      version: "18.3.1",
+      rendererPackageName: "react-dom",
+    },
+    Gd = {
+      bundleType: xr.bundleType,
+      version: xr.version,
+      rendererPackageName: xr.rendererPackageName,
+      rendererConfig: xr.rendererConfig,
+      overrideHookState: null,
+      overrideHookStateDeletePath: null,
+      overrideHookStateRenamePath: null,
+      overrideProps: null,
+      overridePropsDeletePath: null,
+      overridePropsRenamePath: null,
+      setErrorHandler: null,
+      setSuspenseHandler: null,
+      scheduleUpdate: null,
+      currentDispatcherRef: W.ReactCurrentDispatcher,
+      findHostInstanceByFiber: function (e) {
+        return ((e = la(e)), e === null ? null : e.stateNode);
+      },
+      findFiberByHostInstance: xr.findFiberByHostInstance || Jd,
+      findHostInstancesForRefresh: null,
+      scheduleRefresh: null,
+      scheduleRoot: null,
+      setRefreshHandler: null,
+      getCurrentFiber: null,
+      reconcilerVersion: "18.3.1-next-f1338f8080-20240426",
+    };
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u") {
+    var Tl = __REACT_DEVTOOLS_GLOBAL_HOOK__;
+    if (!Tl.isDisabled && Tl.supportsFiber)
+      try {
+        ((br = Tl.inject(Gd)), (yt = Tl));
+      } catch {}
+  }
+  return (
+    (Ke.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = Xd),
+    (Ke.createPortal = function (e, t) {
+      var n =
+        2 < arguments.length && arguments[2] !== void 0 ? arguments[2] : null;
+      if (!zo(t)) throw Error(s(200));
+      return Qd(e, t, null, n);
+    }),
+    (Ke.createRoot = function (e, t) {
+      if (!zo(e)) throw Error(s(299));
+      var n = !1,
+        r = "",
+        l = Tu;
+      return (
+        t != null &&
+          (t.unstable_strictMode === !0 && (n = !0),
+          t.identifierPrefix !== void 0 && (r = t.identifierPrefix),
+          t.onRecoverableError !== void 0 && (l = t.onRecoverableError)),
+        (t = Eo(e, 1, !1, null, null, n, !1, r, l)),
+        (e[St] = t.current),
+        nr(e.nodeType === 8 ? e.parentNode : e),
+        new bo(t)
+      );
+    }),
+    (Ke.findDOMNode = function (e) {
+      if (e == null) return null;
+      if (e.nodeType === 1) return e;
+      var t = e._reactInternals;
+      if (t === void 0)
+        throw typeof e.render == "function"
+          ? Error(s(188))
+          : ((e = Object.keys(e).join(",")), Error(s(268, e)));
+      return ((e = la(t)), (e = e === null ? null : e.stateNode), e);
+    }),
+    (Ke.flushSync = function (e) {
+      return on(e);
+    }),
+    (Ke.hydrate = function (e, t, n) {
+      if (!zl(t)) throw Error(s(200));
+      return Pl(null, e, t, !0, n);
+    }),
+    (Ke.hydrateRoot = function (e, t, n) {
+      if (!zo(e)) throw Error(s(405));
+      var r = (n != null && n.hydratedSources) || null,
+        l = !1,
+        i = "",
+        o = Tu;
+      if (
+        (n != null &&
+          (n.unstable_strictMode === !0 && (l = !0),
+          n.identifierPrefix !== void 0 && (i = n.identifierPrefix),
+          n.onRecoverableError !== void 0 && (o = n.onRecoverableError)),
+        (t = zu(t, null, e, 1, n ?? null, l, !1, i, o)),
+        (e[St] = t.current),
+        nr(e),
+        r)
+      )
+        for (e = 0; e < r.length; e++)
+          ((n = r[e]),
+            (l = n._getVersion),
+            (l = l(n._source)),
+            t.mutableSourceEagerHydrationData == null
+              ? (t.mutableSourceEagerHydrationData = [n, l])
+              : t.mutableSourceEagerHydrationData.push(n, l));
+      return new bl(t);
+    }),
+    (Ke.render = function (e, t, n) {
+      if (!zl(t)) throw Error(s(200));
+      return Pl(null, e, t, !1, n);
+    }),
+    (Ke.unmountComponentAtNode = function (e) {
+      if (!zl(e)) throw Error(s(40));
+      return e._reactRootContainer
+        ? (on(function () {
+            Pl(null, null, e, !1, function () {
+              ((e._reactRootContainer = null), (e[St] = null));
+            });
+          }),
+          !0)
+        : !1;
+    }),
+    (Ke.unstable_batchedUpdates = wo),
+    (Ke.unstable_renderSubtreeIntoContainer = function (e, t, n, r) {
+      if (!zl(n)) throw Error(s(200));
+      if (e == null || e._reactInternals === void 0) throw Error(s(38));
+      return Pl(e, t, n, !1, r);
+    }),
+    (Ke.version = "18.3.1-next-f1338f8080-20240426"),
+    Ke
+  );
+}
+var Uu;
+function of() {
+  if (Uu) return Io.exports;
+  Uu = 1;
+  function p() {
+    if (!(
+      typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ > "u" ||
+      typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE != "function"
+    ))
+      try {
+        __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE(p);
+      } catch (y) {
+        console.error(y);
+      }
+  }
+  return (p(), (Io.exports = lf()), Io.exports);
+}
+var Bu;
+function af() {
+  if (Bu) return Il;
+  Bu = 1;
+  var p = of();
+  return ((Il.createRoot = p.createRoot), (Il.hydrateRoot = p.hydrateRoot), Il);
+}
+var sf = af();
+const Mo = "https://bcodfuggztfosuzsyyla.supabase.co",
+  $u =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjb2RmdWdnenRmb3N1enN5eWxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0MjgyNTQsImV4cCI6MjEwMDAwNDI1NH0.RSD_E1f0Qy9E2s3vHMK5H9Mch0_-aCOrNhJs1hxCv5Y",
+  uf = 12,
+  Pt = [
+    {
+      id: "americas",
+      name: "Americas",
+      tagline: "LA to Miami · sun to sunrise",
+      accent: "#F4A93C",
+      bg: "linear-gradient(180deg,#ffd27a 0%,#ff9d4d 38%,#e8632e 70%,#7a2d1a 100%)",
+      text: "#2a1505",
+      panel: "rgba(255,236,200,.9)",
+    },
+    {
+      id: "europe",
+      name: "Europe",
+      tagline: "Ibiza to Berlin · midnight to morning",
+      accent: "#4FC3F7",
+      bg: "linear-gradient(180deg,#1a2a6b 0%,#2a4d8f 30%,#b95e8a 68%,#f0a35e 100%)",
+      text: "#eaf4ff",
+      panel: "rgba(10,24,48,.85)",
+    },
+    {
+      id: "worldwide",
+      name: "Worldwide",
+      tagline: "Beyond the map · everywhere",
+      accent: "#FF3B57",
+      bg: "linear-gradient(180deg,#2a0a10 0%,#3a0d14 40%,#1a0508 100%)",
+      text: "#ffe2e6",
+      panel: "rgba(28,6,9,.88)",
+    },
+  ],
+  cf = [
+    {
+      vibe: "europe",
+      video_id: "0uEUZCuNDog",
+      artist: "Marco Carola · Music On",
+      festival_name: "Music On",
+      city: "Amsterdam",
+      published_at: "2024-05-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "XzLtKtz5eeI",
+      artist: "Marco Carola · Music On 2023",
+      festival_name: "Music On",
+      city: "Amsterdam",
+      published_at: "2023-05-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "ec-TpvnZIy0",
+      artist: "Enzo Siragusa b2b Rossi · FUSE",
+      festival_name: "FUSE Open Air",
+      city: "London",
+      published_at: "2023-09-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "Fvi_uov0gck",
+      artist: "Enzo Siragusa · FUSE 2021",
+      festival_name: "FUSE Open Air",
+      city: "London",
+      published_at: "2021-09-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "WL_yw5x3by4",
+      artist: "Len Faki · Boiler Room Berlin",
+      festival_name: "Boiler Room",
+      city: "Berlin",
+      published_at: "2023-03-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "aFmaUwjsO4g",
+      artist: "Marcel Dettmann · Boiler Room Berlin",
+      festival_name: "Boiler Room",
+      city: "Berlin",
+      published_at: "2013-10-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "VkiJGQidnic",
+      artist: "Rødhåd · Boiler Room Berlin",
+      festival_name: "Boiler Room",
+      city: "Berlin",
+      published_at: "2014-05-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "m1SvbXLYEEc",
+      artist: "Charlotte de Witte · Awakenings 2025",
+      festival_name: "Awakenings",
+      city: "Amsterdam",
+      published_at: "2025-06-01",
+    },
+    {
+      vibe: "americas",
+      video_id: "l0FC5DTlh2Y",
+      artist: "Westend · Day Trip in the Park",
+      festival_name: "Day Trip",
+      city: "Los Angeles",
+      published_at: new Date(Date.now() + 36e5).toISOString(),
+    },
+    {
+      vibe: "americas",
+      video_id: "3YctdJP8_eo",
+      artist: "FISHER · Out 2 Lunch",
+      festival_name: "Out 2 Lunch",
+      city: "Las Vegas",
+      published_at: "2024-08-01",
+    },
+    {
+      vibe: "americas",
+      video_id: "ka_Cf5qSPtI",
+      artist: "Green Velvet · sunrise",
+      festival_name: "Club Space",
+      city: "Miami",
+      published_at: "2024-11-01",
+    },
+    {
+      vibe: "americas",
+      video_id: "CTvkbzE4Jus",
+      artist: "Carl Cox · sunrise",
+      festival_name: "Club Space",
+      city: "Miami",
+      published_at: "2024-03-01",
+    },
+    {
+      vibe: "americas",
+      video_id: "4iKfR3UBDpQ",
+      artist: "Mochakk · sunrise",
+      festival_name: "Club Space",
+      city: "Miami",
+      published_at: "2023-12-01",
+    },
+    {
+      vibe: "worldwide",
+      video_id: "RvRhUHTV_8k",
+      artist: "Ben Böhmer · Cappadocia",
+      festival_name: "Cercle",
+      city: "Türkiye",
+      published_at: "2019-08-01",
+    },
+    {
+      vibe: "worldwide",
+      video_id: "_SvwdK_HibQ",
+      artist: "Monolink · Maldives",
+      festival_name: "Cercle",
+      city: "Maldives",
+      published_at: "2021-03-01",
+    },
+    {
+      vibe: "americas",
+      video_id: "5HMiADa3J8Y",
+      artist: "Boo Williams",
+      festival_name: "Boiler Room",
+      city: "Chicago",
+      published_at: "2015-06-01",
+    },
+    {
+      vibe: "americas",
+      video_id: "7IsTFaspFQk",
+      artist: "Paul Johnson",
+      festival_name: "Boiler Room",
+      city: "Chicago",
+      published_at: "2015-06-01",
+    },
+    {
+      vibe: "americas",
+      video_id: "MVzPsKNUyxY",
+      artist: "Gene Farris",
+      festival_name: "Boiler Room",
+      city: "Chicago",
+      published_at: "2015-06-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "XY2Yec_0w5U",
+      artist: "Chris Stussy · Circoloco",
+      festival_name: "DC-10",
+      city: "Ibiza",
+      published_at: "2024-07-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "dv-cMsrU72o",
+      artist: "INVT · Circoloco",
+      festival_name: "DC-10",
+      city: "Ibiza",
+      published_at: "2024-09-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "ZfUSdi_Wjl4",
+      artist: "DJ Tennis b2b Carlita · Circoloco Opening",
+      festival_name: "DC-10",
+      city: "Ibiza",
+      published_at: "2023-05-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "IYEmrL764EI",
+      artist: "Roger Sanchez · Closing 2024",
+      festival_name: "Pacha",
+      city: "Ibiza",
+      published_at: "2024-10-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "vEGc3Jsppbc",
+      artist: "Claptone · The Masquerade Opening",
+      festival_name: "Amnesia",
+      city: "Ibiza",
+      published_at: "2024-06-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "H3Uka1aALpg",
+      artist: "Vintage Culture",
+      festival_name: "Amnesia",
+      city: "Ibiza",
+      published_at: "2023-08-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "D--FKyo2uUY",
+      artist: "Seth Troxler",
+      festival_name: "Yoyaku",
+      city: "Paris",
+      published_at: "2026-04-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "MOIyvMUzSM8",
+      artist: "Soyoon",
+      festival_name: "Yoyaku",
+      city: "Paris",
+      published_at: "2026-06-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "TCcPM5S8AxM",
+      artist: "Satoshi Tomiie & Tomoki Tamura",
+      festival_name: "Yoyaku",
+      city: "Paris",
+      published_at: "2026-07-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "01aNpNmV_3w",
+      artist: "Nina Yamada",
+      festival_name: "Yoyaku",
+      city: "Paris",
+      published_at: "2026-04-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "Qf8Dkfmo-58",
+      artist: "Alich",
+      festival_name: "Yoyaku",
+      city: "Paris",
+      published_at: "2026-07-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "TuSz4ecYi8s",
+      artist: "Noël Dekkers · Opening",
+      festival_name: "Boomerang Beach",
+      city: "Netherlands",
+      published_at: "2026-07-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "76JwjFbpZSI",
+      artist: "Chico Rose",
+      festival_name: "Boomerang Beach",
+      city: "Netherlands",
+      published_at: "2026-06-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "NgzMwbqoPEA",
+      artist: "STOFFELA · NebulaX Afro House",
+      festival_name: "Nibiru Universe",
+      city: "Costinești",
+      published_at: "2026-07-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "z2GyyJhJWgE",
+      artist: "OMAR+",
+      festival_name: "Thuishaven",
+      city: "Amsterdam",
+      published_at: "2026-07-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "SvISOuUYSIM",
+      artist: "Archie Hamilton",
+      festival_name: "Thuishaven",
+      city: "Amsterdam",
+      published_at: "2026-04-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "s5tRIoDtJHQ",
+      artist: "Claptone · 3 Hours",
+      festival_name: "Thuishaven",
+      city: "Amsterdam",
+      published_at: "2026-06-01",
+    },
+    {
+      vibe: "europe",
+      video_id: "OpstwHg3FiQ",
+      artist: "Kolter · 3 Hours",
+      festival_name: "Thuishaven",
+      city: "Amsterdam",
+      published_at: "2025-12-01",
+    },
+    {
+      vibe: "americas",
+      video_id: "MnGUGnHSQXA",
+      artist: "Butch · Sultan Room Rooftop",
+      festival_name: "Raw Cuts",
+      city: "New York",
+      published_at: "2025-07-01",
+    },
+    {
+      vibe: "americas",
+      video_id: "NH28-5zohe4",
+      artist: "Rossi. · Roberta's",
+      festival_name: "Raw Cuts",
+      city: "New York",
+      published_at: "2025-08-01",
+    },
+    {
+      vibe: "americas",
+      video_id: "yQXb-bD8w1c",
+      artist: "Joris Voorn",
+      festival_name: "Green Valley",
+      city: "Camboriú",
+      published_at: "2026-02-01",
+    },
+    {
+      vibe: "americas",
+      video_id: "FgZH_yAzP-8",
+      artist: "Beltran",
+      festival_name: "Green Valley",
+      city: "Camboriú",
+      published_at: "2024-11-01",
+    },
+    {
+      vibe: "worldwide",
+      video_id: "XrmnXiLYcZc",
+      artist: "Supergloss · Turbine Hall",
+      festival_name: "MODE Festival",
+      city: "Sydney",
+      published_at: "2025-11-01",
+    },
+    {
+      vibe: "worldwide",
+      video_id: "qdS_7U0-Ugw",
+      artist: "Alarico",
+      festival_name: "Pitch Music & Arts",
+      city: "Grampians",
+      published_at: "2026-03-01",
+    },
+    {
+      vibe: "worldwide",
+      video_id: "o4UCqEHQmCs",
+      artist: "Mac Declos · Turbine Hall",
+      festival_name: "MODE Festival",
+      city: "Sydney",
+      published_at: "2025-12-01",
+    },
+    {
+      vibe: "worldwide",
+      video_id: "Q5sCIW-aVmg",
+      artist: "X CLUB.",
+      festival_name: "MODE Festival",
+      city: "Sydney",
+      published_at: "2025-11-01",
+    },
+    {
+      vibe: "worldwide",
+      video_id: "XHNHq1mC0VQ",
+      artist: "ZHU (Blacklizt) · Hakuba Mountains",
+      festival_name: "Cercle",
+      city: "Nagano",
+      published_at: "2020-03-01",
+    },
+  ],
+  df = {
+    l0FC5DTlh2Y: [
+      { t_sec: 754, label: "ID", resolved: !1, likes: 41 },
+      {
+        t_sec: 1930,
+        label: "Westend - Mercury (unreleased)",
+        resolved: !0,
+        likes: 87,
+      },
+      { t_sec: 3266, label: "ID", resolved: !1, likes: 63 },
+    ],
+    ka_Cf5qSPtI: [
+      { t_sec: 1205, label: "ID", resolved: !1, likes: 29 },
+      {
+        t_sec: 4110,
+        label: "Green Velvet - La La Land (rework)",
+        resolved: !0,
+        likes: 52,
+      },
+    ],
+  },
+  ff = [
+    {
+      id: "westend",
+      name: "Westend",
+      festival_name: "Day Trip",
+      vibe: "americas",
+      latest_video: "l0FC5DTlh2Y",
+    },
+    {
+      id: "estefano-perez",
+      name: "Estefano Perez",
+      festival_name: "The Circuit",
+      vibe: "americas",
+      is_hype: !0,
+    },
+    {
+      id: "chris-navarro",
+      name: "Chris Navarro",
+      festival_name: "The Circuit",
+      vibe: "americas",
+      is_hype: !0,
+    },
+    {
+      id: "kettama",
+      name: "Kettama",
+      festival_name: "Out 2 Lunch",
+      vibe: "americas",
+      latest_video: "_bKZIUr9s4g",
+    },
+  ],
+  Zu = "ps_follows",
+  qu = "ps_last_visit";
+function pf() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem(Zu) || "[]"));
+  } catch {
+    return new Set();
+  }
+}
+function mf(p) {
+  try {
+    localStorage.setItem(Zu, JSON.stringify([...p]));
+  } catch {}
+}
+function hf() {
+  try {
+    return localStorage.getItem(qu);
+  } catch {
+    return null;
+  }
+}
+function gf() {
+  try {
+    localStorage.setItem(qu, new Date().toISOString());
+  } catch {}
+}
+function yf() {
+  try {
+    const p = new URLSearchParams(window.location.search),
+      y = p.get("v"),
+      s = parseInt(p.get("t") || "0", 10);
+    return y ? { v: y, t: isNaN(s) ? 0 : s } : null;
+  } catch {
+    return null;
+  }
+}
+function vf(p, y) {
+  const s = new URL(window.location.href);
+  return (
+    (s.search = ""),
+    s.searchParams.set("v", p),
+    y > 0 && s.searchParams.set("t", String(Math.floor(y))),
+    s.toString()
+  );
+}
+async function xf(p) {
+  try {
+    return (await navigator.clipboard.writeText(p), !0);
+  } catch {
+    try {
+      const y = document.createElement("textarea");
+      return (
+        (y.value = p),
+        document.body.appendChild(y),
+        y.select(),
+        document.execCommand("copy"),
+        y.remove(),
+        !0
+      );
+    } catch {
+      return !1;
+    }
+  }
+}
+function kr(p) {
+  return (
+    ((p == null ? void 0 : p.artist) || (p == null ? void 0 : p.title) || "")
+      .split("·")[0]
+      .split(" - ")[0]
+      .split(" | ")[0]
+      .trim() || "this artist"
+  );
+}
+function wf(p) {
+  const y = Math.floor(p / 3600),
+    s = Math.floor((p % 3600) / 60),
+    I = p % 60;
+  return (
+    (y ? y + ":" : "") +
+    String(s).padStart(y ? 2 : 1, "0") +
+    ":" +
+    String(I).padStart(2, "0")
+  );
+}
+function ec() {
+  const p = new Date(),
+    y = `${p.getUTCFullYear()}-${String(p.getUTCMonth() + 1).padStart(2, "0")}-${String(p.getUTCDate()).padStart(2, "0")}`,
+    s = p.toLocaleDateString(void 0, { month: "short", day: "numeric" });
+  return { key: y, label: s };
+}
+function kf(p) {
+  let y = 2166136261;
+  for (let s = 0; s < p.length; s++)
+    ((y ^= p.charCodeAt(s)), (y = Math.imul(y, 16777619)));
+  return ((y >>> 0) % 1e5) / 1e5;
+}
+function Sf(p, y, s) {
+  const I = ec();
+  return p
+    .filter((_) => _.vibe === y)
+    .map((_) => ({ ..._, _k: kf(_.video_id + I.key) }))
+    .sort((_, z) => _._k - z._k)
+    .slice(0, s);
+}
+async function _f() {
+  var C;
+  const p = { apikey: $u, Authorization: `Bearer ${$u}` },
+    [y, s, I] = await Promise.all([
+      fetch(`${Mo}/rest/v1/todays_lineup?select=*`, { headers: p }),
+      fetch(`${Mo}/rest/v1/set_id_moments?select=*`, { headers: p }),
+      fetch(`${Mo}/rest/v1/fresh_selectors?select=*`, { headers: p }),
+    ]);
+  if (!y.ok) throw new Error("lineup fetch failed");
+  const _ = await y.json();
+  function _geoRegion(r) {
+    const city = (r.city || "").toLowerCase();
+    const fest = (r.festival_id || r.festival_name || "").toLowerCase();
+    const amerIds = [
+      "knockdown-nyc",
+      "triiple",
+      "sotrackboa",
+      "parque-povo",
+      "dblock",
+      "beatport-live",
+      "motion-lima",
+      "reframe-la",
+      "hellbent-la",
+      "superior-ny",
+      "pacha-nyc",
+      "edc-orlando",
+      "laroc",
+      "monsoon",
+      "universo-paralello",
+      "concourse",
+      "greenvalley",
+      "arc-chicago",
+      "edc-mexico",
+      "boilerroom",
+      "clubspace",
+      "daytrip",
+      "fisher",
+      "smartbar",
+      "stereo",
+      "movement",
+      "panoramanyc",
+      "timegate",
+      "wd4e",
+      "trotamundo",
+      "crssd",
+      "iii-points",
+      "exchange-la",
+      "academy-la",
+      "seismic",
+    ];
+    const eurIds = [
+      "dc10",
+      "off-week",
+      "glastonbury",
+      "tlv-desert",
+      "intercell",
+      "selected-sessions",
+      "hi-ibiza",
+      "berghain",
+      "fabric",
+      "tresor",
+      "awakenings",
+      "dekmantel",
+      "thuishaven",
+      "yoyaku",
+      "ra",
+      "fuse",
+      "sunwaves",
+      "resistance",
+      "ctm",
+      "sonarfest",
+      "musicon",
+      "rex",
+      "shelter",
+      "faust",
+      "cprty",
+      "timewarp",
+      "junction",
+      "junction2",
+      "clubtoclub",
+      "ade",
+      "egg",
+      "vunderground",
+      "printworks",
+      "sonus",
+      "creamfields",
+      "shelter-ams",
+      "pacha",
+      "amnesia",
+      "nibiru",
+    ];
+    const amer = [
+      "miami",
+      "chicago",
+      "los angeles",
+      "las vegas",
+      "austin",
+      "new york",
+      "brooklyn",
+      "detroit",
+      "montreal",
+      "sao paulo",
+      "camboriú",
+      "camboriu",
+      "valinhos",
+      "brazil",
+      "mexico",
+      "los angeles",
+      "atlanta",
+      "san francisco",
+      "denver",
+      "san diego",
+      "montañita",
+      "montanita",
+      "ecuador",
+      "bogota",
+      "bogotá",
+      "medellin",
+      "buenos aires",
+      "lima",
+      "santiago",
+      "colombia",
+      "peru",
+    ];
+    const eur = [
+      "london",
+      "berlin",
+      "amsterdam",
+      "paris",
+      "ibiza",
+      "rotterdam",
+      "barcelona",
+      "turin",
+      "mannheim",
+      "tisno",
+      "cambridge",
+      "stockholm",
+      "brussels",
+      "glasgow",
+      "manchester",
+      "ghent",
+      "zagreb",
+      "prague",
+      "budapest",
+    ];
+    if (amerIds.includes(r.festival_id)) return "americas";
+    if (eurIds.includes(r.festival_id)) return "europe";
+    if (amer.some((c) => city.includes(c) || fest.includes(c)))
+      return "americas";
+    if (eur.some((c) => city.includes(c) || fest.includes(c))) return "europe";
+    if (city === "worldwide" || city === "" || fest.includes("circuit"))
+      return r.vibe === "daylight"
+        ? "americas"
+        : r.vibe === "tidal"
+          ? "americas"
+          : "worldwide";
+    return r.vibe === "americas"
+      ? "americas"
+      : r.vibe === "europe"
+        ? "europe"
+        : "worldwide";
+  }
+  _.forEach((r) => {
+    r.vibe = _geoRegion(r);
+  });
+  const z = s.ok ? await s.json() : [],
+    b = {};
+  for (const V of z) (b[(C = V.video_id)] ?? (b[C] = [])).push(V);
+  const U = I.ok ? await I.json() : [];
+  return { rows: _, idMoments: b, fresh: U };
+}
+let Rl = null;
+function jf() {
+  return (
+    Rl ||
+    ((Rl = new Promise((p) => {
+      if (window.YT && window.YT.Player) return p(window.YT);
+      const y = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        (typeof y == "function" && y(), p(window.YT));
+      };
+      const s = document.createElement("script");
+      ((s.src = "https://www.youtube.com/iframe_api"),
+        document.head.appendChild(s));
+    })),
+    Rl)
+  );
+}
+function Cf({
+  stage: p,
+  slot: y,
+  onEnded: s,
+  seekRef: I,
+  timeRef: _,
+  startAt: z,
+}) {
+  const b = E.useRef(null),
+    U = E.useRef(null),
+    [C, V] = E.useState("loading");
+  return (
+    E.useEffect(() => {
+      let O = !1;
+      return (
+        jf().then(($) => {
+          O ||
+            !b.current ||
+            (U.current = new $.Player(b.current, {
+              videoId: y.video_id,
+              playerVars: {
+                autoplay: 1,
+                rel: 0,
+                modestbranding: 1,
+                playsinline: 1,
+              },
+              events: {
+                onReady: (H) => {
+                  try {
+                    H.target.playVideo();
+                  } catch {}
+                  if (
+                    (I &&
+                      (I.current = (B) => {
+                        try {
+                          (H.target.seekTo(B, !0), H.target.playVideo());
+                        } catch {}
+                      }),
+                    _ &&
+                      (_.current = () => {
+                        try {
+                          return H.target.getCurrentTime() || 0;
+                        } catch {
+                          return 0;
+                        }
+                      }),
+                    z > 0)
+                  )
+                    try {
+                      H.target.seekTo(z, !0);
+                    } catch {}
+                },
+                onStateChange: (H) => {
+                  const B = window.YT.PlayerState;
+                  H.data === B.PLAYING
+                    ? V("playing")
+                    : H.data === B.PAUSED
+                      ? V("paused")
+                      : H.data === B.ENDED && s();
+                },
+                onError: () => {
+                  V("error");
+                  setTimeout(s, 3000);
+                },
+              },
+            }));
+        }),
+        () => {
+          O = !0;
+          try {
+            U.current && U.current.destroy();
+          } catch {}
+          U.current = null;
+        }
+      );
+    }, [y.video_id]),
+    u.jsxs("div", {
+      className: "jb-player",
+      children: [
+        u.jsxs("div", {
+          className: "jb-screen",
+          children: [
+            u.jsx("div", { ref: b, className: "jb-host" }),
+            C === "error" &&
+              u.jsxs("div", {
+                className: "jb-err",
+                children: [
+                  u.jsx("p", { children: "This set can't be embedded." }),
+                  u.jsx("button", {
+                    onClick: s,
+                    style: { borderColor: p.accent, color: p.accent },
+                    children: "Next set →",
+                  }),
+                ],
+              }),
+          ],
+        }),
+        u.jsxs("div", {
+          className: "jb-now",
+          children: [
+            u.jsx("span", {
+              className: "jb-dot",
+              style: { background: p.accent },
+            }),
+            C === "playing"
+              ? "Now playing"
+              : C === "error"
+                ? "Unavailable"
+                : "Cueing",
+            " · ",
+            y.artist,
+            " ",
+            u.jsxs("span", {
+              className: "jb-fest",
+              children: ["— ", y.festival_name, y.city ? `, ${y.city}` : ""],
+            }),
+          ],
+        }),
+      ],
+    })
+  );
+}
+function Ef() {
+  var Y;
+  const [p, y] = E.useState(null),
+    [s, I] = E.useState({}),
+    [_, z] = E.useState([]),
+    [b, U] = E.useState(pf),
+    [C] = E.useState(hf),
+    [V, O] = E.useState(!1),
+    $ = E.useMemo(yf, []),
+    [H, B] = E.useState(0),
+    le = E.useRef(null),
+    P = E.useRef(null);
+  E.useEffect(() => {
+    gf();
+  }, []);
+  const M = E.useCallback((v) => {
+      U((d) => {
+        const x = new Set(d),
+          R = v.toLowerCase();
+        return (x.has(R) ? x.delete(R) : x.add(R), mf(x), x);
+      });
+    }, []),
+    ie = E.useCallback((v) => b.has((v || "").toLowerCase()), [b]),
+    [Ee, _e] = E.useState(""),
+    [W, G] = E.useState(0),
+    [ue, ye] = E.useState(0),
+    [Pe, Be] = E.useState(!1),
+    je = E.useMemo(ec, []);
+  E.useEffect(() => {
+    let v = !0;
+    return (
+      (async () => {
+        var d;
+        try {
+          const { rows: x, idMoments: R, fresh: X } = await _f();
+          if (!v) return;
+          const Z = {};
+          for (const te of x) (Z[(d = te.vibe)] ?? (Z[d] = [])).push(te);
+          (y(Z), I(R), z(X), _e("supabase"));
+          return;
+        } catch {}
+        if (v) {
+          const x = {};
+          for (const R of Pt) x[R.id] = Sf(cf, R.id, uf);
+          (y(x), I(df), z(ff), _e("sample"));
+        }
+      })(),
+      () => {
+        v = !1;
+      }
+    );
+  }, []);
+  const ee = Pt[W];
+  const [liveIdx, setLiveIdx] = E.useState(0);
+  const [stats, setStats] = E.useState({ sets: null, venues: null });
+  const [subOpen2, setSubOpen2] = E.useState(!1);
+  const [subForm, setSubForm] = E.useState({
+    url: "",
+    name: "",
+    loc: "",
+    own: !1,
+    why: "",
+  });
+  const [subState2, setSubState2] = E.useState("idle");
+  const [subMsg, setSubMsg] = E.useState("");
+  E.useEffect(() => {
+    fetch(`${Xf}/rest/v1/public_sets?select=video_id,festival_id`, {
+      headers: { apikey: Xu, Authorization: `Bearer ${Xu}` },
+    })
+      .then((r) => r.json())
+      .then((rows) => {
+        if (!Array.isArray(rows)) return;
+        const venues = new Set(rows.map((r) => r.festival_id).filter(Boolean));
+        setStats({ sets: rows.length, venues: venues.size });
+      })
+      .catch(() => {});
+  }, []);
+  const [castDismissed, setCastDismissed] = E.useState(() => {
+    try {
+      return localStorage.getItem("psCastDismissed") === "1";
+    } catch {
+      return false;
+    }
+  });
+  const dismissCast = () => {
+    try {
+      localStorage.setItem("psCastDismissed", "1");
+    } catch {}
+    setCastDismissed(!0);
+  };
+  E.useEffect(() => {
+    if (nearYou !== null) return;
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude: ulat, longitude: ulng } = pos.coords;
+        const now = new Date().toISOString();
+        try {
+          const r = await fetch(
+            `${Xf}/rest/v1/events?verified=eq.true&starts_at=gte.${now}&lat=not.is.null&select=festival_id,venue_name,title,starts_at,headliner,ticket_url,ticket_price_from,lat,lng&order=starts_at.asc&limit=50`,
+            { headers: { apikey: Xu, Authorization: `Bearer ${Xu}` } },
+          );
+          const ev = r.ok ? await r.json() : [];
+          function haversine(la1, lo1, la2, lo2) {
+            const R = 3958.8,
+              dLat = ((la2 - la1) * Math.PI) / 180,
+              dLon = ((lo2 - lo1) * Math.PI) / 180;
+            const a =
+              Math.sin(dLat / 2) ** 2 +
+              Math.cos((la1 * Math.PI) / 180) *
+                Math.cos((la2 * Math.PI) / 180) *
+                Math.sin(dLon / 2) ** 2;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          }
+          const seen = new Set();
+          const nearby = ev
+            .map((e) => ({
+              ...e,
+              dist: Math.round(haversine(ulat, ulng, e.lat, e.lng)),
+            }))
+            .filter((e) => {
+              if (e.dist > 2000 || seen.has(e.festival_id)) return false;
+              seen.add(e.festival_id);
+              return true;
+            })
+            .sort((a, b) => a.dist - b.dist)
+            .slice(0, 3);
+          setNearYou(nearby.length ? nearby : []);
+        } catch {
+          setNearYou([]);
+        }
+      },
+      () => setNearYou([]),
+      { timeout: 5000, maximumAge: 3600000 },
+    );
+  }, []);
+  const _djKey = (t) => {
+    if (!t) return "";
+    return t
+      .toLowerCase()
+      .split(/\s*[·@:]\s*/)[0]
+      .split(/\s+-\s+/)[0]
+      .replace(
+        /\s+\d+\s*(hour|hrs?|hr)\s+(sunrise|sunset|opening|closing|marathon|extended)?\s*(set|dj set)?\b.*/,
+        "",
+      )
+      .replace(
+        /\s+(sunrise|sunset|opening|closing|marathon|extended|hybrid|all night(?: long)?)\s+(set|dj set)?\b.*/,
+        "",
+      )
+      .replace(
+        /\s+(live set|dj set|full set|live at|opening for|residency|- live|– live)\b.*/,
+        "",
+      )
+      .replace(/^live\s+/, "")
+      .replace(/\s+\|\s+.*/, "")
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+  };
+  const _rawNe = (p == null ? void 0 : p[ee.id]) ?? [];
+  const _seenDj = new Set();
+  const Ne = _rawNe.filter((_r) => {
+    const k = _djKey(_r.artist || _r.title);
+    if (!k || _seenDj.has(k)) return false;
+    _seenDj.add(k);
+    return true;
+  });
+  E.useEffect(() => {
+    if (!Ne || Ne.length < 2) return;
+    const iv = setInterval(
+      () => setLiveIdx((i) => (i + 1) % Math.min(Ne.length, 10)),
+      8000,
+    );
+    return () => clearInterval(iv);
+  }, [Ne.length]);
+  const de = Ne[ue],
+    Xe = (v) => {
+      (G(v), ye(0), B(0));
+    },
+    rt = E.useCallback(() => {
+      ye((v) => (Ne.length ? (v + 1) % Ne.length : 0));
+    }, [Ne.length]);
+  E.useEffect(() => {
+    if (!(!$ || !p))
+      for (let v = 0; v < Pt.length; v++) {
+        const x = (p[Pt[v].id] ?? []).findIndex((R) => R.video_id === $.v);
+        if (x >= 0) {
+          (Be(!0), G(v), ye(x), B($.t || 0));
+          return;
+        }
+      }
+  }, [$, p]);
+  const Le = E.useMemo(() => {
+      if (!p || b.size === 0) return [];
+      const v = [];
+      for (const R of Pt)
+        for (const X of p[R.id] ?? []) v.push({ ...X, _stage: R.id });
+      const d = new Set(),
+        x = [];
+      for (const R of v) {
+        const X = (R.artist || R.title || "").toLowerCase();
+        if (![...b].some((se) => X.includes(se)) || d.has(R.video_id)) continue;
+        d.add(R.video_id);
+        const Z = C ? new Date(C) : new Date(Date.now() - 7 * 864e5),
+          te = R.published_at && new Date(R.published_at) > Z;
+        x.push({ ...R, isNew: te });
+      }
+      return (
+        x.sort(
+          (R, X) =>
+            new Date(X.published_at || 0) - new Date(R.published_at || 0),
+        ),
+        x.slice(0, 8)
+      );
+    }, [p, b, C]),
+    me = E.useCallback(
+      (v) => {
+        const d = Pt.findIndex((R) => R.id === v._stage);
+        if (d < 0) return;
+        const x = (p[Pt[d].id] ?? []).findIndex(
+          (R) => R.video_id === v.video_id,
+        );
+        x >= 0 && (G(d), ye(x), B(0));
+      },
+      [p],
+    ),
+    N = E.useCallback(async () => {
+      if (!de) return;
+      const v = P.current ? P.current() : 0;
+      (await xf(vf(de.video_id, v))) && (O(!0), setTimeout(() => O(!1), 1800));
+    }, [de]);
+  const [qt, Zt] = E.useState(null),
+    Xt = E.useRef(null),
+    Kt = E.useRef(null),
+    [subOpen, setSubOpen] = E.useState(!1),
+    [subEmail, setSubEmail] = E.useState(""),
+    [subState, setSubState] = E.useState("idle"),
+    [nearYou, setNearYou] = E.useState(null);
+  E.useEffect(() => {
+    if (!de || !P.current) return;
+    const it = setInterval(() => {
+      const cur = P.current ? P.current() : 0;
+      const mm = (s[de.video_id] || []).filter(
+        (m) => m.resolved && m.t_sec > 0 && m.t_sec <= cur,
+      );
+      const active = mm.length ? mm[mm.length - 1] : null;
+      const activeKey = active ? active.t_sec + "|" + active.label : "";
+      if (Kt.current !== activeKey && active) {
+        Kt.current = activeKey;
+        clearTimeout(Xt.current);
+        Zt(null);
+        const delay = 15000 + (Date.now() % 15000);
+        Xt.current = setTimeout(() => {
+          Zt({ label: active.label, accent: ee.accent });
+          setTimeout(() => Zt(null), 6000);
+        }, delay);
+      }
+    }, 2000);
+    return () => clearInterval(it);
+  }, [de && de.video_id, ee && ee.id]);
+  return u.jsxs("div", {
+    className: "jb-root",
+    style: { "--accent": ee.accent },
+    children: [
+      u.jsx("style", { children: Nf }),
+      !Pe &&
+        u.jsxs("div", {
+          className: "jb-gate",
+          children: [
+            u.jsx("div", {
+              className: "jb-brand-mark",
+              children: "PROPER SELECTS",
+            }),
+            u.jsxs("h1", {
+              className: "jb-promise",
+              children: [
+                "The best festival sets in the world.",
+                u.jsx("br", {}),
+                u.jsx("span", {
+                  className: "jb-promise-em",
+                  children: "On your TV. Free forever.",
+                }),
+              ],
+            }),
+            Ne[liveIdx] &&
+              u.jsxs("div", {
+                className: "jb-livefeed",
+                children: [
+                  u.jsx("span", { className: "jb-livedot" }),
+                  u.jsxs("span", {
+                    children: [
+                      "Playing now: ",
+                      u.jsx("strong", { children: Ne[liveIdx].artist }),
+                    ],
+                  }),
+                ],
+              }),
+            u.jsx("button", {
+              className: "jb-enter",
+              onClick: () => Be(!0),
+              children: "▷  START LISTENING",
+            }),
+            u.jsx("div", {
+              className: "jb-nostack",
+              children: "No account · No ads · No algorithm",
+            }),
+            u.jsx("div", {
+              className: "jb-proof",
+              children: stats.sets
+                ? stats.sets +
+                  " sets · " +
+                  stats.venues +
+                  " venues · A new lineup every midnight"
+                : "A new lineup every midnight",
+            }),
+            u.jsx("button", {
+              className: "jb-submitlink",
+              onClick: (e) => {
+                e.stopPropagation();
+                setSubOpen2(!0);
+              },
+              children: "Know a set that belongs here? →",
+            }),
+          ],
+        }),
+      Pe &&
+        u.jsxs("div", {
+          className: "jb-stage",
+          style: { background: ee.bg, color: ee.text },
+          children: [
+            u.jsxs("header", {
+              className: "jb-top",
+              children: [
+                u.jsx("button", {
+                  className: "jb-brand",
+                  onClick: () => Be(!1),
+                  children: "PROPER SELECTS",
+                }),
+                u.jsxs("span", {
+                  className: "jb-prog",
+                  children: ["today's program · ", je.label],
+                }),
+                u.jsx("button", {
+                  className: "jb-sub-btn",
+                  onClick: () => setSubOpen(!0),
+                  children: "Subscribe",
+                }),
+                u.jsx("nav", {
+                  className: "jb-tabs",
+                  children: Pt.map((v, d) =>
+                    u.jsx(
+                      "button",
+                      {
+                        className: "jb-tab" + (d === W ? " on" : ""),
+                        style:
+                          d === W
+                            ? { borderColor: v.accent, color: v.accent }
+                            : void 0,
+                        onClick: () => Xe(d),
+                        children: v.name,
+                      },
+                      v.id,
+                    ),
+                  ),
+                }),
+              ],
+            }),
+            u.jsxs("div", {
+              className: "jb-body",
+              children: [
+                !castDismissed &&
+                  u.jsxs("div", {
+                    className: "jb-cast-banner",
+                    children: [
+                      u.jsxs("div", {
+                        style: { flex: 1 },
+                        children: [
+                          u.jsx("div", {
+                            style: {
+                              fontSize: 13,
+                              fontWeight: 800,
+                              marginBottom: 2,
+                            },
+                            children: "Don't know what set to play?",
+                          }),
+                          u.jsx("div", {
+                            style: { fontSize: 11, opacity: 0.65 },
+                            children:
+                              "Hit play. Cast to your TV. Let the room take care of itself.",
+                          }),
+                        ],
+                      }),
+                      u.jsx("button", {
+                        className: "jb-cast-dismiss",
+                        onClick: dismissCast,
+                        "aria-label": "Dismiss",
+                        children: "×",
+                      }),
+                    ],
+                  }),
+                nearYou &&
+                  nearYou.length > 0 &&
+                  u.jsxs("div", {
+                    className: "jb-near",
+                    children: [
+                      u.jsxs("div", {
+                        className: "jb-near-head",
+                        children: [
+                          u.jsx("span", { children: "📍 Near you" }),
+                          u.jsx("span", {
+                            className: "jb-radar-sub",
+                            children: "upcoming shows",
+                          }),
+                        ],
+                      }),
+                      u.jsx("div", {
+                        className: "jb-near-row",
+                        children: nearYou.map((e) =>
+                          u.jsxs(
+                            "a",
+                            {
+                              href: e.ticket_url || "#",
+                              target: "_blank",
+                              rel: "noopener noreferrer",
+                              className: "jb-near-card",
+                              children: [
+                                u.jsxs("div", {
+                                  className: "jb-near-venue",
+                                  children: [e.venue_name],
+                                }),
+                                u.jsx("div", {
+                                  className: "jb-near-event",
+                                  children:
+                                    e.headliner && e.headliner !== "TBA"
+                                      ? e.headliner
+                                      : e.title,
+                                }),
+                                u.jsxs("div", {
+                                  className: "jb-near-meta",
+                                  children: [
+                                    new Date(e.starts_at).toLocaleDateString(
+                                      void 0,
+                                      { month: "short", day: "numeric" },
+                                    ),
+                                    " · ",
+                                    e.dist < 50
+                                      ? e.dist + " mi away"
+                                      : e.dist + " mi",
+                                    e.ticket_price_from
+                                      ? " · from $" + e.ticket_price_from
+                                      : "",
+                                  ],
+                                }),
+                              ],
+                            },
+                            e.festival_id,
+                          ),
+                        ),
+                      }),
+                    ],
+                  }),
+                false,
+                u.jsxs("div", {
+                  className: "jb-head",
+                  children: [
+                    u.jsx("h2", {
+                      className: "jb-stage-name",
+                      children: ee.name,
+                    }),
+                    u.jsx("p", {
+                      className: "jb-stage-tag",
+                      children: ee.tagline,
+                    }),
+                  ],
+                }),
+                u.jsxs("div", {
+                  className: "jb-grid",
+                  children: [
+                    de
+                      ? u.jsxs("div", {
+                          className: "jb-playcol",
+                          children: [
+                            u.jsx(Cf, {
+                              stage: ee,
+                              slot: de,
+                              onEnded: rt,
+                              seekRef: le,
+                              timeRef: P,
+                              startAt: H,
+                            }),
+                            u.jsxs("div", {
+                              className: "jb-actions",
+                              children: [
+                                u.jsx("button", {
+                                  className: "jb-share",
+                                  onClick: N,
+                                  style: {
+                                    borderColor: ee.accent,
+                                    color: ee.accent,
+                                  },
+                                  children: V
+                                    ? "Link copied ✓"
+                                    : "Share at current time",
+                                }),
+                              ],
+                            }),
+                            ((Y = s[de.video_id]) == null ? void 0 : Y.length) >
+                              0 &&
+                              u.jsxs("div", {
+                                className: "jb-radar",
+                                children: [
+                                  u.jsxs("div", {
+                                    className: "jb-radar-head",
+                                    children: [
+                                      u.jsx("span", {
+                                        style: { color: ee.accent },
+                                        children: "ID Radar",
+                                      }),
+                                      u.jsx("span", {
+                                        className: "jb-radar-sub",
+                                        children:
+                                          "mined from the comments · tap to jump",
+                                      }),
+                                    ],
+                                  }),
+                                  u.jsx("div", {
+                                    className: "jb-radar-row",
+                                    children: s[de.video_id].map((v, d) =>
+                                      u.jsxs(
+                                        "button",
+                                        {
+                                          className:
+                                            "jb-id" +
+                                            (v.resolved ? " resolved" : ""),
+                                          style: v.resolved
+                                            ? { borderColor: ee.accent }
+                                            : void 0,
+                                          onClick: () =>
+                                            le.current && le.current(v.t_sec),
+                                          title: v.label,
+                                          children: [
+                                            u.jsx("span", {
+                                              className: "jb-id-ts",
+                                              style: { color: ee.accent },
+                                              children: wf(v.t_sec),
+                                            }),
+                                            u.jsx("span", {
+                                              className: "jb-id-label",
+                                              children: v.resolved
+                                                ? v.label
+                                                : "ID?",
+                                            }),
+                                            v.likes > 0 &&
+                                              u.jsxs("span", {
+                                                className: "jb-id-likes",
+                                                children: ["▲", v.likes],
+                                              }),
+                                          ],
+                                        },
+                                        d,
+                                      ),
+                                    ),
+                                  }),
+                                ],
+                              }),
+                          ],
+                        })
+                      : u.jsx("div", {
+                          className: "jb-empty",
+                          children:
+                            "No sets in today's program for this stage yet.",
+                        }),
+                    u.jsxs("div", {
+                      className: "jb-list",
+                      style: { background: ee.panel },
+                      children: [
+                        u.jsxs("div", {
+                          className: "jb-list-head",
+                          children: [
+                            u.jsxs("span", {
+                              style: { color: ee.accent },
+                              children: ["On ", ee.name, " today"],
+                            }),
+                            u.jsx("span", {
+                              className: "jb-list-sub",
+                              children: "new lineup at midnight",
+                            }),
+                          ],
+                        }),
+                        Ne.map((v, d) =>
+                          u.jsxs(
+                            "button",
+                            {
+                              className: "jb-slot" + (d === ue ? " on" : ""),
+                              onClick: () => ye(d),
+                              style:
+                                d === ue ? { borderColor: ee.accent } : void 0,
+                              children: [
+                                u.jsx("span", {
+                                  className: "jb-slot-num",
+                                  style: { color: ee.accent },
+                                  children: String(d + 1).padStart(2, "0"),
+                                }),
+                                u.jsxs("span", {
+                                  className: "jb-slot-main",
+                                  children: [
+                                    u.jsx("span", {
+                                      className: "jb-slot-artist",
+                                      children: v.artist,
+                                    }),
+                                    u.jsxs("span", {
+                                      className: "jb-slot-meta",
+                                      children: [
+                                        v.festival_name,
+                                        v.city ? ` · ${v.city}` : "",
+                                      ],
+                                    }),
+                                  ],
+                                }),
+                                d === ue &&
+                                  u.jsx("span", {
+                                    style: { color: ee.accent },
+                                    children: "▷",
+                                  }),
+                              ],
+                            },
+                            v.video_id,
+                          ),
+                        ),
+                      ],
+                    }),
+                  ],
+                }),
+                qt &&
+                  u.jsxs("div", {
+                    className: "jb-toast",
+                    style: { borderColor: qt.accent },
+                    children: [
+                      u.jsx("span", { children: "♫ " }),
+                      u.jsx("span", {
+                        className: "jb-toast-label",
+                        children: qt.label,
+                      }),
+                      u.jsx("button", {
+                        className: "jb-toast-close",
+                        onClick: () => Zt(null),
+                        children: "✕",
+                      }),
+                    ],
+                  }),
+              ],
+            }),
+          ],
+        }),
+      subOpen2 &&
+        u.jsx("div", {
+          className: "jb-sub-overlay",
+          onClick: (e) => {
+            if (e.target.className === "jb-sub-overlay") setSubOpen2(!1);
+          },
+          children: u.jsxs("div", {
+            className: "jb-sub-modal",
+            style: { maxWidth: 440 },
+            children: [
+              u.jsx("button", {
+                className: "jb-sub-close",
+                onClick: () => setSubOpen2(!1),
+                children: "✕",
+              }),
+              u.jsx("div", {
+                style: {
+                  fontSize: 11,
+                  letterSpacing: ".2em",
+                  textTransform: "uppercase",
+                  opacity: 0.5,
+                  marginBottom: 12,
+                },
+                children: "BEDROOM DJ",
+              }),
+              u.jsx("h2", {
+                style: {
+                  fontSize: 22,
+                  fontWeight: 800,
+                  margin: "0 0 6px",
+                  lineHeight: 1.2,
+                },
+                children: "Submit a set",
+              }),
+              u.jsx("p", {
+                style: {
+                  fontSize: 12,
+                  opacity: 0.6,
+                  lineHeight: 1.5,
+                  margin: "0 0 20px",
+                },
+                children:
+                  "Full DJ sets only. 45+ minutes. Not aftermovies, radio streams, or highlight reels. Your own bedroom set? Even better.",
+              }),
+              subState2 === "done"
+                ? u.jsxs("div", {
+                    style: { padding: "20px 0", textAlign: "center" },
+                    children: [
+                      u.jsx("div", {
+                        style: { fontSize: 24, marginBottom: 8 },
+                        children: "✓",
+                      }),
+                      u.jsx("div", {
+                        style: {
+                          fontSize: 14,
+                          fontWeight: 700,
+                          marginBottom: 6,
+                        },
+                        children: "Submitted",
+                      }),
+                      u.jsx("div", {
+                        style: { fontSize: 12, opacity: 0.6 },
+                        children: subMsg,
+                      }),
+                    ],
+                  })
+                : u.jsxs("form", {
+                    onSubmit: async (e) => {
+                      e.preventDefault();
+                      if (subState2 === "loading") return;
+                      setSubState2("loading");
+                      try {
+                        const r = await fetch("/api/submit-set", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            video_url: subForm.url,
+                            submitter_name: subForm.name,
+                            submitter_location: subForm.loc,
+                            is_own_set: subForm.own,
+                            why: subForm.why,
+                          }),
+                        });
+                        const d = await r.json();
+                        if (r.ok) {
+                          setSubMsg(d.message || "Thanks");
+                          setSubState2("done");
+                        } else {
+                          setSubMsg(d.error || "Something went wrong");
+                          setSubState2("error");
+                        }
+                      } catch {
+                        setSubMsg("Network error");
+                        setSubState2("error");
+                      }
+                    },
+                    children: [
+                      u.jsx("input", {
+                        type: "url",
+                        required: !0,
+                        placeholder: "YouTube URL",
+                        value: subForm.url,
+                        onChange: (e) =>
+                          setSubForm({ ...subForm, url: e.target.value }),
+                        className: "jb-sub-input",
+                        disabled: subState2 === "loading",
+                      }),
+                      u.jsx("input", {
+                        type: "text",
+                        placeholder: "Your name (optional)",
+                        value: subForm.name,
+                        onChange: (e) =>
+                          setSubForm({ ...subForm, name: e.target.value }),
+                        className: "jb-sub-input",
+                        disabled: subState2 === "loading",
+                      }),
+                      u.jsx("input", {
+                        type: "text",
+                        placeholder: "City (optional — e.g. Austin, Berlin)",
+                        value: subForm.loc,
+                        onChange: (e) =>
+                          setSubForm({ ...subForm, loc: e.target.value }),
+                        className: "jb-sub-input",
+                        disabled: subState2 === "loading",
+                      }),
+                      u.jsx("textarea", {
+                        placeholder: "One line — why does this belong?",
+                        value: subForm.why,
+                        onChange: (e) =>
+                          setSubForm({ ...subForm, why: e.target.value }),
+                        className: "jb-sub-input",
+                        rows: 2,
+                        disabled: subState2 === "loading",
+                        style: { resize: "none", fontFamily: "inherit" },
+                      }),
+                      u.jsxs("label", {
+                        style: {
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 8,
+                          margin: "8px 0 16px",
+                          fontSize: 12,
+                          opacity: 0.7,
+                          cursor: "pointer",
+                        },
+                        children: [
+                          u.jsx("input", {
+                            type: "checkbox",
+                            checked: subForm.own,
+                            onChange: (e) =>
+                              setSubForm({ ...subForm, own: e.target.checked }),
+                            disabled: subState2 === "loading",
+                          }),
+                          "This is my own set (Bedroom DJ)",
+                        ],
+                      }),
+                      subState2 === "error" &&
+                        u.jsx("div", {
+                          style: {
+                            fontSize: 11,
+                            color: "#F87171",
+                            marginBottom: 12,
+                          },
+                          children: subMsg,
+                        }),
+                      u.jsx("button", {
+                        type: "submit",
+                        className: "jb-sub-submit",
+                        disabled: subState2 === "loading",
+                        children:
+                          subState2 === "loading" ? "Sending…" : "Submit →",
+                      }),
+                    ],
+                  }),
+            ],
+          }),
+        }),
+      subOpen &&
+        u.jsx("div", {
+          className: "jb-sub-overlay",
+          onClick: (e) => {
+            if (e.target.className === "jb-sub-overlay") setSubOpen(!1);
+          },
+          children: u.jsxs("div", {
+            className: "jb-sub-modal",
+            children: [
+              u.jsx("button", {
+                className: "jb-sub-close",
+                onClick: () => setSubOpen(!1),
+                children: "✕",
+              }),
+              u.jsx("div", {
+                style: {
+                  fontSize: 12,
+                  letterSpacing: ".2em",
+                  textTransform: "uppercase",
+                  opacity: 0.5,
+                  marginBottom: 16,
+                },
+                children: "PROPER SELECTS",
+              }),
+              u.jsx("h2", {
+                style: {
+                  fontSize: 22,
+                  fontWeight: 800,
+                  margin: "0 0 8px",
+                  lineHeight: 1.2,
+                },
+                children: "Get the weekly drop",
+              }),
+              u.jsx("p", {
+                style: {
+                  fontSize: 13,
+                  opacity: 0.6,
+                  lineHeight: 1.6,
+                  margin: "0 0 24px",
+                },
+                children: "New sets. Best of the vault. Every Monday.",
+              }),
+              u.jsxs("form", {
+                onSubmit: async (e) => {
+                  e.preventDefault();
+                  if (subState === "loading") return;
+                  setSubState("loading");
+                  try {
+                    const r = await fetch("/api/subscribe", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ email: subEmail }),
+                    });
+                    if (r.ok) {
+                      setSubState("done");
+                    } else {
+                      setSubState("error");
+                    }
+                  } catch {
+                    setSubState("error");
+                  }
+                },
+                children: [
+                  u.jsx("input", {
+                    type: "email",
+                    required: !0,
+                    value: subEmail,
+                    onChange: (e) => setSubEmail(e.target.value),
+                    placeholder: "your@email.com",
+                    className: "jb-sub-input",
+                    disabled: subState === "loading" || subState === "done",
+                  }),
+                  u.jsx("button", {
+                    type: "submit",
+                    className: "jb-sub-submit",
+                    disabled: subState === "loading" || subState === "done",
+                    children:
+                      subState === "loading"
+                        ? "Sending…"
+                        : subState === "done"
+                          ? "Check your inbox ✓"
+                          : subState === "error"
+                            ? "Try again →"
+                            : "Subscribe →",
+                  }),
+                ],
+              }),
+            ],
+          }),
+        }),
+    ],
+  });
+}
+const Nf = `
+  .jb-root{min-height:100%;width:100%;background:#0a0a0c;color:#EDEAE2;font-family:'Helvetica Neue',Arial,sans-serif;overflow-x:hidden;}
+  .jb-root *{box-sizing:border-box;}
+  button{font-family:inherit;cursor:pointer;}
+
+  .jb-gate{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;position:relative;background:radial-gradient(130% 100% at 50% -10%,#17171f 0%,#0a0a0c 60%);}
+  .jb-eyebrow{letter-spacing:.4em;text-transform:uppercase;font-size:11px;opacity:.55;margin-bottom:26px;}.jb-brand-mark{font-size:11px;font-weight:800;letter-spacing:.32em;opacity:.5;margin-bottom:48px;}.jb-promise{font-size:clamp(38px,7vw,68px);font-weight:900;line-height:1.05;letter-spacing:-.03em;margin:0 0 24px;max-width:820px;}.jb-promise-em{color:var(--accent);}.jb-livefeed{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;font-size:11px;letter-spacing:.06em;margin-bottom:32px;opacity:.85;}.jb-livedot{width:6px;height:6px;border-radius:50%;background:#22C55E;box-shadow:0 0 8px #22C55E;animation:livepulse 1.6s ease-in-out infinite;}@keyframes livepulse{0%,100%{opacity:1;}50%{opacity:.4;}}.jb-nostack{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.5;margin-top:28px;}.jb-proof{font-size:10.5px;letter-spacing:.14em;opacity:.32;margin-top:10px;}.jb-submitlink{background:none;border:none;color:rgba(237,234,226,.35);font-size:11px;letter-spacing:.06em;cursor:pointer;margin-top:32px;padding:6px 10px;font-family:inherit;transition:color .15s;}.jb-submitlink:hover{color:var(--accent);}.jb-cast-banner{display:flex;align-items:center;gap:14px;margin:0 0 18px;padding:12px 16px;background:rgba(244,169,60,.08);border:1px solid rgba(244,169,60,.2);border-radius:10px;}.jb-cast-dismiss{background:none;border:none;color:rgba(237,234,226,.4);font-size:20px;cursor:pointer;line-height:1;padding:4px 8px;transition:color .15s;}.jb-cast-dismiss:hover{color:#EDEAE2;}
+  .jb-title{font-size:clamp(54px,13vw,150px);line-height:.85;font-weight:800;letter-spacing:-.04em;margin:0;}
+  .jb-title span{display:block;-webkit-text-stroke:2px #EDEAE2;color:transparent;}
+  .jb-date{margin:24px 0 34px;font-size:12px;letter-spacing:.24em;text-transform:uppercase;opacity:.65;}
+  .jb-enter{background:#EDEAE2;color:#0a0a0c;border:none;padding:16px 34px;font-size:14px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;border-radius:2px;transition:transform .15s,opacity .15s;}
+  .jb-enter:hover{transform:translateY(-2px);opacity:.9;}
+  .jb-gate-stages{display:flex;gap:20px;margin-top:42px;flex-wrap:wrap;justify-content:center;text-transform:uppercase;letter-spacing:.22em;font-size:12px;font-weight:700;}
+  .jb-foot{position:absolute;bottom:22px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;opacity:.4;}
+
+  .jb-stage{min-height:100vh;animation:jbfade .5s ease;}
+  @keyframes jbfade{from{opacity:0;}to{opacity:1;}}
+  .jb-top{display:flex;align-items:center;gap:18px;padding:16px 24px;position:sticky;top:0;z-index:5;background:rgba(0,0,0,.3);backdrop-filter:blur(12px);}
+  .jb-brand{background:none;border:none;color:inherit;font-weight:800;letter-spacing:.18em;font-size:13px;}
+  .jb-prog{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;opacity:.7;}
+  .jb-tabs{margin-left:auto;display:flex;gap:8px;}
+  .jb-tab{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.25);color:inherit;padding:7px 14px;border-radius:2px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;transition:transform .15s;}
+  .jb-tab:hover{transform:translateY(-1px);}
+  .jb-tab.on{background:rgba(0,0,0,.4);}
+
+  .jb-body{max-width:1120px;margin:0 auto;padding:26px 24px 70px;}
+  .jb-head{margin:8px 0 26px;}
+  .jb-stage-name{font-size:clamp(44px,7.5vw,88px);font-weight:800;letter-spacing:-.04em;margin:0;line-height:.85;}
+  .jb-stage-tag{margin:12px 0 0;opacity:.82;font-size:15px;}
+
+  .jb-grid{display:grid;grid-template-columns:1fr 330px;gap:24px;align-items:start;}
+  .jb-player{display:flex;flex-direction:column;gap:10px;}
+  .jb-screen{position:relative;aspect-ratio:16/9;background:#000;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.14);box-shadow:0 34px 90px -34px rgba(0,0,0,.85);}
+  .jb-host,.jb-host iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  .jb-err{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(0,0,0,.85);color:#fff;text-align:center;padding:18px;}
+  .jb-err p{margin:0;font-size:13px;opacity:.85;}
+  .jb-err button{background:none;border:1px solid;padding:10px 18px;border-radius:2px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;}
+  .jb-now{display:flex;align-items:center;gap:8px;font-size:12.5px;opacity:.92;flex-wrap:wrap;}
+  .jb-fest{opacity:.6;}
+  .jb-dot{width:8px;height:8px;border-radius:50%;animation:jbblink 1.6s ease-in-out infinite;}
+  @keyframes jbblink{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+  .jb-list{border-radius:10px;padding:16px;border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(10px);}
+  .jb-list-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:12px;padding-bottom:11px;border-bottom:1px solid rgba(128,128,128,.3);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;}
+  .jb-list-sub{opacity:.55;font-weight:600;letter-spacing:.08em;}
+  .jb-slot{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:rgba(128,128,128,.1);border:1px solid transparent;padding:12px;margin-bottom:8px;border-radius:7px;color:inherit;transition:background .15s,transform .15s;}
+  .jb-slot:hover{background:rgba(128,128,128,.2);transform:translateX(3px);}
+  .jb-slot.on{background:rgba(128,128,128,.16);}
+  .jb-slot-num{font-size:12px;font-weight:800;min-width:20px;}
+  .jb-slot-main{flex:1;display:flex;flex-direction:column;min-width:0;}
+  .jb-slot-artist{font-size:13px;font-weight:600;line-height:1.3;}
+  .jb-slot-meta{font-size:11px;opacity:.6;}
+  .jb-empty{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.05);border-radius:8px;font-size:13.5px;opacity:.65;text-align:center;padding:18px;}
+
+  .jb-playcol{display:flex;flex-direction:column;gap:12px;}
+  .jb-radar{border:1px solid rgba(255,255,255,.14);border-radius:9px;padding:12px 14px;background:rgba(0,0,0,.18);backdrop-filter:blur(8px);}
+  .jb-radar-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;}
+  .jb-radar-sub{opacity:.5;font-weight:600;letter-spacing:.06em;text-transform:none;font-size:10.5px;}
+  .jb-radar-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .jb-id{display:flex;align-items:center;gap:7px;background:rgba(128,128,128,.12);border:1px solid transparent;border-radius:6px;padding:8px 11px;color:inherit;font-size:12px;transition:background .15s,transform .15s;max-width:100%;}
+  .jb-id:hover{background:rgba(128,128,128,.24);transform:translateY(-1px);}
+  .jb-id.resolved{background:rgba(128,128,128,.08);}
+  .jb-id-ts{font-weight:800;font-variant-numeric:tabular-nums;}
+  .jb-id-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;}
+  .jb-id-likes{opacity:.5;font-size:10.5px;}
+  .jb-actions{display:flex;gap:9px;flex-wrap:wrap;}
+  .jb-share,.jb-followbtn{background:rgba(0,0,0,.2);border:1px solid;border-radius:6px;padding:9px 15px;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;transition:transform .15s,background .15s;}
+  .jb-share:hover,.jb-followbtn:hover{transform:translateY(-1px);}
+  .jb-following{margin-bottom:24px;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:14px 16px;background:rgba(0,0,0,.15);backdrop-filter:blur(8px);}
+  .jb-follow-row{display:flex;gap:10px;flex-wrap:wrap;}
+  .jb-follow-card{position:relative;display:flex;flex-direction:column;text-align:left;background:rgba(128,128,128,.1);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:11px 15px;min-width:150px;max-width:230px;color:inherit;transition:background .15s,transform .15s;}
+  .jb-follow-card:hover{background:rgba(128,128,128,.2);transform:translateY(-2px);}
+  .jb-newbadge{position:absolute;top:-7px;right:-6px;background:#ff4d5e;color:#fff;font-size:9px;font-weight:800;letter-spacing:.1em;padding:3px 7px;border-radius:9px;}
+  .jb-star{position:absolute;top:8px;right:9px;background:none;border:none;color:rgba(255,255,255,.45);font-size:15px;padding:2px;line-height:1;}
+  .jb-star:hover{transform:scale(1.2);}
+  .jb-fresh-card{position:relative;padding-right:32px;}
+  .jb-hype{margin-left:7px;border:1px solid;border-radius:3px;font-size:8.5px;font-weight:800;letter-spacing:.12em;padding:2px 5px;vertical-align:middle;}
+  .jb-fresh{margin-top:26px;border-top:1px solid rgba(128,128,128,.25);padding-top:18px;}
+  .jb-fresh-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:12px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;}
+  .jb-fresh-row{display:flex;gap:10px;flex-wrap:wrap;}
+  .jb-fresh-card{display:flex;flex-direction:column;background:rgba(128,128,128,.1);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:11px 15px;min-width:130px;}
+  .jb-fresh-name{font-size:13.5px;font-weight:700;}
+  .jb-fresh-meta{font-size:10.5px;opacity:.55;margin-top:2px;}
+  .jb-sub-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(237,234,226,.7);padding:5px 12px;border-radius:16px;font-size:11px;font-weight:700;letter-spacing:.06em;cursor:pointer;transition:background .15s;white-space:nowrap;font-family:inherit;}.jb-sub-btn:hover{background:rgba(255,255,255,.12);color:#EDEAE2;}.jb-sub-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}.jb-sub-modal{background:#13131a;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:32px 28px;max-width:380px;width:100%;position:relative;}.jb-sub-close{position:absolute;top:14px;right:16px;background:none;border:none;color:rgba(237,234,226,.4);font-size:18px;cursor:pointer;line-height:1;padding:4px;}.jb-sub-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#EDEAE2;padding:11px 14px;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none;box-sizing:border-box;}.jb-sub-input:focus{border-color:rgba(244,169,60,.5);}.jb-sub-submit{width:100%;padding:12px;background:#F4A93C;color:#0a0a0e;border:none;border-radius:8px;font-weight:800;font-size:14px;letter-spacing:.04em;cursor:pointer;font-family:inherit;transition:opacity .15s;}.jb-sub-submit:disabled{opacity:.6;cursor:default;}  .jb-near{margin:0 0 20px;}.jb-near-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:12px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;}.jb-near-row{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;-webkit-overflow-scrolling:touch;}.jb-near-row::-webkit-scrollbar{display:none;}.jb-near-card{flex:0 0 auto;width:180px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;display:block;transition:border-color .15s,background .15s;}.jb-near-card:hover{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.07);}.jb-near-venue{font-size:12px;font-weight:800;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.jb-near-event{font-size:11px;opacity:.7;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.jb-near-meta{font-size:10px;opacity:.45;line-height:1.4;}  @media (max-width:880px){ .jb-grid{grid-template-columns:1fr;} .jb-tabs{gap:5px;} .jb-tab{padding:6px 10px;font-size:10px;} }
+  .jb-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(10,10,12,.94);border:1px solid;border-radius:10px;padding:12px 18px;font-size:13px;font-weight:600;letter-spacing:.02em;backdrop-filter:blur(14px);z-index:9999;pointer-events:auto;display:flex;align-items:center;gap:10px;max-width:80vw;box-shadow:0 8px 32px rgba(0,0,0,.5);animation:jbtoast .35s ease forwards;}
+  .jb-toast-label{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .jb-toast-close{background:none;border:none;color:inherit;opacity:.5;cursor:pointer;font-size:14px;flex-shrink:0;padding:0 0 0 4px;}
+  .jb-toast-close:hover{opacity:1;}
+  @keyframes jbtoast{from{opacity:0;transform:translateX(-50%) translateY(10px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+  @media (prefers-reduced-motion:reduce){ *{animation:none !important;transition:none !important;} }
+`,
+  Do = "https://bcodfuggztfosuzsyyla.supabase.co",
+  Vu =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjb2RmdWdnenRmb3N1enN5eWxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0MjgyNTQsImV4cCI6MjEwMDAwNDI1NH0.RSD_E1f0Qy9E2s3vHMK5H9Mch0_-aCOrNhJs1hxCv5Y",
+  bf = {
+    festivals: [
+      {
+        id: "musicon",
+        name: "Music On",
+        city: "Amsterdam",
+        country: "NL",
+        lat: 52.3676,
+        lng: 4.9041,
+        vibe: "Tech house · open-air",
+        accent: "#F4A93C",
+        ticket_url: null,
+      },
+      {
+        id: "fuse",
+        name: "FUSE Open Air",
+        city: "London",
+        country: "GB",
+        lat: 51.5072,
+        lng: -0.1276,
+        vibe: "Rolling house · dubby tech",
+        accent: "#FFB454",
+        ticket_url: null,
+      },
+      {
+        id: "clubspace",
+        name: "Club Space",
+        city: "Miami",
+        country: "US",
+        lat: 25.7796,
+        lng: -80.1937,
+        vibe: "Sunrise terrace · marathon",
+        accent: "#4FC3F7",
+        ticket_url: null,
+      },
+      {
+        id: "sunwaves",
+        name: "Sunwaves",
+        city: "Mamaia",
+        country: "RO",
+        lat: 44.2599,
+        lng: 28.6348,
+        vibe: "Minimal · beach · marathon",
+        accent: "#7C4DFF",
+        ticket_url: null,
+      },
+      {
+        id: "boilerroom",
+        name: "Boiler Room",
+        city: "Chicago",
+        country: "US",
+        lat: 41.8781,
+        lng: -87.6298,
+        vibe: "Raw warehouse · Chicago house",
+        accent: "#FF3B57",
+        ticket_url: null,
+      },
+      {
+        id: "fisher",
+        name: "Out 2 Lunch",
+        city: "Las Vegas",
+        country: "US",
+        lat: 36.1699,
+        lng: -115.1398,
+        vibe: "Big-room tech house · day club",
+        accent: "#FF8A3D",
+        ticket_url: null,
+      },
+      {
+        id: "daytrip",
+        name: "Day Trip",
+        city: "Los Angeles",
+        country: "US",
+        lat: 34.0709,
+        lng: -118.2334,
+        vibe: "Open-air daytime house",
+        accent: "#FFC24B",
+        ticket_url: null,
+      },
+      {
+        id: "concourse",
+        name: "The Concourse Project",
+        city: "Austin",
+        country: "US",
+        lat: 30.2249,
+        lng: -97.7571,
+        vibe: "Indoor/outdoor · world-class production",
+        accent: "#00E5FF",
+        ticket_url: "https://ra.co/clubs/188640",
+        promo_code: "PROPERSELECTS",
+        promo_label: "Proper Selects members — 10% off tickets",
+        promo_url: "https://concourseproject.com",
+      },
+      {
+        id: "seismic",
+        name: "Seismic Dance Event",
+        city: "Austin",
+        country: "US",
+        lat: 30.2255,
+        lng: -97.758,
+        vibe: "Multi-stage indoor/outdoor · house & techno",
+        accent: "#FF5FA0",
+        ticket_url: "https://seismicde.com",
+      },
+      {
+        id: "dirtybird",
+        name: "Dirtybird Campout",
+        city: "Northern California",
+        country: "US",
+        lat: 38.8,
+        lng: -123.5,
+        vibe: "Forest camping festival · tech house",
+        accent: "#FFA500",
+        ticket_url: "https://dirtybirdcampout.com",
+      },
+      {
+        id: "treehouse",
+        name: "Treehouse Miami",
+        city: "Miami",
+        country: "US",
+        lat: 25.7855,
+        lng: -80.1942,
+        vibe: "Rooftop open-air · sunrise sessions",
+        accent: "#38BDF8",
+        ticket_url: "https://treehousemiami.com",
+      },
+      {
+        id: "fabriclondon",
+        name: "fabric",
+        city: "London",
+        country: "GB",
+        lat: 51.5195,
+        lng: -0.0996,
+        vibe: "Room 1 & 2 · underground institution",
+        accent: "#E2E8F0",
+        ticket_url: "https://fabric.club",
+      },
+      {
+        id: "watergate",
+        name: "Watergate",
+        city: "Berlin",
+        country: "DE",
+        lat: 52.5023,
+        lng: 13.4425,
+        vibe: "Spree terrace · melodic house & techno",
+        accent: "#7DD3FC",
+        ticket_url: "https://water-gate.de",
+      },
+      {
+        id: "tresor",
+        name: "Tresor",
+        city: "Berlin",
+        country: "DE",
+        lat: 52.5073,
+        lng: 13.4166,
+        vibe: "Globus vault · 1000V techno",
+        accent: "#A78BFA",
+        ticket_url: "https://tresorberlin.com",
+      },
+      {
+        id: "dc10",
+        name: "DC-10",
+        city: "Ibiza",
+        country: "ES",
+        lat: 38.9054,
+        lng: 1.4341,
+        vibe: "Underground · Circoloco",
+        accent: "#E84545",
+        ticket_url: "https://dc10ibiza.com",
+      },
+      {
+        id: "pacha",
+        name: "Pacha",
+        city: "Ibiza",
+        country: "ES",
+        lat: 38.9067,
+        lng: 1.4325,
+        vibe: "Club classics · Ibiza institution",
+        accent: "#FF69B4",
+        ticket_url: "https://pacha.com",
+      },
+      {
+        id: "amnesia",
+        name: "Amnesia",
+        city: "Ibiza",
+        country: "ES",
+        lat: 38.9394,
+        lng: 1.3964,
+        vibe: "House & techno · open-air terrace",
+        accent: "#FF9500",
+        ticket_url: "https://amnesia.es",
+      },
+      {
+        id: "thuishaven",
+        name: "Thuishaven",
+        city: "Amsterdam",
+        country: "NL",
+        lat: 52.3998,
+        lng: 4.8931,
+        vibe: "Open-air warehouse · sunset to sunrise",
+        accent: "#F9C846",
+        ticket_url: "https://thuishaven.nl",
+      },
+      {
+        id: "yoyaku",
+        name: "Yoyaku",
+        city: "Paris",
+        country: "FR",
+        lat: 48.8866,
+        lng: 2.3522,
+        vibe: "Vinyl · legendary in-store sessions",
+        accent: "#A78BFA",
+        ticket_url: "https://yoyaku.io",
+      },
+      {
+        id: "greenvalley",
+        name: "Green Valley",
+        city: "Camboriú",
+        country: "BR",
+        lat: -26.9839,
+        lng: -48.6356,
+        vibe: "Outdoor mega-club · Brazil",
+        accent: "#4ADE80",
+        ticket_url: null,
+      },
+      {
+        id: "boilerroom-berlin",
+        name: "Boiler Room Berlin",
+        city: "Berlin",
+        country: "DE",
+        lat: 52.52,
+        lng: 13.405,
+        vibe: "Raw warehouse energy · techno",
+        accent: "#FF3B57",
+        ticket_url: null,
+      },
+      {
+        id: "rawcuts",
+        name: "Raw Cuts",
+        city: "New York",
+        country: "US",
+        lat: 40.6939,
+        lng: -73.9867,
+        vibe: "No phones · no VIP · Brooklyn",
+        accent: "#06B6D4",
+        ticket_url: null,
+      },
+      {
+        id: "nibiru",
+        name: "Nibiru Universe",
+        city: "Costinești",
+        country: "RO",
+        lat: 43.8333,
+        lng: 28.6833,
+        vibe: "Black Sea festival city · 2026",
+        accent: "#C084FC",
+        ticket_url: "https://nibiru.net",
+      },
+      {
+        id: "mode",
+        name: "MODE Festival",
+        city: "Sydney",
+        country: "AU",
+        lat: -33.8688,
+        lng: 151.2093,
+        vibe: "Industrial warehouse · RA Live",
+        accent: "#34D399",
+        ticket_url: null,
+      },
+      {
+        id: "pitch",
+        name: "Pitch Music & Arts",
+        city: "Grampians",
+        country: "AU",
+        lat: -37.1,
+        lng: 142.5,
+        vibe: "Wilderness · 5-day immersive",
+        accent: "#60A5FA",
+        ticket_url: null,
+      },
+      {
+        id: "boomerang",
+        name: "Boomerang Beach",
+        city: "Netherlands",
+        country: "NL",
+        lat: 52.0,
+        lng: 4.3,
+        vibe: "Beach festival · Still Moving",
+        accent: "#FB923C",
+        ticket_url: "https://stillmovingevents.nl",
+      },
+    ],
+    sets: {
+      musicon: [
+        {
+          source: "youtube",
+          video_id: "0uEUZCuNDog",
+          artist: "Marco Carola · 2024",
+        },
+        {
+          source: "youtube",
+          video_id: "XzLtKtz5eeI",
+          artist: "Marco Carola · 2023",
+        },
+        {
+          source: "youtube",
+          video_id: "fUDRcZrWc48",
+          artist: "Marco Carola · 2022",
+        },
+      ],
+      fuse: [
+        {
+          source: "youtube",
+          video_id: "ec-TpvnZIy0",
+          artist: "Enzo Siragusa b2b Rossi",
+        },
+        {
+          source: "youtube",
+          video_id: "Fvi_uov0gck",
+          artist: "Enzo Siragusa · 2021",
+        },
+      ],
+      clubspace: [
+        {
+          source: "youtube",
+          video_id: "ka_Cf5qSPtI",
+          artist: "Green Velvet · sunrise",
+        },
+        {
+          source: "youtube",
+          video_id: "CTvkbzE4Jus",
+          artist: "Carl Cox · sunrise",
+        },
+        {
+          source: "youtube",
+          video_id: "4iKfR3UBDpQ",
+          artist: "Mochakk · sunrise",
+        },
+      ],
+      sunwaves: [
+        {
+          source: "youtube",
+          video_id: "RvRhUHTV_8k",
+          artist: "Ben Böhmer · sunrise",
+        },
+        {
+          source: "youtube",
+          video_id: "_SvwdK_HibQ",
+          artist: "Monolink · live",
+        },
+      ],
+      boilerroom: [
+        { source: "youtube", video_id: "5HMiADa3J8Y", artist: "Boo Williams" },
+        { source: "youtube", video_id: "7IsTFaspFQk", artist: "Paul Johnson" },
+        { source: "youtube", video_id: "MVzPsKNUyxY", artist: "Gene Farris" },
+      ],
+      fisher: [
+        {
+          source: "youtube",
+          video_id: "3YctdJP8_eo",
+          artist: "FISHER · Out 2 Lunch",
+        },
+        {
+          source: "youtube",
+          video_id: "_bKZIUr9s4g",
+          artist: "FISHER b2b Kettama",
+        },
+      ],
+      daytrip: [
+        {
+          source: "youtube",
+          video_id: "l0FC5DTlh2Y",
+          artist: "Westend · Live @ Day Trip in the Park",
+        },
+      ],
+      concourse: [
+        {
+          source: "youtube",
+          video_id: "SLth9mPN_Lc",
+          artist: "Lavern · May 2026",
+        },
+        {
+          source: "youtube",
+          video_id: "TKVw8y1FGgU",
+          artist: "Ranger Trucco · 2026",
+        },
+        {
+          source: "youtube",
+          video_id: "y1mbaSae5v8",
+          artist: "Discip · Apr 2026",
+        },
+        {
+          source: "youtube",
+          video_id: "L_xFAIUDCoc",
+          artist: "Chris Avantgarde · 2026",
+        },
+        { source: "youtube", video_id: "PuIf9EJlLnI", artist: "MK · Jan 2026" },
+        {
+          source: "youtube",
+          video_id: "YtQD9B1iQOE",
+          artist: "Westend · Sep 2025",
+        },
+        {
+          source: "youtube",
+          video_id: "07cyWNEKeTg",
+          artist: "Eli & Fur · Jul 2025",
+        },
+        {
+          source: "youtube",
+          video_id: "yNwlb06myu8",
+          artist: "James Hype · Jun 2025",
+        },
+        {
+          source: "youtube",
+          video_id: "5xcTBvCtp6k",
+          artist: "Lilly Palmer · Feb 2025",
+        },
+        {
+          source: "youtube",
+          video_id: "E3eds2a5RcI",
+          artist: "Deep Dish (Dubfire & Sharam) · Jan 2025",
+        },
+        {
+          source: "youtube",
+          video_id: "perw9QdPjz0",
+          artist: "Carl Cox · Oct 2023",
+        },
+        {
+          source: "youtube",
+          video_id: "vMS66_5ckNw",
+          artist: "Nina Kraviz · Sep 2023",
+        },
+        {
+          source: "youtube",
+          video_id: "dh9RKIUYE04",
+          artist: "Green Velvet · Apr 2024",
+        },
+        {
+          source: "youtube",
+          video_id: "rA2y1vC4_Ws",
+          artist: "Gorgon City · Aug 2024",
+        },
+      ],
+      seismic: [
+        {
+          source: "youtube",
+          video_id: "zfcedYnYFNQ",
+          artist: "Gorgon City · Seismic 8.0 · 2025",
+        },
+        {
+          source: "youtube",
+          video_id: "ObiAocVMTyo",
+          artist: "Odd Mob · Seismic 8.0 · 2025",
+        },
+        {
+          source: "youtube",
+          video_id: "rfxQxkUFhvE",
+          artist: "Elderbrook (DJ) · Seismic 8.0 · 2025",
+        },
+      ],
+      dirtybird: [
+        {
+          source: "youtube",
+          video_id: "rO98797Cy_U",
+          artist: "Ekonovah · Dirtybird Campout x Northern Nights 2025",
+        },
+        {
+          source: "youtube",
+          video_id: "M0uFf65KJyM",
+          artist: "DJ Glen · Dirtybird Campout 2025",
+        },
+      ],
+      treehouse: [
+        {
+          source: "youtube",
+          video_id: "lLsfhfr5gMI",
+          artist: "Chillin Williams · Treehouse Miami 2021",
+        },
+        {
+          source: "youtube",
+          video_id: "PDxWrAdHpaI",
+          artist: "GROOVELAND · Treehouse Miami 2022",
+        },
+      ],
+      fabriclondon: [
+        {
+          source: "youtube",
+          video_id: "5i8W1z9zkE0",
+          artist: "Marsh · fabric Room 1 · 7HRS · Feb 2025",
+        },
+        {
+          source: "youtube",
+          video_id: "GUdqwJYOYsw",
+          artist: "Inland Knights · fabric Room 1 · Jan 2026",
+        },
+      ],
+      watergate: [
+        {
+          source: "youtube",
+          video_id: "NHmRX5SQYAA",
+          artist: "JOPLYN · Watergate Berlin",
+        },
+      ],
+      tresor: [
+        {
+          source: "youtube",
+          video_id: "RVky73Kg8p4",
+          artist: "DJ Nastia · Tresor Berlin 2024",
+        },
+        {
+          source: "youtube",
+          video_id: "Cej1F-bNzsw",
+          artist: "Julia Govor · Tresor Berlin 2024",
+        },
+      ],
+      dc10: [
+        {
+          source: "youtube",
+          video_id: "XY2Yec_0w5U",
+          artist: "Chris Stussy · Circoloco 2024",
+        },
+        {
+          source: "youtube",
+          video_id: "dv-cMsrU72o",
+          artist: "INVT · Circoloco 2024",
+        },
+        {
+          source: "youtube",
+          video_id: "ZfUSdi_Wjl4",
+          artist: "DJ Tennis b2b Carlita · Opening 2023",
+        },
+      ],
+      pacha: [
+        {
+          source: "youtube",
+          video_id: "IYEmrL764EI",
+          artist: "Roger Sanchez · Closing 2024",
+        },
+      ],
+      amnesia: [
+        {
+          source: "youtube",
+          video_id: "vEGc3Jsppbc",
+          artist: "Claptone · The Masquerade Opening 2024",
+        },
+        {
+          source: "youtube",
+          video_id: "H3Uka1aALpg",
+          artist: "Vintage Culture",
+        },
+      ],
+      thuishaven: [
+        { source: "youtube", video_id: "z2GyyJhJWgE", artist: "OMAR+ · 2026" },
+        {
+          source: "youtube",
+          video_id: "SvISOuUYSIM",
+          artist: "Archie Hamilton · 2026",
+        },
+        {
+          source: "youtube",
+          video_id: "s5tRIoDtJHQ",
+          artist: "Claptone · 3HRS · 2026",
+        },
+        {
+          source: "youtube",
+          video_id: "OpstwHg3FiQ",
+          artist: "Kolter · 3HRS · 2025",
+        },
+      ],
+      yoyaku: [
+        {
+          source: "youtube",
+          video_id: "D--FKyo2uUY",
+          artist: "Seth Troxler · 2026",
+        },
+        { source: "youtube", video_id: "MOIyvMUzSM8", artist: "Soyoon · 2026" },
+        {
+          source: "youtube",
+          video_id: "TCcPM5S8AxM",
+          artist: "Satoshi Tomiie & Tomoki Tamura · 2026",
+        },
+        {
+          source: "youtube",
+          video_id: "01aNpNmV_3w",
+          artist: "Nina Yamada · 2026",
+        },
+        { source: "youtube", video_id: "Qf8Dkfmo-58", artist: "Alich · 2026" },
+      ],
+      greenvalley: [
+        {
+          source: "youtube",
+          video_id: "yQXb-bD8w1c",
+          artist: "Joris Voorn · 2026",
+        },
+        {
+          source: "youtube",
+          video_id: "FgZH_yAzP-8",
+          artist: "Beltran · 2024",
+        },
+      ],
+      "boilerroom-berlin": [
+        {
+          source: "youtube",
+          video_id: "WL_yw5x3by4",
+          artist: "Len Faki · 2023",
+        },
+        {
+          source: "youtube",
+          video_id: "aFmaUwjsO4g",
+          artist: "Marcel Dettmann",
+        },
+        { source: "youtube", video_id: "VkiJGQidnic", artist: "Rødhåd" },
+      ],
+      rawcuts: [
+        {
+          source: "youtube",
+          video_id: "MnGUGnHSQXA",
+          artist: "Butch · Sultan Room Rooftop 2025",
+        },
+        {
+          source: "youtube",
+          video_id: "NH28-5zohe4",
+          artist: "Rossi. · Roberta's 2025",
+        },
+      ],
+      nibiru: [
+        {
+          source: "youtube",
+          video_id: "NgzMwbqoPEA",
+          artist: "STOFFELA · NebulaX 2026",
+        },
+      ],
+      mode: [
+        {
+          source: "youtube",
+          video_id: "XrmnXiLYcZc",
+          artist: "Supergloss · 2025",
+        },
+        {
+          source: "youtube",
+          video_id: "o4UCqEHQmCs",
+          artist: "Mac Declos · 2025",
+        },
+        {
+          source: "youtube",
+          video_id: "Q5sCIW-aVmg",
+          artist: "X CLUB. · 2025",
+        },
+      ],
+      pitch: [
+        {
+          source: "youtube",
+          video_id: "qdS_7U0-Ugw",
+          artist: "Alarico · 2026",
+        },
+      ],
+      boomerang: [
+        {
+          source: "youtube",
+          video_id: "TuSz4ecYi8s",
+          artist: "Noël Dekkers · 2026",
+        },
+        {
+          source: "youtube",
+          video_id: "76JwjFbpZSI",
+          artist: "Chico Rose · 2026",
+        },
+      ],
+    },
+    latest: [
+      {
+        id: "x1",
+        festival_id: "daytrip",
+        festival_name: "Day Trip",
+        accent: "#FFC24B",
+        video_id: "l0FC5DTlh2Y",
+        artist: "Westend · Live @ Day Trip in the Park",
+        published_at: new Date(Date.now() - 7 * 864e5).toISOString(),
+      },
+      {
+        id: "x2",
+        festival_id: "clubspace",
+        festival_name: "Club Space",
+        accent: "#4FC3F7",
+        video_id: "ka_Cf5qSPtI",
+        artist: "Green Velvet · sunrise",
+        published_at: new Date(Date.now() - 21 * 864e5).toISOString(),
+      },
+      {
+        id: "x3",
+        festival_id: "musicon",
+        festival_name: "Music On",
+        accent: "#F4A93C",
+        video_id: "0uEUZCuNDog",
+        artist: "Marco Carola · 2024",
+        published_at: new Date(Date.now() - 40 * 864e5).toISOString(),
+      },
+      {
+        id: "x4",
+        festival_id: "thuishaven",
+        festival_name: "Thuishaven",
+        accent: "#F9C846",
+        video_id: "z2GyyJhJWgE",
+        artist: "OMAR+",
+        published_at: new Date(Date.now() - 14 * 864e5).toISOString(),
+      },
+      {
+        id: "x5",
+        festival_id: "yoyaku",
+        festival_name: "Yoyaku",
+        accent: "#A78BFA",
+        video_id: "TCcPM5S8AxM",
+        artist: "Satoshi Tomiie & Tomoki Tamura",
+        published_at: new Date(Date.now() - 21 * 864e5).toISOString(),
+      },
+      {
+        id: "x6",
+        festival_id: "dc10",
+        festival_name: "DC-10",
+        accent: "#E84545",
+        video_id: "XY2Yec_0w5U",
+        artist: "Chris Stussy · Circoloco 2024",
+        published_at: new Date(Date.now() - 30 * 864e5).toISOString(),
+      },
+      {
+        id: "x7",
+        festival_id: "greenvalley",
+        festival_name: "Green Valley",
+        accent: "#4ADE80",
+        video_id: "yQXb-bD8w1c",
+        artist: "Joris Voorn",
+        published_at: new Date(Date.now() - 7 * 864e5).toISOString(),
+      },
+      {
+        id: "x8",
+        festival_id: "mode",
+        festival_name: "MODE Festival",
+        accent: "#34D399",
+        video_id: "XrmnXiLYcZc",
+        artist: "Supergloss",
+        published_at: new Date(Date.now() - 35 * 864e5).toISOString(),
+      },
+      {
+        id: "x9",
+        festival_id: "concourse",
+        festival_name: "The Concourse Project",
+        accent: "#00E5FF",
+        video_id: "SLth9mPN_Lc",
+        artist: "Lavern · May 2026",
+        published_at: new Date(Date.now() - 5 * 864e5).toISOString(),
+      },
+    ],
+  };
+async function zf() {
+  var C;
+  const p = { apikey: Vu, Authorization: `Bearer ${Vu}` },
+    [y, s, I] = await Promise.all([
+      fetch(`${Do}/rest/v1/festivals?active=eq.true&select=*`, { headers: p }),
+      fetch(`${Do}/rest/v1/public_sets?select=*`, { headers: p }),
+      fetch(`${Do}/rest/v1/latest_sets?select=*`, { headers: p }),
+    ]);
+  if (!y.ok || !s.ok) throw new Error("supabase fetch failed");
+  const _ = await y.json(),
+    z = await s.json();
+  function _geoRegion(r) {
+    const city = (r.city || "").toLowerCase();
+    const fest = (r.festival_id || r.festival_name || "").toLowerCase();
+    const amer = [
+      "miami",
+      "chicago",
+      "los angeles",
+      "las vegas",
+      "austin",
+      "new york",
+      "brooklyn",
+      "detroit",
+      "montreal",
+      "sao paulo",
+      "camboriú",
+      "camboriu",
+      "valinhos",
+      "brazil",
+      "mexico",
+      "los angeles",
+      "atlanta",
+      "san francisco",
+      "denver",
+      "san diego",
+      "montañita",
+      "montanita",
+      "ecuador",
+      "bogota",
+      "bogotá",
+      "medellin",
+      "buenos aires",
+      "lima",
+      "santiago",
+      "colombia",
+      "peru",
+    ];
+    const eur = [
+      "london",
+      "berlin",
+      "amsterdam",
+      "paris",
+      "ibiza",
+      "rotterdam",
+      "barcelona",
+      "turin",
+      "mannheim",
+      "tisno",
+      "cambridge",
+      "stockholm",
+      "brussels",
+      "glasgow",
+      "manchester",
+      "ghent",
+      "zagreb",
+      "prague",
+      "budapest",
+    ];
+    if (amer.some((c) => city.includes(c) || fest.includes(c)))
+      return "americas";
+    if (eur.some((c) => city.includes(c) || fest.includes(c))) return "europe";
+    if (city === "worldwide" || city === "" || fest.includes("circuit"))
+      return r.vibe === "daylight"
+        ? "americas"
+        : r.vibe === "tidal"
+          ? "americas"
+          : "worldwide";
+    return r.vibe === "americas"
+      ? "americas"
+      : r.vibe === "europe"
+        ? "europe"
+        : "worldwide";
+  }
+  z.forEach((r) => {
+    r.vibe = _geoRegion(r);
+  });
+  const b = I.ok ? await I.json() : [],
+    U = {};
+  for (const V of z) (U[(C = V.festival_id)] ?? (U[C] = [])).push(V);
+  const _merged = bf.festivals.filter((f) => !_.find((s) => s.id === f.id));
+  const _msets = Object.fromEntries(
+    Object.entries(bf.sets).filter(([k]) => !U[k]),
+  );
+  return {
+    festivals: [..._, ..._merged],
+    sets: { ...U, ..._msets },
+    latest: [...b, ...bf.latest.filter((l) => !b.find((r) => r.id === l.id))],
+  };
+}
+function Pf(p) {
+  if (!p) return "";
+  const y = Math.floor((Date.now() - new Date(p).getTime()) / 1e3);
+  return y < 3600
+    ? `${Math.floor(y / 60)}m ago`
+    : y < 86400
+      ? `${Math.floor(y / 3600)}h ago`
+      : y < 604800
+        ? `${Math.floor(y / 86400)}d ago`
+        : `${Math.floor(y / 604800)}w ago`;
+}
+function Hu(p) {
+  return new Promise((y) => {
+    if (document.querySelector(`link[href="${p}"]`)) return y();
+    const s = document.createElement("link");
+    ((s.rel = "stylesheet"),
+      (s.href = p),
+      (s.onload = y),
+      (s.onerror = y),
+      document.head.appendChild(s));
+  });
+}
+function Wu(p) {
+  return new Promise((y, s) => {
+    if (document.querySelector(`script[src="${p}"]`)) return y();
+    const I = document.createElement("script");
+    ((I.src = p),
+      (I.onload = y),
+      (I.onerror = s),
+      document.head.appendChild(I));
+  });
+}
+async function Tf() {
+  return (
+    await Hu("https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"),
+    await Hu(
+      "https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css",
+    ),
+    await Wu("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"),
+    await Wu(
+      "https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js",
+    ),
+    window.L
+  );
+}
+let Ll = null;
+function If() {
+  return (
+    Ll ||
+    ((Ll = new Promise((p) => {
+      if (window.YT && window.YT.Player) return p(window.YT);
+      const y = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        (typeof y == "function" && y(), p(window.YT));
+      };
+      const s = document.createElement("script");
+      ((s.src = "https://www.youtube.com/iframe_api"),
+        document.head.appendChild(s));
+    })),
+    Ll)
+  );
+}
+function Rf({ festival: p, set: y, onEnded: s }) {
+  const I = E.useRef(null),
+    _ = E.useRef(null),
+    [z, b] = E.useState("loading");
+  return (
+    E.useEffect(() => {
+      if (y.source !== "youtube") {
+        b("playing");
+        return;
+      }
+      let U = !1;
+      return (
+        If().then((C) => {
+          U ||
+            !I.current ||
+            (_.current = new C.Player(I.current, {
+              videoId: y.video_id,
+              playerVars: {
+                autoplay: 1,
+                rel: 0,
+                modestbranding: 1,
+                playsinline: 1,
+              },
+              events: {
+                onReady: (V) => {
+                  try {
+                    V.target.playVideo();
+                  } catch {}
+                },
+                onStateChange: (V) => {
+                  const O = window.YT.PlayerState;
+                  V.data === O.PLAYING
+                    ? b("playing")
+                    : V.data === O.PAUSED
+                      ? b("paused")
+                      : V.data === O.ENDED && s();
+                },
+                onError: () => b("error"),
+              },
+            }));
+        }),
+        () => {
+          U = !0;
+          try {
+            _.current && _.current.destroy();
+          } catch {}
+          _.current = null;
+        }
+      );
+    }, [y.source, y.video_id]),
+    y.source === "soundcloud"
+      ? u.jsx("div", {
+          className: "am-screen",
+          children: u.jsx("iframe", {
+            className: "am-host",
+            title: "set",
+            scrolling: "no",
+            frameBorder: "0",
+            src: `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${y.video_id}&auto_play=true`,
+          }),
+        })
+      : y.source === "mixcloud"
+        ? u.jsx("div", {
+            className: "am-screen",
+            children: u.jsx("iframe", {
+              className: "am-host",
+              title: "set",
+              frameBorder: "0",
+              src: `https://www.mixcloud.com/widget/iframe/?autoplay=1&feed=${encodeURIComponent(y.video_id)}`,
+            }),
+          })
+        : u.jsxs("div", {
+            className: "am-screen-wrap",
+            children: [
+              u.jsxs("div", {
+                className: "am-screen",
+                children: [
+                  u.jsx("div", { ref: I, className: "am-host" }),
+                  z === "error" &&
+                    u.jsxs("div", {
+                      className: "am-screen-error",
+                      children: [
+                        u.jsx("p", { children: "This set can't be embedded." }),
+                        u.jsx("button", {
+                          onClick: s,
+                          style: { borderColor: p.accent, color: p.accent },
+                          children: "Skip →",
+                        }),
+                      ],
+                    }),
+                ],
+              }),
+              u.jsxs("div", {
+                className: "am-now",
+                children: [
+                  u.jsx("span", {
+                    className: "am-dot",
+                    style: { background: p.accent },
+                  }),
+                  z === "playing"
+                    ? "Now playing"
+                    : z === "error"
+                      ? "Unavailable"
+                      : "Cueing",
+                  " · ",
+                  y.artist,
+                ],
+              }),
+            ],
+          })
+  );
+}
+function Lf() {
+  var _e;
+  const [p, y] = E.useState(null),
+    [s, I] = E.useState(""),
+    _ = E.useRef(null),
+    z = E.useRef(null),
+    [b, U] = E.useState(!1),
+    [C, V] = E.useState(!1),
+    [O, $] = E.useState(null),
+    [H, B] = E.useState(0),
+    [_atR, _setAtR] = E.useState("all");
+  const _atGeo = E.useCallback(function (f) {
+    var c = (f && (f.city || "")).toLowerCase();
+    var amer = [
+      "miami",
+      "chicago",
+      "los angeles",
+      "las vegas",
+      "austin",
+      "new york",
+      "brooklyn",
+      "detroit",
+      "montreal",
+      "sao paulo",
+      "são paulo",
+      "camboriú",
+      "camboriu",
+      "valinhos",
+      "brazil",
+      "mexico city",
+      "orlando",
+      "lima",
+      "el paso",
+      "itupeva",
+      "bahia",
+      "peru",
+    ];
+    var eur = [
+      "london",
+      "berlin",
+      "amsterdam",
+      "paris",
+      "ibiza",
+      "rotterdam",
+      "barcelona",
+      "turin",
+      "mannheim",
+      "tisno",
+      "cambridge",
+      "stockholm",
+      "mamaia",
+      "glastonbury",
+      "warrington",
+      "costineşti",
+      "costinesti",
+      "sde boker",
+      "netherlands",
+    ];
+    if (
+      amer.some(function (x) {
+        return c.indexOf(x) >= 0;
+      })
+    )
+      return "americas";
+    if (
+      eur.some(function (x) {
+        return c.indexOf(x) >= 0;
+      })
+    )
+      return "europe";
+    return "worldwide";
+  }, []);
+  var _atFilt =
+    p && p.festivals
+      ? _atR === "all"
+        ? p.festivals
+        : p.festivals.filter(function (f) {
+            return _atGeo(f) === _atR;
+          })
+      : [];
+  var _atCnt = {
+    all: p && p.festivals ? p.festivals.length : 0,
+    americas: 0,
+    europe: 0,
+    worldwide: 0,
+  };
+  if (p && p.festivals) {
+    p.festivals.forEach(function (f) {
+      _atCnt[_atGeo(f)]++;
+    });
+  }
+  const _SBKEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjb2RmdWdnenRmb3N1enN5eWxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0MjgyNTQsImV4cCI6MjEwMDAwNDI1NH0.RSD_E1f0Qy9E2s3vHMK5H9Mch0_-aCOrNhJs1hxCv5Y";
+  const _SBURL = "https://bcodfuggztfosuzsyyla.supabase.co";
+  const [_subbed, _setSubbed] = E.useState(
+    () => !!localStorage.getItem("ps_sub"),
+  );
+  const [_email, _setEmail] = E.useState("");
+  const [_submitting, _setSubmitting] = E.useState(!1);
+  const _subscribe = E.useCallback(
+    async (venue) => {
+      if (!_email || !_email.includes("@")) return;
+      _setSubmitting(!0);
+      try {
+        await fetch(_SBURL + "/rest/v1/subscribers", {
+          method: "POST",
+          headers: {
+            apikey: _SBKEY,
+            Authorization: "Bearer " + _SBKEY,
+            "Content-Type": "application/json",
+            Prefer: "return=minimal,resolution=ignore-duplicates",
+          },
+          body: JSON.stringify({
+            email: _email.trim().toLowerCase(),
+            source: venue,
+          }),
+        });
+        localStorage.setItem("ps_sub", "1");
+        _setSubbed(!0);
+      } catch (e) {
+      } finally {
+        _setSubmitting(!1);
+      }
+    },
+    [_email],
+  );
+  E.useEffect(() => {
+    let W = !0;
+    return (
+      (async () => {
+        try {
+          const G = await zf();
+          W && (y(G), I("supabase"));
+          return;
+        } catch {}
+        W && (y(bf), I("sample"));
+      })(),
+      () => {
+        W = !1;
+      }
+    );
+  }, []);
+  const le = E.useCallback(
+      (W) => {
+        var G;
+        return (
+          ((G = p == null ? void 0 : p.sets) == null ? void 0 : G[W]) ?? []
+        );
+      },
+      [p],
+    ),
+    P = E.useCallback((W) => {
+      ($(W),
+        B(0),
+        z.current && z.current.flyTo([W.lat, W.lng], 6, { duration: 1.1 }));
+    }, []),
+    M = E.useCallback(() => {
+      if (!O) return;
+      const W = le(O.id).length || 1;
+      B((G) => (G + 1) % W);
+    }, [O, le]);
+  E.useEffect(() => {
+    if (!p) return;
+    let W = !1;
+    return (
+      Tf()
+        .then((G) => {
+          if (W || !_.current || z.current) return;
+          const ue = G.map(_.current, {
+            center: [30, 5],
+            zoom: 2,
+            minZoom: 2,
+            maxZoom: 12,
+            worldCopyJump: !1,
+            attributionControl: !1,
+            maxBounds: [
+              [-90, -180],
+              [90, 180],
+            ],
+            maxBoundsViscosity: 1,
+          });
+          z.current = ue;
+          const ye = G.tileLayer(
+            "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+            { maxZoom: 19, crossOrigin: !0, noWrap: !0 },
+          );
+          let Pe = !1;
+          (ye.on("tileload", () => {
+            Pe = !0;
+          }),
+            ye.addTo(ue),
+            setTimeout(() => {
+              !Pe && !W && V(!0);
+            }, 4e3));
+          const Be = G.markerClusterGroup({
+            maxClusterRadius: 44,
+            iconCreateFunction: (je) =>
+              G.divIcon({
+                html: `<div class="am-cluster">${je.getChildCount()}</div>`,
+                className: "am-cluster-wrap",
+                iconSize: [38, 38],
+              }),
+          });
+          ((_atFilt.length ? _atFilt : p.festivals).forEach((je) => {
+            const ee = G.divIcon({
+                className: "am-pin-wrap",
+                iconSize: [16, 16],
+                iconAnchor: [8, 8],
+                html: `<div class="am-pin" style="--c:${je.accent}"><span class="am-pin-glow"></span><span class="am-pin-core"></span><span class="am-pin-label">${je.name}</span></div>`,
+              }),
+              Ne = G.marker([je.lat, je.lng], { icon: ee });
+            (Ne.on("click", () => P(je)), Be.addLayer(Ne));
+          }),
+            ue.addLayer(Be),
+            U(!0));
+        })
+        .catch(() => V(!0)),
+      () => {
+        W = !0;
+        try {
+          z.current && z.current.remove();
+        } catch {}
+        z.current = null;
+      }
+    );
+  }, [p, P]);
+  const ie = O ? le(O.id) : [],
+    Ee = ie[H];
+  return u.jsxs("div", {
+    className: "am-root",
+    children: [
+      u.jsx("style", { children: Mf }),
+      u.jsxs("header", {
+        className: "am-top",
+        children: [
+          u.jsxs("span", {
+            className: "am-brand",
+            style: { pointerEvents: "auto" },
+            children: [
+              "PROPER SELECTS ",
+              u.jsx("span", { className: "am-brand-sub", children: "ATLAS" }),
+            ],
+          }),
+          u.jsxs("div", {
+            className: "am-region-chips",
+            children: [
+              u.jsxs("button", {
+                className: "am-region-chip" + (_atR === "all" ? " on" : ""),
+                onClick: function () {
+                  _setAtR("all");
+                },
+                children: [
+                  "All ",
+                  u.jsx("span", {
+                    className: "am-region-count",
+                    children: _atCnt.all,
+                  }),
+                ],
+              }),
+              u.jsxs("button", {
+                className:
+                  "am-region-chip" + (_atR === "americas" ? " on" : ""),
+                onClick: function () {
+                  _setAtR("americas");
+                },
+                children: [
+                  "Americas ",
+                  u.jsx("span", {
+                    className: "am-region-count",
+                    children: _atCnt.americas,
+                  }),
+                ],
+              }),
+              u.jsxs("button", {
+                className: "am-region-chip" + (_atR === "europe" ? " on" : ""),
+                onClick: function () {
+                  _setAtR("europe");
+                },
+                children: [
+                  "Europe ",
+                  u.jsx("span", {
+                    className: "am-region-count",
+                    children: _atCnt.europe,
+                  }),
+                ],
+              }),
+              u.jsxs("button", {
+                className:
+                  "am-region-chip" + (_atR === "worldwide" ? " on" : ""),
+                onClick: function () {
+                  _setAtR("worldwide");
+                },
+                children: [
+                  "Worldwide ",
+                  u.jsx("span", {
+                    className: "am-region-count",
+                    children: _atCnt.worldwide,
+                  }),
+                ],
+              }),
+            ],
+          }),
+          u.jsxs("span", {
+            className: "am-hint",
+            style: { pointerEvents: "auto" },
+            children: [
+              p
+                ? b
+                  ? "tap a festival · scroll to zoom"
+                  : "drawing the world…"
+                : "loading…",
+              s === "sample" && p ? "  · sample data (connect Supabase)" : "",
+            ],
+          }),
+        ],
+      }),
+      u.jsx("div", { className: "am-map", ref: _ }),
+      u.jsxs("div", {
+        className: "am-fab",
+        children: [
+          u.jsx("button", {
+            className: "am-fab-btn",
+            title: "Zoom in",
+            onClick: function () {
+              try {
+                if (z.current) z.current.zoomIn();
+              } catch (e) {}
+            },
+            children: "+",
+          }),
+          u.jsx("button", {
+            className: "am-fab-btn",
+            title: "Zoom out",
+            onClick: function () {
+              try {
+                if (z.current) z.current.zoomOut();
+              } catch (e) {}
+            },
+            children: "−",
+          }),
+          u.jsx("button", {
+            className: "am-fab-btn",
+            title: "Reset view",
+            onClick: function () {
+              try {
+                if (z.current) z.current.setView([30, 5], 2, { animate: true });
+              } catch (e) {}
+            },
+            children: "◎",
+          }),
+        ],
+      }),
+      C &&
+        u.jsx("div", {
+          className: "am-tilewarn",
+          children:
+            "Basemap tiles blocked in this preview — pins, zoom & sets still work. Deploy/run locally for the full map.",
+        }),
+      u.jsx("div", {
+        className: "am-drawer" + (O ? " open" : ""),
+        children:
+          O &&
+          u.jsxs(u.Fragment, {
+            children: [
+              u.jsxs("div", {
+                className: "am-drawer-head",
+                style: { borderColor: O.accent },
+                children: [
+                  u.jsxs("div", {
+                    children: [
+                      u.jsxs("div", {
+                        className: "am-drawer-city",
+                        style: { color: O.accent },
+                        children: [O.city, O.country ? `, ${O.country}` : ""],
+                      }),
+                      u.jsx("h2", {
+                        className: "am-drawer-name",
+                        children: O.name,
+                      }),
+                      u.jsx("div", {
+                        className: "am-drawer-vibe",
+                        children: O.vibe,
+                      }),
+                    ],
+                  }),
+                  u.jsx("button", {
+                    className: "am-close",
+                    onClick: () => $(null),
+                    children: "✕",
+                  }),
+                ],
+              }),
+              Ee
+                ? u.jsx(Rf, { festival: O, set: Ee, onEnded: M })
+                : u.jsx("div", {
+                    className: "am-empty",
+                    children: "No live sets right now — being re-curated.",
+                  }),
+              u.jsx("div", {
+                className: "am-setlist",
+                children: ie.map((W, G) =>
+                  u.jsxs(
+                    "button",
+                    {
+                      className: "am-set" + (G === H ? " on" : ""),
+                      onClick: () => B(G),
+                      style: G === H ? { borderColor: O.accent } : void 0,
+                      children: [
+                        u.jsx("span", {
+                          className: "am-set-num",
+                          style: { color: O.accent },
+                          children: String(G + 1).padStart(2, "0"),
+                        }),
+                        u.jsx("span", {
+                          className: "am-set-name",
+                          children: W.artist,
+                        }),
+                        G === H &&
+                          u.jsx("span", {
+                            style: { color: O.accent },
+                            children: "▷",
+                          }),
+                      ],
+                    },
+                    G,
+                  ),
+                ),
+              }),
+              O.promo_code &&
+                u.jsxs("div", {
+                  className: "am-promo",
+                  children: [
+                    u.jsx("div", {
+                      className: "am-promo-label",
+                      children: O.promo_label || "Member offer",
+                    }),
+                    _subbed
+                      ? u.jsxs(u.Fragment, {
+                          children: [
+                            u.jsxs("div", {
+                              className: "am-promo-row",
+                              children: [
+                                u.jsx("span", {
+                                  className: "am-promo-code",
+                                  children: O.promo_code,
+                                }),
+                                u.jsx("button", {
+                                  className: "am-promo-copy",
+                                  onClick: () => {
+                                    navigator.clipboard
+                                      .writeText(O.promo_code)
+                                      .catch(() => {});
+                                  },
+                                  children: "Copy",
+                                }),
+                              ],
+                            }),
+                            O.promo_url &&
+                              u.jsx("a", {
+                                className: "am-promo-link",
+                                href: O.promo_url,
+                                target: "_blank",
+                                rel: "noopener noreferrer",
+                                style: { color: O.accent },
+                                children: "Get tickets →",
+                              }),
+                          ],
+                        })
+                      : u.jsxs("div", {
+                          className: "am-promo-gate",
+                          children: [
+                            u.jsx("div", {
+                              className: "am-promo-locked",
+                              children: "Subscribe to reveal code",
+                            }),
+                            u.jsxs("div", {
+                              className: "am-promo-form",
+                              children: [
+                                u.jsx("input", {
+                                  className: "am-promo-input",
+                                  type: "email",
+                                  placeholder: "your@email.com",
+                                  value: _email,
+                                  onChange: (e) => _setEmail(e.target.value),
+                                  onKeyDown: (e) => {
+                                    if (e.key === "Enter") _subscribe(O.id);
+                                  },
+                                }),
+                                u.jsx("button", {
+                                  className: "am-promo-submit",
+                                  style: {
+                                    background: O.accent,
+                                    color: "#000",
+                                  },
+                                  disabled: _submitting,
+                                  onClick: () => _subscribe(O.id),
+                                  children: _submitting ? "..." : "Unlock",
+                                }),
+                              ],
+                            }),
+                            u.jsx("div", {
+                              className: "am-promo-hint",
+                              children:
+                                "Free · no spam · exclusive member codes",
+                            }),
+                          ],
+                        }),
+                  ],
+                }),
+              O.ticket_url &&
+                u.jsx("a", {
+                  className: "am-tickets",
+                  href: O.ticket_url,
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                  style: { borderColor: O.accent, color: O.accent },
+                  children: "Tickets & dates →",
+                }),
+            ],
+          }),
+      }),
+      !O &&
+        b &&
+        p &&
+        u.jsxs("div", {
+          className: "am-legend",
+          children: [
+            u.jsx("div", {
+              className: "am-legend-title",
+              children: "Festivals",
+            }),
+            p.festivals.map((W) =>
+              u.jsxs(
+                "button",
+                {
+                  className: "am-legend-row",
+                  onClick: () => P(W),
+                  children: [
+                    u.jsx("span", {
+                      className: "am-legend-dot",
+                      style: { background: W.accent },
+                    }),
+                    u.jsx("span", {
+                      className: "am-legend-name",
+                      children: W.name,
+                    }),
+                    u.jsx("span", {
+                      className: "am-legend-city",
+                      children: W.city,
+                    }),
+                  ],
+                },
+                W.id,
+              ),
+            ),
+          ],
+        }),
+      !O &&
+        b &&
+        p &&
+        ((_e = p.latest) == null ? void 0 : _e.length) > 0 &&
+        u.jsxs("div", {
+          className: "am-latest",
+          children: [
+            u.jsx("div", {
+              className: "am-legend-title",
+              children: "Latest drops",
+            }),
+            p.latest.slice(0, 6).map((W) => {
+              const G = p.festivals.find((ue) => ue.id === W.festival_id);
+              return u.jsxs(
+                "button",
+                {
+                  className: "am-latest-row",
+                  onClick: () => G && P(G),
+                  children: [
+                    u.jsx("span", {
+                      className: "am-legend-dot",
+                      style: { background: W.accent || "#888" },
+                    }),
+                    u.jsxs("span", {
+                      className: "am-latest-text",
+                      children: [
+                        u.jsx("span", {
+                          className: "am-latest-name",
+                          children: W.artist || W.title,
+                        }),
+                        u.jsxs("span", {
+                          className: "am-latest-meta",
+                          children: [
+                            W.festival_name,
+                            " · ",
+                            Pf(W.published_at),
+                          ],
+                        }),
+                      ],
+                    }),
+                  ],
+                },
+                W.id,
+              );
+            }),
+          ],
+        }),
+    ],
+  });
+}
+const Mf = `
+  .am-root{position:relative;width:100%;height:100vh;min-height:560px;background:#06080c;color:#EDEAE2;font-family:'Helvetica Neue',Arial,sans-serif;overflow:hidden;}
+  .am-root *{box-sizing:border-box;}
+  .am-top{position:absolute;z-index:600;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;pointer-events:none;background:linear-gradient(180deg,rgba(6,8,12,.85),transparent);}
+  .am-region-chips{display:flex;gap:5px;pointer-events:auto;background:rgba(6,8,12,.72);backdrop-filter:blur(12px);padding:5px;border-radius:999px;border:1px solid rgba(255,255,255,.1);}
+  .am-region-chip{background:transparent;border:none;color:rgba(237,234,226,.65);padding:7px 13px;font-size:11.5px;font-weight:700;letter-spacing:.06em;border-radius:999px;cursor:pointer;font-family:inherit;transition:background .16s,color .16s;text-transform:uppercase;}
+  .am-region-chip:hover{color:#fff;}
+  .am-region-chip.on{background:#F4A93C;color:#000;}
+  .am-region-count{opacity:.7;margin-left:5px;font-weight:600;font-size:10px;}
+  .am-fab{position:absolute;z-index:500;bottom:20px;right:20px;display:flex;flex-direction:column;gap:8px;}
+  .am-fab-btn{width:38px;height:38px;background:rgba(6,8,12,.85);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14);color:#EDEAE2;border-radius:9px;cursor:pointer;font-family:inherit;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:background .16s,border-color .16s,color .16s;}
+  .am-fab-btn:hover{background:rgba(244,169,60,.18);border-color:rgba(244,169,60,.5);color:#F4A93C;}
+  .am-brand{font-weight:800;letter-spacing:.16em;font-size:15px;}
+  .am-brand-sub{opacity:.55;font-weight:600;letter-spacing:.3em;font-size:11px;margin-left:4px;}
+  .am-hint{font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.6;text-align:right;}
+  .am-map{position:absolute;inset:0;z-index:1;background:#0a0e16;}
+  .leaflet-container{background:#0a0e16 !important;font-family:inherit;}
+  .am-tilewarn{position:absolute;z-index:600;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(20,24,34,.92);border:1px solid rgba(255,255,255,.14);color:#cdd6e6;font-size:12px;padding:9px 14px;border-radius:8px;max-width:90%;text-align:center;backdrop-filter:blur(8px);}
+  .am-pin-wrap{background:none !important;border:none !important;}
+  .am-pin{position:relative;width:16px;height:16px;cursor:pointer;}
+  .am-pin-glow{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:32px;height:32px;border-radius:50%;background:radial-gradient(circle,var(--c) 0%,transparent 65%);opacity:.32;animation:ampulse 3s ease-in-out infinite;pointer-events:none;}
+  .am-pin-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:11px;height:11px;border-radius:50%;background:var(--c);box-shadow:0 0 0 2px rgba(6,8,12,.7),0 0 14px var(--c);transition:transform .2s cubic-bezier(.4,0,.2,1);}
+  .am-pin:hover .am-pin-core{transform:translate(-50%,-50%) scale(1.55);}
+  .am-pin:hover .am-pin-label{opacity:1;transform:translateX(-50%) translateY(0);}
+  @keyframes ampulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.28;}50%{transform:translate(-50%,-50%) scale(1.45);opacity:.55;}}
+  .am-pin-label{position:absolute;left:50%;top:24px;transform:translateX(-50%) translateY(-4px);white-space:nowrap;font-size:11px;font-weight:700;color:#fff;background:rgba(6,8,12,.94);backdrop-filter:blur(8px);padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.16);pointer-events:none;opacity:0;transition:opacity .18s,transform .18s;letter-spacing:.02em;}
+  .am-cluster-wrap{background:none !important;border:none !important;}
+  .am-cluster{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(38,50,72,.96),rgba(20,28,44,.96));border:2px solid rgba(255,255,255,.32);color:#fff;font-weight:800;font-size:13px;box-shadow:0 6px 24px rgba(120,160,255,.35),0 0 0 4px rgba(120,160,255,.08);cursor:pointer;transition:transform .2s;}
+  .am-cluster:hover{transform:scale(1.1);}
+  .am-legend-title{font-size:10px;letter-spacing:.2em;text-transform:uppercase;opacity:.5;padding:6px 8px 8px;font-weight:700;}
+  .am-legend{position:absolute;z-index:500;left:16px;bottom:16px;width:226px;max-width:46%;background:rgba(10,14,22,.82);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px;backdrop-filter:blur(12px);}
+  .am-latest{position:absolute;z-index:500;right:16px;bottom:16px;width:260px;max-width:48%;background:rgba(10,14,22,.82);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px;backdrop-filter:blur(12px);}
+  .am-latest-row{display:flex;align-items:center;gap:9px;width:100%;background:none;border:none;color:inherit;padding:9px 8px;border-radius:8px;cursor:pointer;text-align:left;transition:background .15s;}
+  .am-latest-row:hover{background:rgba(255,255,255,.08);}
+  .am-latest-text{display:flex;flex-direction:column;min-width:0;}
+  .am-latest-name{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;}
+  .am-latest-meta{font-size:10.5px;opacity:.55;}.am-promo{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:12px 14px;margin:12px 0 6px;}.am-promo-label{font-size:10px;letter-spacing:.15em;text-transform:uppercase;opacity:.5;margin-bottom:8px;}.am-promo-row{display:flex;align-items:center;gap:10px;}.am-promo-code{font-family:monospace;font-size:16px;font-weight:800;letter-spacing:.12em;flex:1;}.am-promo-copy{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#EDEAE2;padding:5px 11px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;letter-spacing:.05em;}.am-promo-copy:hover{background:rgba(255,255,255,.22);}.am-promo-link{display:block;margin-top:8px;font-size:11px;letter-spacing:.08em;opacity:.7;text-decoration:none;}.am-promo-link:hover{opacity:1;}.am-promo-gate{display:flex;flex-direction:column;gap:10px;}.am-promo-locked{font-size:13px;font-weight:600;letter-spacing:.04em;opacity:.55;padding:2px 0;}.am-promo-form{display:flex;gap:8px;}.am-promo-input{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#EDEAE2;padding:8px 12px;border-radius:8px;font-size:13px;font-family:inherit;outline:none;}.am-promo-input:focus{border-color:rgba(255,255,255,.5);}.am-promo-input::placeholder{opacity:.4;}.am-promo-submit{padding:8px 14px;border-radius:8px;border:none;font-weight:700;font-size:12px;font-family:inherit;cursor:pointer;letter-spacing:.04em;transition:opacity .15s;}.am-promo-submit:disabled{opacity:.5;}.am-promo-hint{font-size:10px;opacity:.4;letter-spacing:.05em;}
+  .am-legend-row{display:flex;align-items:center;gap:9px;width:100%;background:none;border:none;color:inherit;padding:9px 8px;border-radius:8px;cursor:pointer;text-align:left;transition:background .15s;}
+  .am-legend-row:hover{background:rgba(255,255,255,.08);}
+  .am-legend-dot{width:9px;height:9px;border-radius:50%;flex:none;}
+  .am-legend-name{font-size:13px;font-weight:700;}
+  .am-legend-city{font-size:11px;opacity:.55;margin-left:auto;}
+  .am-drawer{position:absolute;z-index:700;top:0;right:0;height:100%;width:380px;max-width:92%;background:rgba(10,13,20,.96);border-left:1px solid rgba(255,255,255,.12);backdrop-filter:blur(16px);transform:translateX(100%);transition:transform .4s cubic-bezier(.6,0,.2,1);display:flex;flex-direction:column;padding:18px;}
+  .am-drawer.open{transform:translateX(0);}
+  .am-drawer-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:1px solid;padding-bottom:14px;margin-bottom:14px;}
+  .am-drawer-city{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;}
+  .am-drawer-name{margin:5px 0 4px;font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1;}
+  .am-drawer-vibe{font-size:12.5px;opacity:.7;}
+  .am-close{background:rgba(255,255,255,.08);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:14px;cursor:pointer;flex:none;}
+  .am-close:hover{background:rgba(255,255,255,.18);}
+  .am-screen-wrap{display:flex;flex-direction:column;gap:9px;margin-bottom:14px;}
+  .am-screen{position:relative;aspect-ratio:16/9;background:#000;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.12);}
+  .am-host,.am-host iframe,iframe.am-host{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  .am-screen-error{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(0,0,0,.85);text-align:center;padding:16px;}
+  .am-screen-error p{margin:0;font-size:13px;opacity:.85;}
+  .am-screen-error button{background:none;border:1px solid;padding:9px 16px;border-radius:2px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;cursor:pointer;}
+  .am-now{display:flex;align-items:center;gap:8px;font-size:12px;opacity:.9;}
+  .am-dot{width:8px;height:8px;border-radius:50%;animation:amblink 1.6s ease-in-out infinite;}
+  @keyframes amblink{0%,100%{opacity:1;}50%{opacity:.3;}}
+  .am-empty{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.04);border-radius:8px;font-size:13px;opacity:.6;margin-bottom:14px;text-align:center;padding:16px;}
+  .am-setlist{overflow-y:auto;flex:1;}
+  .am-set{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:rgba(255,255,255,.04);border:1px solid transparent;padding:12px;margin-bottom:7px;border-radius:7px;color:inherit;cursor:pointer;transition:background .15s,transform .15s;}
+  .am-set:hover{background:rgba(255,255,255,.09);transform:translateX(3px);}
+  .am-set.on{background:rgba(255,255,255,.07);}
+  .am-set-num{font-size:12px;font-weight:800;min-width:18px;}
+  .am-set-name{flex:1;font-size:13px;}
+  .am-tickets{display:block;text-align:center;margin-top:12px;padding:13px;border:1px solid;border-radius:8px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;text-decoration:none;transition:background .15s;}
+  .am-tickets:hover{background:rgba(255,255,255,.06);}
+  @media (max-width:768px){.am-drawer{width:100%;max-width:100%;}.am-legend{width:200px;}}
+  @media (prefers-reduced-motion:reduce){*{animation:none !important;}}
+`,
+  Df = "https://bcodfuggztfosuzsyyla.supabase.co",
+  Yu =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjb2RmdWdnenRmb3N1enN5eWxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0MjgyNTQsImV4cCI6MjEwMDAwNDI1NH0.RSD_E1f0Qy9E2s3vHMK5H9Mch0_-aCOrNhJs1hxCv5Y",
+  Fo = {
+    americas: {
+      name: "Americas",
+      accent: "#F4A93C",
+      blurb: "LA to Miami · open air",
+    },
+    europe: {
+      name: "Europe",
+      accent: "#4FC3F7",
+      blurb: "Ibiza to Berlin · midnight",
+    },
+    worldwide: {
+      name: "Worldwide",
+      accent: "#FF3B57",
+      blurb: "Beyond the map",
+    },
+  },
+  Ff = [
+    {
+      vibe: "europe",
+      video_id: "0uEUZCuNDog",
+      artist: "Marco Carola · Music On",
+      festival_name: "Music On",
+      city: "Amsterdam",
+    },
+    {
+      vibe: "europe",
+      video_id: "XzLtKtz5eeI",
+      artist: "Marco Carola · Music On 2023",
+      festival_name: "Music On",
+      city: "Amsterdam",
+    },
+    {
+      vibe: "europe",
+      video_id: "ec-TpvnZIy0",
+      artist: "Enzo Siragusa b2b Rossi",
+      festival_name: "FUSE Open Air",
+      city: "London",
+    },
+    {
+      vibe: "europe",
+      video_id: "Fvi_uov0gck",
+      artist: "Enzo Siragusa · FUSE 2021",
+      festival_name: "FUSE Open Air",
+      city: "London",
+    },
+    {
+      vibe: "europe",
+      video_id: "WL_yw5x3by4",
+      artist: "Len Faki · Boiler Room Berlin",
+      festival_name: "Boiler Room",
+      city: "Berlin",
+    },
+    {
+      vibe: "europe",
+      video_id: "aFmaUwjsO4g",
+      artist: "Marcel Dettmann · Boiler Room Berlin",
+      festival_name: "Boiler Room",
+      city: "Berlin",
+    },
+    {
+      vibe: "europe",
+      video_id: "VkiJGQidnic",
+      artist: "Rødhåd · Boiler Room Berlin",
+      festival_name: "Boiler Room",
+      city: "Berlin",
+    },
+    {
+      vibe: "europe",
+      video_id: "m1SvbXLYEEc",
+      artist: "Charlotte de Witte · Awakenings 2025",
+      festival_name: "Awakenings",
+      city: "Amsterdam",
+    },
+    {
+      vibe: "americas",
+      video_id: "l0FC5DTlh2Y",
+      artist: "Westend · Day Trip in the Park",
+      festival_name: "Day Trip",
+      city: "Los Angeles",
+    },
+    {
+      vibe: "americas",
+      video_id: "3YctdJP8_eo",
+      artist: "FISHER · Out 2 Lunch",
+      festival_name: "Out 2 Lunch",
+      city: "Las Vegas",
+    },
+    {
+      vibe: "americas",
+      video_id: "ka_Cf5qSPtI",
+      artist: "Green Velvet · sunrise",
+      festival_name: "Club Space",
+      city: "Miami",
+    },
+    {
+      vibe: "americas",
+      video_id: "CTvkbzE4Jus",
+      artist: "Carl Cox · sunrise",
+      festival_name: "Club Space",
+      city: "Miami",
+    },
+    {
+      vibe: "americas",
+      video_id: "4iKfR3UBDpQ",
+      artist: "Mochakk · sunrise",
+      festival_name: "Club Space",
+      city: "Miami",
+    },
+    {
+      vibe: "worldwide",
+      video_id: "RvRhUHTV_8k",
+      artist: "Ben Böhmer · Cappadocia",
+      festival_name: "Cercle",
+      city: "Türkiye",
+    },
+    {
+      vibe: "americas",
+      video_id: "5HMiADa3J8Y",
+      artist: "Boo Williams",
+      festival_name: "Boiler Room",
+      city: "Chicago",
+    },
+    {
+      vibe: "americas",
+      video_id: "7IsTFaspFQk",
+      artist: "Paul Johnson",
+      festival_name: "Boiler Room",
+      city: "Chicago",
+    },
+    {
+      vibe: "americas",
+      video_id: "MVzPsKNUyxY",
+      artist: "Gene Farris",
+      festival_name: "Boiler Room",
+      city: "Chicago",
+    },
+    {
+      vibe: "europe",
+      video_id: "XY2Yec_0w5U",
+      artist: "Chris Stussy · Circoloco",
+      festival_name: "DC-10",
+      city: "Ibiza",
+    },
+    {
+      vibe: "europe",
+      video_id: "dv-cMsrU72o",
+      artist: "INVT · Circoloco",
+      festival_name: "DC-10",
+      city: "Ibiza",
+    },
+    {
+      vibe: "europe",
+      video_id: "ZfUSdi_Wjl4",
+      artist: "DJ Tennis b2b Carlita · Circoloco Opening",
+      festival_name: "DC-10",
+      city: "Ibiza",
+    },
+    {
+      vibe: "europe",
+      video_id: "IYEmrL764EI",
+      artist: "Roger Sanchez · Closing 2024",
+      festival_name: "Pacha",
+      city: "Ibiza",
+    },
+    {
+      vibe: "europe",
+      video_id: "vEGc3Jsppbc",
+      artist: "Claptone · The Masquerade Opening",
+      festival_name: "Amnesia",
+      city: "Ibiza",
+    },
+    {
+      vibe: "europe",
+      video_id: "H3Uka1aALpg",
+      artist: "Vintage Culture",
+      festival_name: "Amnesia",
+      city: "Ibiza",
+    },
+    {
+      vibe: "europe",
+      video_id: "D--FKyo2uUY",
+      artist: "Seth Troxler",
+      festival_name: "Yoyaku",
+      city: "Paris",
+    },
+    {
+      vibe: "europe",
+      video_id: "MOIyvMUzSM8",
+      artist: "Soyoon",
+      festival_name: "Yoyaku",
+      city: "Paris",
+    },
+    {
+      vibe: "europe",
+      video_id: "TCcPM5S8AxM",
+      artist: "Satoshi Tomiie & Tomoki Tamura",
+      festival_name: "Yoyaku",
+      city: "Paris",
+    },
+    {
+      vibe: "europe",
+      video_id: "01aNpNmV_3w",
+      artist: "Nina Yamada",
+      festival_name: "Yoyaku",
+      city: "Paris",
+    },
+    {
+      vibe: "europe",
+      video_id: "Qf8Dkfmo-58",
+      artist: "Alich",
+      festival_name: "Yoyaku",
+      city: "Paris",
+    },
+    {
+      vibe: "europe",
+      video_id: "TuSz4ecYi8s",
+      artist: "Noël Dekkers · Opening",
+      festival_name: "Boomerang Beach",
+      city: "Netherlands",
+    },
+    {
+      vibe: "europe",
+      video_id: "76JwjFbpZSI",
+      artist: "Chico Rose",
+      festival_name: "Boomerang Beach",
+      city: "Netherlands",
+    },
+    {
+      vibe: "europe",
+      video_id: "NgzMwbqoPEA",
+      artist: "STOFFELA · NebulaX Afro House",
+      festival_name: "Nibiru Universe",
+      city: "Costinești",
+    },
+    {
+      vibe: "europe",
+      video_id: "z2GyyJhJWgE",
+      artist: "OMAR+",
+      festival_name: "Thuishaven",
+      city: "Amsterdam",
+    },
+    {
+      vibe: "europe",
+      video_id: "SvISOuUYSIM",
+      artist: "Archie Hamilton",
+      festival_name: "Thuishaven",
+      city: "Amsterdam",
+    },
+    {
+      vibe: "europe",
+      video_id: "s5tRIoDtJHQ",
+      artist: "Claptone · 3 Hours",
+      festival_name: "Thuishaven",
+      city: "Amsterdam",
+    },
+    {
+      vibe: "europe",
+      video_id: "OpstwHg3FiQ",
+      artist: "Kolter · 3 Hours",
+      festival_name: "Thuishaven",
+      city: "Amsterdam",
+    },
+    {
+      vibe: "americas",
+      video_id: "MnGUGnHSQXA",
+      artist: "Butch · Sultan Room Rooftop",
+      festival_name: "Raw Cuts",
+      city: "New York",
+    },
+    {
+      vibe: "americas",
+      video_id: "NH28-5zohe4",
+      artist: "Rossi. · Roberta's",
+      festival_name: "Raw Cuts",
+      city: "New York",
+    },
+    {
+      vibe: "americas",
+      video_id: "yQXb-bD8w1c",
+      artist: "Joris Voorn",
+      festival_name: "Green Valley",
+      city: "Camboriú",
+    },
+    {
+      vibe: "americas",
+      video_id: "FgZH_yAzP-8",
+      artist: "Beltran",
+      festival_name: "Green Valley",
+      city: "Camboriú",
+    },
+    {
+      vibe: "worldwide",
+      video_id: "XrmnXiLYcZc",
+      artist: "Supergloss · Turbine Hall",
+      festival_name: "MODE Festival",
+      city: "Sydney",
+    },
+    {
+      vibe: "worldwide",
+      video_id: "qdS_7U0-Ugw",
+      artist: "Alarico",
+      festival_name: "Pitch Music & Arts",
+      city: "Grampians",
+    },
+    {
+      vibe: "worldwide",
+      video_id: "o4UCqEHQmCs",
+      artist: "Mac Declos · Turbine Hall",
+      festival_name: "MODE Festival",
+      city: "Sydney",
+    },
+    {
+      vibe: "worldwide",
+      video_id: "Q5sCIW-aVmg",
+      artist: "X CLUB.",
+      festival_name: "MODE Festival",
+      city: "Sydney",
+    },
+    {
+      vibe: "worldwide",
+      video_id: "XHNHq1mC0VQ",
+      artist: "ZHU (Blacklizt) · Hakuba Mountains",
+      festival_name: "Cercle",
+      city: "Nagano",
+    },
+  ];
+function tc() {
+  const p = new Date();
+  return {
+    key: `${p.getUTCFullYear()}-${String(p.getUTCMonth() + 1).padStart(2, "0")}-${String(p.getUTCDate()).padStart(2, "0")}`,
+    label: p.toLocaleDateString(void 0, { month: "short", day: "numeric" }),
+  };
+}
+function Of(p) {
+  let y = 2166136261;
+  for (let s = 0; s < p.length; s++)
+    ((y ^= p.charCodeAt(s)), (y = Math.imul(y, 16777619)));
+  return ((y >>> 0) % 1e5) / 1e5;
+}
+function Af(p) {
+  const y = tc().key;
+  return [...p]
+    .map((s) => ({ ...s, _k: Of(s.video_id + y) }))
+    .sort((s, I) => s._k - I._k);
+}
+async function Uf() {
+  const p = { apikey: Yu, Authorization: `Bearer ${Yu}` },
+    y = await fetch(`${Df}/rest/v1/vault_sets?select=*&limit=500`, {
+      headers: p,
+    });
+  if (!y.ok) throw new Error("lineup fetch failed");
+  return y.json();
+}
+let Ml = null;
+function Bf() {
+  return (
+    Ml ||
+    ((Ml = new Promise((p) => {
+      if (window.YT && window.YT.Player) return p(window.YT);
+      const y = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        (typeof y == "function" && y(), p(window.YT));
+      };
+      const s = document.createElement("script");
+      ((s.src = "https://www.youtube.com/iframe_api"),
+        document.head.appendChild(s));
+    })),
+    Ml)
+  );
+}
+function $f({ set: p, onEnded: y, onError: s }) {
+  const I = E.useRef(null),
+    _ = E.useRef(null);
+  return (
+    E.useEffect(() => {
+      let z = !1;
+      return (
+        Bf().then((b) => {
+          z ||
+            !I.current ||
+            (_.current = new b.Player(I.current, {
+              videoId: p.video_id,
+              playerVars: {
+                autoplay: 1,
+                rel: 0,
+                modestbranding: 1,
+                playsinline: 1,
+              },
+              events: {
+                onReady: (U) => {
+                  try {
+                    U.target.playVideo();
+                  } catch {}
+                },
+                onStateChange: (U) => {
+                  U.data === window.YT.PlayerState.ENDED && y();
+                },
+                onError: () => s(p.video_id),
+              },
+            }));
+        }),
+        () => {
+          z = !0;
+          try {
+            _.current && _.current.destroy();
+          } catch {}
+          _.current = null;
+        }
+      );
+    }, [p.video_id]),
+    u.jsx("div", { ref: I, className: "tg-host" })
+  );
+}
+const _isApple =
+  /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ||
+  /iPad|iPhone|iPod/.test(navigator.userAgent);
+const _isChrome =
+  /Chrome/.test(navigator.userAgent) &&
+  !/Safari/.test(navigator.userAgent.replace(/Chrome[^\s]*/, ""));
+function Vf() {
+  const [p, y] = E.useState(null),
+    [s, I] = E.useState(""),
+    [_, z] = E.useState(""),
+    [b, U] = E.useState(null),
+    [C, V] = E.useState(() => new Set()),
+    [Nv, Sv] = E.useState(null),
+    O = E.useMemo(tc, []);
+  E.useEffect(() => {
+    let P = !0;
+    return (
+      (async () => {
+        try {
+          const M = await Uf();
+          P && (y(M), I("supabase"));
+          return;
+        } catch {}
+        P && (y(Af(Ff)), I("sample"));
+      })(),
+      () => {
+        P = !1;
+      }
+    );
+  }, []);
+  E.useEffect(() => {
+    if (_ === "" && p && p.length) {
+      let picked = "";
+      try {
+        const lv = localStorage.getItem("psVaultVenue");
+        if (lv && p.find((st) => st.festival_id === lv)) picked = lv;
+      } catch (e) {}
+      if (!picked) {
+        const counts = {};
+        for (const st of p) {
+          counts[st.festival_id] = (counts[st.festival_id] || 0) + 1;
+        }
+        const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+        if (top) picked = top[0];
+      }
+      if (picked) z(picked);
+    }
+  }, [p, _]);
+  E.useEffect(() => {
+    const h = () => {
+      try {
+        const lv = localStorage.getItem("psVaultVenue");
+        if (lv && p && p.find((st) => st.festival_id === lv)) z(lv);
+      } catch (e) {}
+    };
+    window.addEventListener("focus", h);
+    window.addEventListener("psVaultSelect", h);
+    return () => {
+      window.removeEventListener("focus", h);
+      window.removeEventListener("psVaultSelect", h);
+    };
+  }, [p]);
+  E.useEffect(() => {
+    if (!_ || _ === "all") {
+      Sv(null);
+      return;
+    }
+    const now = new Date().toISOString();
+    fetch(
+      Df +
+        "/rest/v1/events?festival_id=eq." +
+        encodeURIComponent(_) +
+        "&starts_at=gte." +
+        encodeURIComponent(now) +
+        "&order=starts_at.asc&limit=1",
+      { headers: { apikey: Yu, Authorization: "Bearer " + Yu } },
+    )
+      .then((r) => r.json())
+      .then((d) => {
+        Sv((d && d[0]) || null);
+      })
+      .catch(() => Sv(null));
+  }, [_]);
+  const $ = E.useMemo(() => {
+    if (!p) return [];
+    const _djKey = (t) => {
+      if (!t) return "";
+      let x = t
+        .toLowerCase()
+        .split(/\s*[·@:]\s*/)[0]
+        .split(/\s+-\s+/)[0]
+        .replace(
+          /\s+\d+\s*(hour|hrs?|hr)\s+(sunrise|sunset|opening|closing|marathon|extended)?\s*(set|dj set)?\b.*/,
+          "",
+        )
+        .replace(
+          /\s+(sunrise|sunset|opening|closing|marathon|extended|hybrid|all night(?: long)?)\s+(set|dj set)?\b.*/,
+          "",
+        )
+        .replace(
+          /\s+(live set|dj set|full set|live at|opening for|residency|- live|– live)\b.*/,
+          "",
+        )
+        .replace(/^live\s+/, "")
+        .replace(/\s+\|\s+.*/, "")
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim();
+      return x;
+    };
+    const _seen = new Set();
+    return (
+      _ === "" || _ === "all" ? p : p.filter((M) => M.festival_id === _)
+    ).filter((M) => !C.has(M.video_id));
+  }, [p, _, C]);
+  E.useEffect(() => {
+    if (!$.length) {
+      U(null);
+      return;
+    }
+    (!b || !$.some((P) => P.video_id === b)) && U($[0].video_id);
+  }, [$, b]);
+  const H = E.useCallback(() => {
+      const P = $.findIndex((M) => M.video_id === b);
+      P >= 0 && $.length && U($[(P + 1) % $.length].video_id);
+    }, [$, b]),
+    B = E.useCallback((P) => {
+      V((M) => new Set(M).add(P));
+    }, []),
+    le = E.useMemo(() => {
+      const P = { all: (p == null ? void 0 : p.length) ?? 0 };
+      if (p) {
+        for (const s of p) {
+          const k = s.festival_id;
+          if (k) P[k] = (P[k] || 0) + 1;
+        }
+      }
+      return P;
+    }, [p]);
+  return u.jsxs("div", {
+    className: "tg-root",
+    children: [
+      u.jsx("style", { children: Hf }),
+      u.jsxs("header", {
+        className: "tg-top",
+        children: [
+          u.jsxs("div", {
+            className: "tg-brand",
+            children: ["PROPER SELECTS ", u.jsx("span", { children: "VAULT" })],
+          }),
+          u.jsxs("div", {
+            className: "tg-date",
+            children: [
+              "Full library · ",
+              O.label,
+              s === "sample" ? " · sample" : "",
+            ],
+          }),
+        ],
+      }),
+      u.jsxs("div", {
+        className: "tg-filters",
+        children: [
+          u.jsxs("button", {
+            className: "tg-chip" + (_ === "all" ? " on" : ""),
+            onClick: () => z("all"),
+            children: [
+              "All ",
+              u.jsx("span", { className: "tg-count", children: le.all }),
+            ],
+          }),
+          (p || [])
+            .reduce((acc, st) => {
+              const k = st.festival_id;
+              if (k && !acc.find((x) => x.k === k))
+                acc.push({
+                  k,
+                  name: st.festival_name || k,
+                  city: st.city || "",
+                  accent: st.accent || "#F4A93C",
+                });
+              return acc;
+            }, [])
+            .sort((a, b) => (le[b.k] || 0) - (le[a.k] || 0))
+            .slice(0, 30)
+            .map((V) =>
+              u.jsxs(
+                "button",
+                {
+                  className: "tg-chip" + (_ === V.k ? " on" : ""),
+                  style:
+                    _ === V.k
+                      ? { borderColor: V.accent, color: V.accent }
+                      : void 0,
+                  onClick: () => z(V.k),
+                  children: [
+                    u.jsx("span", {
+                      className: "tg-chip-dot",
+                      style: { background: V.accent },
+                    }),
+                    V.name,
+                    " ",
+                    u.jsx("span", { className: "tg-count", children: le[V.k] }),
+                    u.jsx("span", {
+                      className: "tg-chip-blurb",
+                      children: V.city,
+                    }),
+                  ],
+                },
+                V.k,
+              ),
+            ),
+        ],
+      }),
+      Nv &&
+        _ !== "all" &&
+        u.jsxs("div", {
+          style: {
+            margin: "16px 24px",
+            padding: 16,
+            background: "rgba(255,255,255,.05)",
+            border:
+              "1px solid " +
+              ((((p || []).find((x) => x.festival_id === _) || {}).accent ||
+                "#555") +
+                "44"),
+            borderRadius: 12,
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 12,
+            alignItems: "center",
+          },
+          children: [
+            u.jsxs("div", {
+              style: { flex: 1, minWidth: 180 },
+              children: [
+                u.jsx("div", {
+                  style: {
+                    fontSize: 10,
+                    letterSpacing: ".18em",
+                    textTransform: "uppercase",
+                    opacity: 0.5,
+                    marginBottom: 4,
+                  },
+                  children: "Next Event",
+                }),
+                u.jsx("div", {
+                  style: { fontSize: 15, fontWeight: 700, marginBottom: 2 },
+                  children: Nv.title,
+                }),
+                u.jsx("div", {
+                  style: { fontSize: 13, opacity: 0.7 },
+                  children:
+                    new Date(Nv.starts_at).toLocaleDateString(void 0, {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    }) + (Nv.headliner ? " · " + Nv.headliner : ""),
+                }),
+                Nv.supporting_acts &&
+                  Nv.supporting_acts.length > 0 &&
+                  u.jsx("div", {
+                    style: { fontSize: 12, opacity: 0.5, marginTop: 2 },
+                    children: Nv.supporting_acts.join(" · "),
+                  }),
+              ],
+            }),
+            Nv.ticket_url &&
+              u.jsx("a", {
+                href: Nv.ticket_url,
+                target: "_blank",
+                rel: "noopener noreferrer",
+                style: {
+                  display: "inline-block",
+                  padding: "8px 16px",
+                  background:
+                    ((p || []).find((x) => x.festival_id === _) || {}).accent ||
+                    "#fff",
+                  color: "#000",
+                  borderRadius: 8,
+                  fontWeight: 700,
+                  fontSize: 13,
+                  textDecoration: "none",
+                  whiteSpace: "nowrap",
+                },
+                children:
+                  "Get Tickets" +
+                  (Nv.ticket_price_from ? " · $" + Nv.ticket_price_from : ""),
+              }),
+          ],
+        }),
+      _ !== "all" &&
+        u.jsxs("div", {
+          style: {
+            padding: "20px 24px 4px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 6,
+          },
+          children: [
+            u.jsx("div", {
+              style: {
+                fontSize: 11,
+                letterSpacing: ".18em",
+                textTransform: "uppercase",
+                opacity: 0.5,
+              },
+              children: "Featured Venue",
+            }),
+            u.jsx("h2", {
+              style: {
+                fontSize: "clamp(32px,5vw,60px)",
+                fontWeight: 800,
+                margin: 0,
+                lineHeight: 1,
+                letterSpacing: "-.03em",
+              },
+              children:
+                ((p || []).find((x) => x.festival_id === _) || {})
+                  .festival_name || _,
+            }),
+            u.jsx("div", {
+              style: { fontSize: 13, opacity: 0.6 },
+              children:
+                (le[_] || 0) +
+                " sets in vault · " +
+                (((p || []).find((x) => x.festival_id === _) || {}).city || ""),
+            }),
+          ],
+        }),
+      u.jsxs("div", {
+        className: "tg-grid",
+        children: [
+          $.map((P) => {
+            const M = Fo[P.vibe] ?? { name: P.vibe, accent: "#999" },
+              ie = P.video_id === b;
+            return u.jsxs(
+              "div",
+              {
+                className: "tg-tile" + (ie ? " live" : ""),
+                style: ie
+                  ? {
+                      borderColor: M.accent,
+                      boxShadow: `0 0 34px -6px ${M.accent}66`,
+                    }
+                  : void 0,
+                onClick: () => !ie && U(P.video_id),
+                children: [
+                  u.jsxs("div", {
+                    className: "tg-frame",
+                    children: [
+                      ie
+                        ? u.jsx($f, { set: P, onEnded: H, onError: B })
+                        : u.jsxs(u.Fragment, {
+                            children: [
+                              u.jsx("img", {
+                                className: "tg-thumb",
+                                loading: "lazy",
+                                alt: P.artist,
+                                src: `https://img.youtube.com/vi/${P.video_id}/hqdefault.jpg`,
+                              }),
+                              u.jsx("div", {
+                                className: "tg-play",
+                                style: { borderColor: M.accent },
+                                children: u.jsx("span", {
+                                  style: { color: M.accent },
+                                  children: "▷",
+                                }),
+                              }),
+                            ],
+                          }),
+                      ie &&
+                        u.jsx("span", {
+                          className: "tg-live-tag",
+                          style: { color: M.accent },
+                          children: "● LIVE",
+                        }),
+                      ie &&
+                        _isApple &&
+                        u.jsx(
+                          "span",
+                          { className: "tg-airplay-hint" },
+                          void 0,
+                          "⊹ AirPlay",
+                        ),
+                      ie &&
+                        _isChrome &&
+                        !_isApple &&
+                        u.jsx(
+                          "span",
+                          { className: "tg-airplay-hint" },
+                          void 0,
+                          "⊹ Cast",
+                        ),
+                    ],
+                  }),
+                  u.jsxs("div", {
+                    className: "tg-meta",
+                    children: [
+                      u.jsx("div", {
+                        className: "tg-artist",
+                        children: P.artist,
+                      }),
+                      u.jsxs("div", {
+                        className: "tg-fest",
+                        children: [
+                          P.festival_name,
+                          P.city ? ` · ${P.city}` : "",
+                        ],
+                      }),
+                    ],
+                  }),
+                ],
+              },
+              P.video_id,
+            );
+          }),
+          p &&
+            !$.length &&
+            u.jsx("div", {
+              className: "tg-empty",
+              children:
+                _ === "all"
+                  ? "Pick a venue above to explore its vault."
+                  : "No sets yet for this venue — check back soon.",
+            }),
+        ],
+      }),
+    ],
+  });
+}
+const Hf = `
+  .tg-root{min-height:100vh;width:100%;background:#0a0a0e;color:#EDEAE2;font-family:'Helvetica Neue',Arial,sans-serif;padding-bottom:60px;}
+  .tg-root *{box-sizing:border-box;}
+  button{font-family:inherit;cursor:pointer;}
+
+  .tg-top{display:flex;align-items:baseline;justify-content:space-between;gap:14px;padding:18px 22px 10px;}
+  .tg-brand{font-weight:800;letter-spacing:.16em;font-size:15px;}
+  .tg-brand span{opacity:.5;letter-spacing:.3em;font-size:11px;margin-left:4px;}
+  .tg-date{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;opacity:.55;}
+
+  .tg-filters{display:flex;gap:8px;padding:8px 22px 18px;flex-wrap:wrap;}@media(max-width:768px){.tg-filters{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:14px;scrollbar-width:none;}.tg-filters::-webkit-scrollbar{display:none;}}
+  .tg-chip{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.16);color:#EDEAE2;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.04em;transition:transform .15s,background .15s;}
+  .tg-chip:hover{transform:translateY(-1px);background:rgba(255,255,255,.1);}
+  .tg-chip.on{background:rgba(255,255,255,.1);}
+  .tg-chip-dot{width:8px;height:8px;border-radius:50%;}
+  .tg-count{opacity:.5;font-weight:600;}
+  .tg-chip-blurb{opacity:.45;font-weight:500;font-size:10.5px;display:none;}
+  @media(min-width:700px){.tg-chip-blurb{display:inline;}}
+
+  .tg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;padding:0 22px;}@media(max-width:768px){.tg-grid{grid-template-columns:1fr;padding:0 14px;gap:12px;}}
+  .tg-tile{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.1);border-radius:10px;overflow:hidden;cursor:pointer;transition:transform .18s,border-color .18s,box-shadow .18s;}
+  .tg-tile:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.3);}
+  .tg-tile.live{cursor:default;}
+  @media(min-width:960px){.tg-tile.live{grid-column:span 2;grid-row:span 2;}}
+
+  .tg-frame{position:relative;aspect-ratio:16/9;background:#000;}
+  .tg-host,.tg-host iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  .tg-thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85;transition:opacity .18s,transform .3s;}
+  .tg-tile:hover .tg-thumb{opacity:1;transform:scale(1.03);}
+  .tg-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);font-size:16px;opacity:0;transition:opacity .18s;}
+  .tg-tile:hover .tg-play{opacity:1;}
+  .tg-badge{position:absolute;top:10px;left:10px;color:#0a0a0e;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:3px;}
+  .tg-live-tag{position:absolute;top:10px;right:10px;font-size:10px;font-weight:800;letter-spacing:.12em;background:rgba(0,0,0,.6);padding:4px 8px;border-radius:3px;animation:tgpulse 1.6s ease-in-out infinite;}
+  @keyframes tgpulse{0%,100%{opacity:1;}50%{opacity:.45;}}
+
+  .tg-meta{padding:11px 13px 13px;}
+  .tg-artist{font-size:13.5px;font-weight:600;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+  .tg-fest{font-size:11px;opacity:.55;margin-top:3px;}
+
+  .tg-empty{grid-column:1/-1;padding:60px 20px;text-align:center;opacity:.6;font-size:14px;}
+  @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important;}}  .tg-airplay-hint{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.06em;color:rgba(237,234,226,.6);cursor:default;user-select:none;margin-left:6px;vertical-align:middle;}
+`,
+  Qu = "https://bcodfuggztfosuzsyyla.supabase.co",
+  Ju =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjb2RmdWdnenRmb3N1enN5eWxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0MjgyNTQsImV4cCI6MjEwMDAwNDI1NH0.RSD_E1f0Qy9E2s3vHMK5H9Mch0_-aCOrNhJs1hxCv5Y",
+  Ku = "#F4A93C";
+async function Wf() {
+  try {
+    const r = await fetch("/api/radar");
+    if (r.ok) {
+      const d = await r.json();
+      if (d && d.length) return d;
+    }
+    return nc;
+  } catch {
+    return nc;
+  }
+}
+const nc = [
+  {
+    id: "s1",
+    video_id: "ka_Cf5qSPtI",
+    artist: "Green Velvet · sunrise",
+    festival: { name: "Club Space", city: "Miami", accent: "#4FC3F7" },
+  },
+  {
+    id: "s2",
+    video_id: "0uEUZCuNDog",
+    artist: "Marco Carola · 2024",
+    festival: { name: "Music On", city: "Amsterdam", accent: "#F4A93C" },
+  },
+  {
+    id: "s3",
+    video_id: "l0FC5DTlh2Y",
+    artist: "Westend · Day Trip",
+    festival: { name: "Day Trip", city: "Los Angeles", accent: "#FFC24B" },
+  },
+];
+function Yf() {
+  return (
+    window.__ytPromise ||
+      (window.__ytPromise = new Promise((p) => {
+        var I;
+        if ((I = window.YT) != null && I.Player) return p(window.YT);
+        const y = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = () => {
+          (typeof y == "function" && y(), p(window.YT));
+        };
+        const s = document.createElement("script");
+        ((s.src = "https://www.youtube.com/iframe_api"),
+          document.head.appendChild(s));
+      })),
+    window.__ytPromise
+  );
+}
+function Qf({ set: p, accent: y }) {
+  const s = E.useRef(null),
+    I = E.useRef(null),
+    [_, z] = E.useState("loading");
+  return (
+    E.useEffect(() => {
+      let b = !1;
+      return (
+        Yf().then((U) => {
+          b ||
+            !s.current ||
+            (I.current = new U.Player(s.current, {
+              videoId: p.video_id,
+              playerVars: {
+                autoplay: 1,
+                rel: 0,
+                modestbranding: 1,
+                playsinline: 1,
+              },
+              events: {
+                onReady: (C) => {
+                  try {
+                    C.target.playVideo();
+                  } catch {}
+                },
+                onStateChange: (C) => {
+                  const V = window.YT.PlayerState;
+                  C.data === V.PLAYING
+                    ? z("playing")
+                    : C.data === V.PAUSED && z("paused");
+                },
+                onError: () => z("error"),
+              },
+            }));
+        }),
+        () => {
+          var U;
+          b = !0;
+          try {
+            (U = I.current) == null || U.destroy();
+          } catch {}
+          I.current = null;
+        }
+      );
+    }, [p.video_id]),
+    u.jsxs("div", {
+      style: {
+        position: "relative",
+        width: "100%",
+        aspectRatio: "16/9",
+        background: "#000",
+        borderRadius: 8,
+        overflow: "hidden",
+        border: "1px solid rgba(255,255,255,.12)",
+      },
+      children: [
+        u.jsx("div", {
+          ref: s,
+          style: {
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+          },
+        }),
+        _ === "loading" &&
+          u.jsx("div", {
+            style: {
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "#000",
+              color: "rgba(255,255,255,.4)",
+              fontSize: 12,
+            },
+            children: "Cueing…",
+          }),
+        _ === "error" &&
+          u.jsx("div", {
+            style: {
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "#000",
+              color: "rgba(255,255,255,.5)",
+              fontSize: 12,
+              textAlign: "center",
+            },
+            children: "Can't embed · open on YouTube",
+          }),
+      ],
+    })
+  );
+}
+function Jf() {
+  var O, $, H;
+  const [p, y] = E.useState(null),
+    [s, I] = E.useState(null),
+    _ = E.useRef(null),
+    z = E.useRef({ down: !1, startX: 0, scrollX: 0 });
+  E.useEffect(() => {
+    Wf()
+      .then(y)
+      .catch(() => y(nc));
+  }, []);
+  const b = E.useCallback((B) => {
+      var le;
+      ((z.current.down = !0),
+        (z.current.startX = B.touches ? B.touches[0].clientX : B.clientX),
+        (z.current.scrollX =
+          ((le = _.current) == null ? void 0 : le.scrollLeft) ?? 0),
+        _.current && (_.current.style.cursor = "grabbing"),
+        _.current && (_.current.style.scrollSnapType = "none"));
+    }, []),
+    U = E.useCallback((B) => {
+      if (!z.current.down || !_.current) return;
+      B.preventDefault();
+      const le = B.touches ? B.touches[0].clientX : B.clientX,
+        P = z.current.startX - le;
+      _.current.scrollLeft = z.current.scrollX + P;
+    }, []),
+    C = E.useCallback(() => {
+      ((z.current.down = !1),
+        _.current &&
+          ((_.current.style.cursor = "grab"),
+          (_.current.style.scrollSnapType = "x mandatory")));
+    }, []),
+    V = (B) => `https://img.youtube.com/vi/${B}/mqdefault.jpg`;
+  return p
+    ? u.jsxs("div", {
+        style: nt.root,
+        children: [
+          u.jsx("style", { children: Kf }),
+          u.jsxs("header", {
+            style: nt.header,
+            children: [
+              u.jsxs("div", {
+                style: nt.brand,
+                children: [
+                  "PROPER SELECTS ",
+                  u.jsx("span", { style: nt.brandSub, children: "RADAR" }),
+                ],
+              }),
+              u.jsxs("div", {
+                style: nt.hint,
+                children: [
+                  u.jsx("span", { className: "radar-dot" }),
+                  "Most viewed this month",
+                ],
+              }),
+            ],
+          }),
+          s &&
+            u.jsx("div", {
+              style: nt.playerOverlay,
+              children: u.jsxs("div", {
+                style: nt.playerBox,
+                children: [
+                  u.jsxs("div", {
+                    style: nt.playerHead,
+                    children: [
+                      u.jsxs("div", {
+                        children: [
+                          u.jsxs("div", {
+                            style: {
+                              fontSize: 10,
+                              letterSpacing: ".18em",
+                              textTransform: "uppercase",
+                              opacity: 0.6,
+                              marginBottom: 4,
+                            },
+                            children: [
+                              (O = s.festival) == null ? void 0 : O.name,
+                              " · ",
+                              ($ = s.festival) == null ? void 0 : $.city,
+                            ],
+                          }),
+                          u.jsx("div", {
+                            style: { fontSize: 15, fontWeight: 700 },
+                            children: s.artist ?? "ID",
+                          }),
+                        ],
+                      }),
+                      u.jsx("button", {
+                        style: nt.closeBtn,
+                        onClick: () => I(null),
+                        children: "✕",
+                      }),
+                    ],
+                  }),
+                  u.jsx(Qf, {
+                    set: s,
+                    accent:
+                      ((H = s.festival) == null ? void 0 : H.accent) ?? Ku,
+                  }),
+                ],
+              }),
+            }),
+          ,
+          u.jsxs("div", {
+            style: {
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))",
+              gap: 14,
+              padding: "16px 20px 24px",
+            },
+            children: [
+              [...p]
+                .sort((a, b) => (b.views || 0) - (a.views || 0))
+                .map((B, le) => {
+                  var ie, Ee, _e;
+                  const P =
+                      ((ie = B.festival) == null ? void 0 : ie.accent) ?? Ku,
+                    M = (s == null ? void 0 : s.id) === B.id;
+                  return u.jsxs(
+                    "div",
+                    {
+                      className: "radar-card",
+                      style: { "--acc": P },
+                      onClick: () => {
+                        z.current.down || I(M ? null : B);
+                      },
+                      children: [
+                        u.jsxs("div", {
+                          className: "radar-thumb-wrap",
+                          children: [
+                            u.jsx("img", {
+                              className: "radar-thumb",
+                              src: V(B.video_id),
+                              alt: B.artist ?? "ID",
+                              draggable: !1,
+                            }),
+                            u.jsx("div", { className: "radar-thumb-grad" }),
+                            ,
+                            u.jsx("div", {
+                              className: "radar-views",
+                              children:
+                                B.views > 0
+                                  ? B.views > 1e6
+                                    ? (B.views / 1e6).toFixed(1) + "M views"
+                                    : B.views > 1e3
+                                      ? Math.round(B.views / 1e3) + "K views"
+                                      : "—"
+                                  : "—",
+                            }),
+                            M &&
+                              u.jsx("div", {
+                                className: "radar-playing-badge",
+                                children: "▶ PLAYING",
+                              }),
+                            u.jsx("div", {
+                              className: "radar-rank",
+                              children: `#${le + 1}`,
+                            }),
+                          ],
+                        }),
+                        u.jsxs("div", {
+                          className: "radar-card-body",
+                          children: [
+                            u.jsxs("div", {
+                              className: "radar-festival",
+                              style: { color: P },
+                              children: [
+                                ((Ee = B.festival) == null
+                                  ? void 0
+                                  : Ee.name) ?? "Unknown",
+                                " · ",
+                                ((_e = B.festival) == null
+                                  ? void 0
+                                  : _e.city) ?? "",
+                              ],
+                            }),
+                            u.jsx("div", {
+                              className: "radar-artist",
+                              children: B.artist ?? "ID",
+                            }),
+                            u.jsx("div", {
+                              className: "radar-views",
+                              children:
+                                B.views > 0
+                                  ? B.views > 1e6
+                                    ? (B.views / 1e6).toFixed(1) + "M views"
+                                    : B.views > 1e3
+                                      ? Math.round(B.views / 1e3) + "K views"
+                                      : "—"
+                                  : "—",
+                            }),
+                          ],
+                        }),
+                      ],
+                    },
+                    B.id ?? le,
+                  );
+                }),
+              u.jsx("div", { style: { minWidth: 20, height: 1 } }),
+            ],
+          }),
+          u.jsxs("div", {
+            style: nt.countLine,
+            children: [p.length, " sets in rotation"],
+          }),
+        ],
+      })
+    : u.jsx("div", {
+        style: nt.root,
+        children: u.jsx("div", {
+          style: nt.loadingMsg,
+          children: "Scanning the radar…",
+        }),
+      });
+}
+const nt = {
+    root: {
+      width: "100%",
+      minHeight: "100vh",
+      background: "#06080c",
+      color: "#EDEAE2",
+      fontFamily: "'Helvetica Neue', Arial, sans-serif",
+      display: "flex",
+      flexDirection: "column",
+      overflow: "hidden",
+    },
+    loadingMsg: {
+      flex: 1,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      opacity: 0.5,
+      fontSize: 13,
+      letterSpacing: ".12em",
+    },
+    header: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: "24px 24px 0",
+      marginBottom: 12,
+    },
+    brand: { fontWeight: 800, letterSpacing: ".16em", fontSize: 15 },
+    brandSub: {
+      opacity: 0.55,
+      fontWeight: 600,
+      letterSpacing: ".3em",
+      fontSize: 11,
+      marginLeft: 4,
+    },
+    hint: {
+      fontSize: 11,
+      letterSpacing: ".14em",
+      textTransform: "uppercase",
+      opacity: 0.5,
+    },
+    playerOverlay: {
+      position: "fixed",
+      inset: 0,
+      zIndex: 9e3,
+      background: "rgba(4,6,10,.92)",
+      backdropFilter: "blur(20px)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 24,
+    },
+    playerBox: {
+      width: "100%",
+      maxWidth: 560,
+      background: "rgba(12,15,22,.98)",
+      border: "1px solid rgba(255,255,255,.14)",
+      borderRadius: 14,
+      padding: 20,
+      display: "flex",
+      flexDirection: "column",
+      gap: 14,
+    },
+    playerHead: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "flex-start",
+    },
+    closeBtn: {
+      background: "rgba(255,255,255,.08)",
+      border: "none",
+      color: "#fff",
+      width: 32,
+      height: 32,
+      borderRadius: "50%",
+      fontSize: 14,
+      cursor: "pointer",
+      flexShrink: 0,
+    },
+    rail: {
+      display: "flex",
+      flexDirection: "row",
+      gap: 20,
+      overflowX: "auto",
+      overflowY: "hidden",
+      padding: "12px 24px 32px",
+      scrollSnapType: "x mandatory",
+      WebkitOverflowScrolling: "touch",
+      msOverflowStyle: "none",
+      scrollbarWidth: "none",
+      cursor: "grab",
+      userSelect: "none",
+    },
+    countLine: {
+      padding: "0 24px 32px",
+      fontSize: 11,
+      letterSpacing: ".14em",
+      opacity: 0.35,
+      textTransform: "uppercase",
+    },
+  },
+  Kf = `
+  .radar-card{width:100%;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;}
+  .radar-rank{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);color:#fff;font-size:16px;font-weight:900;letter-spacing:-.03em;padding:3px 8px;border-radius:6px;z-index:2;line-height:1;}  .radar-region-tag{display:inline-block;margin-top:6px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;opacity:.5;border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:2px 8px;}  .radar-card-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;background:rgba(0,0,0,.3);border-radius:14px 14px 0 0;}  .radar-card:hover .radar-card-overlay{opacity:1;}  .radar-card-overlay-icon{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;}  .radar-card:hover{transform:translateY(-4px) scale(1.01);border-color:var(--acc);box-shadow:0 16px 48px -8px rgba(0,0,0,.7),0 0 0 1px var(--acc);}
+  .radar-card:hover .radar-thumb{transform:scale(1.05);}
+  .radar-card:hover .radar-play-btn{opacity:1;transform:scale(1.12);background:var(--acc);color:#000;border-color:var(--acc);}
+  .radar-thumb-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;border-radius:0;}.radar-card:hover .radar-thumb{transform:scale(1.06);}
+  .radar-thumb{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;display:block;pointer-events:none;transition:transform .5s cubic-bezier(.4,0,.2,1);}
+  .radar-thumb-grad{position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(6,8,12,.9) 100%);
+  .radar-playing-badge{position:absolute;bottom:12px;right:12px;background:var(--acc);color:#000;padding:6px 12px;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;box-shadow:0 4px 16px rgba(0,0,0,.35);animation:radarPulse 1.6s ease-in-out infinite;}
+  @keyframes radarPulse{0%,100%{opacity:1;}50%{opacity:.72;}}
+  .radar-card-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:5px;}
+  .radar-festival{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--acc);opacity:.88;margin-bottom:2px;}
+  .radar-artist{font-size:14px;font-weight:700;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;letter-spacing:-.005em;}
+  .radar-card::-webkit-scrollbar{display:none;}
+  .radar-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#FFB454;box-shadow:0 0 8px #FFB454;margin-right:8px;vertical-align:middle;animation:radarLivePulse 1.6s ease-in-out infinite;}
+  @keyframes radarLivePulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.55;transform:scale(1.3);}}
+  .radar-views{font-size:12px;font-weight:700;opacity:.5;margin-top:auto;padding-top:4px;}
+  .radar-views::before{content:'';width:5px;height:5px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px #22c55e;}
+`,
+  Xf = "https://bcodfuggztfosuzsyyla.supabase.co",
+  Xu =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjb2RmdWdnenRmb3N1enN5eWxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0MjgyNTQsImV4cCI6MjEwMDAwNDI1NH0.RSD_E1f0Qy9E2s3vHMK5H9Mch0_-aCOrNhJs1hxCv5Y",
+  Gu = [
+    { id: "jukebox", label: "Today", icon: "◈", desc: "Tonight's lineup" },
+    { id: "grid", label: "Vault", icon: "⊞", desc: "Every set, every venue" },
+    { id: "atlas", label: "Atlas", icon: "◎", desc: "World map" },
+    { id: "radar", label: "Radar", icon: "◉", desc: "Discover sets" },
+  ];
+async function Gf() {
+  const p = { apikey: Xu, Authorization: `Bearer ${Xu}` },
+    y = await fetch(`${Xf}/rest/v1/venue_stats?select=*`, { headers: p });
+  return y.ok ? y.json() : [];
+}
+function Zf() {
+  const [p, y] = E.useState(
+    () => window.matchMedia("(max-width: 768px)").matches,
+  );
+  return (
+    E.useEffect(() => {
+      const s = window.matchMedia("(max-width: 768px)"),
+        I = (_) => y(_.matches);
+      return (
+        s.addEventListener("change", I),
+        () => s.removeEventListener("change", I)
+      );
+    }, []),
+    p
+  );
+}
+function qf() {
+  const [p, y] = E.useState("jukebox"),
+    [s, I] = E.useState(!1),
+    [_, z] = E.useState([]),
+    [sq, setSq] = E.useState(""),
+    b = Zf();
+  E.useEffect(() => {
+    Gf()
+      .then(z)
+      .catch(() => {});
+  }, []);
+  const U = s ? 64 : 240;
+  return u.jsxs("div", {
+    style: {
+      display: "flex",
+      flexDirection: b ? "column" : "row",
+      width: "100vw",
+      height: "100vh",
+      background: "#0e0f14",
+      color: "#EDEAE2",
+      fontFamily: "'Helvetica Neue',Arial,sans-serif",
+      overflow: "hidden",
+    },
+    children: [
+      u.jsx("style", { children: ep }),
+      !b &&
+        u.jsxs("aside", {
+          style: {
+            width: U,
+            minWidth: U,
+            height: "100%",
+            background: "#09090f",
+            borderRight: "1px solid rgba(255,255,255,.07)",
+            display: "flex",
+            flexDirection: "column",
+            transition:
+              "width .22s cubic-bezier(.4,0,.2,1), min-width .22s cubic-bezier(.4,0,.2,1)",
+            zIndex: 200,
+            overflow: "hidden",
+          },
+          children: [
+            u.jsxs("div", {
+              style: {
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                padding: s ? "18px 0" : "18px 16px",
+                justifyContent: s ? "center" : "flex-start",
+              },
+              children: [
+                u.jsx("span", {
+                  style: {
+                    fontSize: 20,
+                    letterSpacing: "-.02em",
+                    fontWeight: 900,
+                    flexShrink: 0,
+                    color: "#EDEAE2",
+                  },
+                  children: "PS",
+                }),
+                !s &&
+                  u.jsx("span", {
+                    style: {
+                      fontSize: 12,
+                      fontWeight: 800,
+                      letterSpacing: ".2em",
+                      textTransform: "uppercase",
+                      opacity: 0.7,
+                    },
+                    children: "Proper Selects",
+                  }),
+              ],
+            }),
+            u.jsx("div", {
+              style: {
+                width: s ? 40 : "calc(100% - 24px)",
+                height: 1,
+                background: "rgba(255,255,255,.07)",
+                margin: s ? "0 auto 4px" : "0 12px 4px",
+              },
+            }),
+            u.jsx("nav", {
+              style: { padding: "8px 0" },
+              children: Gu.map(({ id: C, label: V, icon: O, desc: $ }) => {
+                const H = p === C;
+                return u.jsxs(
+                  "button",
+                  {
+                    onClick: () => y(C),
+                    title: s ? `${V} — ${$}` : "",
+                    style: {
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 12,
+                      width: "100%",
+                      padding: s ? "10px 0" : "10px 14px",
+                      justifyContent: s ? "center" : "flex-start",
+                      background: H ? "rgba(244,169,60,.12)" : "transparent",
+                      border: "none",
+                      borderLeft: H
+                        ? "3px solid #F4A93C"
+                        : "3px solid transparent",
+                      color: H ? "#F4A93C" : "rgba(237,234,226,.7)",
+                      cursor: "pointer",
+                      transition: "background .15s, color .15s",
+                      fontFamily: "inherit",
+                    },
+                    onMouseEnter: (B) => {
+                      H ||
+                        (B.currentTarget.style.background =
+                          "rgba(255,255,255,.05)");
+                    },
+                    onMouseLeave: (B) => {
+                      H || (B.currentTarget.style.background = "transparent");
+                    },
+                    children: [
+                      u.jsx("span", {
+                        style: { fontSize: 16, flexShrink: 0, lineHeight: 1 },
+                        children: O,
+                      }),
+                      !s &&
+                        u.jsxs("span", {
+                          style: {
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "flex-start",
+                          },
+                          children: [
+                            u.jsx("span", {
+                              style: {
+                                fontSize: 13,
+                                fontWeight: 700,
+                                letterSpacing: ".04em",
+                              },
+                              children: V,
+                            }),
+                            u.jsx("span", {
+                              style: {
+                                fontSize: 10,
+                                opacity: 0.45,
+                                letterSpacing: ".06em",
+                              },
+                              children: $,
+                            }),
+                          ],
+                        }),
+                    ],
+                  },
+                  C,
+                );
+              }),
+            }),
+            _.length > 0 &&
+              u.jsxs(u.Fragment, {
+                children: [
+                  u.jsx("div", {
+                    style: {
+                      width: s ? 40 : "calc(100% - 24px)",
+                      height: 1,
+                      background: "rgba(255,255,255,.07)",
+                      margin: s ? "4px auto" : "4px 12px",
+                    },
+                  }),
+                  !s &&
+                    u.jsxs("div", {
+                      style: {
+                        padding: "10px 14px 6px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      },
+                      children: [
+                        u.jsx("span", {
+                          style: {
+                            fontSize: 10,
+                            fontWeight: 700,
+                            letterSpacing: ".2em",
+                            textTransform: "uppercase",
+                            opacity: 0.4,
+                          },
+                          children: "Venues",
+                        }),
+                        u.jsx("span", {
+                          style: {
+                            fontSize: 9,
+                            opacity: 0.35,
+                            letterSpacing: ".08em",
+                          },
+                          children: _.length + " total",
+                        }),
+                      ],
+                    }),
+                  !s &&
+                    u.jsx("div", {
+                      style: { padding: "0 12px 8px" },
+                      children: u.jsx("input", {
+                        type: "text",
+                        placeholder: "Search venues…",
+                        value: sq,
+                        onChange: (e) => setSq(e.target.value),
+                        style: {
+                          width: "100%",
+                          background: "rgba(255,255,255,.05)",
+                          border: "1px solid rgba(255,255,255,.08)",
+                          borderRadius: 6,
+                          padding: "7px 10px",
+                          color: "#EDEAE2",
+                          fontSize: 12,
+                          outline: "none",
+                          fontFamily: "inherit",
+                        },
+                      }),
+                    }),
+                  u.jsx("div", {
+                    style: {
+                      overflowY: "auto",
+                      flex: 1,
+                      padding: s ? "4px 0" : "0 0 12px",
+                      minHeight: 0,
+                    },
+                    className: "slim-scroll",
+                    children: (_ || [])
+                      .filter((C) => {
+                        if (!sq) return true;
+                        const q = sq.toLowerCase();
+                        return (
+                          (C.name || "").toLowerCase().includes(q) ||
+                          (C.city || "").toLowerCase().includes(q)
+                        );
+                      })
+                      .sort((a, b) => (b.sets_count || 0) - (a.sets_count || 0))
+                      .map((C) => {
+                        const isActive =
+                          typeof window !== "undefined" &&
+                          window.localStorage &&
+                          localStorage.psVaultVenue === C.id &&
+                          p === "grid";
+                        const hasRecent = (C.recent_sets || 0) > 0;
+                        const acc = C.accent || "#F4A93C";
+                        return u.jsxs(
+                          "button",
+                          {
+                            title: s
+                              ? `${C.name} — ${C.city} · ${C.sets_count || 0} sets`
+                              : "",
+                            onClick: () => {
+                              try {
+                                localStorage.setItem("psVaultVenue", C.id);
+                                window.dispatchEvent(
+                                  new Event("psVaultSelect"),
+                                );
+                              } catch (e) {}
+                              y("grid");
+                            },
+                            style: {
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 10,
+                              width: "100%",
+                              padding: s ? "7px 0" : "7px 14px",
+                              justifyContent: s ? "center" : "flex-start",
+                              background: isActive
+                                ? "rgba(255,255,255,.06)"
+                                : "transparent",
+                              border: "none",
+                              borderLeft: isActive
+                                ? `3px solid ${acc}`
+                                : "3px solid transparent",
+                              color: isActive
+                                ? "#EDEAE2"
+                                : "rgba(237,234,226,.65)",
+                              cursor: "pointer",
+                              fontFamily: "inherit",
+                              transition: "all .13s",
+                            },
+                            onMouseEnter: (V) => {
+                              if (!isActive)
+                                V.currentTarget.style.background =
+                                  "rgba(255,255,255,.05)";
+                            },
+                            onMouseLeave: (V) => {
+                              if (!isActive)
+                                V.currentTarget.style.background =
+                                  "transparent";
+                            },
+                            children: [
+                              u.jsxs("span", {
+                                style: {
+                                  position: "relative",
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  width: 12,
+                                  height: 12,
+                                  flexShrink: 0,
+                                },
+                                children: [
+                                  u.jsx("span", {
+                                    style: {
+                                      width: 8,
+                                      height: 8,
+                                      borderRadius: "50%",
+                                      background: acc,
+                                      boxShadow: `0 0 6px ${acc}`,
+                                    },
+                                  }),
+                                  hasRecent &&
+                                    u.jsx("span", {
+                                      style: {
+                                        position: "absolute",
+                                        top: -2,
+                                        right: -2,
+                                        width: 6,
+                                        height: 6,
+                                        borderRadius: "50%",
+                                        background: "#22C55E",
+                                        boxShadow: "0 0 4px #22C55E",
+                                        border: "1.5px solid #0e0f14",
+                                      },
+                                    }),
+                                ],
+                              }),
+                              !s &&
+                                u.jsxs("span", {
+                                  style: {
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "flex-start",
+                                    minWidth: 0,
+                                    flex: 1,
+                                  },
+                                  children: [
+                                    u.jsx("span", {
+                                      style: {
+                                        fontSize: 12,
+                                        fontWeight: isActive ? 700 : 600,
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        whiteSpace: "nowrap",
+                                        maxWidth: 160,
+                                        color: isActive ? acc : "inherit",
+                                      },
+                                      children: C.name,
+                                    }),
+                                    u.jsx("span", {
+                                      style: { fontSize: 10, opacity: 0.45 },
+                                      children: C.city,
+                                    }),
+                                  ],
+                                }),
+                              !s &&
+                                u.jsx("span", {
+                                  style: {
+                                    fontSize: 10,
+                                    opacity: 0.4,
+                                    marginLeft: "auto",
+                                    fontVariantNumeric: "tabular-nums",
+                                  },
+                                  children: C.sets_count || 0,
+                                }),
+                            ],
+                          },
+                          C.id,
+                        );
+                      }),
+                  }),
+                ],
+              }),
+            u.jsx("div", {
+              style: {
+                padding: s ? "12px 0" : "12px 14px",
+                borderTop: "1px solid rgba(255,255,255,.07)",
+                display: "flex",
+                justifyContent: s ? "center" : "flex-end",
+              },
+              children: u.jsx("button", {
+                onClick: () => I((C) => !C),
+                title: s ? "Expand sidebar" : "Collapse sidebar",
+                style: {
+                  background: "rgba(255,255,255,.06)",
+                  border: "none",
+                  color: "rgba(237,234,226,.6)",
+                  width: 28,
+                  height: 28,
+                  borderRadius: 6,
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 13,
+                  transition: "background .15s",
+                },
+                onMouseEnter: (C) =>
+                  (C.currentTarget.style.background = "rgba(255,255,255,.12)"),
+                onMouseLeave: (C) =>
+                  (C.currentTarget.style.background = "rgba(255,255,255,.06)"),
+                children: s ? "›" : "‹",
+              }),
+            }),
+          ],
+        }),
+      u.jsx("main", {
+        style: {
+          flex: 1,
+          minHeight: 0,
+          overflowY: "auto",
+          overscrollBehaviorY: "contain",
+          position: "relative",
+          paddingBottom: b ? 60 : 0,
+        },
+        children:
+          p === "jukebox"
+            ? u.jsx(Ef, {})
+            : p === "grid"
+              ? u.jsx(Vf, {})
+              : p === "atlas"
+                ? u.jsx(Lf, {})
+                : u.jsx(Jf, {}),
+      }),
+      b &&
+        u.jsx("nav", {
+          style: {
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 9e3,
+            display: "flex",
+            height: 60,
+            background: "rgba(9,9,15,.97)",
+            borderTop: "1px solid rgba(255,255,255,.1)",
+            backdropFilter: "blur(16px)",
+          },
+          children: Gu.map(({ id: C, label: V, icon: O }) => {
+            const $ = p === C;
+            return u.jsxs(
+              "button",
+              {
+                onClick: () => y(C),
+                style: {
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 3,
+                  background: "transparent",
+                  border: "none",
+                  color: $ ? "#F4A93C" : "rgba(237,234,226,.5)",
+                  cursor: "pointer",
+                  fontFamily: "inherit",
+                  borderTop: $ ? "2px solid #F4A93C" : "2px solid transparent",
+                  transition: "color .15s",
+                },
+                children: [
+                  u.jsx("span", {
+                    style: { fontSize: 18, lineHeight: 1 },
+                    children: O,
+                  }),
+                  u.jsx("span", {
+                    style: {
+                      fontSize: 10,
+                      fontWeight: 700,
+                      letterSpacing: ".08em",
+                      textTransform: "uppercase",
+                    },
+                    children: V,
+                  }),
+                ],
+              },
+              C,
+            );
+          }),
+        }),
+    ],
+  });
+}
+const ep = `
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body, #root { width: 100%; height: 100%; overflow: hidden; background: #0e0f14; }
+  .slim-scroll::-webkit-scrollbar { width: 4px; }
+  .slim-scroll::-webkit-scrollbar-track { background: transparent; }
+  .slim-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); border-radius: 2px; }
+`;
+sf.createRoot(document.getElementById("root")).render(u.jsx(qf, {}));

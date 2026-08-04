@@ -1,34 +1,63 @@
-import React, { useState } from 'react';
-import { STAGES, TABS } from './data/stages.js';
+import React, { useEffect, useState } from 'react';
+import { TABS } from './data/stages.js';
+import { supabaseHeaders, SUPABASE_URL } from './lib/supabase.js';
+import LandingGate from './components/LandingGate.jsx';
+import RadarTab from './components/RadarTab.jsx';
 
 /**
  * Proper Selects — App Shell
  *
- * Vite/React rebuild in progress. Currently a scaffold; individual tabs
- * (TodayTab, VaultTab, AtlasTab, RadarTab) will be ported from the
- * beautified reference bundle at `reference/bundle-beautified.js` one
- * component at a time, verified against production behaviour.
+ * Vite/React rebuild in progress.
+ * Landing + Radar are ported. Today / Vault / Atlas ports still pending.
  */
 export default function App() {
+  const [entered, setEntered] = useState(false);
   const [tab, setTab] = useState('jukebox');
+  const [submitOpen, setSubmitOpen] = useState(false);
+  const [topSets, setTopSets] = useState([]);
+
+  // Fetch top sets for the landing live-feed rotator
+  useEffect(() => {
+    fetch(`${SUPABASE_URL}/rest/v1/public_sets?select=video_id,artist&order=published_at.desc&limit=10`, {
+      headers: supabaseHeaders,
+    })
+      .then((r) => r.json())
+      .then((rows) => Array.isArray(rows) && setTopSets(rows))
+      .catch(() => {});
+  }, []);
+
+  if (!entered) {
+    return <LandingGate onEnter={() => setEntered(true)} onOpenSubmit={() => setSubmitOpen(true)} topSets={topSets} />;
+  }
+
   const active = TABS.find((t) => t.id === tab);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100vw', height: '100vh' }}>
-      <header style={{ padding: 16, borderBottom: '1px solid rgba(255,255,255,.08)' }}>
-        <span style={{ fontWeight: 800, letterSpacing: '.16em', fontSize: 14 }}>
-          PROPER SELECTS <span style={{ opacity: 0.5, fontSize: 10, marginLeft: 6 }}>REBUILD</span>
-        </span>
+      <header style={{ padding: 16, borderBottom: '1px solid rgba(255,255,255,.08)', display: 'flex', gap: 12, alignItems: 'baseline' }}>
+        <button
+          onClick={() => setEntered(false)}
+          style={{ background: 'none', border: 'none', color: '#EDEAE2', fontWeight: 800, letterSpacing: '.16em', fontSize: 14 }}
+        >
+          PROPER SELECTS
+        </button>
+        <span style={{ opacity: 0.5, fontSize: 10, letterSpacing: '.2em' }}>{active?.label?.toUpperCase()}</span>
       </header>
 
-      <main style={{ flex: 1, overflowY: 'auto', padding: 24 }}>
-        <h1 style={{ fontSize: 22, marginBottom: 12 }}>
-          {active?.icon} {active?.label}
-        </h1>
-        <p style={{ opacity: 0.6, fontSize: 13 }}>{active?.desc}</p>
-        <p style={{ opacity: 0.4, fontSize: 12, marginTop: 16 }}>
-          Tab component pending port from beautified reference bundle.
-        </p>
+      <main style={{ flex: 1, overflowY: 'auto' }}>
+        {tab === 'radar' ? (
+          <RadarTab />
+        ) : (
+          <div style={{ padding: 24 }}>
+            <h1 style={{ fontSize: 22, marginBottom: 12 }}>
+              {active?.icon} {active?.label}
+            </h1>
+            <p style={{ opacity: 0.6, fontSize: 13 }}>{active?.desc}</p>
+            <p style={{ opacity: 0.4, fontSize: 12, marginTop: 16 }}>
+              Component pending port. Use the production build (main branch) for now.
+            </p>
+          </div>
+        )}
       </main>
 
       <nav
