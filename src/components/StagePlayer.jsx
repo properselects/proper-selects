@@ -6,7 +6,16 @@ import { loadYT } from '../lib/youtubePlayer.js';
  * onEnded after 3s if the video errors out (private / removed). Enables
  * true "set and forget" background listening.
  */
-export default function StagePlayer({ set, onEnded, seekRef }) {
+// Detect Apple/Chrome once for the AirPlay/Cast hint pills.
+const IS_APPLE =
+  typeof navigator !== 'undefined' &&
+  (/^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent));
+const IS_CHROME =
+  typeof navigator !== 'undefined' &&
+  /Chrome/.test(navigator.userAgent) &&
+  !/Safari/.test(navigator.userAgent.replace(/Chrome[^\s]*/, ''));
+
+export default function StagePlayer({ set, onEnded, seekRef, timeRef }) {
   const hostRef = useRef(null);
   const playerRef = useRef(null);
   const [state, setState] = useState('loading');
@@ -29,6 +38,15 @@ export default function StagePlayer({ set, onEnded, seekRef }) {
                   e.target.seekTo(sec, true);
                   e.target.playVideo();
                 } catch {}
+              };
+            }
+            if (timeRef) {
+              timeRef.current = () => {
+                try {
+                  return e.target.getCurrentTime() || 0;
+                } catch {
+                  return 0;
+                }
               };
             }
           },
@@ -72,6 +90,12 @@ export default function StagePlayer({ set, onEnded, seekRef }) {
             — {set.festival_name}
             {set.city ? `, ${set.city}` : ''}
           </span>
+        )}
+        {state === 'playing' && IS_APPLE && (
+          <span className="tg-airplay-hint" style={{ marginLeft: 8 }}>⊹ AirPlay</span>
+        )}
+        {state === 'playing' && IS_CHROME && !IS_APPLE && (
+          <span className="tg-airplay-hint" style={{ marginLeft: 8 }}>⊹ Cast</span>
         )}
       </div>
     </div>

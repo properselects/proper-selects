@@ -105,7 +105,9 @@ export default function TodayTab() {
   });
   const [nearYou, setNearYou] = useState(null);
   const [idMoments, setIdMoments] = useState({});
+  const [toast, setToast] = useState(null);
   const seekRef = useRef(null);
+  const timeRef = useRef(null);
 
   useEffect(() => {
     fetchLineup().then(setRows).catch(() => setRows([]));
@@ -136,6 +138,20 @@ export default function TodayTab() {
   const current = slots[slotIdx];
 
   const advance = () => setSlotIdx((i) => (slots.length ? (i + 1) % slots.length : 0));
+
+  const shareCurrent = async () => {
+    if (!current) return;
+    const t = Math.floor(timeRef.current?.() || 0);
+    const url = `https://www.youtube.com/watch?v=${current.video_id}${t > 0 ? `&t=${t}s` : ''}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setToast({ label: 'Link copied ✓', accent: stage.accent });
+      setTimeout(() => setToast(null), 1800);
+    } catch {
+      setToast({ label: 'Copy failed', accent: '#F87171' });
+      setTimeout(() => setToast(null), 1800);
+    }
+  };
 
   // Near-you geolocation + event proximity
   useEffect(() => {
@@ -225,7 +241,16 @@ export default function TodayTab() {
         <div className="jb-grid">
           {current ? (
             <div className="jb-playcol">
-              <StagePlayer set={current} onEnded={advance} seekRef={seekRef} />
+              <StagePlayer set={current} onEnded={advance} seekRef={seekRef} timeRef={timeRef} />
+              <div className="jb-actions">
+                <button
+                  className="jb-share"
+                  onClick={shareCurrent}
+                  style={{ borderColor: stage.accent, color: stage.accent }}
+                >
+                  Share at current time
+                </button>
+              </div>
               {(idMoments[current.video_id] || []).length > 0 && (
                 <div className="jb-radar">
                   <div className="jb-radar-head">
@@ -282,6 +307,12 @@ export default function TodayTab() {
           </div>
         </div>
       </div>
+
+      {toast && (
+        <div className="jb-toast" style={{ borderColor: toast.accent }}>
+          <span className="jb-toast-label">{toast.label}</span>
+        </div>
+      )}
     </div>
   );
 }

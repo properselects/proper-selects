@@ -505,6 +505,103 @@ button { font-family: inherit; cursor: pointer; }
 .jb-slot-meta { font-size: 10.5px; opacity: .55; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .jb-empty { padding: 40px; text-align: center; opacity: .5; font-size: 13px; }
 
+/* Share button + toast */
+.jb-actions { display: flex; gap: 9px; flex-wrap: wrap; }
+.jb-share {
+  background: rgba(0,0,0,.2);
+  border: 1px solid;
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .15s;
+}
+.jb-share:hover { background: rgba(0,0,0,.3); }
+.jb-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10,10,12,.94);
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 12px 20px;
+  z-index: 9999;
+  animation: toastIn .18s ease-out;
+}
+.jb-toast-label { font-size: 13px; font-weight: 700; color: #EDEAE2; }
+@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(10px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+/* AirPlay / Cast hint pill */
+.tg-airplay-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  color: rgba(237,234,226,.6);
+  cursor: default;
+  user-select: none;
+  vertical-align: middle;
+}
+
+/* Atlas promo code */
+.am-promo {
+  margin: 0 0 20px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+}
+.am-promo-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.am-promo-row { display: flex; align-items: center; gap: 10px; }
+.am-promo-code {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 800;
+  font-family: 'SF Mono', Menlo, monospace;
+  letter-spacing: .06em;
+  color: #EDEAE2;
+  padding: 6px 10px;
+  background: rgba(0,0,0,.35);
+  border-radius: 6px;
+}
+.am-promo-copy {
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  color: #EDEAE2;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+.am-promo-copy:hover { background: rgba(255,255,255,.18); }
+.am-promo-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 11px;
+  color: rgba(237,234,226,.6);
+  text-decoration: none;
+  letter-spacing: .06em;
+}
+.am-promo-link:hover { color: #EDEAE2; }
+
 .jb-radar {
   margin-top: 12px;
   padding: 12px 14px;

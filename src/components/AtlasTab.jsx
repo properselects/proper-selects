@@ -4,7 +4,7 @@ import { loadLeaflet } from '../lib/leaflet.js';
 
 async function fetchVenues() {
   const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/festivals?select=id,name,city,country,lat,lng,accent,region&active=eq.true`,
+    `${SUPABASE_URL}/rest/v1/festivals?select=id,name,city,country,lat,lng,accent,region,promo_code,promo_label,promo_url&active=eq.true`,
     { headers: supabaseHeaders }
   );
   return r.ok ? r.json() : [];
@@ -93,6 +93,37 @@ export default function AtlasTab() {
           </div>
           <h2 className="am-drawer-name">{selected.name}</h2>
           <div className="am-drawer-region">{selected.region}</div>
+
+          {selected.promo_code && (
+            <div className="am-promo">
+              <div className="am-promo-label" style={{ color: selected.accent || '#F4A93C' }}>
+                {selected.promo_label || 'Promo code'}
+              </div>
+              <div className="am-promo-row">
+                <span className="am-promo-code">{selected.promo_code}</span>
+                <button
+                  className="am-promo-copy"
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(selected.promo_code);
+                      const btn = event.currentTarget;
+                      const orig = btn.textContent;
+                      btn.textContent = 'Copied ✓';
+                      setTimeout(() => (btn.textContent = orig), 1500);
+                    } catch {}
+                  }}
+                >
+                  Copy
+                </button>
+              </div>
+              {selected.promo_url && (
+                <a href={selected.promo_url} target="_blank" rel="noopener noreferrer" className="am-promo-link">
+                  Redeem →
+                </a>
+              )}
+            </div>
+          )}
+
           <div className="am-drawer-sets">
             {selectedSets.length === 0 ? (
               <div style={{ opacity: 0.4, fontSize: 12, padding: '20px 0' }}>No sets yet for this venue.</div>
