@@ -4,6 +4,7 @@ import { supabaseHeaders, SUPABASE_URL } from './lib/supabase.js';
 import LandingGate from './components/LandingGate.jsx';
 import RadarTab from './components/RadarTab.jsx';
 import VaultTab from './components/VaultTab.jsx';
+import TodayTab from './components/TodayTab.jsx';
 import SubscribeModal from './components/SubscribeModal.jsx';
 import SubmitModal from './components/SubmitModal.jsx';
 
@@ -82,6 +83,8 @@ export default function App() {
           <RadarTab />
         ) : tab === 'grid' ? (
           <VaultTab />
+        ) : tab === 'jukebox' ? (
+          <TodayTab />
         ) : (
           <div style={{ padding: 24 }}>
             <h1 style={{ fontSize: 22, marginBottom: 12 }}>
@@ -89,8 +92,7 @@ export default function App() {
             </h1>
             <p style={{ opacity: 0.6, fontSize: 13 }}>{active?.desc}</p>
             <p style={{ opacity: 0.4, fontSize: 12, marginTop: 16 }}>
-              {tab === 'jukebox' ? 'Today tab' : 'Atlas tab'} — port in progress.
-              Use the production build (main branch) for now.
+              Atlas tab — port in progress. Use the production build (main branch) for now.
             </p>
           </div>
         )}
