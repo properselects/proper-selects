@@ -40,7 +40,7 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
       <div className="jb-brand-mark">PROPER SELECTS</div>
 
       <h1 className="jb-promise">
-        The best festival sets in the world.
+        The best DJ sets in the world.
         <br />
         <span className="jb-promise-em">Playing in your room. Free forever.</span>
       </h1>
