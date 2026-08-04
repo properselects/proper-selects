@@ -42,7 +42,7 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
       <h1 className="jb-promise">
         The best festival sets in the world.
         <br />
-        <span className="jb-promise-em">On your TV. Free forever.</span>
+        <span className="jb-promise-em">Playing in your room. Free forever.</span>
       </h1>
 
       {nowPlaying && (
