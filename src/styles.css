@@ -562,3 +562,74 @@ button { font-family: inherit; cursor: pointer; }
 .jb-near-venue { font-size: 12px; font-weight: 800; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .jb-near-event { font-size: 11px; opacity: .7; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .jb-near-meta { font-size: 10px; opacity: .45; line-height: 1.4; }
+
+/* ==================== Atlas ==================== */
+.am-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 380px;
+  max-width: 100%;
+  background: rgba(10,10,14,.94);
+  backdrop-filter: blur(20px);
+  border-left: 2px solid;
+  padding: 24px 22px;
+  overflow-y: auto;
+  z-index: 1000;
+  color: #EDEAE2;
+}
+@media (max-width: 768px) {
+  .am-drawer { width: 100%; max-width: 100%; }
+}
+.am-drawer-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: rgba(237,234,226,.4);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+.am-drawer-city {
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.am-drawer-name {
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0 0 4px;
+  letter-spacing: -.02em;
+}
+.am-drawer-region {
+  font-size: 11px;
+  opacity: .5;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  margin-bottom: 20px;
+}
+.am-drawer-sets { display: flex; flex-direction: column; gap: 8px; }
+.am-set {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  color: inherit;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: background .15s, border-color .15s;
+}
+.am-set:hover { background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.18); }
+.am-set-thumb { width: 60px; height: 34px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
+.am-set-name { flex: 1; font-size: 12px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.am-set-play { font-size: 16px; }

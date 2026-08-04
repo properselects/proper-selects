@@ -1,14 +1,25 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
+import { copyFileSync } from 'fs';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: 'rename-index',
+      closeBundle() {
+        // Rename dist/index-dev.html → dist/index.html so Vercel serves it as the entry
+        try {
+          copyFileSync(resolve(__dirname, 'dist/index-dev.html'), resolve(__dirname, 'dist/index.html'));
+        } catch {}
+      },
+    },
+  ],
   build: {
     outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
-      // Use index-dev.html as the entry so production index.html stays untouched
       input: resolve(__dirname, 'index-dev.html'),
       output: {
         entryFileNames: 'assets/index-[hash].js',

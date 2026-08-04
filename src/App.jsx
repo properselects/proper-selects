@@ -5,6 +5,7 @@ import LandingGate from './components/LandingGate.jsx';
 import RadarTab from './components/RadarTab.jsx';
 import VaultTab from './components/VaultTab.jsx';
 import TodayTab from './components/TodayTab.jsx';
+import AtlasTab from './components/AtlasTab.jsx';
 import SubscribeModal from './components/SubscribeModal.jsx';
 import SubmitModal from './components/SubmitModal.jsx';
 
@@ -85,17 +86,9 @@ export default function App() {
           <VaultTab />
         ) : tab === 'jukebox' ? (
           <TodayTab />
-        ) : (
-          <div style={{ padding: 24 }}>
-            <h1 style={{ fontSize: 22, marginBottom: 12 }}>
-              {active?.icon} {active?.label}
-            </h1>
-            <p style={{ opacity: 0.6, fontSize: 13 }}>{active?.desc}</p>
-            <p style={{ opacity: 0.4, fontSize: 12, marginTop: 16 }}>
-              Atlas tab — port in progress. Use the production build (main branch) for now.
-            </p>
-          </div>
-        )}
+        ) : tab === 'atlas' ? (
+          <AtlasTab />
+        ) : null}
       </main>
 
       <nav
