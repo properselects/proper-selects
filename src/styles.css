@@ -200,3 +200,172 @@ button { font-family: inherit; cursor: pointer; }
   margin-top: auto;
   padding-top: 4px;
 }
+
+/* ==================== Vault ==================== */
+.tg-root {
+  min-height: 100vh;
+  width: 100%;
+  background: #0a0a0e;
+  color: #EDEAE2;
+  padding-bottom: 60px;
+}
+.tg-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px 22px 10px;
+}
+.tg-brand { font-weight: 800; letter-spacing: .16em; font-size: 15px; }
+.tg-brand span { opacity: .5; letter-spacing: .3em; font-size: 11px; margin-left: 4px; }
+.tg-date { font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; opacity: .55; }
+
+.tg-filters {
+  display: flex;
+  gap: 8px;
+  padding: 8px 22px 18px;
+  flex-wrap: wrap;
+}
+@media (max-width: 768px) {
+  .tg-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 14px;
+    scrollbar-width: none;
+  }
+  .tg-filters::-webkit-scrollbar { display: none; }
+}
+.tg-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.16);
+  color: #EDEAE2;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  cursor: pointer;
+  transition: transform .15s, background .15s;
+  white-space: nowrap;
+}
+.tg-chip:hover { transform: translateY(-1px); background: rgba(255,255,255,.1); }
+.tg-chip.on { background: rgba(255,255,255,.1); }
+.tg-chip-dot { width: 8px; height: 8px; border-radius: 50%; }
+.tg-count { opacity: .5; font-weight: 600; }
+.tg-chip-blurb { opacity: .45; font-weight: 500; font-size: 10.5px; display: none; }
+@media (min-width: 700px) { .tg-chip-blurb { display: inline; } }
+
+.tg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+  padding: 0 22px;
+}
+@media (max-width: 768px) {
+  .tg-grid { grid-template-columns: 1fr; padding: 0 14px; gap: 12px; }
+}
+.tg-tile {
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .18s, border-color .18s, box-shadow .18s;
+}
+.tg-tile:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255,255,255,.3);
+}
+.tg-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+.tg-thumb { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.tg-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  margin: auto;
+  background: rgba(0,0,0,.4);
+  backdrop-filter: blur(4px);
+  transition: transform .18s;
+  font-size: 18px;
+}
+.tg-tile:hover .tg-play { transform: scale(1.12); }
+.tg-meta { padding: 12px 14px; }
+.tg-artist { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.tg-fest { font-size: 11px; opacity: .55; }
+
+/* ==================== Sub/Submit modal ==================== */
+.jb-sub-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.jb-sub-modal {
+  background: #13131a;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 16px;
+  padding: 32px 28px;
+  max-width: 380px;
+  width: 100%;
+  position: relative;
+}
+.jb-sub-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: rgba(237,234,226,.4);
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+}
+.jb-sub-input {
+  width: 100%;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  color: #EDEAE2;
+  padding: 11px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  margin-bottom: 10px;
+  outline: none;
+  box-sizing: border-box;
+}
+.jb-sub-input:focus { border-color: rgba(244,169,60,.5); }
+.jb-sub-submit {
+  width: 100%;
+  padding: 12px;
+  background: #F4A93C;
+  color: #0a0a0e;
+  border: none;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: .04em;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity .15s;
+}
+.jb-sub-submit:disabled { opacity: .6; cursor: default; }

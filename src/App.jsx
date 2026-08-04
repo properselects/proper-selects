@@ -3,20 +3,17 @@ import { TABS } from './data/stages.js';
 import { supabaseHeaders, SUPABASE_URL } from './lib/supabase.js';
 import LandingGate from './components/LandingGate.jsx';
 import RadarTab from './components/RadarTab.jsx';
+import VaultTab from './components/VaultTab.jsx';
+import SubscribeModal from './components/SubscribeModal.jsx';
+import SubmitModal from './components/SubmitModal.jsx';
 
-/**
- * Proper Selects — App Shell
- *
- * Vite/React rebuild in progress.
- * Landing + Radar are ported. Today / Vault / Atlas ports still pending.
- */
 export default function App() {
   const [entered, setEntered] = useState(false);
   const [tab, setTab] = useState('jukebox');
+  const [subscribeOpen, setSubscribeOpen] = useState(false);
   const [submitOpen, setSubmitOpen] = useState(false);
   const [topSets, setTopSets] = useState([]);
 
-  // Fetch top sets for the landing live-feed rotator
   useEffect(() => {
     fetch(`${SUPABASE_URL}/rest/v1/public_sets?select=video_id,artist&order=published_at.desc&limit=10`, {
       headers: supabaseHeaders,
@@ -27,26 +24,64 @@ export default function App() {
   }, []);
 
   if (!entered) {
-    return <LandingGate onEnter={() => setEntered(true)} onOpenSubmit={() => setSubmitOpen(true)} topSets={topSets} />;
+    return (
+      <>
+        <LandingGate
+          onEnter={() => setEntered(true)}
+          onOpenSubmit={() => setSubmitOpen(true)}
+          topSets={topSets}
+        />
+        <SubmitModal open={submitOpen} onClose={() => setSubmitOpen(false)} />
+      </>
+    );
   }
 
   const active = TABS.find((t) => t.id === tab);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100vw', height: '100vh' }}>
-      <header style={{ padding: 16, borderBottom: '1px solid rgba(255,255,255,.08)', display: 'flex', gap: 12, alignItems: 'baseline' }}>
+      <header
+        style={{
+          padding: 16,
+          borderBottom: '1px solid rgba(255,255,255,.08)',
+          display: 'flex',
+          gap: 12,
+          alignItems: 'baseline',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div style={{ display: 'flex', gap: 12, alignItems: 'baseline' }}>
+          <button
+            onClick={() => setEntered(false)}
+            style={{ background: 'none', border: 'none', color: '#EDEAE2', fontWeight: 800, letterSpacing: '.16em', fontSize: 14 }}
+          >
+            PROPER SELECTS
+          </button>
+          <span style={{ opacity: 0.5, fontSize: 10, letterSpacing: '.2em' }}>{active?.label?.toUpperCase()}</span>
+        </div>
         <button
-          onClick={() => setEntered(false)}
-          style={{ background: 'none', border: 'none', color: '#EDEAE2', fontWeight: 800, letterSpacing: '.16em', fontSize: 14 }}
+          onClick={() => setSubscribeOpen(true)}
+          style={{
+            background: 'rgba(255,255,255,.06)',
+            border: '1px solid rgba(255,255,255,.12)',
+            color: 'rgba(237,234,226,.7)',
+            padding: '5px 12px',
+            borderRadius: 16,
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: '.06em',
+            cursor: 'pointer',
+          }}
         >
-          PROPER SELECTS
+          Subscribe
         </button>
-        <span style={{ opacity: 0.5, fontSize: 10, letterSpacing: '.2em' }}>{active?.label?.toUpperCase()}</span>
       </header>
 
       <main style={{ flex: 1, overflowY: 'auto' }}>
         {tab === 'radar' ? (
           <RadarTab />
+        ) : tab === 'grid' ? (
+          <VaultTab />
         ) : (
           <div style={{ padding: 24 }}>
             <h1 style={{ fontSize: 22, marginBottom: 12 }}>
@@ -54,7 +89,8 @@ export default function App() {
             </h1>
             <p style={{ opacity: 0.6, fontSize: 13 }}>{active?.desc}</p>
             <p style={{ opacity: 0.4, fontSize: 12, marginTop: 16 }}>
-              Component pending port. Use the production build (main branch) for now.
+              {tab === 'jukebox' ? 'Today tab' : 'Atlas tab'} — port in progress.
+              Use the production build (main branch) for now.
             </p>
           </div>
         )}
@@ -95,6 +131,9 @@ export default function App() {
           );
         })}
       </nav>
+
+      <SubscribeModal open={subscribeOpen} onClose={() => setSubscribeOpen(false)} />
+      <SubmitModal open={submitOpen} onClose={() => setSubmitOpen(false)} />
     </div>
   );
 }
