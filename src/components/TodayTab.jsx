@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { STAGES } from '../data/stages.js';
 import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { geoRegion } from '../lib/geoRegion.js';
@@ -9,6 +9,25 @@ async function fetchLineup() {
   if (!r.ok) return [];
   const rows = await r.json();
   return rows.map((r) => ({ ...r, vibe: geoRegion(r) }));
+}
+
+async function fetchIdMoments() {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/set_id_moments?select=*`, { headers: supabaseHeaders });
+  if (!r.ok) return {};
+  const rows = await r.json();
+  const map = {};
+  for (const m of rows) (map[m.video_id] ??= []).push(m);
+  return map;
+}
+
+function formatTs(sec) {
+  const s = Math.max(0, Math.floor(sec || 0));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const r = s % 60;
+  return h > 0
+    ? `${h}:${String(m).padStart(2, '0')}:${String(r).padStart(2, '0')}`
+    : `${m}:${String(r).padStart(2, '0')}`;
 }
 
 // Dedupe sets by artist key so a DJ doesn't repeat within a stage's daily lineup
@@ -85,9 +104,12 @@ export default function TodayTab() {
     }
   });
   const [nearYou, setNearYou] = useState(null);
+  const [idMoments, setIdMoments] = useState({});
+  const seekRef = useRef(null);
 
   useEffect(() => {
     fetchLineup().then(setRows).catch(() => setRows([]));
+    fetchIdMoments().then(setIdMoments).catch(() => {});
   }, []);
 
   // Group sets by stage
@@ -203,7 +225,30 @@ export default function TodayTab() {
         <div className="jb-grid">
           {current ? (
             <div className="jb-playcol">
-              <StagePlayer set={current} onEnded={advance} />
+              <StagePlayer set={current} onEnded={advance} seekRef={seekRef} />
+              {(idMoments[current.video_id] || []).length > 0 && (
+                <div className="jb-radar">
+                  <div className="jb-radar-head">
+                    <span style={{ color: stage.accent }}>ID Radar</span>
+                    <span className="jb-radar-sub">mined from the comments · tap to jump</span>
+                  </div>
+                  <div className="jb-radar-row">
+                    {idMoments[current.video_id].map((v, d) => (
+                      <button
+                        key={d}
+                        className={'jb-id' + (v.resolved ? ' resolved' : '')}
+                        style={v.resolved ? { borderColor: stage.accent } : undefined}
+                        onClick={() => seekRef.current && seekRef.current(v.t_sec)}
+                        title={v.label}
+                      >
+                        <span className="jb-id-ts" style={{ color: stage.accent }}>{formatTs(v.t_sec)}</span>
+                        <span className="jb-id-label">{v.resolved ? v.label : 'ID?'}</span>
+                        {v.likes > 0 && <span className="jb-id-likes">▲{v.likes}</span>}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="jb-empty">No sets in today's program for this stage yet.</div>

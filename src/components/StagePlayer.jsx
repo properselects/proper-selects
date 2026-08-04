@@ -6,7 +6,7 @@ import { loadYT } from '../lib/youtubePlayer.js';
  * onEnded after 3s if the video errors out (private / removed). Enables
  * true "set and forget" background listening.
  */
-export default function StagePlayer({ set, onEnded }) {
+export default function StagePlayer({ set, onEnded, seekRef }) {
   const hostRef = useRef(null);
   const playerRef = useRef(null);
   const [state, setState] = useState('loading');
@@ -23,6 +23,14 @@ export default function StagePlayer({ set, onEnded }) {
             try {
               e.target.playVideo();
             } catch {}
+            if (seekRef) {
+              seekRef.current = (sec) => {
+                try {
+                  e.target.seekTo(sec, true);
+                  e.target.playVideo();
+                } catch {}
+              };
+            }
           },
           onStateChange: (e) => {
             const S = window.YT.PlayerState;
