@@ -113,13 +113,6 @@ export default function VaultTab() {
 
   return (
     <div className="tg-root">
-      <header className="tg-top">
-        <div className="tg-brand">
-          PROPER SELECTS <span>VAULT</span>
-        </div>
-        <div className="tg-date">Full library</div>
-      </header>
-
       <div className="tg-filters">
         <button
           className={'tg-chip' + (!selectedVenue || selectedVenue === 'all' ? ' on' : '')}
