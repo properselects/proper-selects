@@ -38,6 +38,8 @@ const CHANNELS = [
   { channelId: 'UCDZELNPHzTdvB9Nu5-s--4w', festival_id: 'exchange-la',   festival_name: 'Exchange LA',           city: 'Los Angeles', vibe: 'americas' },
   { channelId: 'UC2iQ3op3Xar4TLX03oEmJYg', festival_id: 'concourse',     festival_name: 'The Concourse Project', city: 'Austin',      vibe: 'americas' },
   { channelId: 'UCdIjpGkpXGw9WJ_5reM-5WQ', festival_id: 'academy-la',   festival_name: 'Academy LA',            city: 'Los Angeles', vibe: 'americas' },
+  // LA collectives added 2026-08-05
+  { channelId: 'UCtw41MdFxU4GZNbzB2UuPpg', festival_id: 'tyf-la',      festival_name: 'Tell Your Friends',     city: 'Los Angeles', vibe: 'americas' },
   // Ibiza/Berlin venues added 2026-08-05
   { channelId: 'UCanV1p6ynx_FzdsraKLousQ', festival_id: 'circoloco',    festival_name: 'Circoloco',             city: 'Ibiza',       vibe: 'europe' },
   { channelId: 'UC072CZUvhdCg6Dsdvc18NkQ', festival_id: 'hi-ibiza',     festival_name: 'Hï Ibiza',              city: 'Ibiza',       vibe: 'europe' },

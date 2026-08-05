@@ -2,12 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { loadLeaflet } from '../lib/leaflet.js';
 
-async function fetchVenues() {
-  const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/festivals?select=id,name,city,country,lat,lng,accent,region,promo_code,promo_label,promo_url&active=eq.true`,
-    { headers: supabaseHeaders }
-  );
-  return r.ok ? r.json() : [];
+async function fetchVenuesWithSets() {
+  const [venueRes, setRes] = await Promise.all([
+    fetch(`${SUPABASE_URL}/rest/v1/festivals?select=id,name,city,country,lat,lng,accent,region,promo_code,promo_label,promo_url&active=eq.true`, { headers: supabaseHeaders }),
+    fetch(`${SUPABASE_URL}/rest/v1/public_sets?select=festival_id&limit=2000`, { headers: supabaseHeaders }),
+  ]);
+  const venues = venueRes.ok ? await venueRes.json() : [];
+  const sets = setRes.ok ? await setRes.json() : [];
+  const festIdsWithSets = new Set(sets.map((s) => s.festival_id));
+  return venues.filter((v) => festIdsWithSets.has(v.id));
 }
 
 async function fetchSetsForVenue(festivalId) {
@@ -36,7 +39,7 @@ export default function AtlasTab() {
   const [regionFilter, setRegionFilter] = useState('all');
 
   useEffect(() => {
-    fetchVenues().then(setVenues).catch(() => {});
+    fetchVenuesWithSets().then(setVenues).catch(() => {});
   }, []);
 
   useEffect(() => {
