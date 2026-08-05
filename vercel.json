@@ -2,8 +2,9 @@
   "buildCommand": "vite build",
   "outputDirectory": "dist",
   "crons": [
-    { "path": "/api/ingest",   "schedule": "0 4 * * *" },
-    { "path": "/api/trending", "schedule": "0 12 * * 1" },
-    { "path": "/api/digest",   "schedule": "0 14 * * 1" }
+    { "path": "/api/ingest",       "schedule": "0 4 * * *" },
+    { "path": "/api/events-sync", "schedule": "0 5 * * *" },
+    { "path": "/api/trending",    "schedule": "0 12 * * 1" },
+    { "path": "/api/digest",      "schedule": "0 14 * * 1" }
   ]
 }
