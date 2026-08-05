@@ -266,9 +266,9 @@ export default function TodayTab() {
           <p className="jb-stage-tag">{stage.tagline}</p>
         </div>
 
-        <div className="jb-grid">
+        <div className="jb-playcol">
           {current ? (
-            <div className="jb-playcol">
+            <>
               <StagePlayer set={current} onEnded={advance} seekRef={seekRef} timeRef={timeRef} />
               <div className="jb-actions">
                 <button
@@ -302,7 +302,7 @@ export default function TodayTab() {
                   </div>
                 </div>
               )}
-            </div>
+            </>
           ) : (
             <div className="jb-empty">No sets in today's program for this stage yet.</div>
           )}

@@ -418,19 +418,11 @@ button { font-family: inherit; cursor: pointer; }
 }
 .jb-stage-tag { font-size: 13px; opacity: .7; margin: 6px 0 0; }
 
-.jb-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 20px;
-  align-items: start;
-}
-@media (max-width: 880px) {
-  .jb-grid { grid-template-columns: 1fr; }
-}
-
-.jb-playcol { display: flex; flex-direction: column; gap: 12px; }
-@media (max-width: 880px) {
-  .jb-playcol { max-width: 540px; margin: 0 auto; width: 100%; }
+.jb-playcol {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 720px;
 }
 .jb-player {
   display: flex;
@@ -482,10 +474,10 @@ button { font-family: inherit; cursor: pointer; }
   display: flex;
   flex-direction: column;
   gap: 6px;
-  max-height: 640px;
+  max-height: 400px;
   overflow-y: auto;
 }
-@media (max-width: 880px) {
+@media (max-width: 640px) {
   .jb-list { max-height: 280px; }
 }
 .jb-list-head {
