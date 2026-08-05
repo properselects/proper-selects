@@ -6,14 +6,9 @@ import { loadYT } from '../lib/youtubePlayer.js';
  * onEnded after 3s if the video errors out (private / removed). Enables
  * true "set and forget" background listening.
  */
-// Detect Apple/Chrome once for the AirPlay/Cast hint pills.
 const IS_APPLE =
   typeof navigator !== 'undefined' &&
   (/^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent));
-const IS_CHROME =
-  typeof navigator !== 'undefined' &&
-  /Chrome/.test(navigator.userAgent) &&
-  !/Safari/.test(navigator.userAgent.replace(/Chrome[^\s]*/, ''));
 
 export default function StagePlayer({ set, onEnded, seekRef, timeRef }) {
   const hostRef = useRef(null);
@@ -72,6 +67,8 @@ export default function StagePlayer({ set, onEnded, seekRef, timeRef }) {
     };
   }, [set.video_id]);
 
+  const ytUrl = `https://www.youtube.com/watch?v=${set.video_id}`;
+
   return (
     <div className="jb-player">
       <div className="jb-screen">
@@ -93,11 +90,16 @@ export default function StagePlayer({ set, onEnded, seekRef, timeRef }) {
             </span>
           )}
         </div>
-        {state === 'playing' && IS_APPLE && (
-          <span className="tg-airplay-hint">⊹ AirPlay</span>
-        )}
-        {state === 'playing' && IS_CHROME && !IS_APPLE && (
-          <span className="tg-airplay-hint">⊹ Cast</span>
+        {state === 'playing' && (
+          <a
+            href={ytUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="tg-airplay-hint"
+            title={IS_APPLE ? 'Open in YouTube to AirPlay' : 'Open in YouTube to Cast'}
+          >
+            {IS_APPLE ? '⊹ AirPlay' : '⊹ Cast'}
+          </a>
         )}
       </div>
     </div>

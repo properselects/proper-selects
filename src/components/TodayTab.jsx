@@ -148,13 +148,17 @@ export default function TodayTab() {
   const stage = STAGES[stageIdx];
   const rawSlots = byStage[stage.id] || [];
 
-  // Dedupe by DJ key within the stage
+  // Dedupe by DJ key + cap per venue at 2 for variety
   const slots = useMemo(() => {
-    const seen = new Set();
+    const seenDj = new Set();
+    const venueCounts = {};
     return rawSlots.filter((r) => {
       const k = djKey(r.artist || r.title);
-      if (!k || seen.has(k)) return false;
-      seen.add(k);
+      if (!k || seenDj.has(k)) return false;
+      const vid = r.festival_id || 'unknown';
+      if ((venueCounts[vid] || 0) >= 2) return false;
+      seenDj.add(k);
+      venueCounts[vid] = (venueCounts[vid] || 0) + 1;
       return true;
     });
   }, [rawSlots]);

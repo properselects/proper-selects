@@ -553,23 +553,27 @@ button { font-family: inherit; cursor: pointer; }
 .jb-toast-label { font-size: 13px; font-weight: 700; color: #EDEAE2; }
 @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(10px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
 
-/* AirPlay / Cast hint pill */
+/* AirPlay / Cast button pill */
 .tg-airplay-hint {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 8px;
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.15);
+  padding: 5px 11px;
+  background: rgba(255,255,255,.09);
+  border: 1px solid rgba(255,255,255,.2);
   border-radius: 20px;
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
   letter-spacing: .06em;
-  color: rgba(237,234,226,.6);
-  cursor: default;
+  color: rgba(237,234,226,.85);
+  cursor: pointer;
+  text-decoration: none;
   user-select: none;
   vertical-align: middle;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
+.tg-airplay-hint:hover { background: rgba(255,255,255,.15); }
 
 /* Atlas promo code */
 .am-promo {
