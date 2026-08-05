@@ -62,7 +62,7 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
         <div className="jb-gate-meta">
           {stats.sets ? (
             <><span className="jb-meta-num">{stats.sets}</span> sets · <span className="jb-meta-num">{stats.venues}</span> venues worldwide</>
-          ) : 'Curated sets from the world's best venues'}
+          ) : 'Curated sets from the best venues worldwide'}
           <span className="jb-meta-dot">·</span>
           Free forever
           <span className="jb-meta-dot">·</span>
