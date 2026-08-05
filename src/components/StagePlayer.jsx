@@ -89,11 +89,6 @@ export default function StagePlayer({ set, onEnded, seekRef, timeRef }) {
             </span>
           )}
         </div>
-        {state === 'playing' && (
-          <span className="tg-airplay-hint" title={IS_APPLE ? 'Tap the AirPlay icon inside the video player' : 'Click the cast icon inside the video player'}>
-            {IS_APPLE ? '⊹ AirPlay in player' : '⊹ Cast in player'}
-          </span>
-        )}
       </div>
     </div>
   );

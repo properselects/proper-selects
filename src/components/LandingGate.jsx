@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
+import { parseArtist } from '../lib/parseArtist.js';
 
-/**
- * Landing/gate screen shown before the user enters the app.
- * Hormozi-style hero, live-feed pill, value stack, and Submit link.
- */
 export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
   const [stats, setStats] = useState({ sets: null, venues: null });
   const [liveIdx, setLiveIdx] = useState(0);
 
-  // Live count from DB
   useEffect(() => {
     fetch(`${SUPABASE_URL}/rest/v1/public_sets?select=video_id,festival_id`, {
       headers: supabaseHeaders,
@@ -23,12 +19,11 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
       .catch(() => {});
   }, []);
 
-  // Live-feed rotator through top sets, cycles every 8s
   useEffect(() => {
     if (!topSets || topSets.length < 2) return;
     const id = setInterval(
       () => setLiveIdx((i) => (i + 1) % Math.min(topSets.length, 10)),
-      8000
+      6000
     );
     return () => clearInterval(id);
   }, [topSets.length]);
@@ -37,41 +32,47 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
 
   return (
     <div className="jb-gate">
-      <div className="jb-brand-mark">PROPER SELECTS</div>
+      <div className="jb-gate-bg" aria-hidden="true" />
 
-      <h1 className="jb-promise">
-        The best DJ sets in the world.
-        <br />
-        <span className="jb-promise-em">Playing in your room. Free forever.</span>
-      </h1>
+      <div className="jb-gate-inner">
+        <div className="jb-wordmark">PROPER SELECTS</div>
 
-      {nowPlaying && (
-        <div className="jb-livefeed">
-          <span className="jb-livedot" />
-          <span>
-            Playing now: <strong>{nowPlaying.artist}</strong>
-          </span>
+        <h1 className="jb-hero">
+          The world's best
+          <br />
+          <span className="jb-hero-em">DJ sets.</span>
+          <br />
+          <span className="jb-hero-sub">Playing in your room.</span>
+        </h1>
+
+        {nowPlaying && (
+          <div className="jb-livefeed">
+            <span className="jb-livedot" />
+            <span className="jb-livefeed-text">
+              Now playing · <strong>{parseArtist(nowPlaying.artist)}</strong>
+            </span>
+          </div>
+        )}
+
+        <button className="jb-enter" onClick={onEnter}>
+          <span className="jb-enter-play">▷</span>
+          Start Listening
+        </button>
+
+        <div className="jb-gate-meta">
+          {stats.sets ? (
+            <><span className="jb-meta-num">{stats.sets}</span> sets · <span className="jb-meta-num">{stats.venues}</span> venues worldwide</>
+          ) : 'Curated sets from the world's best venues'}
+          <span className="jb-meta-dot">·</span>
+          Free forever
+          <span className="jb-meta-dot">·</span>
+          No ads
         </div>
-      )}
 
-      <button className="jb-enter" onClick={onEnter}>▷&nbsp;&nbsp;START LISTENING</button>
-
-      <div className="jb-nostack">No account · No ads · No algorithm</div>
-      <div className="jb-proof">
-        {stats.sets
-          ? `${stats.sets} sets · ${stats.venues} venues · A new lineup every midnight`
-          : 'A new lineup every midnight'}
+        <button className="jb-submitlink" onClick={(e) => { e.stopPropagation(); onOpenSubmit?.(); }}>
+          Know a set that belongs here? →
+        </button>
       </div>
-
-      <button
-        className="jb-submitlink"
-        onClick={(e) => {
-          e.stopPropagation();
-          onOpenSubmit?.();
-        }}
-      >
-        Know a set that belongs here? →
-      </button>
     </div>
   );
 }
