@@ -2,13 +2,37 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { STAGES } from '../data/stages.js';
 import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { geoRegion } from '../lib/geoRegion.js';
+import { parseArtist } from '../lib/parseArtist.js';
 import StagePlayer from './StagePlayer.jsx';
+
+const BAD_CONTENT_RE = [
+  /\bpanel\b/i, /\bdiscussion\b/i, /\binterview\b/i, /\bconference\b/i,
+  /\bresearch\b/i, /\blab\s+finale\b/i, /\bresynthesising\b/i,
+  /\baftermovie\b/i, /\brecap\b/i, /\btrailer\b/i, /\bdocumentary\b/i,
+  /\bpodcast\b/i, /\bepisode\s*\d+/i, /\d{4}\s+\d{2}\s+\d{2}\s+\d{2}/,
+  /\binjected\b/i, /\bkhao\s+san\b/i, /@beatport\s+live\b/i,
+  /\bhip\s*[- ]?hop\b/i, /\bneo\s+soul\b/i, /\bchillhop\b/i, /\blo-?fi\b/i,
+  /\btrap\s+(mix|set)\b/i, /\bdrill\b/i, /\breggaeton\b/i, /\bdancehall\b/i,
+];
+
+function isBadContent(row) {
+  const t = (row.artist || row.title || '').toLowerCase();
+  return BAD_CONTENT_RE.some((re) => re.test(t));
+}
 
 async function fetchLineup() {
   const r = await fetch(`${SUPABASE_URL}/rest/v1/todays_lineup?select=*`, { headers: supabaseHeaders });
   if (!r.ok) return [];
   const rows = await r.json();
-  return rows.map((r) => ({ ...r, vibe: geoRegion(r) }));
+  const seenId = new Set();
+  return rows
+    .filter((r) => !isBadContent(r))
+    .filter((r) => {
+      if (seenId.has(r.video_id)) return false;
+      seenId.add(r.video_id);
+      return true;
+    })
+    .map((r) => ({ ...r, vibe: geoRegion(r) }));
 }
 
 async function fetchIdMoments() {
@@ -294,8 +318,14 @@ export default function TodayTab() {
                 <span className="jb-slot-num" style={{ color: stage.accent }}>
                   {String(d + 1).padStart(2, '0')}
                 </span>
+                <img
+                  className="jb-slot-thumb"
+                  src={`https://img.youtube.com/vi/${v.video_id}/default.jpg`}
+                  alt=""
+                  loading="lazy"
+                />
                 <span className="jb-slot-main">
-                  <span className="jb-slot-artist">{v.artist}</span>
+                  <span className="jb-slot-artist">{parseArtist(v.artist)}</span>
                   <span className="jb-slot-meta">
                     {v.festival_name}
                     {v.city ? ` · ${v.city}` : ''}

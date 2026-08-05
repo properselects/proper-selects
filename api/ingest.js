@@ -38,6 +38,14 @@ const CHANNELS = [
   { channelId: 'UCDZELNPHzTdvB9Nu5-s--4w', festival_id: 'exchange-la',   festival_name: 'Exchange LA',           city: 'Los Angeles', vibe: 'americas' },
   { channelId: 'UC2iQ3op3Xar4TLX03oEmJYg', festival_id: 'concourse',     festival_name: 'The Concourse Project', city: 'Austin',      vibe: 'americas' },
   { channelId: 'UCdIjpGkpXGw9WJ_5reM-5WQ', festival_id: 'academy-la',   festival_name: 'Academy LA',            city: 'Los Angeles', vibe: 'americas' },
+  // Worldwide venues added 2026-08-04
+  { channelId: 'UCglk_nXa4Vfbk255I8Lk4yQ', festival_id: 'tomorrowland',  festival_name: 'Tomorrowland',          city: 'Boom',             vibe: 'worldwide' },
+  { channelId: 'UCDxMwHtvoQ2WzfgbpHdN5dQ', festival_id: 'elrow',          festival_name: 'elrow',                 city: 'Worldwide',        vibe: 'worldwide' },
+  { channelId: 'UCyg-ercUs4czzf9x8dra1IQ', festival_id: 'bpm',            festival_name: 'The BPM Festival',      city: 'Costa Rica',       vibe: 'worldwide' },
+  { channelId: 'UCEpSQWHN-ZBcT6n4_paHO_A', festival_id: 'fabric',         festival_name: 'fabric',                city: 'London',           vibe: 'europe' },
+  { channelId: 'UCuaUS6xjyIGUDiso6am8Mtw', festival_id: 'octagon-seoul',  festival_name: 'Club Octagon',          city: 'Seoul',            vibe: 'worldwide' },
+  { channelId: 'UCApQT8Gkxq7RgXaKVj5eveg', festival_id: 'mayan-warrior',  festival_name: 'Mayan Warrior',         city: 'Black Rock City',  vibe: 'worldwide' },
+  { channelId: 'UC8LpEl1RM7sd28kjqYZpJ6w', festival_id: 'epizode',        festival_name: 'Epizode Festival',      city: 'Phú Quốc',        vibe: 'worldwide' },
 ];
 
 const MIN_SECS = 45 * 60;

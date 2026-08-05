@@ -83,19 +83,21 @@ export default function StagePlayer({ set, onEnded, seekRef, timeRef }) {
           </div>
         )}
       </div>
-      <div className="jb-now">
-        {state === 'playing' ? 'Now playing' : state === 'error' ? 'Unavailable' : 'Cueing'} · {set.artist}
-        {set.festival_name && (
-          <span className="jb-fest">
-            — {set.festival_name}
-            {set.city ? `, ${set.city}` : ''}
-          </span>
-        )}
+      <div className="jb-now-row">
+        <div className="jb-now">
+          {state === 'playing' ? 'Now playing' : state === 'error' ? 'Unavailable' : 'Cueing'} · {set.artist}
+          {set.festival_name && (
+            <span className="jb-fest">
+              — {set.festival_name}
+              {set.city ? `, ${set.city}` : ''}
+            </span>
+          )}
+        </div>
         {state === 'playing' && IS_APPLE && (
-          <span className="tg-airplay-hint" style={{ marginLeft: 8 }}>⊹ AirPlay</span>
+          <span className="tg-airplay-hint">⊹ AirPlay</span>
         )}
         {state === 'playing' && IS_CHROME && !IS_APPLE && (
-          <span className="tg-airplay-hint" style={{ marginLeft: 8 }}>⊹ Cast</span>
+          <span className="tg-airplay-hint">⊹ Cast</span>
         )}
       </div>
     </div>

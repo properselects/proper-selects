@@ -18,13 +18,22 @@ async function fetchSetsForVenue(festivalId) {
   return r.ok ? r.json() : [];
 }
 
+const REGIONS = [
+  { id: 'all',       label: 'All',       color: '#EDEAE2' },
+  { id: 'americas',  label: 'Americas',  color: '#F4A93C' },
+  { id: 'europe',    label: 'Europe',    color: '#4FC3F7' },
+  { id: 'worldwide', label: 'Worldwide', color: '#FF3B57' },
+];
+
 export default function AtlasTab() {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
+  const markersRef = useRef([]);
   const [venues, setVenues] = useState([]);
   const [selected, setSelected] = useState(null);
   const [selectedSets, setSelectedSets] = useState([]);
   const [playing, setPlaying] = useState(null);
+  const [regionFilter, setRegionFilter] = useState('all');
 
   useEffect(() => {
     fetchVenues().then(setVenues).catch(() => {});
@@ -58,6 +67,8 @@ export default function AtlasTab() {
         });
         pin.on('click', () => setSelected(v));
         pin.addTo(map);
+        pin._venueRegion = v.region;
+        markersRef.current.push(pin);
       }
       mapInstance.current = map;
     });
@@ -78,9 +89,35 @@ export default function AtlasTab() {
     fetchSetsForVenue(selected.id).then(setSelectedSets).catch(() => setSelectedSets([]));
   }, [selected]);
 
+  // Show/hide markers based on region filter
+  useEffect(() => {
+    for (const m of markersRef.current) {
+      const show = regionFilter === 'all' || m._venueRegion === regionFilter;
+      if (show) m.setStyle({ fillOpacity: 0.95, opacity: 1 });
+      else m.setStyle({ fillOpacity: 0.08, opacity: 0.15 });
+    }
+  }, [regionFilter]);
+
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%', background: '#0a0a0e' }}>
       <div ref={mapRef} style={{ position: 'absolute', inset: 0 }} />
+
+      {/* Region filter chips + legend */}
+      <div className="am-controls">
+        {REGIONS.map((r) => (
+          <button
+            key={r.id}
+            className={'am-region-chip' + (regionFilter === r.id ? ' on' : '')}
+            onClick={() => setRegionFilter(r.id)}
+            style={regionFilter === r.id ? { borderColor: r.color, color: r.color } : undefined}
+          >
+            {r.id !== 'all' && (
+              <span className="am-region-dot" style={{ background: r.color }} />
+            )}
+            {r.label}
+          </button>
+        ))}
+      </div>
 
       {selected && (
         <div className={'am-drawer open'} style={{ borderColor: selected.accent || '#F4A93C' }}>

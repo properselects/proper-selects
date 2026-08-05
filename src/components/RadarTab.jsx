@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { parseArtist } from '../lib/parseArtist.js';
 
 function formatViews(v) {
-  if (!v || v === 0) return '—';
-  if (v > 1e6) return (v / 1e6).toFixed(1) + 'M views';
-  if (v > 1e3) return Math.round(v / 1e3) + 'K views';
-  return v + ' views';
+  if (!v || v === 0) return null;
+  if (v >= 1e6) return (v / 1e6).toFixed(1) + 'M views';
+  if (v >= 1e3) return Math.round(v / 1e3) + 'K views';
+  return '< 1K';
 }
 
 export default function RadarTab() {
@@ -80,8 +81,8 @@ export default function RadarTab() {
                   {s.festival?.name || '—'}
                   {s.festival?.city ? ` · ${s.festival.city}` : ''}
                 </div>
-                <div className="radar-artist">{s.artist ?? 'ID'}</div>
-                <div className="radar-views">{formatViews(s.views)}</div>
+                <div className="radar-artist">{parseArtist(s.artist ?? 'ID')}</div>
+                {formatViews(s.views) && <div className="radar-views">{formatViews(s.views)}</div>}
               </div>
             </div>
           );

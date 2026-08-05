@@ -1,5 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
+import { parseArtist } from '../lib/parseArtist.js';
+
+const CHIPS_VISIBLE = 10;
 
 /**
  * Vault — venue-scoped grid of every set in the DB.
@@ -33,6 +36,7 @@ export default function VaultTab() {
   const [selectedVenue, setSelectedVenue] = useState('');
   const [playing, setPlaying] = useState(null);
   const [nextEvent, setNextEvent] = useState(null);
+  const [showAllChips, setShowAllChips] = useState(false);
 
   useEffect(() => {
     fetchVault().then(setSets).catch(() => setSets([]));
@@ -103,7 +107,14 @@ export default function VaultTab() {
 
   const filtered = useMemo(() => {
     if (!sets) return [];
-    if (!selectedVenue || selectedVenue === 'all') return sets;
+    if (!selectedVenue || selectedVenue === 'all') {
+      // Cap at 3 per venue so no single venue dominates the All view
+      const seen = {};
+      return sets.filter((s) => {
+        seen[s.festival_id] = (seen[s.festival_id] || 0) + 1;
+        return seen[s.festival_id] <= 3;
+      });
+    }
     return sets.filter((s) => s.festival_id === selectedVenue);
   }, [sets, selectedVenue]);
 
@@ -120,7 +131,7 @@ export default function VaultTab() {
         >
           All <span className="tg-count">{counts.all}</span>
         </button>
-        {chips.map((v) => (
+        {(showAllChips ? chips : chips.slice(0, CHIPS_VISIBLE)).map((v) => (
           <button
             key={v.k}
             className={'tg-chip' + (selectedVenue === v.k ? ' on' : '')}
@@ -132,6 +143,14 @@ export default function VaultTab() {
             <span className="tg-chip-blurb">{v.city}</span>
           </button>
         ))}
+        {chips.length > CHIPS_VISIBLE && (
+          <button
+            className="tg-chip"
+            onClick={() => setShowAllChips((x) => !x)}
+          >
+            {showAllChips ? '− Less' : `+ ${chips.length - CHIPS_VISIBLE} more`}
+          </button>
+        )}
       </div>
 
       {nextEvent && selectedVenue !== 'all' && (
@@ -217,7 +236,7 @@ export default function VaultTab() {
               </div>
             </div>
             <div className="tg-meta">
-              <div className="tg-artist">{s.artist}</div>
+              <div className="tg-artist">{parseArtist(s.artist)}</div>
               <div className="tg-fest">
                 {s.festival_name}
                 {s.city ? ` · ${s.city}` : ''}
