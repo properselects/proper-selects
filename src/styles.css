@@ -376,9 +376,6 @@ button { font-family: inherit; cursor: pointer; }
   display: flex;
   flex-direction: column;
 }
-@media (max-width: 640px) {
-  .jb-stage { min-height: unset; }
-}
 .jb-top {
   display: flex;
   align-items: center;

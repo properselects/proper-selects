@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { loadYT } from '../lib/youtubePlayer.js';
+import { parseArtist } from '../lib/parseArtist.js';
 
 /**
  * YouTube player that fires onEnded when a set finishes, and auto-fires
@@ -82,7 +83,7 @@ export default function StagePlayer({ set, onEnded, seekRef, timeRef }) {
       </div>
       <div className="jb-now-row">
         <div className="jb-now">
-          {state === 'playing' ? 'Now playing' : state === 'error' ? 'Unavailable' : 'Cueing'} · {set.artist}
+          {state === 'playing' ? 'Now playing' : state === 'error' ? 'Unavailable' : 'Cueing'} · {parseArtist(set.artist)}
           {set.festival_name && (
             <span className="jb-fest">
               — {set.festival_name}
