@@ -68,8 +68,6 @@ export default function StagePlayer({ set, onEnded, seekRef, timeRef }) {
     };
   }, [set.video_id]);
 
-  const ytUrl = `https://www.youtube.com/watch?v=${set.video_id}`;
-
   return (
     <div className="jb-player">
       <div className="jb-screen">
@@ -92,15 +90,9 @@ export default function StagePlayer({ set, onEnded, seekRef, timeRef }) {
           )}
         </div>
         {state === 'playing' && (
-          <a
-            href={ytUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="tg-airplay-hint"
-            title={IS_APPLE ? 'Open in YouTube to AirPlay' : 'Open in YouTube to Cast'}
-          >
-            {IS_APPLE ? '⊹ AirPlay' : '⊹ Cast'}
-          </a>
+          <span className="tg-airplay-hint" title={IS_APPLE ? 'Tap the AirPlay icon inside the video player' : 'Click the cast icon inside the video player'}>
+            {IS_APPLE ? '⊹ AirPlay in player' : '⊹ Cast in player'}
+          </span>
         )}
       </div>
     </div>
