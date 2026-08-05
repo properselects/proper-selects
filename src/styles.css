@@ -391,21 +391,19 @@ button { font-family: inherit; cursor: pointer; }
 }
 .jb-tabs { display: flex; gap: 6px; }
 .jb-tab {
-  background: rgba(0,0,0,.28);
-  border: 1px solid rgba(0,0,0,.2);
-  color: rgba(255,255,255,.72);
-  padding: 7px 16px;
+  background: rgba(0,0,0,.15);
+  border: 1px solid rgba(0,0,0,.15);
+  color: inherit;
+  padding: 7px 14px;
   border-radius: 6px;
   font-size: 12px;
   letter-spacing: .04em;
   font-weight: 700;
   cursor: pointer;
-  white-space: nowrap;
   font-family: inherit;
-  transition: background .15s;
+  opacity: .7;
 }
-.jb-tab:hover { background: rgba(0,0,0,.38); }
-.jb-tab.on { background: rgba(0,0,0,.42); color: #fff; }
+.jb-tab.on { opacity: 1; }
 .jb-body { padding: 12px 24px 40px; max-width: 960px; margin: 0 auto; width: 100%; }
 @media (max-width: 480px) {
   .jb-body { padding: 10px 14px 40px; }
