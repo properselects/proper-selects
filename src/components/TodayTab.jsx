@@ -313,12 +313,12 @@ export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, on
                   {current && lineupIds.has(current.video_id) ? '◈ In lineup' : '＋ Add to lineup'}
                 </button>
               </div>
-              {(idMoments[current.video_id] || []).length > 0 && (
-                <div className="jb-radar">
-                  <div className="jb-radar-head">
-                    <span style={{ color: stage.accent }}>ID Radar</span>
-                    <span className="jb-radar-sub">mined from the comments · tap to jump</span>
-                  </div>
+              <div className="jb-radar">
+                <div className="jb-radar-head">
+                  <span style={{ color: stage.accent }}>ID Radar</span>
+                  <span className="jb-radar-sub">mined from the comments · tap to jump</span>
+                </div>
+                {(idMoments[current.video_id] || []).length > 0 ? (
                   <div className="jb-radar-row">
                     {idMoments[current.video_id].map((v, d) => (
                       <button
@@ -334,8 +334,12 @@ export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, on
                       </button>
                     ))}
                   </div>
-                </div>
-              )}
+                ) : (
+                  <div style={{ fontSize: 12, opacity: 0.35, padding: '4px 0' }}>
+                    No IDs mined yet for this set
+                  </div>
+                )}
+              </div>
             </>
           ) : (
             <div className="jb-empty">No sets in today's program for this stage yet.</div>
