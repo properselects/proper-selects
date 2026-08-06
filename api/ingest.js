@@ -53,6 +53,17 @@ const CHANNELS = [
   { channelId: 'UCmfF7JZv26UUKyRedViGIlw', festival_id: 'hor-berlin',    festival_name: 'HÖR Berlin',            city: 'Berlin',      vibe: 'europe' },
   { channelId: 'UCJEKlziKdxoos1qbptjGgLg', festival_id: 'djmag',         festival_name: 'DJ Mag',                city: 'Worldwide',   vibe: 'worldwide' },
   { channelId: 'UCnLorjUZZ7kORuVEE4d-lMA', festival_id: 'househats',     festival_name: 'House Hats',            city: 'Worldwide',   vibe: 'worldwide' },
+  // Underground labels + curator channels added 2026-08-06
+  { channelId: 'UCpiZh3AGeTygzfmUgioOFFg', festival_id: 'toolroom',      festival_name: 'Toolroom Records',      city: 'London',      vibe: 'europe' },
+  { channelId: 'UCJ-IRkRfFXrzmkyxZ7hEgcA', festival_id: 'when-we-dip',   festival_name: 'When We Dip',           city: 'Worldwide',   vibe: 'worldwide' },
+  { channelId: 'UCzwhGJV9o4KTPD5Nq6GPeqQ', festival_id: 'diynamic',      festival_name: 'DIYNAMIC',              city: 'Hamburg',     vibe: 'europe' },
+  { channelId: 'UCC7eKMxcVk1LZwzJlBdsVuQ', festival_id: 'innervisions',  festival_name: 'Innervisions',          city: 'Berlin',      vibe: 'europe' },
+  { channelId: 'UCyEMqKQPGdj8wKVKt2-agbQ', festival_id: 'beatport',      festival_name: 'Beatport',              city: 'Worldwide',   vibe: 'worldwide' },
+  { channelId: 'UCCycRfTS7V9WOFfWfkNVCSg', festival_id: 'cercle-recs',   festival_name: 'Cercle Records',        city: 'Paris',       vibe: 'europe' },
+  { channelId: 'UCCbpTuRINyfjtwFkjHuII1w', festival_id: 'mau5trap',      festival_name: 'mau5trap',              city: 'Los Angeles', vibe: 'americas' },
+  { channelId: 'UCFZ75Bg73NJnJgmeUX9l62g', festival_id: 'selected',      festival_name: 'Selected.',             city: 'Worldwide',   vibe: 'worldwide' },
+  { channelId: 'UC8Bhgj67ino3eyL6WXvYgAA', festival_id: 'anti-up',       festival_name: 'Anti Up',               city: 'Los Angeles', vibe: 'americas' },
+  { channelId: 'UCKp7UVaoVuiW1qtyPLPVFMQ', festival_id: 'diplo',         festival_name: 'Diplo',                 city: 'Los Angeles', vibe: 'americas' },
   // US eminent DJ + festival channels added 2026-08-06
   { channelId: 'UCr45VhwCBYwMfdN-gz7W_OA', festival_id: 'insomniac',     festival_name: 'Insomniac',             city: 'Los Angeles', vibe: 'americas' },
   { channelId: 'UC5AOhbMw3M618Q2hk6zt5yw', festival_id: 'arc-chicago',   festival_name: 'ARC Music Festival',    city: 'Chicago',     vibe: 'americas' },
