@@ -21,7 +21,8 @@ function isBadContent(row) {
 }
 
 async function fetchLineup() {
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/todays_lineup?select=*`, { headers: supabaseHeaders });
+  const today = new Date().toISOString().slice(0, 10);
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/todays_lineup?select=*&_d=${today}`, { headers: supabaseHeaders });
   if (!r.ok) return [];
   const rows = await r.json();
   const seenId = new Set();
