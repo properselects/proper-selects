@@ -15,7 +15,7 @@ async function fetchVenuesWithSets() {
 
 async function fetchSetsForVenue(festivalId) {
   const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/public_sets?festival_id=eq.${encodeURIComponent(festivalId)}&select=video_id,artist&limit=8`,
+    `${SUPABASE_URL}/rest/v1/vault_sets?festival_id=eq.${encodeURIComponent(festivalId)}&select=video_id,artist,festival_name,city&limit=8`,
     { headers: supabaseHeaders }
   );
   return r.ok ? r.json() : [];
@@ -28,7 +28,18 @@ const REGIONS = [
   { id: 'worldwide', label: 'Worldwide', color: '#FF3B57' },
 ];
 
-export default function AtlasTab() {
+export default function AtlasTab({ lineup = [], onLineupChange }) {
+  const lineupIds = React.useMemo(() => new Set((lineup || []).map((s) => s.video_id)), [lineup]);
+
+  function toggleLineup(s) {
+    if (lineupIds.has(s.video_id)) {
+      onLineupChange && onLineupChange(lineup.filter((x) => x.video_id !== s.video_id));
+    } else {
+      if (lineup.length >= 12) return;
+      onLineupChange && onLineupChange([...lineup, s]);
+    }
+  }
+
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markersRef = useRef([]);
@@ -169,7 +180,8 @@ export default function AtlasTab() {
               <div style={{ opacity: 0.4, fontSize: 12, padding: '20px 0' }}>No sets yet for this venue.</div>
             ) : (
               selectedSets.map((s) => (
-                <button key={s.video_id} className="am-set" onClick={() => setPlaying(s)}>
+                <div key={s.video_id} style={{ display: 'flex', alignItems: 'center' }}>
+                <button className="am-set" onClick={() => setPlaying(s)} style={{ flex: 1 }}>
                   <img
                     src={`https://img.youtube.com/vi/${s.video_id}/mqdefault.jpg`}
                     alt={s.artist}
@@ -178,6 +190,18 @@ export default function AtlasTab() {
                   <span className="am-set-name">{s.artist}</span>
                   <span className="am-set-play" style={{ color: selected.accent || '#F4A93C' }}>▷</span>
                 </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); toggleLineup(s); }}
+                  title={lineupIds.has(s.video_id) ? 'Remove from lineup' : 'Add to lineup'}
+                  style={{
+                    background: 'none', border: 'none', flexShrink: 0,
+                    color: lineupIds.has(s.video_id) ? (selected.accent || '#F4A93C') : 'rgba(237,234,226,.3)',
+                    fontSize: 18, cursor: 'pointer', padding: '4px 8px', lineHeight: 1,
+                  }}
+                >
+                  {lineupIds.has(s.video_id) ? '◈' : '＋'}
+                </button>
+                </div>
               ))
             )}
           </div>

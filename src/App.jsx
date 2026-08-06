@@ -182,11 +182,11 @@ export default function App() {
         {tab === 'radar' ? (
           <RadarTab />
         ) : tab === 'grid' ? (
-          <VaultTab />
+          <VaultTab lineup={lineup} onLineupChange={setLineup} />
         ) : tab === 'jukebox' ? (
           <TodayTab lineup={lineup} onLineupChange={setLineup} onOpenLineup={openDrawer} />
         ) : tab === 'atlas' ? (
-          <AtlasTab />
+          <AtlasTab lineup={lineup} onLineupChange={setLineup} />
         ) : null}
       </main>
 

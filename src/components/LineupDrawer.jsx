@@ -8,7 +8,7 @@ const MAX = 12;
 async function searchSets(q) {
   const enc = encodeURIComponent(`%${q}%`);
   const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/public_sets?or=(artist.ilike.${enc},title.ilike.${enc})&select=video_id,artist,title,festival_name,city&order=published_at.desc&limit=30`,
+    `${SUPABASE_URL}/rest/v1/vault_sets?or=(artist.ilike.${enc},title.ilike.${enc})&select=video_id,artist,title,festival_name,city&order=published_at.desc&limit=30`,
     { headers: supabaseHeaders }
   );
   if (!r.ok) return [];

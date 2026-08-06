@@ -31,7 +31,18 @@ async function fetchNextEvent(festivalId) {
   return rows[0] || null;
 }
 
-export default function VaultTab() {
+export default function VaultTab({ lineup = [], onLineupChange }) {
+  const lineupIds = React.useMemo(() => new Set((lineup || []).map((s) => s.video_id)), [lineup]);
+
+  function toggleLineup(s) {
+    if (lineupIds.has(s.video_id)) {
+      onLineupChange && onLineupChange(lineup.filter((x) => x.video_id !== s.video_id));
+    } else {
+      if (lineup.length >= 12) return;
+      onLineupChange && onLineupChange([...lineup, s]);
+    }
+  }
+
   const [sets, setSets] = useState(null);
   const [selectedVenue, setSelectedVenue] = useState('');
   const [playing, setPlaying] = useState(null);
@@ -234,7 +245,7 @@ export default function VaultTab() {
 
       <div className="tg-grid">
         {filtered.map((s) => (
-          <div key={s.video_id} className="tg-tile" onClick={() => setPlaying(s)}>
+          <div key={s.video_id} className="tg-tile" onClick={() => setPlaying(s)} style={{ position: 'relative' }}>
             <div className="tg-frame">
               <img
                 className="tg-thumb"
@@ -246,12 +257,25 @@ export default function VaultTab() {
                 <span style={{ color: s.accent || '#F4A93C' }}>▷</span>
               </div>
             </div>
-            <div className="tg-meta">
-              <div className="tg-artist">{parseArtist(s.artist)}</div>
-              <div className="tg-fest">
-                {s.festival_name}
-                {s.city ? ` · ${s.city}` : ''}
+            <div className="tg-meta" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div className="tg-artist">{parseArtist(s.artist)}</div>
+                <div className="tg-fest">
+                  {s.festival_name}
+                  {s.city ? ` · ${s.city}` : ''}
+                </div>
               </div>
+              <button
+                onClick={(e) => { e.stopPropagation(); toggleLineup(s); }}
+                title={lineupIds.has(s.video_id) ? 'Remove from lineup' : 'Add to lineup'}
+                style={{
+                  background: 'none', border: 'none', flexShrink: 0,
+                  color: lineupIds.has(s.video_id) ? (s.accent || '#F4A93C') : 'rgba(237,234,226,.3)',
+                  fontSize: 18, cursor: 'pointer', padding: '4px', lineHeight: 1,
+                }}
+              >
+                {lineupIds.has(s.video_id) ? '◈' : '＋'}
+              </button>
             </div>
           </div>
         ))}
