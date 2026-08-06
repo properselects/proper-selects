@@ -34,6 +34,7 @@ export default function App() {
   const [showTooltip, setShowTooltip] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [preview, setPreview] = useState(null);
+  const [nowPlaying, setNowPlaying] = useState(null);
 
   useEffect(() => {
     fetch(`${SUPABASE_URL}/rest/v1/public_sets?select=video_id,artist&order=published_at.desc&limit=10`, {
@@ -202,17 +203,52 @@ export default function App() {
         </div>
       </header>
 
-      <main style={{ flex: 1, overflowY: 'auto' }}>
-        {tab === 'radar' ? (
-          <RadarTab />
-        ) : tab === 'grid' ? (
+      <main style={{ flex: 1, overflowY: 'auto', position: 'relative' }}>
+        {/* All tabs stay mounted so YouTube iframe survives tab switches */}
+        <div style={{ display: tab === 'jukebox' ? 'block' : 'none', height: '100%' }}>
+          <TodayTab lineup={lineup} onLineupChange={setLineup} onOpenLineup={openDrawer} onSetChange={setNowPlaying} />
+        </div>
+        <div style={{ display: tab === 'grid' ? 'block' : 'none', height: '100%' }}>
           <VaultTab lineup={lineup} onLineupChange={setLineup} />
-        ) : tab === 'jukebox' ? (
-          <TodayTab lineup={lineup} onLineupChange={setLineup} onOpenLineup={openDrawer} />
-        ) : tab === 'atlas' ? (
+        </div>
+        <div style={{ display: tab === 'atlas' ? 'block' : 'none', height: '100%' }}>
           <AtlasTab lineup={lineup} onLineupChange={setLineup} />
-        ) : null}
+        </div>
+        <div style={{ display: tab === 'radar' ? 'block' : 'none', height: '100%' }}>
+          <RadarTab />
+        </div>
       </main>
+
+      {/* Mini player — shown when something is playing and user is on another tab */}
+      {nowPlaying && tab !== 'jukebox' && (
+        <button
+          onClick={() => setTab('jukebox')}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 10,
+            width: '100%', background: 'rgba(10,10,14,.97)',
+            border: 'none', borderTop: '1px solid rgba(255,255,255,.1)',
+            borderBottom: 'none', padding: '8px 14px', cursor: 'pointer',
+            color: '#EDEAE2', textAlign: 'left',
+          }}
+        >
+          <img
+            src={`https://img.youtube.com/vi/${nowPlaying.video_id}/default.jpg`}
+            alt=""
+            style={{ width: 48, height: 36, objectFit: 'cover', borderRadius: 4, flexShrink: 0 }}
+          />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {nowPlaying.artist}
+            </div>
+            {nowPlaying.festival_name && (
+              <div style={{ fontSize: 11, opacity: 0.5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {nowPlaying.festival_name}{nowPlaying.city ? ` · ${nowPlaying.city}` : ''}
+              </div>
+            )}
+          </div>
+          <span style={{ fontSize: 18, color: '#F4A93C', flexShrink: 0 }}>▷</span>
+        </button>
+      )}
 
       <nav
         style={{

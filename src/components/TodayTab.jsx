@@ -116,7 +116,7 @@ function NearYouRow({ nearby }) {
   );
 }
 
-export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup }) {
+export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, onSetChange }) {
   const lineupIds = React.useMemo(() => new Set((lineup || []).map((s) => s.video_id)), [lineup]);
 
   function toggleLineup(set) {
@@ -175,6 +175,11 @@ export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup }) 
   }, [rawSlots]);
 
   const current = slots[slotIdx];
+
+  // Notify parent of currently playing set for mini player
+  React.useEffect(() => {
+    onSetChange?.(current || null);
+  }, [current?.video_id]);
 
   const advance = () => setSlotIdx((i) => (slots.length ? (i + 1) % slots.length : 0));
 
