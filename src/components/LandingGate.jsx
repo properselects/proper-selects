@@ -4,7 +4,7 @@ import { parseArtist } from '../lib/parseArtist.js';
 
 const STACK = [
   { icon: '◈', text: 'Build a lineup in 30 seconds' },
-  { icon: '↗', text: 'Share it with friends — one link' },
+  { icon: '⊕', text: 'Share it with friends — one link' },
   { icon: '⟶', text: 'They click. It plays. Instantly.' },
   { icon: '⊞', text: 'Free forever. No signup.' },
 ];
