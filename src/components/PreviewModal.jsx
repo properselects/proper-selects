@@ -81,8 +81,10 @@ export default function PreviewModal({ set, onClose }) {
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none' }}
           />
         </div>
-        <div style={{ padding: '8px 14px', fontSize: 11, opacity: 0.5, textAlign: 'center' }}>
-          Tap outside or Minimize to keep it playing while you browse
+        <div style={{ padding: '10px 14px', fontSize: 11, opacity: 0.65, textAlign: 'center', lineHeight: 1.5 }}>
+          <div style={{ marginBottom: 3 }}>📺 Cast or AirPlay to a screen near you</div>
+          <div style={{ opacity: 0.65 }}>Tap the ⋮ menu inside the player — quality auto-adjusts to the screen</div>
+          <div style={{ opacity: 0.5, marginTop: 4, fontSize: 10 }}>Or tap outside to keep it playing while you browse</div>
         </div>
       </div>
     </>
