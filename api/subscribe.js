@@ -72,7 +72,6 @@ export default async function handler(req, res) {
       email: email.toLowerCase().trim(),
       confirmed: false,
       unsubscribed_at: null,
-      subscribed_at: new Date().toISOString(),
     }),
   });
 
