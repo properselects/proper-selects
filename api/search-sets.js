@@ -82,7 +82,10 @@ export default async function handler(req, res) {
   // Search YouTube
   const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(q + ' DJ set')}&type=video&videoDuration=long&maxResults=10&order=relevance&key=${YT_KEY}`;
   const searchRes = await fetch(searchUrl);
-  if (!searchRes.ok) return res.status(502).json({ error: 'YouTube search failed' });
+  if (!searchRes.ok) {
+    const errBody = await searchRes.json().catch(() => ({}));
+    return res.status(502).json({ error: 'YouTube search failed', status: searchRes.status, detail: errBody?.error?.message || errBody });
+  }
   const searchData = await searchRes.json();
 
   const candidates = (searchData.items || [])
