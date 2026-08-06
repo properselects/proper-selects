@@ -57,6 +57,20 @@ export default function LineupDrawer({ open, onClose, lineup, onLineupChange }) 
       try {
         const rows = await searchSets(query);
         setResults(rows);
+        // If DB has fewer than 2 results, do real-time YouTube search in background
+        if (rows.length < 2) {
+          fetch(`/api/search-sets?q=${encodeURIComponent(query)}`)
+            .then(r => r.ok ? r.json() : null)
+            .then(data => {
+              if (data?.sets?.length) {
+                // Merge YouTube finds with DB results (dedupe by video_id)
+                const seen = new Set(rows.map(r => r.video_id));
+                const fresh = data.sets.filter(s => !seen.has(s.video_id));
+                if (fresh.length) setResults(prev => [...prev, ...fresh]);
+              }
+            })
+            .catch(() => {});
+        }
       } finally {
         setSearching(false);
       }
