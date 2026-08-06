@@ -3,7 +3,8 @@
 
 export const maxDuration = 30;
 
-const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
+// Use search key for view counts — keeps its own quota separate from ingest
+const YOUTUBE_API_KEY = process.env.YOUTUBE_SEARCH_KEY || process.env.YOUTUBE_API_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
@@ -34,11 +35,12 @@ async function getViewCounts(videoIds) {
 async function getRecentSets() {
   if (!SUPABASE_URL || !SUPABASE_KEY) return FALLBACK_SETS;
   try {
-    // Get sets published in last 60 days
+    // vault_sets has festival_name, city, accent — public_sets does not
     const since = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString();
-    const r = await fetch(`${SUPABASE_URL}/rest/v1/public_sets?select=video_id,artist,festival_name,city,accent&published_at=gte.${since}&limit=60`, {
-      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
-    });
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/vault_sets?select=video_id,artist,festival_name,city,accent&published_at=gte.${encodeURIComponent(since)}&source=eq.youtube&duration_sec=gte.2700&order=published_at.desc&limit=80`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+    );
     const rows = r.ok ? await r.json() : [];
     return rows.length >= 5 ? rows : FALLBACK_SETS;
   } catch { return FALLBACK_SETS; }
