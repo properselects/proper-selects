@@ -100,12 +100,20 @@ function NearYouRow({ nearby }) {
             rel="noopener noreferrer"
             className="jb-near-card"
           >
-            <div className="jb-near-venue">{e.venue_name}</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
+              <div className="jb-near-venue">{e.venue_name}</div>
+              {new Date(e.starts_at).getHours() >= 2 && new Date(e.starts_at).getHours() < 12 && (
+                <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: '.08em', background: 'rgba(244,169,60,.15)', color: '#F4A93C', padding: '2px 5px', borderRadius: 3 }}>
+                  AFTER HOURS
+                </span>
+              )}
+            </div>
             <div className="jb-near-event">
               {e.headliner && e.headliner !== 'TBA' ? e.headliner : e.title}
             </div>
             <div className="jb-near-meta">
-              {new Date(e.starts_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} ·{' '}
+              {new Date(e.starts_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}{' '}
+              {new Date(e.starts_at).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })} ·{' '}
               {e.dist < 50 ? `${e.dist} mi away` : `${e.dist} mi`}
               {e.ticket_price_from ? ` · from $${e.ticket_price_from}` : ''}
             </div>
