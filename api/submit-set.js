@@ -21,6 +21,10 @@ async function verifyEmbeddable(videoId) {
   }
 }
 
+function escapeHtml(s) {
+  return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 async function pingTelegram(msg) {
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
   try {
@@ -78,8 +82,8 @@ export default async function handler(req, res) {
   }
 
   const kind = is_own_set ? '🎧 Bedroom DJ submission' : '📀 Set submission';
-  const who = submitter_name ? `<b>${submitter_name}</b>${submitter_location ? ` (${submitter_location})` : ''}` : 'Anonymous';
-  await pingTelegram(`${kind}\n\nBy: ${who}\n${why ? `Why: ${why}\n\n` : ''}${video_url}`);
+  const who = submitter_name ? `<b>${escapeHtml(submitter_name)}</b>${submitter_location ? ` (${escapeHtml(submitter_location)})` : ''}` : 'Anonymous';
+  await pingTelegram(`${kind}\n\nBy: ${who}\n${why ? `Why: ${escapeHtml(why)}\n\n` : ''}${escapeHtml(video_url)}`);
 
   return res.status(200).json({ ok: true, message: is_own_set ? "Your set is in the queue — we'll listen this week." : 'Thanks — added to the queue for review.' });
 }

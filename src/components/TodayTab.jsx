@@ -35,8 +35,14 @@ async function fetchLineup() {
     .map((r) => ({ ...r, vibe: geoRegion(r) }));
 }
 
-async function fetchIdMoments() {
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/set_id_moments?select=*`, { headers: supabaseHeaders });
+async function fetchIdMoments(videoIds) {
+  if (!videoIds?.length) return {};
+  // Fetch only for the video IDs currently in today's lineup — bounded, fast
+  const idList = videoIds.slice(0, 60).map(encodeURIComponent).join(',');
+  const r = await fetch(
+    `${SUPABASE_URL}/rest/v1/set_id_moments?select=*&video_id=in.(${idList})&order=likes.desc&limit=500`,
+    { headers: supabaseHeaders }
+  );
   if (!r.ok) return {};
   const rows = await r.json();
   const map = {};
@@ -153,8 +159,10 @@ export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, on
   const timeRef = useRef(null);
 
   useEffect(() => {
-    fetchLineup().then(setRows).catch(() => setRows([]));
-    fetchIdMoments().then(setIdMoments).catch(() => {});
+    fetchLineup().then((r) => {
+      setRows(r);
+      fetchIdMoments(r.map((x) => x.video_id)).then(setIdMoments).catch(() => {});
+    }).catch(() => setRows([]));
   }, []);
 
   // Group sets by stage

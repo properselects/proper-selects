@@ -7,21 +7,39 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
 // RA area IDs with approximate city center coordinates for proximity matching
+// tz is the IANA timezone — used to store starts_at as an offset-aware ISO string
 const RA_AREAS = [
-  { id: '38',  city: 'Miami',       lat: 25.7617,   lng: -80.1918,  region: 'americas' },
-  { id: '23',  city: 'Los Angeles', lat: 34.0522,   lng: -118.2437, region: 'americas' },
-  { id: '17',  city: 'Chicago',     lat: 41.8781,   lng: -87.6298,  region: 'americas' },
-  { id: '8',   city: 'New York',    lat: 40.7128,   lng: -74.0060,  region: 'americas' },
-  { id: '321', city: 'Austin',      lat: 30.2672,   lng: -97.7431,  region: 'americas' },
-  { id: '19',  city: 'Detroit',     lat: 42.3314,   lng: -83.0458,  region: 'americas' },
-  { id: '13',  city: 'London',      lat: 51.5074,   lng: -0.1278,   region: 'europe'   },
-  { id: '34',  city: 'Berlin',      lat: 52.5200,   lng: 13.4050,   region: 'europe'   },
-  { id: '29',  city: 'Amsterdam',   lat: 52.3676,   lng: 4.9041,    region: 'europe'   },
-  { id: '25',  city: 'Ibiza',       lat: 38.9067,   lng: 1.4206,    region: 'europe'   },
-  { id: '20',  city: 'Barcelona',   lat: 41.3851,   lng: 2.1734,    region: 'europe'   },
-  { id: '537', city: 'Seoul',       lat: 37.5665,   lng: 126.9780,  region: 'worldwide' },
-  { id: '27',  city: 'Tokyo',       lat: 35.6762,   lng: 139.6503,  region: 'worldwide' },
+  { id: '38',  city: 'Miami',       lat: 25.7617,   lng: -80.1918,  region: 'americas', tz: 'America/New_York' },
+  { id: '23',  city: 'Los Angeles', lat: 34.0522,   lng: -118.2437, region: 'americas', tz: 'America/Los_Angeles' },
+  { id: '17',  city: 'Chicago',     lat: 41.8781,   lng: -87.6298,  region: 'americas', tz: 'America/Chicago' },
+  { id: '8',   city: 'New York',    lat: 40.7128,   lng: -74.0060,  region: 'americas', tz: 'America/New_York' },
+  { id: '321', city: 'Austin',      lat: 30.2672,   lng: -97.7431,  region: 'americas', tz: 'America/Chicago' },
+  { id: '19',  city: 'Detroit',     lat: 42.3314,   lng: -83.0458,  region: 'americas', tz: 'America/Detroit' },
+  { id: '13',  city: 'London',      lat: 51.5074,   lng: -0.1278,   region: 'europe',   tz: 'Europe/London' },
+  { id: '34',  city: 'Berlin',      lat: 52.5200,   lng: 13.4050,   region: 'europe',   tz: 'Europe/Berlin' },
+  { id: '29',  city: 'Amsterdam',   lat: 52.3676,   lng: 4.9041,    region: 'europe',   tz: 'Europe/Amsterdam' },
+  { id: '25',  city: 'Ibiza',       lat: 38.9067,   lng: 1.4206,    region: 'europe',   tz: 'Europe/Madrid' },
+  { id: '20',  city: 'Barcelona',   lat: 41.3851,   lng: 2.1734,    region: 'europe',   tz: 'Europe/Madrid' },
+  { id: '537', city: 'Seoul',       lat: 37.5665,   lng: 126.9780,  region: 'worldwide', tz: 'Asia/Seoul' },
+  { id: '27',  city: 'Tokyo',       lat: 35.6762,   lng: 139.6503,  region: 'worldwide', tz: 'Asia/Tokyo' },
 ];
+
+// Convert a naive local datetime (YYYY-MM-DDTHH:MM:SS) in a given IANA tz to a proper UTC ISO string
+function toUtcIso(naiveLocal, tz) {
+  if (!naiveLocal) return null;
+  const [datePart, timePart = '22:00:00'] = naiveLocal.split('T');
+  const [y, m, d] = datePart.split('-').map(Number);
+  const [hh, mm, ss = 0] = timePart.split(':').map(Number);
+  // Get offset by asking Intl what the tz displays for a known UTC time near the event
+  const guessUtc = new Date(Date.UTC(y, m - 1, d, hh, mm, ss));
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
+  }).formatToParts(guessUtc).reduce((acc, p) => (acc[p.type] = p.value, acc), {});
+  const tzWall = Date.UTC(+parts.year, +parts.month - 1, +parts.day, +parts.hour % 24, +parts.minute, +parts.second);
+  const offsetMs = tzWall - guessUtc.getTime();
+  return new Date(guessUtc.getTime() - offsetMs).toISOString();
+}
 
 const RA_QUERY = `
   query eventListings($filters: FilterInputDtoInput, $pageSize: Int, $page: Int) {
@@ -104,10 +122,14 @@ async function insertEvents(events) {
       apikey: SUPABASE_KEY,
       Authorization: `Bearer ${SUPABASE_KEY}`,
       'Content-Type': 'application/json',
-      Prefer: 'return=minimal',
+      Prefer: 'return=minimal,resolution=ignore-duplicates',
     },
     body: JSON.stringify(events),
   });
+  if (!res.ok) {
+    const err = await res.text().catch(() => '');
+    console.error('events insert failed:', res.status, err.slice(0, 200));
+  }
   return res.ok;
 }
 
@@ -136,9 +158,10 @@ export default async function handler(req, res) {
         const { headliner, supporting } = parseLineup(e.lineup);
         const venue = e.venue || {};
         const img = (e.images || [])[0];
-        const startsAt = e.date
+        const naiveLocal = e.date
           ? `${e.date.slice(0, 10)}T${e.startTime || '22:00:00'}`
           : null;
+        const startsAt = toUtcIso(naiveLocal, area.tz);
         return {
           festival_id: null,
           title: e.title || 'Untitled',
@@ -157,8 +180,9 @@ export default async function handler(req, res) {
       }).filter((r) => r.starts_at);
 
       if (rows.length) {
-        await insertEvents(rows);
-        totalInserted += rows.length;
+        const ok = await insertEvents(rows);
+        if (ok) totalInserted += rows.length;
+        else errors.push(`${area.city}: insert failed`);
       }
     } catch (err) {
       errors.push(`${area.city}: ${err.message}`);
