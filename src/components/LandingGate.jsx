@@ -47,9 +47,9 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
         <h1 className="jb-hero">
           Stop sending
           <br />
-          <span className="jb-hero-em">random links.</span>
+          <span className="jb-hero-em">sets one by one.</span>
           <br />
-          <span className="jb-hero-sub">Send a lineup.</span>
+          <span className="jb-hero-sub">Send the whole night.</span>
         </h1>
 
         <p style={{
@@ -61,8 +61,8 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
           fontWeight: 500,
           letterSpacing: '-.01em',
         }}>
-          The world's best DJ sets — curated from 70+ venues.
-          Build your lineup. Share one link. Your friends hit play.
+          Pick sets from Boiler Room, Cercle, Thuishaven and more.
+          Build your lineup. One link. They click and it plays.
         </p>
 
         {/* Value stack */}
