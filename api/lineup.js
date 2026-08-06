@@ -56,5 +56,11 @@ export default async function handler(req, res) {
     return res.status(201).json({ slug });
   }
 
+  if (req.method === 'DELETE') {
+    const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    const { ok, data } = await sb(`lineups?created_at=lt.${encodeURIComponent(cutoff)}`, { method: 'DELETE' });
+    return res.json({ deleted: ok ? (data?.length || 0) : 0, cutoff });
+  }
+
   return res.status(405).json({ error: 'Method not allowed' });
 }

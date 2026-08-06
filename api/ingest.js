@@ -227,7 +227,7 @@ async function insertSets(sets) {
   return r.ok;
 }
 
-import { parseDescription } from './hot-tracks.js';
+import { parseDescription } from '../ingest/hot-tracks.js';
 
 async function ytDescriptions(ids) {
   if (!ids.length) return {};
