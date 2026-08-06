@@ -3,26 +3,13 @@
 
 export const maxDuration = 60;
 
-// Primary ingest key; falls back to search key if quota exhausted
+// Ingest uses its own key only — search key is reserved for user-facing search
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
-const YOUTUBE_SEARCH_KEY = process.env.YOUTUBE_SEARCH_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
-let activeYtKey = YOUTUBE_API_KEY;
-
 async function ytFetch(url) {
-  const res = await fetch(url.replace('KEY_PLACEHOLDER', activeYtKey));
-  if (res.status === 429 || res.status === 403) {
-    const body = await res.json().catch(() => ({}));
-    const isQuota = JSON.stringify(body).includes('quota');
-    if (isQuota && activeYtKey === YOUTUBE_API_KEY && YOUTUBE_SEARCH_KEY) {
-      activeYtKey = YOUTUBE_SEARCH_KEY;
-      return fetch(url.replace('KEY_PLACEHOLDER', activeYtKey));
-    }
-    return res;
-  }
-  return res;
+  return fetch(url.replace('KEY_PLACEHOLDER', YOUTUBE_API_KEY));
 }
 
 const CHANNELS = [
@@ -267,6 +254,11 @@ async function insertTracks(tracks) {
 }
 
 export default async function handler(req, res) {
+  // Cron-only: reject unauthenticated calls
+  const CRON_SECRET = process.env.CRON_SECRET;
+  if (CRON_SECRET && req.headers.authorization !== `Bearer ${CRON_SECRET}`) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
   if (!YOUTUBE_API_KEY || !SUPABASE_KEY) return res.status(500).json({ error: 'Missing env vars' });
 
   const existing = await getExisting();

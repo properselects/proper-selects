@@ -50,7 +50,11 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { email } = req.body || {};
+  const { email, website } = req.body || {};
+
+  // Honeypot — bots fill hidden fields, humans don't
+  if (website) return res.status(200).json({ ok: true, message: 'Check your email to confirm' });
+
   if (!email || !isValidEmail(email)) {
     return res.status(400).json({ error: 'Valid email required' });
   }
@@ -59,7 +63,20 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Server configuration error' });
   }
 
-  // Upsert subscriber (idempotent — re-subscribing resets token)
+  const normalizedEmail = email.toLowerCase().trim();
+
+  // Rate limit / anti-bomb: if this email already has a subscriber row, don't re-send.
+  // Same row will be found on legitimate re-attempts too — user was already emailed.
+  const throttleCheck = await fetch(
+    `${SUPABASE_URL}/rest/v1/subscribers?email=eq.${encodeURIComponent(normalizedEmail)}&select=id,confirmed`,
+    { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+  );
+  const existing = throttleCheck.ok ? await throttleCheck.json() : [];
+  if (existing[0]) {
+    return res.status(200).json({ ok: true, message: existing[0].confirmed ? 'Already subscribed' : 'Check your email to confirm' });
+  }
+
+  // Insert new subscriber
   const r = await fetch(`${SUPABASE_URL}/rest/v1/subscribers`, {
     method: 'POST',
     headers: {
@@ -69,7 +86,7 @@ export default async function handler(req, res) {
       Prefer: 'resolution=merge-duplicates,return=representation',
     },
     body: JSON.stringify({
-      email: email.toLowerCase().trim(),
+      email: normalizedEmail,
       confirmed: false,
       unsubscribed_at: null,
     }),

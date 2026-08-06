@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 export default function SubscribeModal({ open, onClose }) {
   const [email, setEmail] = useState('');
+  const [website, setWebsite] = useState(''); // honeypot
   const [state, setState] = useState('idle');
 
   if (!open) return null;
@@ -14,7 +15,7 @@ export default function SubscribeModal({ open, onClose }) {
       const r = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, website }),
       });
       setState(r.ok ? 'done' : 'error');
     } catch {
@@ -36,6 +37,17 @@ export default function SubscribeModal({ open, onClose }) {
           New sets. Best of the vault. Every Monday.
         </p>
         <form onSubmit={submit}>
+          {/* Honeypot — hidden from humans, bots fill it */}
+          <input
+            type="text"
+            name="website"
+            value={website}
+            onChange={(e) => setWebsite(e.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+            style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }}
+            aria-hidden="true"
+          />
           <input
             type="email"
             required

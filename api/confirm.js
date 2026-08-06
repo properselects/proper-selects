@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   }
 
   const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/subscribers?confirm_token=eq.${token}&select=id,email,confirmed`,
+    `${SUPABASE_URL}/rest/v1/subscribers?confirm_token=eq.${encodeURIComponent(token)}&select=id,email,confirmed`,
     { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
   );
   const rows = await r.json();
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
   const { id, confirmed } = rows[0];
   if (!confirmed) {
-    await fetch(`${SUPABASE_URL}/rest/v1/subscribers?id=eq.${id}`, {
+    await fetch(`${SUPABASE_URL}/rest/v1/subscribers?id=eq.${encodeURIComponent(id)}`, {
       method: 'PATCH',
       headers: {
         apikey: SUPABASE_KEY,

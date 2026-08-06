@@ -112,6 +112,10 @@ async function insertEvents(events) {
 }
 
 export default async function handler(req, res) {
+  const CRON_SECRET = process.env.CRON_SECRET;
+  if (CRON_SECRET && req.headers.authorization !== `Bearer ${CRON_SECRET}`) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
   if (!SUPABASE_KEY) return res.status(500).json({ error: 'Missing SUPABASE_SERVICE_KEY' });
 
   const now = new Date();

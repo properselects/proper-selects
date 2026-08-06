@@ -147,6 +147,10 @@ async function insertSets(sets) {
 }
 
 export default async function handler(req, res) {
+  const CRON_SECRET = process.env.CRON_SECRET;
+  if (CRON_SECRET && req.headers.authorization !== `Bearer ${CRON_SECRET}`) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
   if (!YOUTUBE_API_KEY || !SUPABASE_KEY) return res.status(500).json({ error: 'Missing env vars' });
 
   const publishedAfter = new Date(Date.now() - MAX_AGE_DAYS * 864e5).toISOString();

@@ -8,7 +8,10 @@ export default async function handler(req, res) {
   const { token } = req.query;
   if (!token) return res.status(400).send('Invalid link.');
 
-  await fetch(`${SUPABASE_URL}/rest/v1/subscribers?id=eq.${token}`, {
+  // Validate UUID format to prevent PostgREST filter injection
+  if (!/^[0-9a-f-]{36}$/i.test(token)) return res.status(400).send('Invalid link.');
+
+  await fetch(`${SUPABASE_URL}/rest/v1/subscribers?id=eq.${encodeURIComponent(token)}`, {
     method: 'PATCH',
     headers: {
       apikey: SUPABASE_KEY,
