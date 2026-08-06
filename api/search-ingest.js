@@ -121,8 +121,8 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Missing env vars' });
   }
 
-  // Look back 21 days for recent uploads
-  const publishedAfter = new Date(Date.now() - 21 * 24 * 60 * 60 * 1000).toISOString();
+  // Look back 90 days for recent uploads
+  const publishedAfter = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();
   const existing = await getExisting();
 
   const candidates = [];
