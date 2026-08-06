@@ -92,30 +92,29 @@ async function sbFetch(path) {
 }
 
 const REGIONS = ['americas', 'europe', 'worldwide'];
-const FRESH_HOURS = 72;
 const TARGET = 20;
 
 async function todayLineup() {
-  const freshCutoff = new Date(Date.now() - FRESH_HOURS * 60 * 60 * 1000).toISOString();
-
-  const [freshAll, ...fillPools] = await Promise.all([
-    sbFetch(`public_sets?select=*&status=eq.live&source=eq.youtube&duration_sec=gte.2700&created_at=gte.${encodeURIComponent(freshCutoff)}&order=created_at.desc&limit=500`),
+  // Fresh layer: todays_lineup view already curates recent/relevant sets per region
+  // Fill layer: vault_sets for variety when a region is sparse
+  const [fresh, ...fillPools] = await Promise.all([
+    sbFetch(`todays_lineup?select=*`),
     ...REGIONS.map((region) =>
-      sbFetch(`public_sets?select=*&status=eq.live&source=eq.youtube&duration_sec=gte.2700&vibe=eq.${region}&created_at=lt.${encodeURIComponent(freshCutoff)}&order=published_at.desc&limit=400`)
+      sbFetch(`vault_sets?select=*&vibe=eq.${region}&source=eq.youtube&duration_sec=gte.2700&order=published_at.desc&limit=400`)
     ),
   ]);
 
   return REGIONS.flatMap((region, i) => {
-    const freshDiverse = applyDiversity(freshAll.filter((r) => r.vibe === region), 2);
-    const fillNeeded = Math.max(0, TARGET - freshDiverse.length);
+    const freshRegion = applyDiversity(fresh.filter((r) => r.vibe === region), 2);
+    const fillNeeded = Math.max(0, TARGET - freshRegion.length);
     let fill = [];
     if (fillNeeded > 0) {
-      const freshIds = new Set(freshDiverse.map((r) => r.video_id));
+      const freshIds = new Set(freshRegion.map((r) => r.video_id));
       const pool = fillPools[i].filter((r) => !freshIds.has(r.video_id));
       shuffle(pool);
       fill = applyDiversity(pool, 2).slice(0, fillNeeded);
     }
-    return [...freshDiverse, ...fill].map((s) => ({ ...s, vibe: region }));
+    return [...freshRegion, ...fill].map((s) => ({ ...s, vibe: region }));
   });
 }
 
