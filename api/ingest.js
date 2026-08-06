@@ -83,6 +83,9 @@ const CHANNELS = [
   { channelId: 'UCuaUS6xjyIGUDiso6am8Mtw', festival_id: 'octagon-seoul',  festival_name: 'Club Octagon',          city: 'Seoul',            vibe: 'worldwide' },
   { channelId: 'UCApQT8Gkxq7RgXaKVj5eveg', festival_id: 'mayan-warrior',  festival_name: 'Mayan Warrior',         city: 'Black Rock City',  vibe: 'worldwide' },
   { channelId: 'UC8LpEl1RM7sd28kjqYZpJ6w', festival_id: 'epizode',        festival_name: 'Epizode Festival',      city: 'Phú Quốc',        vibe: 'worldwide' },
+  // Las Vegas venues added 2026-08-06
+  { channelId: 'UCe710jxByDD7eF1A_C_im7A', festival_id: 'omnia-lv',       festival_name: 'Omnia Las Vegas',       city: 'Las Vegas',        vibe: 'americas' },
+  { channelId: 'UCFma8dm2-m5KoFu6FW5i8mA', festival_id: 'xs-lv',          festival_name: 'XS Las Vegas',          city: 'Las Vegas',        vibe: 'americas' },
 ];
 
 const MIN_SECS = 45 * 60;
