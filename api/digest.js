@@ -93,7 +93,7 @@ function setCard(s, badge) {
   const venueLine = [s.festival_name, s.city].filter(Boolean).join(' · ');
   const badgeHtml = badge ? `<div style="position:absolute;top:10px;left:10px;background:${accent};color:#0a0a0e;font-size:10px;font-weight:800;padding:3px 8px;border-radius:4px;letter-spacing:.06em;">${badge}</div>` : '';
   return `
-    <a href="https://proper-selects.vercel.app" style="display:block;text-decoration:none;margin-bottom:12px;border:1px solid rgba(255,255,255,.1);border-radius:10px;overflow:hidden;background:rgba(255,255,255,.03);position:relative;">
+    <a href="https://www.youtube.com/watch?v=${s.video_id}" style="display:block;text-decoration:none;margin-bottom:12px;border:1px solid rgba(255,255,255,.1);border-radius:10px;overflow:hidden;background:rgba(255,255,255,.03);position:relative;">
       <div style="position:relative;">
         <img src="${thumb}" alt="" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">
         ${badgeHtml}
