@@ -1,11 +1,21 @@
 // GET /api/digest — send the weekly Proper Selects email digest
 // Triggered by Vercel cron: every Monday at 9AM CT (14:00 UTC)
+import nodemailer from 'nodemailer';
+
 export const maxDuration = 30;
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const GMAIL_USER = process.env.GMAIL_USER;
+const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
 const CRON_SECRET = process.env.CRON_SECRET;
+
+function createTransport() {
+  return nodemailer.createTransport({
+    service: 'gmail',
+    auth: { user: GMAIL_USER, pass: GMAIL_APP_PASSWORD },
+  });
+}
 
 async function getNewSets() {
   const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
@@ -93,8 +103,8 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  if (!RESEND_API_KEY) {
-    return res.status(500).json({ error: 'RESEND_API_KEY not configured' });
+  if (!GMAIL_USER || !GMAIL_APP_PASSWORD) {
+    return res.status(500).json({ error: 'Gmail credentials not configured' });
   }
 
   const [newSets, subscribers] = await Promise.all([getNewSets(), getConfirmedSubscribers()]);
@@ -108,25 +118,18 @@ export default async function handler(req, res) {
 
   const week = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
   let sent = 0, failed = 0;
+  const transport = createTransport();
 
   for (const sub of subscribers) {
-    const html = buildEmail(newSets, sub.id); // use id as unsub token for now
+    const html = buildEmail(newSets, sub.id);
     try {
-      const r = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${RESEND_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from: 'Proper Selects <onboarding@resend.dev>',
-          to: [sub.email],
-          subject: `Proper Selects — New sets this week (${week})`,
-          html,
-        }),
+      await transport.sendMail({
+        from: `"Proper Selects" <${GMAIL_USER}>`,
+        to: sub.email,
+        subject: `Proper Selects — New sets this week (${week})`,
+        html,
       });
-      if (r.ok) sent++;
-      else failed++;
+      sent++;
     } catch {
       failed++;
     }

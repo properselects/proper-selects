@@ -1,43 +1,46 @@
 // POST /api/subscribe — add an email to the Proper Selects weekly digest list
+import nodemailer from 'nodemailer';
+
 export const maxDuration = 10;
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const GMAIL_USER = process.env.GMAIL_USER;
+const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
 
 function isValidEmail(e) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 }
 
+function createTransport() {
+  return nodemailer.createTransport({
+    service: 'gmail',
+    auth: { user: GMAIL_USER, pass: GMAIL_APP_PASSWORD },
+  });
+}
+
 async function sendConfirmEmail(email, token) {
-  if (!RESEND_API_KEY) return; // skip in dev if no key
+  if (!GMAIL_USER || !GMAIL_APP_PASSWORD) return;
   const confirmUrl = `https://proper-selects.vercel.app/api/confirm?token=${token}`;
-  await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${RESEND_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from: 'Proper Selects <onboarding@resend.dev>',
-      to: [email],
-      subject: 'Confirm your Proper Selects subscription',
-      html: `
-        <div style="font-family:'Helvetica Neue',Arial,sans-serif;background:#0a0a0e;color:#EDEAE2;max-width:480px;margin:0 auto;padding:32px 24px;border-radius:12px;">
-          <div style="font-weight:800;letter-spacing:.16em;font-size:13px;margin-bottom:24px;">
-            PROPER SELECTS <span style="opacity:.5;letter-spacing:.3em;font-size:10px;margin-left:4px;">WEEKLY DROP</span>
-          </div>
-          <h2 style="font-size:22px;margin:0 0 12px;line-height:1.2;">One click to confirm</h2>
-          <p style="opacity:.7;font-size:14px;line-height:1.6;margin:0 0 28px;">
-            You're almost in. Confirm your email and you'll get the best new sets in your inbox every Monday.
-          </p>
-          <a href="${confirmUrl}" style="display:inline-block;padding:12px 28px;background:#F4A93C;color:#0a0a0e;border-radius:8px;font-weight:800;font-size:14px;text-decoration:none;letter-spacing:.04em;">
-            Confirm subscription →
-          </a>
-          <p style="opacity:.4;font-size:11px;margin-top:28px;">If you didn't sign up, ignore this email.</p>
+  await createTransport().sendMail({
+    from: `"Proper Selects" <${GMAIL_USER}>`,
+    to: email,
+    subject: 'Confirm your Proper Selects subscription',
+    html: `
+      <div style="font-family:'Helvetica Neue',Arial,sans-serif;background:#0a0a0e;color:#EDEAE2;max-width:480px;margin:0 auto;padding:32px 24px;border-radius:12px;">
+        <div style="font-weight:800;letter-spacing:.16em;font-size:13px;margin-bottom:24px;">
+          PROPER SELECTS <span style="opacity:.5;letter-spacing:.3em;font-size:10px;margin-left:4px;">WEEKLY DROP</span>
         </div>
-      `,
-    }),
+        <h2 style="font-size:22px;margin:0 0 12px;line-height:1.2;">One click to confirm</h2>
+        <p style="opacity:.7;font-size:14px;line-height:1.6;margin:0 0 28px;">
+          You're almost in. Confirm your email and you'll get the best new sets in your inbox every Monday.
+        </p>
+        <a href="${confirmUrl}" style="display:inline-block;padding:12px 28px;background:#F4A93C;color:#0a0a0e;border-radius:8px;font-weight:800;font-size:14px;text-decoration:none;letter-spacing:.04em;">
+          Confirm subscription →
+        </a>
+        <p style="opacity:.4;font-size:11px;margin-top:28px;">If you didn't sign up, ignore this email.</p>
+      </div>
+    `,
   });
 }
 
