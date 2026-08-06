@@ -35,16 +35,15 @@ export default function GlobalSearch({ open, onClose, lineup, onLineupChange, on
         const rows = await searchDB(query);
         setResults(rows);
         if (rows.length < 2) {
-          fetch(`/api/search-sets?q=${encodeURIComponent(query)}`)
+          // Keep spinner while YouTube search runs
+          const data = await fetch(`/api/search-sets?q=${encodeURIComponent(query)}`)
             .then(r => r.ok ? r.json() : null)
-            .then(data => {
-              if (data?.sets?.length) {
-                const seen = new Set(rows.map(r => r.video_id));
-                const fresh = data.sets.filter(s => !seen.has(s.video_id));
-                if (fresh.length) setResults(prev => [...prev, ...fresh]);
-              }
-            })
-            .catch(() => {});
+            .catch(() => null);
+          if (data?.sets?.length) {
+            const seen = new Set(rows.map(r => r.video_id));
+            const fresh = data.sets.filter(s => !seen.has(s.video_id));
+            if (fresh.length) setResults(prev => [...prev, ...fresh]);
+          }
         }
       } finally {
         setSearching(false);
