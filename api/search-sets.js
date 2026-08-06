@@ -4,7 +4,8 @@
 
 export const maxDuration = 20;
 
-const YT_KEY = process.env.YOUTUBE_API_KEY;
+// Dedicated search key keeps its own quota separate from the ingest key
+const YT_KEY = process.env.YOUTUBE_SEARCH_KEY || process.env.YOUTUBE_API_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
