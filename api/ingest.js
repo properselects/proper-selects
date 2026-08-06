@@ -44,6 +44,10 @@ const CHANNELS = [
   { channelId: 'UCanV1p6ynx_FzdsraKLousQ', festival_id: 'circoloco',    festival_name: 'Circoloco',             city: 'Ibiza',       vibe: 'europe' },
   { channelId: 'UC072CZUvhdCg6Dsdvc18NkQ', festival_id: 'hi-ibiza',     festival_name: 'Hï Ibiza',              city: 'Ibiza',       vibe: 'europe' },
   { channelId: 'UCPQNk7oBBfQRf0tDFQBvgCA', festival_id: 'watergate',    festival_name: 'Watergate',             city: 'Berlin',      vibe: 'europe' },
+  // US festival channels added 2026-08-05
+  { channelId: 'UCPqwSbjPy6KdC7f_eCFUlWg', festival_id: 'hard-summer',   festival_name: 'Hard Summer',           city: 'Los Angeles', vibe: 'americas' },
+  { channelId: 'UC-QVOEJcRTmqXTEwUFbPRLA', festival_id: 'lollapalooza',  festival_name: 'Lollapalooza',          city: 'Chicago',     vibe: 'americas' },
+  { channelId: 'UCndfUzXCcrgdE4ecZhr79yw', festival_id: 'ultra',          festival_name: 'Ultra Music Festival',  city: 'Miami',       vibe: 'americas' },
   // Worldwide venues added 2026-08-04
   { channelId: 'UCglk_nXa4Vfbk255I8Lk4yQ', festival_id: 'tomorrowland',  festival_name: 'Tomorrowland',          city: 'Boom',             vibe: 'worldwide' },
   { channelId: 'UCDxMwHtvoQ2WzfgbpHdN5dQ', festival_id: 'elrow',          festival_name: 'elrow',                 city: 'Worldwide',        vibe: 'worldwide' },
