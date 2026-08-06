@@ -45,11 +45,11 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
         <div className="jb-wordmark">PROPER SELECTS</div>
 
         <h1 className="jb-hero">
-          Stop sending
+          Don't know
           <br />
-          <span className="jb-hero-em">sets one by one.</span>
+          <span className="jb-hero-em">what set to play?</span>
           <br />
-          <span className="jb-hero-sub">Send the whole night.</span>
+          <span className="jb-hero-sub">Share a whole lineup.</span>
         </h1>
 
         <p style={{
@@ -61,8 +61,8 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
           fontWeight: 500,
           letterSpacing: '-.01em',
         }}>
-          Pick sets from Boiler Room, Cercle, Thuishaven and more.
-          Build your lineup. One link. They click and it plays.
+          275+ live sets from Boiler Room, Cercle, Thuishaven and more.
+          Build a lineup in seconds. Send one link. Your friends hit play.
         </p>
 
         {/* Value stack */}
