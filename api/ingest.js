@@ -14,7 +14,7 @@ const CHANNELS = [
   { channelId: 'UCOlJBEcHjFpQ0SQlNNqEuIA', festival_id: 'cercle',       festival_name: 'Cercle',                city: 'Worldwide',   vibe: 'worldwide' },
   { channelId: 'UCGbDh9LIjFRrMEO0sxvKVyA', festival_id: 'thuishaven',   festival_name: 'Thuishaven',            city: 'Amsterdam',   vibe: 'europe' },
   { channelId: 'UCNKR0GnJRSqMcKx6JWXBhwA', festival_id: 'yoyaku',       festival_name: 'Yoyaku',                city: 'Paris',       vibe: 'europe' },
-  { channelId: 'UCwmFOfFuvRPI112vR5DN8vQ', festival_id: 'rawcuts',       festival_name: 'Raw Cuts',              city: 'New York',    vibe: 'americas' },
+  { channelId: 'UCwatAPhCuO0UwCZUaqEzzRQ', festival_id: 'rawcuts',       festival_name: 'RAW CUTS',              city: 'New York',    vibe: 'americas' },
   { channelId: 'UC3ifTl5zKiCAhHIBQYcaTrg', festival_id: 'greenvalley',   festival_name: 'Green Valley',          city: 'Camboriú',    vibe: 'americas' },
   { channelId: 'UCp_MbSA-jJzGjsBBgYZTmjA', festival_id: 'dc10',          festival_name: 'DC-10',                 city: 'Ibiza',       vibe: 'europe' },
   { channelId: 'UCaSjh0kdrd3xEn0zqcjbiDg', festival_id: 'concourse',     festival_name: 'The Concourse Project', city: 'Austin',      vibe: 'americas' },
