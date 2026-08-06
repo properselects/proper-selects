@@ -291,17 +291,48 @@ export default async function handler(req, res) {
   if (toInsert.length) {
     await insertSets(toInsert);
 
-    // Fetch descriptions and parse tracklists for new sets
+    // Fetch descriptions, parse tracklists, and extract ID moments
     try {
       const ids = toInsert.map(s => s.video_id);
       const descs = await ytDescriptions(ids);
       const allTracks = [];
+      const descMoments = [];
+
+      // YouTube auto-ID block pattern: "Song: X\nArtist: Y"
+      const YT_MUSIC_RE = /Song:\s*(.+?)\nArtist:\s*(.+?)(?:\n|$)/gi;
+
       for (const s of toInsert) {
-        const parsed = parseDescription(descs[s.video_id] || '', s.video_id);
+        const desc = descs[s.video_id] || '';
+        const parsed = parseDescription(desc, s.video_id);
         allTracks.push(...parsed);
+
+        // Mirror description tracklist → set_id_moments (resolved, from official tracklist)
+        for (const t of parsed) {
+          const label = [t.artist, t.title].filter(Boolean).join(' - ');
+          if (label.length >= 3) {
+            descMoments.push({ video_id: s.video_id, t_sec: t.timestamp_sec, label, resolved: true, likes: 0, source: 'description' });
+          }
+        }
+
+        // YouTube auto music identification (from description "Song: X\nArtist: Y" blocks)
+        let match;
+        while ((match = YT_MUSIC_RE.exec(desc)) !== null) {
+          const label = `${match[2].trim()} - ${match[1].trim()}`;
+          if (label.length >= 3) {
+            descMoments.push({ video_id: s.video_id, t_sec: 0, label, resolved: true, likes: 0, source: 'youtube-music-id' });
+          }
+        }
       }
+
       if (allTracks.length) await insertTracks(allTracks);
-      console.log(`Parsed ${allTracks.length} track entries from ${toInsert.length} new sets`);
+      if (descMoments.length) {
+        await fetch(`${SUPABASE_URL}/rest/v1/set_id_moments`, {
+          method: 'POST',
+          headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal,resolution=ignore-duplicates' },
+          body: JSON.stringify(descMoments),
+        });
+      }
+      console.log(`Parsed ${allTracks.length} tracks, ${descMoments.length} ID moments from descriptions`);
     } catch (e) {
       console.error('Tracklist parse error:', e.message);
     }
