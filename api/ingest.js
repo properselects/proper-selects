@@ -37,7 +37,9 @@ const CHANNELS = [
   // USA venues added 2026-08-02
   { channelId: 'UCnf2atji58GrDey0R4AOKVg', festival_id: 'movement',      festival_name: 'Movement Festival',     city: 'Detroit',     vibe: 'americas' },
   { channelId: 'UCT1Tq7SDg9kd4XgFjc47_4Q', festival_id: 'iii-points',   festival_name: 'III Points',            city: 'Miami',       vibe: 'americas' },
-  { channelId: 'UCFXhLNpftXbCi9W58CJLrJQ', festival_id: 'crssd',         festival_name: 'CRSSD Festival',        city: 'San Diego',   vibe: 'americas' },
+  { channelId: 'UCFXhLNpftXbCi9W58CJLrJQ', festival_id: 'crssd',         festival_name: 'CRSSD Festival',        city: 'San Diego',    vibe: 'americas' },
+  { channelId: 'UCD7UAd18FFkcJ22wxNNwq7A', festival_id: 'dirtybird',      festival_name: 'Dirtybird',             city: 'San Francisco', vibe: 'americas' },
+  { channelId: 'UC6MoTuUjFrdEoBd3S9AN8Cg', festival_id: 'splash-house',   festival_name: 'Splash House',          city: 'Palm Springs',  vibe: 'americas' },
   { channelId: 'UCDZELNPHzTdvB9Nu5-s--4w', festival_id: 'exchange-la',   festival_name: 'Exchange LA',           city: 'Los Angeles', vibe: 'americas' },
   { channelId: 'UC2iQ3op3Xar4TLX03oEmJYg', festival_id: 'concourse',     festival_name: 'The Concourse Project', city: 'Austin',      vibe: 'americas' },
   { channelId: 'UCdIjpGkpXGw9WJ_5reM-5WQ', festival_id: 'academy-la',   festival_name: 'Academy LA',            city: 'Los Angeles', vibe: 'americas' },
