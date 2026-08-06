@@ -116,7 +116,18 @@ function NearYouRow({ nearby }) {
   );
 }
 
-export default function TodayTab() {
+export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup }) {
+  const lineupIds = React.useMemo(() => new Set((lineup || []).map((s) => s.video_id)), [lineup]);
+
+  function toggleLineup(set) {
+    if (lineupIds.has(set.video_id)) {
+      onLineupChange && onLineupChange(lineup.filter((s) => s.video_id !== set.video_id));
+    } else {
+      if (lineup.length >= 12) { onOpenLineup && onOpenLineup(); return; }
+      onLineupChange && onLineupChange([...lineup, set]);
+    }
+  }
+
   const [rows, setRows] = useState(null);
   const [stageIdx, setStageIdx] = useState(0);
   const [slotIdx, setSlotIdx] = useState(0);
@@ -278,6 +289,16 @@ export default function TodayTab() {
                 >
                   Share at current time
                 </button>
+                <button
+                  className="jb-share"
+                  onClick={() => current && toggleLineup(current)}
+                  style={{
+                    borderColor: current && lineupIds.has(current.video_id) ? stage.accent : 'rgba(255,255,255,.2)',
+                    color: current && lineupIds.has(current.video_id) ? stage.accent : 'rgba(237,234,226,.5)',
+                  }}
+                >
+                  {current && lineupIds.has(current.video_id) ? '◈ In lineup' : '＋ Add to lineup'}
+                </button>
               </div>
               {(idMoments[current.video_id] || []).length > 0 && (
                 <div className="jb-radar">
@@ -313,30 +334,42 @@ export default function TodayTab() {
               <span className="jb-list-sub">new lineup at midnight</span>
             </div>
             {slots.map((v, d) => (
-              <button
-                key={v.video_id}
-                className={'jb-slot' + (d === slotIdx ? ' on' : '')}
-                onClick={() => setSlotIdx(d)}
-                style={d === slotIdx ? { borderColor: stage.accent } : undefined}
-              >
-                <span className="jb-slot-num" style={{ color: stage.accent }}>
-                  {String(d + 1).padStart(2, '0')}
-                </span>
-                <img
-                  className="jb-slot-thumb"
-                  src={`https://img.youtube.com/vi/${v.video_id}/default.jpg`}
-                  alt=""
-                  loading="lazy"
-                />
-                <span className="jb-slot-main">
-                  <span className="jb-slot-artist">{parseArtist(v.artist)}</span>
-                  <span className="jb-slot-meta">
-                    {v.festival_name}
-                    {v.city ? ` · ${v.city}` : ''}
+              <div key={v.video_id} style={{ display: 'flex', alignItems: 'center' }}>
+                <button
+                  className={'jb-slot' + (d === slotIdx ? ' on' : '')}
+                  onClick={() => setSlotIdx(d)}
+                  style={{ flex: 1, ...(d === slotIdx ? { borderColor: stage.accent } : {}) }}
+                >
+                  <span className="jb-slot-num" style={{ color: stage.accent }}>
+                    {String(d + 1).padStart(2, '0')}
                   </span>
-                </span>
-                {d === slotIdx && <span style={{ color: stage.accent }}>▷</span>}
-              </button>
+                  <img
+                    className="jb-slot-thumb"
+                    src={`https://img.youtube.com/vi/${v.video_id}/default.jpg`}
+                    alt=""
+                    loading="lazy"
+                  />
+                  <span className="jb-slot-main">
+                    <span className="jb-slot-artist">{parseArtist(v.artist)}</span>
+                    <span className="jb-slot-meta">
+                      {v.festival_name}
+                      {v.city ? ` · ${v.city}` : ''}
+                    </span>
+                  </span>
+                  {d === slotIdx && <span style={{ color: stage.accent }}>▷</span>}
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); toggleLineup(v); }}
+                  title={lineupIds.has(v.video_id) ? 'Remove from lineup' : 'Add to lineup'}
+                  style={{
+                    background: 'none', border: 'none', padding: '0 12px',
+                    color: lineupIds.has(v.video_id) ? stage.accent : 'rgba(237,234,226,.3)',
+                    fontSize: 16, cursor: 'pointer', flexShrink: 0, lineHeight: 1,
+                  }}
+                >
+                  {lineupIds.has(v.video_id) ? '◈' : '＋'}
+                </button>
+              </div>
             ))}
           </div>
         </div>

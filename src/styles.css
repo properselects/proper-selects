@@ -886,3 +886,17 @@ button { font-family: inherit; cursor: pointer; }
 .am-region-chip.on { background: rgba(255,255,255,.07); }
 .am-region-chip:hover { border-color: rgba(255,255,255,.3); color: rgba(237,234,226,.85); }
 .am-region-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* ==================== Lineup ==================== */
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes fadeInDown {
+  from { transform: translateY(-6px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes chipPulse {
+  0%,100% { box-shadow: none; }
+  50% { box-shadow: 0 0 0 3px rgba(244,169,60,.18); }
+}

@@ -1,6 +1,9 @@
 {
   "buildCommand": "vite build",
   "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/l/:slug", "destination": "/index.html" }
+  ],
   "crons": [
     { "path": "/api/ingest",       "schedule": "0 4 * * *" },
     { "path": "/api/events-sync",    "schedule": "0 5 * * *" },
