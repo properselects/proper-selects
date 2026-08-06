@@ -48,13 +48,24 @@ export default function VaultTab() {
     let pick = '';
     try {
       const lv = localStorage.getItem('psVaultVenue');
-      if (lv && sets.find((s) => s.festival_id === lv)) pick = lv;
+      const lvDate = localStorage.getItem('psVaultVenueDate');
+      const today = new Date().toISOString().slice(0, 10);
+      // Only reuse the stored venue if it was picked TODAY
+      if (lv && lvDate === today && sets.find((s) => s.festival_id === lv)) pick = lv;
     } catch {}
     if (!pick) {
-      const counts = {};
-      for (const s of sets) counts[s.festival_id] = (counts[s.festival_id] || 0) + 1;
-      const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
-      if (top) pick = top[0];
+      // Featured venue rotates daily — deterministic pick from all venues with ≥3 sets
+      const venues = [...new Set(sets.map((s) => s.festival_id).filter(Boolean))];
+      const eligible = venues.filter((v) => sets.filter((s) => s.festival_id === v).length >= 3);
+      const pool = eligible.length ? eligible : venues;
+      // Day-of-year seed → same venue for all users on the same day, rotates each day
+      const now = new Date();
+      const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+      pick = pool[dayOfYear % pool.length];
+      try {
+        localStorage.setItem('psVaultVenue', pick);
+        localStorage.setItem('psVaultVenueDate', now.toISOString().slice(0, 10));
+      } catch {}
     }
     if (pick) setSelectedVenue(pick);
   }, [sets, selectedVenue]);
