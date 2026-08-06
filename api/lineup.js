@@ -99,9 +99,9 @@ async function todayLineup() {
   const freshCutoff = new Date(Date.now() - FRESH_HOURS * 60 * 60 * 1000).toISOString();
 
   const [freshAll, ...fillPools] = await Promise.all([
-    sbFetch(`public_sets?select=*&status=eq.live&duration_sec=gte.2700&created_at=gte.${encodeURIComponent(freshCutoff)}&order=created_at.desc&limit=500`),
+    sbFetch(`public_sets?select=*&status=eq.live&source=eq.youtube&duration_sec=gte.2700&created_at=gte.${encodeURIComponent(freshCutoff)}&order=created_at.desc&limit=500`),
     ...REGIONS.map((region) =>
-      sbFetch(`public_sets?select=*&status=eq.live&duration_sec=gte.2700&vibe=eq.${region}&created_at=lt.${encodeURIComponent(freshCutoff)}&order=published_at.desc&limit=400`)
+      sbFetch(`public_sets?select=*&status=eq.live&source=eq.youtube&duration_sec=gte.2700&vibe=eq.${region}&created_at=lt.${encodeURIComponent(freshCutoff)}&order=published_at.desc&limit=400`)
     ),
   ]);
 
