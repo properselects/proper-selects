@@ -61,7 +61,7 @@ async function fetchRAEvents(areaId, dateFrom, dateTo) {
           areas: { id: areaId },
           listingDate: { gte: dateFrom, lte: dateTo },
         },
-        pageSize: 20,
+        pageSize: 40,
         page: 1,
       },
     }),
@@ -116,7 +116,7 @@ export default async function handler(req, res) {
 
   const now = new Date();
   const dateFrom = now.toISOString().slice(0, 10);
-  const dateTo = new Date(now.getTime() + 21 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const dateTo = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
   await clearOldRAEvents();
 
