@@ -21,7 +21,7 @@ function isBadContent(row) {
 }
 
 async function fetchLineup() {
-  const r = await fetch('/api/today');
+  const r = await fetch('/api/lineup?today=1');
   if (!r.ok) return [];
   const rows = await r.json();
   const seenId = new Set();
