@@ -4,9 +4,8 @@ import { parseArtist } from '../lib/parseArtist.js';
 
 const STACK = [
   { icon: '◈', text: 'Build a lineup in 30 seconds' },
-  { icon: '⟶', text: 'Send one link. They click. It plays.' },
-  { icon: '⊞', text: 'New sets every morning — 70+ venues' },
-  { icon: '◎', text: 'Boiler Room · Cercle · Thuishaven · Dekmantel' },
+  { icon: '⟶', text: 'One link. They click. It plays.' },
+  { icon: '⊞', text: 'Free forever. No signup.' },
 ];
 
 export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
@@ -61,8 +60,8 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
           fontWeight: 500,
           letterSpacing: '-.01em',
         }}>
-          275+ live sets from Boiler Room, Cercle, Thuishaven and more.
-          Build a lineup in seconds. Send one link. Your friends hit play.
+          The world's best DJ sets from 75+ venues — Boiler Room, Cercle,
+          RAW CUTS, Thuishaven. Fresh every morning.
         </p>
 
         {/* Value stack */}
@@ -104,15 +103,11 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
           Start Listening
         </button>
 
-        <div className="jb-gate-meta" style={{ marginTop: 20 }}>
-          {stats.sets ? (
-            <><span className="jb-meta-num">{stats.sets}</span> sets · <span className="jb-meta-num">{stats.venues}</span> venues worldwide</>
-          ) : 'Curated from the world\'s best venues'}
-          <span className="jb-meta-dot">·</span>
-          Free forever
-          <span className="jb-meta-dot">·</span>
-          No signup
-        </div>
+        {stats.sets && (
+          <div className="jb-gate-meta" style={{ marginTop: 20 }}>
+            <span className="jb-meta-num">{stats.sets}</span> live sets · <span className="jb-meta-num">{stats.venues}</span> venues worldwide
+          </div>
+        )}
 
         <button className="jb-submitlink" onClick={(e) => { e.stopPropagation(); onOpenSubmit?.(); }}>
           Know a set that belongs here? →
