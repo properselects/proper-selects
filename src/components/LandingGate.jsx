@@ -2,6 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { parseArtist } from '../lib/parseArtist.js';
 
+const STACK = [
+  { icon: '◈', text: 'Build a lineup in 30 seconds' },
+  { icon: '⟶', text: 'Send one link. They click. It plays.' },
+  { icon: '⊞', text: 'New sets every morning — 70+ venues' },
+  { icon: '◎', text: 'Boiler Room · Cercle · Thuishaven · Dekmantel' },
+];
+
 export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
   const [stats, setStats] = useState({ sets: null, venues: null });
   const [liveIdx, setLiveIdx] = useState(0);
@@ -23,7 +30,7 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
     if (!topSets || topSets.length < 2) return;
     const id = setInterval(
       () => setLiveIdx((i) => (i + 1) % Math.min(topSets.length, 10)),
-      6000
+      5000
     );
     return () => clearInterval(id);
   }, [topSets.length]);
@@ -38,15 +45,53 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
         <div className="jb-wordmark">PROPER SELECTS</div>
 
         <h1 className="jb-hero">
-          The world's best
+          Stop sending
           <br />
-          <span className="jb-hero-em">DJ sets.</span>
+          <span className="jb-hero-em">random links.</span>
           <br />
-          <span className="jb-hero-sub">Playing in your room.</span>
+          <span className="jb-hero-sub">Send a lineup.</span>
         </h1>
 
+        <p style={{
+          fontSize: 'clamp(15px, 2.2vw, 20px)',
+          color: 'rgba(237,234,226,.55)',
+          maxWidth: 480,
+          lineHeight: 1.55,
+          margin: '0 auto 32px',
+          fontWeight: 500,
+          letterSpacing: '-.01em',
+        }}>
+          The world's best DJ sets — curated from 70+ venues.
+          Build your lineup. Share one link. Your friends hit play.
+        </p>
+
+        {/* Value stack */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 10,
+          marginBottom: 36,
+          width: '100%',
+          maxWidth: 380,
+          textAlign: 'left',
+        }}>
+          {STACK.map(({ icon, text }) => (
+            <div key={text} style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              fontSize: 14,
+              color: 'rgba(237,234,226,.75)',
+              fontWeight: 600,
+            }}>
+              <span style={{ color: '#F4A93C', fontSize: 15, flexShrink: 0 }}>{icon}</span>
+              {text}
+            </div>
+          ))}
+        </div>
+
         {nowPlaying && (
-          <div className="jb-livefeed">
+          <div className="jb-livefeed" style={{ marginBottom: 20 }}>
             <span className="jb-livedot" />
             <span className="jb-livefeed-text">
               Now playing · <strong>{parseArtist(nowPlaying.artist)}</strong>
@@ -59,14 +104,14 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
           Start Listening
         </button>
 
-        <div className="jb-gate-meta">
+        <div className="jb-gate-meta" style={{ marginTop: 20 }}>
           {stats.sets ? (
             <><span className="jb-meta-num">{stats.sets}</span> sets · <span className="jb-meta-num">{stats.venues}</span> venues worldwide</>
-          ) : 'Curated sets from the best venues worldwide'}
+          ) : 'Curated from the world\'s best venues'}
           <span className="jb-meta-dot">·</span>
           Free forever
           <span className="jb-meta-dot">·</span>
-          No ads
+          No signup
         </div>
 
         <button className="jb-submitlink" onClick={(e) => { e.stopPropagation(); onOpenSubmit?.(); }}>
