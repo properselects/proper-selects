@@ -19,12 +19,23 @@ const CHANNELS = [
   { channelId: 'UCl2CLatrfJiU6OqmHZNUDNg', festival_id: 'dekmantel',         festival_name: 'Dekmantel',          city: 'Amsterdam',   vibe: 'europe' },
   { channelId: 'UCDHvlud7Hf86FxFsogrBcMg', festival_id: 'ra',                festival_name: 'Resident Advisor',   city: 'London',      vibe: 'europe' },
   { channelId: 'UCOlJBEcHjFpQ0SQlNNqEuIA', festival_id: 'cercle',            festival_name: 'Cercle',             city: 'Worldwide',   vibe: 'worldwide' },
-  { channelId: 'UCGbDh9LIjFRrMEO0sxvKVyA', festival_id: 'thuishaven',        festival_name: 'Thuishaven',         city: 'Amsterdam',   vibe: 'europe' },
+  { channelId: 'UC2KhiKAhm8wIkjt2chtIUTA', festival_id: 'thuishaven',        festival_name: 'Thuishaven',         city: 'Amsterdam',   vibe: 'europe' },
   { channelId: 'UCNKR0GnJRSqMcKx6JWXBhwA', festival_id: 'yoyaku',           festival_name: 'Yoyaku',             city: 'Paris',       vibe: 'europe' },
   { channelId: 'UCwmFOfFuvRPI112vR5DN8vQ', festival_id: 'rawcuts',           festival_name: 'Raw Cuts',           city: 'New York',    vibe: 'americas' },
   { channelId: 'UC3ifTl5zKiCAhHIBQYcaTrg', festival_id: 'greenvalley',       festival_name: 'Green Valley',       city: 'Camboriú',    vibe: 'americas' },
   { channelId: 'UCp_MbSA-jJzGjsBBgYZTmjA', festival_id: 'dc10',             festival_name: 'DC-10',              city: 'Ibiza',       vibe: 'europe' },
   { channelId: 'NIBIRU_PLACEHOLDER',         festival_id: 'nibiru',           festival_name: 'Nibiru Universe',    city: 'Costinești',  vibe: 'europe' },
+  // Amsterdam venues + festivals added 2026-08-06
+  { channelId: 'UCzyHGSqC5g9FrxiBiWZodSg', festival_id: 'het-sieraad',      festival_name: 'Het Sieraad',        city: 'Amsterdam',   vibe: 'europe' },
+  { channelId: 'UCxGCaygaT8AKwN2-CZJTHRw', festival_id: 'loveland',         festival_name: 'Loveland',           city: 'Amsterdam',   vibe: 'europe' },
+  { channelId: 'UCyPL9zjOpks6Ae2DgY5xVug', festival_id: 'into-the-woods',   festival_name: 'Into the Woods',     city: 'Amersfoort',  vibe: 'europe' },
+  { channelId: 'UCYX_IcIznJjbV_CeiIsoJYA', festival_id: 'mysteryland',      festival_name: 'Mysteryland',        city: 'Haarlemmermeer', vibe: 'europe' },
+  { channelId: 'UCJ2RRwUFwr2iKTJWRl-D6dA', festival_id: 'ade',              festival_name: 'Amsterdam Dance Event', city: 'Amsterdam', vibe: 'europe' },
+  { channelId: 'UC66Z6LkocrEkjbuw8Jj622w', festival_id: 'warehouse-elem',   festival_name: 'Warehouse Elementenstraat', city: 'Amsterdam', vibe: 'europe' },
+  { channelId: 'UCppt30WbwOWOEh7qLlBJoJA', festival_id: 'techno-tuesday',   festival_name: 'Techno Tuesday Amsterdam', city: 'Amsterdam', vibe: 'europe' },
+  { channelId: 'UC-OFGLPQXxV7uhwb9ydzfmw', festival_id: 'adam-open-air',    festival_name: 'Amsterdam Open Air', city: 'Amsterdam',   vibe: 'europe' },
+  { channelId: 'UCsXsIwJkujO2FwsqkzrljoA', festival_id: 'melkweg',          festival_name: 'Melkweg',            city: 'Amsterdam',   vibe: 'europe' },
+  { channelId: 'UCwXhRDLdSBM3s5L_uMnX7uA', festival_id: 'ot301',            festival_name: 'OT301',              city: 'Amsterdam',   vibe: 'europe' },
 ];
 
 const MIN_DURATION_SECONDS = 45 * 60; // 45 minutes minimum for a full set
