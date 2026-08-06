@@ -10,6 +10,8 @@ import SubscribeModal from './components/SubscribeModal.jsx';
 import SubmitModal from './components/SubmitModal.jsx';
 import LineupDrawer from './components/LineupDrawer.jsx';
 import LineupSharePage from './components/LineupSharePage.jsx';
+import GlobalSearch from './components/GlobalSearch.jsx';
+import PreviewModal from './components/PreviewModal.jsx';
 
 // Detect /l/{slug} share pages
 function getShareSlug() {
@@ -30,6 +32,8 @@ export default function App() {
   });
   const [tooltipSeen, setTooltipSeen] = useState(() => !!localStorage.getItem('psLineupTipSeen'));
   const [showTooltip, setShowTooltip] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [preview, setPreview] = useState(null);
 
   useEffect(() => {
     fetch(`${SUPABASE_URL}/rest/v1/public_sets?select=video_id,artist&order=published_at.desc&limit=10`, {
@@ -113,6 +117,26 @@ export default function App() {
         </div>
 
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          {/* Search button */}
+          <button
+            onClick={() => setSearchOpen(true)}
+            title="Search sets"
+            style={{
+              background: 'rgba(255,255,255,.06)',
+              border: '1px solid rgba(255,255,255,.12)',
+              color: 'rgba(237,234,226,.7)',
+              padding: '5px 10px',
+              borderRadius: 16,
+              fontSize: 12,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 5,
+            }}
+          >
+            🔍 <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.05em' }}>Search</span>
+          </button>
+
           {/* Lineup chip */}
           <div style={{ position: 'relative' }}>
             <button
@@ -231,7 +255,16 @@ export default function App() {
         onClose={() => setDrawerOpen(false)}
         lineup={lineup}
         onLineupChange={setLineup}
+        onPreview={setPreview}
       />
+      <GlobalSearch
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        lineup={lineup}
+        onLineupChange={setLineup}
+        onPreview={setPreview}
+      />
+      <PreviewModal set={preview} onClose={() => setPreview(null)} />
       <SubscribeModal open={subscribeOpen} onClose={() => setSubscribeOpen(false)} />
       <SubmitModal open={submitOpen} onClose={() => setSubmitOpen(false)} />
     </div>

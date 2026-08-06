@@ -25,7 +25,19 @@ function DragHandle() {
   );
 }
 
-export default function LineupDrawer({ open, onClose, lineup, onLineupChange }) {
+export default function LineupDrawer({ open, onClose, lineup, onLineupChange, onPreview }) {
+  function moveUp(i) {
+    if (i === 0) return;
+    const arr = [...lineup];
+    [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]];
+    onLineupChange(arr);
+  }
+  function moveDown(i) {
+    if (i === lineup.length - 1) return;
+    const arr = [...lineup];
+    [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+    onLineupChange(arr);
+  }
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [searching, setSearching] = useState(false);
@@ -246,6 +258,13 @@ export default function LineupDrawer({ open, onClose, lineup, onLineupChange }) 
                       {s.festival_name}{s.city ? ` · ${s.city}` : ''}
                     </div>
                   </div>
+                  <span
+                    onClick={(e) => { e.stopPropagation(); onPreview && onPreview(s); }}
+                    style={{ background: 'rgba(255,255,255,.06)', borderRadius: 5, padding: '3px 7px', color: ACCENT, cursor: 'pointer', fontSize: 11, flexShrink: 0, marginRight: 4 }}
+                    title="Preview"
+                  >
+                    ▷
+                  </span>
                   <span style={{ fontSize: 16, color: inList ? ACCENT : 'rgba(255,255,255,.3)', flexShrink: 0 }}>
                     {inList ? '✓' : '+'}
                   </span>
@@ -272,18 +291,35 @@ export default function LineupDrawer({ open, onClose, lineup, onLineupChange }) 
                 onDrop={(e) => onDrop(e, i)}
                 onDragEnd={onDragEnd}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: 10, padding: '7px 16px',
+                  display: 'flex', alignItems: 'center', gap: 6, padding: '7px 12px',
                   borderBottom: '1px solid rgba(255,255,255,.04)',
                   background: overIdx === i ? 'rgba(244,169,60,.08)' : 'transparent',
-                  cursor: 'grab', opacity: dragIdx === i ? 0.5 : 1,
+                  opacity: dragIdx === i ? 0.5 : 1,
                   transition: 'background .12s',
                 }}
               >
-                <DragHandle />
-                <span style={{ fontSize: 11, opacity: 0.4, width: 16, textAlign: 'right', flexShrink: 0 }}>{i + 1}</span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 1, flexShrink: 0 }}>
+                  <button
+                    onClick={() => moveUp(i)}
+                    disabled={i === 0}
+                    title="Move up"
+                    style={{ background: 'none', border: 'none', color: i === 0 ? 'rgba(255,255,255,.1)' : 'rgba(237,234,226,.5)', cursor: i === 0 ? 'default' : 'pointer', fontSize: 10, padding: 0, lineHeight: 1, height: 14 }}
+                  >
+                    ▲
+                  </button>
+                  <button
+                    onClick={() => moveDown(i)}
+                    disabled={i === lineup.length - 1}
+                    title="Move down"
+                    style={{ background: 'none', border: 'none', color: i === lineup.length - 1 ? 'rgba(255,255,255,.1)' : 'rgba(237,234,226,.5)', cursor: i === lineup.length - 1 ? 'default' : 'pointer', fontSize: 10, padding: 0, lineHeight: 1, height: 14 }}
+                  >
+                    ▼
+                  </button>
+                </div>
+                <span style={{ fontSize: 11, opacity: 0.4, width: 14, textAlign: 'right', flexShrink: 0 }}>{i + 1}</span>
                 <img
                   src={`https://img.youtube.com/vi/${s.video_id}/default.jpg`}
-                  alt="" width={40} height={30}
+                  alt="" width={36} height={27}
                   style={{ borderRadius: 4, objectFit: 'cover', flexShrink: 0 }}
                   loading="lazy"
                 />
@@ -296,7 +332,15 @@ export default function LineupDrawer({ open, onClose, lineup, onLineupChange }) 
                   </div>
                 </div>
                 <button
+                  onClick={() => onPreview && onPreview(s)}
+                  title="Preview"
+                  style={{ background: 'rgba(255,255,255,.06)', border: 'none', borderRadius: 5, padding: '4px 8px', color: ACCENT, cursor: 'pointer', fontSize: 11, flexShrink: 0 }}
+                >
+                  ▷
+                </button>
+                <button
                   onClick={() => removeSet(s.video_id)}
+                  title="Remove"
                   style={{ background: 'none', border: 'none', color: 'rgba(237,234,226,.3)', fontSize: 16, cursor: 'pointer', padding: '4px', lineHeight: 1, flexShrink: 0 }}
                 >
                   ×
