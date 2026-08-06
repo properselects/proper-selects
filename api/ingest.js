@@ -48,6 +48,11 @@ const CHANNELS = [
   { channelId: 'UCPqwSbjPy6KdC7f_eCFUlWg', festival_id: 'hard-summer',   festival_name: 'Hard Summer',           city: 'Los Angeles', vibe: 'americas' },
   { channelId: 'UC-QVOEJcRTmqXTEwUFbPRLA', festival_id: 'lollapalooza',  festival_name: 'Lollapalooza',          city: 'Chicago',     vibe: 'americas' },
   { channelId: 'UCndfUzXCcrgdE4ecZhr79yw', festival_id: 'ultra',          festival_name: 'Ultra Music Festival',  city: 'Miami',       vibe: 'americas' },
+  // Curator + DJ media channels added 2026-08-06
+  { channelId: 'UC0e1D3NdDoAi8Om4KdaqAPw', festival_id: 'housecalls',    festival_name: 'House Calls TV',        city: 'Worldwide',   vibe: 'worldwide' },
+  { channelId: 'UCmfF7JZv26UUKyRedViGIlw', festival_id: 'hor-berlin',    festival_name: 'HÖR Berlin',            city: 'Berlin',      vibe: 'europe' },
+  { channelId: 'UCJEKlziKdxoos1qbptjGgLg', festival_id: 'djmag',         festival_name: 'DJ Mag',                city: 'Worldwide',   vibe: 'worldwide' },
+  { channelId: 'UCnLorjUZZ7kORuVEE4d-lMA', festival_id: 'househats',     festival_name: 'House Hats',            city: 'Worldwide',   vibe: 'worldwide' },
   // US eminent DJ + festival channels added 2026-08-06
   { channelId: 'UCr45VhwCBYwMfdN-gz7W_OA', festival_id: 'insomniac',     festival_name: 'Insomniac',             city: 'Los Angeles', vibe: 'americas' },
   { channelId: 'UC5AOhbMw3M618Q2hk6zt5yw', festival_id: 'arc-chicago',   festival_name: 'ARC Music Festival',    city: 'Chicago',     vibe: 'americas' },
