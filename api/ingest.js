@@ -48,6 +48,12 @@ const CHANNELS = [
   { channelId: 'UCPqwSbjPy6KdC7f_eCFUlWg', festival_id: 'hard-summer',   festival_name: 'Hard Summer',           city: 'Los Angeles', vibe: 'americas' },
   { channelId: 'UC-QVOEJcRTmqXTEwUFbPRLA', festival_id: 'lollapalooza',  festival_name: 'Lollapalooza',          city: 'Chicago',     vibe: 'americas' },
   { channelId: 'UCndfUzXCcrgdE4ecZhr79yw', festival_id: 'ultra',          festival_name: 'Ultra Music Festival',  city: 'Miami',       vibe: 'americas' },
+  // US eminent DJ + festival channels added 2026-08-06
+  { channelId: 'UCr45VhwCBYwMfdN-gz7W_OA', festival_id: 'insomniac',     festival_name: 'Insomniac',             city: 'Los Angeles', vibe: 'americas' },
+  { channelId: 'UC5AOhbMw3M618Q2hk6zt5yw', festival_id: 'arc-chicago',   festival_name: 'ARC Music Festival',    city: 'Chicago',     vibe: 'americas' },
+  { channelId: 'UCye08Q8h2bkXmH8syuftqmQ', festival_id: 'iii-points',    festival_name: 'III Points',            city: 'Miami',       vibe: 'americas' },
+  { channelId: 'UCsIVrho83JfwUieSs_UKCmA', festival_id: 'john-summit',   festival_name: 'John Summit',           city: 'Chicago',     vibe: 'americas' },
+  { channelId: 'UCAWEFemmYHWXFDtV_5FPN-w', festival_id: 'anyma',          festival_name: 'Anyma',                 city: 'Los Angeles', vibe: 'americas' },
   // Worldwide venues added 2026-08-04
   { channelId: 'UCglk_nXa4Vfbk255I8Lk4yQ', festival_id: 'tomorrowland',  festival_name: 'Tomorrowland',          city: 'Boom',             vibe: 'worldwide' },
   { channelId: 'UCDxMwHtvoQ2WzfgbpHdN5dQ', festival_id: 'elrow',          festival_name: 'elrow',                 city: 'Worldwide',        vibe: 'worldwide' },
