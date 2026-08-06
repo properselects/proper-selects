@@ -24,7 +24,8 @@ button { font-family: inherit; cursor: pointer; }
   justify-content: center;
   text-align: center;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   background: #07080c;
 }
 .jb-gate-bg {
