@@ -24,13 +24,18 @@ const DJ_WATCHLIST = [
   'Carl Cox', 'Sven Vath', 'Paul van Dyk', 'Martin Buttrich',
   'Joris Voorn', 'Tale of Us', 'Dixon', 'Ame',
 
-  // Hard Summer / US festival circuit
+  // Hard Summer / US festival circuit — eminent US DJs
   'John Summit', 'Fisher', 'Chris Lake', 'Skrillex',
   'Boys Noize', 'Four Tet', 'Floating Points',
+  'Dom Dolla', 'Diplo', 'Kaskade', 'Deadmau5',
+  'James Hype', 'Vintage Culture', 'Cassian', 'Anyma',
+  'Sara Landry', 'Anfisa Letyago', 'Charlotte de Witte',
+  'Kaytranada', 'Disclosure', 'Duke Dumont', 'Gorgon City',
 
   // Beltran / Classmatic / LA underground
   'Beltran', 'Classmatic', 'Chris Avantgarde', 'Eli Brown',
   'Dj Tennis', 'Sama Abdulhadi', 'HAAi',
+  'Mochakk', 'Miss Monique', 'Massano',
 
   // Boiler Room / RA crowd
   'Blawan', 'SPFDJ', 'Paula Temple', 'KAS:ST',
@@ -46,6 +51,9 @@ const AMERICAS_ARTISTS = new Set([
   'marco carola', 'loco dice', 'richie hawtin', 'victor calderone', 'danny tenaglia',
   'john summit', 'fisher', 'chris lake', 'skrillex', 'boys noize',
   'beltran', 'classmatic', 'chris avantgarde', 'eli brown',
+  'dom dolla', 'diplo', 'kaskade', 'deadmau5', 'james hype',
+  'vintage culture', 'cassian', 'anyma', 'sara landry', 'kaytranada',
+  'disclosure', 'duke dumont', 'gorgon city', 'mochakk',
 ]);
 
 function vibeFor(djName) {
