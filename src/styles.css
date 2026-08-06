@@ -17,7 +17,7 @@ button { font-family: inherit; cursor: pointer; }
 
 /* ==================== LandingGate ==================== */
 .jb-gate {
-  min-height: 100vh;
+  min-height: 100dvh;
   width: 100%;
   display: flex;
   align-items: center;
@@ -244,7 +244,7 @@ button { font-family: inherit; cursor: pointer; }
 
 /* ==================== Vault ==================== */
 .tg-root {
-  min-height: 100vh;
+  min-height: 100dvh;
   width: 100%;
   background: #0a0a0e;
   color: #EDEAE2;
@@ -413,7 +413,7 @@ button { font-family: inherit; cursor: pointer; }
 
 /* ==================== Today ==================== */
 .jb-stage {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }

@@ -41,7 +41,7 @@ export default function App() {
   const active = TABS.find((t) => t.id === tab);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', width: '100vw', height: '100vh' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', width: '100vw', height: '100dvh' }}>
       <header
         style={{
           padding: 16,
