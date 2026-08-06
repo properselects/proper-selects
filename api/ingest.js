@@ -3,9 +3,27 @@
 
 export const maxDuration = 60;
 
+// Primary ingest key; falls back to search key if quota exhausted
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
+const YOUTUBE_SEARCH_KEY = process.env.YOUTUBE_SEARCH_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
+
+let activeYtKey = YOUTUBE_API_KEY;
+
+async function ytFetch(url) {
+  const res = await fetch(url.replace('KEY_PLACEHOLDER', activeYtKey));
+  if (res.status === 429 || res.status === 403) {
+    const body = await res.json().catch(() => ({}));
+    const isQuota = JSON.stringify(body).includes('quota');
+    if (isQuota && activeYtKey === YOUTUBE_API_KEY && YOUTUBE_SEARCH_KEY) {
+      activeYtKey = YOUTUBE_SEARCH_KEY;
+      return fetch(url.replace('KEY_PLACEHOLDER', activeYtKey));
+    }
+    return res;
+  }
+  return res;
+}
 
 const CHANNELS = [
   { channelId: 'UCGCoc4fAMC4wvp1vgEOpFzA', festival_id: 'boilerroom',   festival_name: 'Boiler Room',           city: 'Chicago',     vibe: 'americas' },
@@ -155,7 +173,7 @@ function parseDuration(d) {
 }
 
 async function ytSearch(channelId) {
-  const r = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&maxResults=10&order=date&type=video&videoDuration=long&key=${YOUTUBE_API_KEY}`);
+  const r = await ytFetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&maxResults=10&order=date&type=video&videoDuration=long&key=KEY_PLACEHOLDER`);
   const d = await r.json();
   return (d.items||[]).map(i => ({ video_id: i.id.videoId, title: i.snippet.title, published_at: i.snippet.publishedAt }));
 }
@@ -208,7 +226,7 @@ function routeByTitle(title, defaultCh) {
 }
 
 async function ytDurations(ids) {
-  const r = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${ids.join(',')}&key=${YOUTUBE_API_KEY}`);
+  const r = await ytFetch(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${ids.join(',')}&key=KEY_PLACEHOLDER`);
   const d = await r.json();
   return Object.fromEntries((d.items||[]).map(i => [i.id, parseDuration(i.contentDetails.duration)]));
 }
@@ -234,7 +252,7 @@ import { parseDescription } from '../ingest/hot-tracks.js';
 
 async function ytDescriptions(ids) {
   if (!ids.length) return {};
-  const r = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${ids.join(',')}&key=${YOUTUBE_API_KEY}`);
+  const r = await ytFetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${ids.join(',')}&key=KEY_PLACEHOLDER`);
   const d = await r.json();
   return Object.fromEntries((d.items||[]).map(i => [i.id, i.snippet?.description ?? '']));
 }
