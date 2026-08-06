@@ -15,6 +15,8 @@ const CHANNELS = [
   { channelId: 'UC2KhiKAhm8wIkjt2chtIUTA', festival_id: 'thuishaven',   festival_name: 'Thuishaven',            city: 'Amsterdam',   vibe: 'europe' },
   { channelId: 'UCNKR0GnJRSqMcKx6JWXBhwA', festival_id: 'yoyaku',       festival_name: 'Yoyaku',                city: 'Paris',       vibe: 'europe' },
   { channelId: 'UCXAuu4lli9oBgKZVGapNvBw', festival_id: 'dgtl',          festival_name: 'DGTL Festival',         city: 'Amsterdam',   vibe: 'europe' },
+  { channelId: 'UCJFXYDv0Fy7TavmclGFpaWg', festival_id: 'radion',         festival_name: 'Radion Amsterdam',       city: 'Amsterdam',   vibe: 'europe' },
+  { channelId: 'UCxGCaygaT8AKwN2-CZJTHRw', festival_id: 'loveland',       festival_name: 'Loveland Festival',     city: 'Amsterdam',   vibe: 'europe' },
   { channelId: 'UCwatAPhCuO0UwCZUaqEzzRQ', festival_id: 'rawcuts',       festival_name: 'RAW CUTS',              city: 'New York',    vibe: 'americas' },
   { channelId: 'UC3ifTl5zKiCAhHIBQYcaTrg', festival_id: 'greenvalley',   festival_name: 'Green Valley',          city: 'Camboriú',    vibe: 'americas' },
   { channelId: 'UCp_MbSA-jJzGjsBBgYZTmjA', festival_id: 'dc10',          festival_name: 'DC-10',                 city: 'Ibiza',       vibe: 'europe' },
