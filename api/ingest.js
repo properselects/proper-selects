@@ -91,6 +91,7 @@ const CHANNELS = [
   // Las Vegas venues added 2026-08-06
   { channelId: 'UCe710jxByDD7eF1A_C_im7A', festival_id: 'omnia-lv',       festival_name: 'Omnia Las Vegas',       city: 'Las Vegas',        vibe: 'americas' },
   { channelId: 'UCFma8dm2-m5KoFu6FW5i8mA', festival_id: 'xs-lv',          festival_name: 'XS Las Vegas',          city: 'Las Vegas',        vibe: 'americas' },
+  { channelId: 'UCfyFtw01Nf973V9gggJVi_Q', festival_id: 'unum',           festival_name: 'UNUM Festival',         city: 'Shëngjin',         vibe: 'europe' },
 ];
 
 const MIN_SECS = 45 * 60;

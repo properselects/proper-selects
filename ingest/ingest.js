@@ -36,6 +36,7 @@ const CHANNELS = [
   { channelId: 'UC-OFGLPQXxV7uhwb9ydzfmw', festival_id: 'adam-open-air',    festival_name: 'Amsterdam Open Air', city: 'Amsterdam',   vibe: 'europe' },
   { channelId: 'UCsXsIwJkujO2FwsqkzrljoA', festival_id: 'melkweg',          festival_name: 'Melkweg',            city: 'Amsterdam',   vibe: 'europe' },
   { channelId: 'UCwXhRDLdSBM3s5L_uMnX7uA', festival_id: 'ot301',            festival_name: 'OT301',              city: 'Amsterdam',   vibe: 'europe' },
+  { channelId: 'UCfyFtw01Nf973V9gggJVi_Q', festival_id: 'unum',             festival_name: 'UNUM Festival',      city: 'Shëngjin',    vibe: 'europe' },
 ];
 
 const MIN_DURATION_SECONDS = 45 * 60; // 45 minutes minimum for a full set
