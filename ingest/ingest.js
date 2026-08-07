@@ -81,8 +81,10 @@ async function getExistingVideoIds() {
 }
 
 async function insertSets(sets) {
-  const url = `${SUPABASE_URL}/rest/v1/public_sets`;
-  const res = await fetch(url, {
+  const rows = sets.map(({ video_id, festival_id, source, artist, title, duration_sec, published_at }) =>
+    ({ video_id, festival_id, source, artist, title, duration_sec, published_at, status: 'live', embeddable: true })
+  );
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/sets`, {
     method: 'POST',
     headers: {
       apikey: SUPABASE_KEY,
@@ -90,7 +92,7 @@ async function insertSets(sets) {
       'Content-Type': 'application/json',
       Prefer: 'return=minimal,resolution=ignore-duplicates',
     },
-    body: JSON.stringify(sets),
+    body: JSON.stringify(rows),
   });
   return res.ok;
 }
@@ -124,13 +126,11 @@ async function run() {
         toInsert.push({
           video_id: v.video_id,
           festival_id: ch.festival_id,
-          festival_name: ch.festival_name,
-          city: ch.city,
-          vibe: ch.vibe,
           artist: v.title,
+          title: v.title,
           source: 'youtube',
+          duration_sec: v.duration_sec || null,
           published_at: v.published_at,
-          accent: null,
         });
         console.log(`  ✓ queued: ${v.title.slice(0, 60)}`);
       }

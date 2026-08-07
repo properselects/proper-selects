@@ -228,10 +228,13 @@ async function getExisting() {
 }
 
 async function insertSets(sets) {
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/public_sets`, {
+  const rows = sets.map(({ video_id, festival_id, source, artist, title, duration_sec, published_at, status, embeddable }) =>
+    ({ video_id, festival_id, source, artist, title, duration_sec, published_at, status: status || 'live', embeddable: embeddable !== false })
+  );
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/sets`, {
     method: 'POST',
     headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal,resolution=ignore-duplicates' },
-    body: JSON.stringify(sets),
+    body: JSON.stringify(rows),
   });
   return r.ok;
 }
