@@ -28,7 +28,7 @@ const REGIONS = [
   { id: 'worldwide', label: 'Worldwide', color: '#FF3B57' },
 ];
 
-export default function AtlasTab({ lineup = [], onLineupChange }) {
+export default function AtlasTab({ lineup = [], onLineupChange, isActive = false }) {
   const lineupIds = React.useMemo(() => new Set((lineup || []).map((s) => s.video_id)), [lineup]);
 
   function toggleLineup(s) {
@@ -102,6 +102,13 @@ export default function AtlasTab({ lineup = [], onLineupChange }) {
     }
     fetchSetsForVenue(selected.id).then(setSelectedSets).catch(() => setSelectedSets([]));
   }, [selected]);
+
+  // When tab becomes visible, tell Leaflet to recalculate its size
+  useEffect(() => {
+    if (isActive && mapInstance.current) {
+      setTimeout(() => mapInstance.current?.invalidateSize(), 50);
+    }
+  }, [isActive]);
 
   // Show/hide markers based on region filter
   useEffect(() => {

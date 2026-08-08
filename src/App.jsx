@@ -203,18 +203,20 @@ export default function App() {
         </div>
       </header>
 
-      <main style={{ flex: 1, overflowY: 'auto', position: 'relative' }}>
+      {/* main: overflow hidden so atlas map (position:absolute) fills correctly */}
+      <main style={{ flex: 1, overflow: 'hidden', position: 'relative', minHeight: 0 }}>
         {/* All tabs stay mounted so YouTube iframe survives tab switches */}
-        <div style={{ display: tab === 'jukebox' ? 'block' : 'none', height: '100%' }}>
+        <div style={{ display: tab === 'jukebox' ? 'flex' : 'none', flexDirection: 'column', height: '100%', overflowY: 'auto' }}>
           <TodayTab lineup={lineup} onLineupChange={setLineup} onOpenLineup={openDrawer} onSetChange={setNowPlaying} />
         </div>
-        <div style={{ display: tab === 'grid' ? 'block' : 'none', height: '100%' }}>
+        <div style={{ display: tab === 'grid' ? 'flex' : 'none', flexDirection: 'column', height: '100%', overflowY: 'auto' }}>
           <VaultTab lineup={lineup} onLineupChange={setLineup} />
         </div>
-        <div style={{ display: tab === 'atlas' ? 'block' : 'none', height: '100%' }}>
-          <AtlasTab lineup={lineup} onLineupChange={setLineup} />
+        {/* Atlas: position absolute so Leaflet map gets real pixel dimensions */}
+        <div style={{ display: tab === 'atlas' ? 'block' : 'none', position: 'absolute', inset: 0 }}>
+          <AtlasTab lineup={lineup} onLineupChange={setLineup} isActive={tab === 'atlas'} />
         </div>
-        <div style={{ display: tab === 'radar' ? 'block' : 'none', height: '100%' }}>
+        <div style={{ display: tab === 'radar' ? 'flex' : 'none', flexDirection: 'column', height: '100%', overflowY: 'auto' }}>
           <RadarTab />
         </div>
       </main>
