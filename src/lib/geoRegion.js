@@ -6,6 +6,7 @@ const AMER_IDS = new Set([
   'universo-paralello','concourse','greenvalley','arc-chicago','edc-mexico','boilerroom',
   'clubspace','daytrip','fisher','smartbar','stereo','movement','panoramanyc','timegate',
   'wd4e','trotamundo','crssd','iii-points','exchange-la','academy-la','seismic',
+  'alldayidream','mayan-warrior','bpm',
 ]);
 const EUR_IDS = new Set([
   'dc10','off-week','glastonbury','tlv-desert','intercell','selected-sessions','hi-ibiza',
@@ -13,6 +14,7 @@ const EUR_IDS = new Set([
   'sunwaves','resistance','ctm','sonarfest','musicon','rex','shelter','faust','cprty',
   'timewarp','junction','junction2','clubtoclub','ade','egg','vunderground','printworks',
   'sonus','creamfields','shelter-ams','pacha','amnesia','nibiru',
+  'tomorrowland','exit','dimensions','elrow',
 ]);
 const AMER_CITIES = [
   'miami','chicago','los angeles','las vegas','austin','new york','brooklyn','detroit',
