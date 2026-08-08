@@ -123,6 +123,11 @@ const NON_MUSICAL_PATTERNS = [
   /\bq\s*&\s*a\b/i,
   /\bbehind the scenes\b/i,
   /\bepisode\s*\d+/i,          // Episode 12 etc — usually podcast/radio
+  /\bwhen\s+we\s+dip\s+\d+/i, // When We Dip 190 — numbered podcast series
+  /\bfabric\s+\d+\b/i,         // fabric 123 — numbered mix series
+  /\bra\.\d+\b/i,              // RA.945 — RA podcast series
+  /\bmix\s+of\s+the\s+day\b/i,
+  /[-–\s]\d{3,}$/,             // title ends in bare episode number ≥ 100
   /\b\d{4}\s+\d{2}\s+\d{2}\s+\d{2}\s+\d{2}/,  // radio-style timestamps (2025 02 25 14 03)
   /#djset\b/i,               // promo/studio mixes (not live venue recordings)
   /\bpres\.\s+\w.*#/i,       // "Monsoon~ pres. DJ #djset" style promos

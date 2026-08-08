@@ -42,6 +42,13 @@ const BAD_CONTENT_RE = [
   /\binjected\b/i, /\bkhao\s+san\b/i, /@beatport\s+live\b/i,
   /\bhip\s*[- ]?hop\b/i, /\bneo\s+soul\b/i, /\bchillhop\b/i, /\blo-?fi\b/i,
   /\btrap\s+(mix|set)\b/i, /\bdrill\b/i, /\breggaeton\b/i, /\bdancehall\b/i,
+  // Numbered podcast/mix series (e.g. "When We Dip 190", "fabric 123", "RA.945")
+  /\bwhen\s+we\s+dip\s+\d+/i,
+  /\bfabric\s+\d+\b/i,
+  /\bra\.\d+\b/i,
+  /\bmix\s+of\s+the\s+day\b/i,
+  // Generic: title ends with a bare episode number ≥ 100 (strong signal of a series)
+  /[-–\s]\d{3,}$/,
 ];
 
 function isBad(row) {
