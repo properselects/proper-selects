@@ -356,7 +356,7 @@ export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, on
           <div className="jb-list" style={{ background: stage.panel }}>
             <div className="jb-list-head">
               <span style={{ color: stage.accent }}>On {stage.name} today</span>
-              <span className="jb-list-sub">new lineup at midnight</span>
+              <span className="jb-list-sub">fresh sets added daily</span>
             </div>
             {slots.map((v, d) => (
               <div key={v.video_id} style={{ display: 'flex', alignItems: 'center' }}>

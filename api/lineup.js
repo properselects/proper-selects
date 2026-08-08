@@ -1,5 +1,5 @@
 // GET /api/lineup?slug=xxx  → fetch a saved lineup
-// GET /api/lineup?today=1  → hybrid daily lineup (fresh ingest + vault fill per region)
+// GET /api/lineup?today=1  → daily lineup: 8 newest sets (last 14 days) + 12 shuffled vault per region
 // POST /api/lineup { name, videoIds, setMetadata } → create and return slug
 // DELETE /api/lineup → purge lineups older than 30 days
 
@@ -93,28 +93,35 @@ async function sbFetch(path) {
 
 const REGIONS = ['americas', 'europe', 'worldwide'];
 const TARGET = 20;
+const FRESH_TARGET = 8; // slots reserved for recently published sets
+const FRESH_WINDOW_DAYS = 14;
 
 async function todayLineup() {
-  // Fresh layer: todays_lineup view already curates recent/relevant sets per region
-  // Fill layer: vault_sets for variety when a region is sparse
-  const [fresh, ...fillPools] = await Promise.all([
-    sbFetch(`todays_lineup?select=*`),
-    ...REGIONS.map((region) =>
-      sbFetch(`vault_sets?select=*&vibe=eq.${region}&source=eq.youtube&duration_sec=gte.2700&order=published_at.desc&limit=400`)
-    ),
-  ]);
+  // Fresh layer: newest sets published in the last 14 days per region (sorted by published_at desc)
+  // Fill layer: shuffled vault for variety
+  const since = new Date(Date.now() - FRESH_WINDOW_DAYS * 24 * 60 * 60 * 1000).toISOString();
+
+  const pools = await Promise.all(
+    REGIONS.map((region) =>
+      sbFetch(`vault_sets?select=*&vibe=eq.${region}&source=eq.youtube&duration_sec=gte.2700&order=published_at.desc&limit=500`)
+    )
+  );
 
   return REGIONS.flatMap((region, i) => {
-    const freshRegion = applyDiversity(fresh.filter((r) => r.vibe === region), 2);
-    const fillNeeded = Math.max(0, TARGET - freshRegion.length);
-    let fill = [];
-    if (fillNeeded > 0) {
-      const freshIds = new Set(freshRegion.map((r) => r.video_id));
-      const pool = fillPools[i].filter((r) => !freshIds.has(r.video_id));
-      shuffle(pool);
-      fill = applyDiversity(pool, 2).slice(0, fillNeeded);
-    }
-    return [...freshRegion, ...fill].map((s) => ({ ...s, vibe: region }));
+    const all = pools[i];
+    const recent = all.filter((r) => r.published_at && r.published_at >= since);
+    const older = all.filter((r) => !r.published_at || r.published_at < since);
+
+    // Fresh slots: most recently published, diversity-filtered
+    const fresh = applyDiversity(recent, 2).slice(0, FRESH_TARGET);
+    const freshIds = new Set(fresh.map((r) => r.video_id));
+
+    // Fill slots: shuffle the rest for variety
+    const pool = older.filter((r) => !freshIds.has(r.video_id));
+    shuffle(pool);
+    const fill = applyDiversity(pool, 2).slice(0, TARGET - fresh.length);
+
+    return [...fresh, ...fill].map((s) => ({ ...s, vibe: region }));
   });
 }
 
