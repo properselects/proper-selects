@@ -4,6 +4,7 @@ import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { geoRegion } from '../lib/geoRegion.js';
 import { parseArtist } from '../lib/parseArtist.js';
 import StagePlayer from './StagePlayer.jsx';
+import { fetchNextEvent, EventStrip } from '../lib/venueEvents.js';
 
 const BAD_CONTENT_RE = [
   /\bpanel\b/i, /\bdiscussion\b/i, /\binterview\b/i, /\bconference\b/i,
@@ -145,6 +146,7 @@ export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, on
   const [rows, setRows] = useState(null);
   const [stageIdx, setStageIdx] = useState(0);
   const [slotIdx, setSlotIdx] = useState(0);
+  const [venueEvent, setVenueEvent] = useState(null);
   const [castDismissed, setCastDismissed] = useState(() => {
     try {
       return localStorage.getItem('psCastDismissed') === '1';
@@ -196,6 +198,14 @@ export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, on
   React.useEffect(() => {
     onSetChange?.(current || null);
   }, [current?.video_id]);
+
+  // Fetch upcoming event for the current set's venue
+  React.useEffect(() => {
+    setVenueEvent(null);
+    if (current?.festival_id) {
+      fetchNextEvent(current.festival_id).then(setVenueEvent).catch(() => {});
+    }
+  }, [current?.festival_id]);
 
   const advance = () => setSlotIdx((i) => (slots.length ? (i + 1) % slots.length : 0));
 
@@ -321,6 +331,12 @@ export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, on
                   {current && lineupIds.has(current.video_id) ? '◈ In lineup' : '＋ Add to lineup'}
                 </button>
               </div>
+              <EventStrip
+                event={venueEvent}
+                accent={stage.accent}
+                label={current?.festival_name ? `UPCOMING AT ${current.festival_name.toUpperCase()}` : 'UPCOMING'}
+              />
+
               <div className="jb-radar">
                 <div className="jb-radar-head">
                   <span style={{ color: stage.accent }}>ID Radar</span>

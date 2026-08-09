@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { parseArtist } from '../lib/parseArtist.js';
+import { fetchNextEvent, EventStrip } from '../lib/venueEvents.js';
 
 function formatViews(v) {
   if (!v || v === 0) return null;
@@ -11,6 +12,7 @@ function formatViews(v) {
 export default function RadarTab() {
   const [sets, setSets] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
     fetch('/api/radar')
@@ -20,6 +22,13 @@ export default function RadarTab() {
       })
       .catch(() => {});
   }, []);
+
+  function selectSet(s) {
+    setSelected(s);
+    setSelectedEvent(null);
+    const fid = s?.festival?.id || s?.festival_id;
+    if (fid) fetchNextEvent(fid).then(setSelectedEvent).catch(() => {});
+  }
 
   return (
     <div style={{ background: '#06080c', minHeight: '100%', color: '#EDEAE2' }}>
@@ -63,7 +72,7 @@ export default function RadarTab() {
               key={s.id || s.video_id}
               className="radar-card"
               style={{ '--acc': accent }}
-              onClick={() => setSelected(isSelected ? null : s)}
+              onClick={() => isSelected ? setSelected(null) : selectSet(s)}
             >
               <div className="radar-thumb-wrap">
                 <img
@@ -103,14 +112,21 @@ export default function RadarTab() {
             padding: 20,
           }}
         >
-          <div style={{ width: '100%', maxWidth: 900, aspectRatio: '16/9' }}>
-            <iframe
-              width="100%"
-              height="100%"
-              src={`https://www.youtube.com/embed/${selected.video_id}?autoplay=1&rel=0`}
-              allow="autoplay; encrypted-media; picture-in-picture"
-              allowFullScreen
-              style={{ border: 0, borderRadius: 12 }}
+          <div style={{ width: '100%', maxWidth: 900 }}>
+            <div style={{ aspectRatio: '16/9' }}>
+              <iframe
+                width="100%"
+                height="100%"
+                src={`https://www.youtube.com/embed/${selected.video_id}?autoplay=1&rel=0`}
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowFullScreen
+                style={{ border: 0, borderRadius: 12 }}
+              />
+            </div>
+            <EventStrip
+              event={selectedEvent}
+              accent={selected.festival?.accent || '#F4A93C'}
+              label={selected.festival?.name ? `UPCOMING AT ${selected.festival.name.toUpperCase()}` : 'UPCOMING'}
             />
           </div>
         </div>

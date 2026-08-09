@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { parseArtist } from '../lib/parseArtist.js';
+import { fetchNextEvent, EventStrip } from '../lib/venueEvents.js';
 
 const CHIPS_VISIBLE = 10;
 
@@ -47,6 +48,7 @@ export default function VaultTab({ lineup = [], onLineupChange }) {
   const [selectedVenue, setSelectedVenue] = useState('');
   const [playing, setPlaying] = useState(null);
   const [nextEvent, setNextEvent] = useState(null);
+  const [playingEvent, setPlayingEvent] = useState(null);
   const [showAllChips, setShowAllChips] = useState(false);
 
   useEffect(() => {
@@ -245,7 +247,7 @@ export default function VaultTab({ lineup = [], onLineupChange }) {
 
       <div className="tg-grid">
         {filtered.map((s) => (
-          <div key={s.video_id} className="tg-tile" onClick={() => setPlaying(s)} style={{ position: 'relative' }}>
+          <div key={s.video_id} className="tg-tile" onClick={() => { setPlaying(s); setPlayingEvent(null); fetchNextEvent(s.festival_id).then(setPlayingEvent).catch(() => {}); }} style={{ position: 'relative' }}>
             <div className="tg-frame">
               <img
                 className="tg-thumb"
@@ -295,14 +297,21 @@ export default function VaultTab({ lineup = [], onLineupChange }) {
             padding: 20,
           }}
         >
-          <div style={{ width: '100%', maxWidth: 900, aspectRatio: '16/9' }}>
-            <iframe
-              width="100%"
-              height="100%"
-              src={`https://www.youtube.com/embed/${playing.video_id}?autoplay=1&rel=0`}
-              allow="autoplay; encrypted-media; picture-in-picture"
-              allowFullScreen
-              style={{ border: 0, borderRadius: 12 }}
+          <div style={{ width: '100%', maxWidth: 900 }}>
+            <div style={{ aspectRatio: '16/9' }}>
+              <iframe
+                width="100%"
+                height="100%"
+                src={`https://www.youtube.com/embed/${playing.video_id}?autoplay=1&rel=0`}
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowFullScreen
+                style={{ border: 0, borderRadius: 12 }}
+              />
+            </div>
+            <EventStrip
+              event={playingEvent}
+              accent={playing.accent || '#F4A93C'}
+              label={playing.festival_name ? `UPCOMING AT ${playing.festival_name.toUpperCase()}` : 'UPCOMING'}
             />
           </div>
         </div>
