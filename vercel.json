@@ -10,6 +10,7 @@
     { "path": "/api/search-ingest", "schedule": "0 3 * * 0" },
     { "path": "/api/trending",    "schedule": "0 12 * * 1" },
     { "path": "/api/digest",      "schedule": "0 14 * * 1" },
-    { "path": "/api/lineup", "schedule": "0 3 * * 0" }
+    { "path": "/api/lineup", "schedule": "0 3 * * 0" },
+    { "path": "/api/venue-report", "schedule": "0 15 1 * *" }
   ]
 }

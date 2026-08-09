@@ -4,7 +4,7 @@ import { loadLeaflet } from '../lib/leaflet.js';
 
 async function fetchVenuesWithSets() {
   const [venueRes, setRes] = await Promise.all([
-    fetch(`${SUPABASE_URL}/rest/v1/festivals?select=id,name,city,country,lat,lng,accent,region,promo_code,promo_label,promo_url&active=eq.true`, { headers: supabaseHeaders }),
+    fetch(`${SUPABASE_URL}/rest/v1/festivals?select=id,name,city,country,lat,lng,accent,region,promo_code,promo_label,promo_url,ticket_url,partner&active=eq.true`, { headers: supabaseHeaders }),
     fetch(`${SUPABASE_URL}/rest/v1/public_sets?select=festival_id&limit=2000`, { headers: supabaseHeaders }),
   ]);
   const venues = venueRes.ok ? await venueRes.json() : [];
@@ -16,6 +16,15 @@ async function fetchVenuesWithSets() {
 async function fetchSetsForVenue(festivalId) {
   const r = await fetch(
     `${SUPABASE_URL}/rest/v1/vault_sets?festival_id=eq.${encodeURIComponent(festivalId)}&select=video_id,artist,festival_name,city&limit=8`,
+    { headers: supabaseHeaders }
+  );
+  return r.ok ? r.json() : [];
+}
+
+async function fetchUpcomingEvents(festivalId) {
+  const now = new Date().toISOString();
+  const r = await fetch(
+    `${SUPABASE_URL}/rest/v1/events?festival_id=eq.${encodeURIComponent(festivalId)}&starts_at=gte.${encodeURIComponent(now)}&select=id,title,headliner,supporting_acts,starts_at,ticket_url,ticket_price_from,sold_out&order=starts_at.asc&limit=3`,
     { headers: supabaseHeaders }
   );
   return r.ok ? r.json() : [];
@@ -46,6 +55,7 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
   const [venues, setVenues] = useState([]);
   const [selected, setSelected] = useState(null);
   const [selectedSets, setSelectedSets] = useState([]);
+  const [selectedEvents, setSelectedEvents] = useState([]);
   const [playing, setPlaying] = useState(null);
   const [regionFilter, setRegionFilter] = useState('all');
 
@@ -72,12 +82,13 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
       for (const v of venues) {
         if (v.lat == null || v.lng == null) continue;
         const accent = v.accent || '#F4A93C';
+        const isPartner = v.partner === true;
         const pin = L.circleMarker([v.lat, v.lng], {
-          radius: 7,
+          radius: isPartner ? 10 : 7,
           fillColor: accent,
-          color: '#0a0a0e',
-          weight: 2,
-          fillOpacity: 0.95,
+          color: isPartner ? accent : '#0a0a0e',
+          weight: isPartner ? 3 : 2,
+          fillOpacity: isPartner ? 1 : 0.95,
         });
         pin.on('click', () => setSelected(v));
         pin.addTo(map);
@@ -98,9 +109,11 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
   useEffect(() => {
     if (!selected) {
       setSelectedSets([]);
+      setSelectedEvents([]);
       return;
     }
     fetchSetsForVenue(selected.id).then(setSelectedSets).catch(() => setSelectedSets([]));
+    fetchUpcomingEvents(selected.id).then(setSelectedEvents).catch(() => setSelectedEvents([]));
   }, [selected]);
 
   // When tab becomes visible, tell Leaflet to recalculate its size
@@ -149,8 +162,32 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
             {selected.city}
             {selected.country ? `, ${selected.country}` : ''}
           </div>
-          <h2 className="am-drawer-name">{selected.name}</h2>
-          <div className="am-drawer-region">{selected.region}</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <h2 className="am-drawer-name" style={{ margin: 0 }}>{selected.name}</h2>
+            {selected.partner && (
+              <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: '.1em', padding: '2px 6px', borderRadius: 4, background: selected.accent || '#F4A93C', color: '#0a0a0e' }}>
+                PARTNER
+              </span>
+            )}
+          </div>
+          <div className="am-drawer-region" style={{ marginTop: 4 }}>{selected.region}</div>
+
+          {selected.ticket_url && (
+            <a
+              href={selected.ticket_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-block', marginTop: 12,
+                padding: '8px 16px', borderRadius: 8,
+                background: selected.accent || '#F4A93C',
+                color: '#0a0a0e', fontWeight: 800, fontSize: 12,
+                textDecoration: 'none', letterSpacing: '.04em',
+              }}
+            >
+              Get tickets →
+            </a>
+          )}
 
           {selected.promo_code && (
             <div className="am-promo">
@@ -179,6 +216,31 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
                   Redeem →
                 </a>
               )}
+            </div>
+          )}
+
+          {selectedEvents.length > 0 && (
+            <div style={{ marginTop: 16 }}>
+              <div style={{ fontSize: 9, fontWeight: 800, letterSpacing: '.18em', opacity: .4, marginBottom: 8 }}>UPCOMING SHOWS</div>
+              {selectedEvents.map((ev) => {
+                const date = new Date(ev.starts_at);
+                const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                const timeStr = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                return (
+                  <div key={ev.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,.06)' }}>
+                    <div>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: '#EDEAE2' }}>{ev.headliner || ev.title}</div>
+                      <div style={{ fontSize: 10, opacity: .5, marginTop: 2 }}>{dateStr} · {timeStr}{ev.ticket_price_from ? ` · from $${ev.ticket_price_from}` : ''}</div>
+                    </div>
+                    {ev.ticket_url && !ev.sold_out && (
+                      <a href={ev.ticket_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 800, color: selected.accent || '#F4A93C', textDecoration: 'none', flexShrink: 0, marginLeft: 8 }}>
+                        Tickets →
+                      </a>
+                    )}
+                    {ev.sold_out && <span style={{ fontSize: 10, opacity: .4, flexShrink: 0, marginLeft: 8 }}>Sold out</span>}
+                  </div>
+                );
+              })}
             </div>
           )}
 
