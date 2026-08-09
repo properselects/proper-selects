@@ -4,7 +4,7 @@ import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { geoRegion } from '../lib/geoRegion.js';
 import { parseArtist } from '../lib/parseArtist.js';
 import StagePlayer from './StagePlayer.jsx';
-import { fetchNextEvent, EventStrip } from '../lib/venueEvents.js';
+import { fetchNextEvent, EventStrip } from '../lib/venueEvents.jsx';
 
 const BAD_CONTENT_RE = [
   /\bpanel\b/i, /\bdiscussion\b/i, /\binterview\b/i, /\bconference\b/i,

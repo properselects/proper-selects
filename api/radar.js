@@ -38,7 +38,7 @@ async function getRecentSets() {
     // vault_sets has festival_name, city, accent — public_sets does not
     const since = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString();
     const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/vault_sets?select=video_id,artist,festival_name,city,accent&published_at=gte.${encodeURIComponent(since)}&source=eq.youtube&duration_sec=gte.2700&order=published_at.desc&limit=80`,
+      `${SUPABASE_URL}/rest/v1/vault_sets?select=video_id,artist,festival_id,festival_name,city,accent&published_at=gte.${encodeURIComponent(since)}&source=eq.youtube&duration_sec=gte.2700&order=published_at.desc&limit=80`,
       { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
     );
     const rows = r.ok ? await r.json() : [];
@@ -63,6 +63,7 @@ export default async function handler(req, res) {
       video_id: s.video_id,
       artist: s.artist,
       views: s.views,
+      festival_id: s.festival_id || null,
       festival: {
         name: s.festival_name || s.festival?.name || 'Unknown',
         city: s.city || s.festival?.city || '',

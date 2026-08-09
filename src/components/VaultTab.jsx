@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { parseArtist } from '../lib/parseArtist.js';
-import { fetchNextEvent, EventStrip } from '../lib/venueEvents.js';
+import { fetchNextEvent, EventStrip } from '../lib/venueEvents.jsx';
 
 const CHIPS_VISIBLE = 10;
 
@@ -20,17 +20,6 @@ async function fetchVault() {
   return r.ok ? r.json() : [];
 }
 
-async function fetchNextEvent(festivalId) {
-  const now = new Date().toISOString();
-  const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/events?festival_id=eq.${encodeURIComponent(festivalId)}` +
-      `&verified=eq.true&starts_at=gte.${encodeURIComponent(now)}` +
-      `&order=starts_at.asc&limit=1`,
-    { headers: supabaseHeaders }
-  );
-  const rows = r.ok ? await r.json() : [];
-  return rows[0] || null;
-}
 
 export default function VaultTab({ lineup = [], onLineupChange }) {
   const lineupIds = React.useMemo(() => new Set((lineup || []).map((s) => s.video_id)), [lineup]);

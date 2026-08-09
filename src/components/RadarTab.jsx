@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { parseArtist } from '../lib/parseArtist.js';
-import { fetchNextEvent, EventStrip } from '../lib/venueEvents.js';
+import { fetchNextEvent, EventStrip } from '../lib/venueEvents.jsx';
 
 function formatViews(v) {
   if (!v || v === 0) return null;
@@ -26,7 +26,7 @@ export default function RadarTab() {
   function selectSet(s) {
     setSelected(s);
     setSelectedEvent(null);
-    const fid = s?.festival?.id || s?.festival_id;
+    const fid = s?.festival_id;
     if (fid) fetchNextEvent(fid).then(setSelectedEvent).catch(() => {});
   }
 
