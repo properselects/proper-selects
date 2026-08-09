@@ -6,7 +6,7 @@ const AMER_IDS = new Set([
   'universo-paralello','concourse','greenvalley','arc-chicago','edc-mexico','boilerroom',
   'clubspace','daytrip','fisher','smartbar','stereo','movement','panoramanyc','timegate',
   'wd4e','trotamundo','crssd','iii-points','exchange-la','academy-la','seismic',
-  'alldayidream','mayan-warrior','bpm',
+  'alldayidream','mayan-warrior','bpm','housecalls',
 ]);
 const EUR_IDS = new Set([
   'dc10','off-week','glastonbury','tlv-desert','intercell','selected-sessions','hi-ibiza',
