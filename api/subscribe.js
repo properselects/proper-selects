@@ -7,6 +7,7 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 const GMAIL_USER = process.env.GMAIL_USER;
 const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
+const SITE_URL = process.env.SITE_URL || 'https://proper-selects.vercel.app';
 
 function isValidEmail(e) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
@@ -21,7 +22,7 @@ function createTransport() {
 
 async function sendConfirmEmail(email, token) {
   if (!GMAIL_USER || !GMAIL_APP_PASSWORD) return;
-  const confirmUrl = `https://proper-selects.vercel.app/api/confirm?token=${token}`;
+  const confirmUrl = `${SITE_URL}/api/confirm?token=${token}`;
   await createTransport().sendMail({
     from: `"Proper Selects" <${GMAIL_USER}>`,
     to: email,

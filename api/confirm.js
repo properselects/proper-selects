@@ -3,6 +3,7 @@ export const maxDuration = 10;
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
+const SITE_URL = process.env.SITE_URL || 'https://proper-selects.vercel.app';
 
 export default async function handler(req, res) {
   const { token } = req.query;
@@ -55,7 +56,7 @@ export default async function handler(req, res) {
         <div class="brand">PROPER SELECTS</div>
         <h1>You're in ✓</h1>
         <p>Every Monday you'll get the best new sets added to the vault, straight to your inbox.</p>
-        <a href="https://proper-selects.vercel.app">Open Proper Selects →</a>
+        <a href="${SITE_URL}">Open Proper Selects →</a>
       </div>
     </body>
     </html>

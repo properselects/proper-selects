@@ -10,6 +10,7 @@ const YOUTUBE_API_KEY = process.env.YOUTUBE_SEARCH_KEY || process.env.YOUTUBE_AP
 const GMAIL_USER = process.env.GMAIL_USER;
 const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
 const CRON_SECRET = process.env.CRON_SECRET;
+const SITE_URL = process.env.SITE_URL || 'https://proper-selects.vercel.app';
 
 function createTransport() {
   return nodemailer.createTransport({
@@ -120,7 +121,7 @@ function idRow(idm, i) {
 function buildEmail(data, unsubToken) {
   const { newSets, lineupSets, topIds, radarSets, newCount } = data;
   const week = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-  const unsubUrl = `https://proper-selects.vercel.app/api/unsubscribe?token=${unsubToken}`;
+  const unsubUrl = `${SITE_URL}/api/unsubscribe?token=${unsubToken}`;
 
   const freshSection = newSets.length ? `
     ${sectionHeader('Fresh this week')}
@@ -166,7 +167,7 @@ function buildEmail(data, unsubToken) {
   ${radarSection}
 
   <div style="text-align:center;margin-top:36px;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);">
-    <a href="https://proper-selects.vercel.app" style="display:inline-block;padding:12px 32px;background:#F4A93C;color:#0a0a0e;border-radius:8px;font-weight:800;font-size:13px;text-decoration:none;letter-spacing:.04em;">
+    <a href="${SITE_URL}" style="display:inline-block;padding:12px 32px;background:#F4A93C;color:#0a0a0e;border-radius:8px;font-weight:800;font-size:13px;text-decoration:none;letter-spacing:.04em;">
       Open the vault &rarr;
     </a>
   </div>
