@@ -19,8 +19,18 @@ const rateBuckets = new Map();
 const RATE_LIMIT = 5;              // max attempts
 const RATE_WINDOW_MS = 60 * 60_000; // 1 hour
 
+// Comma-separated list of IPs (v4/v6) exempt from the rate limit.
+// Set RATE_LIMIT_ALLOWLIST in Vercel env vars — no redeploy needed after change.
+const ALLOWLIST = new Set(
+  (process.env.RATE_LIMIT_ALLOWLIST || '')
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean)
+);
+
 function checkRateLimit(ip) {
   if (!ip) return true;
+  if (ALLOWLIST.has(ip)) return true;
   const now = Date.now();
   const bucket = (rateBuckets.get(ip) || []).filter(t => now - t < RATE_WINDOW_MS);
   if (bucket.length >= RATE_LIMIT) {
@@ -191,6 +201,12 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   if (req.method === 'OPTIONS') return res.status(200).end();
+
+  // GET /api/subscribe?whoami=1 — echo caller IP so it can be added to allowlist
+  if (req.method === 'GET' && req.query.whoami === '1') {
+    const ip = getClientIp(req);
+    return res.json({ ip, allowlisted: ALLOWLIST.has(ip) });
+  }
 
   // GET /api/subscribe?stats=1 — aggregate counts for internal reporting
   if (req.method === 'GET' && req.query.stats === '1') {
