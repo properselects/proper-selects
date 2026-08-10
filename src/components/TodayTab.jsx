@@ -379,7 +379,7 @@ export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, on
                 <button
                   className={'jb-slot' + (d === slotIdx ? ' on' : '')}
                   onClick={() => setSlotIdx(d)}
-                  style={{ flex: 1, ...(d === slotIdx ? { borderColor: stage.accent } : {}) }}
+                  style={{ flex: 1, color: stage.text, ...(d === slotIdx ? { borderColor: stage.accent } : {}) }}
                 >
                   <span className="jb-slot-num" style={{ color: stage.accent }}>
                     {String(d + 1).padStart(2, '0')}
@@ -391,8 +391,8 @@ export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, on
                     loading="lazy"
                   />
                   <span className="jb-slot-main">
-                    <span className="jb-slot-artist">{parseArtist(v.artist)}</span>
-                    <span className="jb-slot-meta">
+                    <span className="jb-slot-artist" style={{ color: stage.text }}>{parseArtist(v.artist)}</span>
+                    <span className="jb-slot-meta" style={{ color: stage.text, opacity: 0.7 }}>
                       {v.festival_name}
                       {v.city ? ` · ${v.city}` : ''}
                     </span>
@@ -404,7 +404,8 @@ export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, on
                   title={lineupIds.has(v.video_id) ? 'Remove from lineup' : 'Add to lineup'}
                   style={{
                     background: 'none', border: 'none', padding: '0 12px',
-                    color: lineupIds.has(v.video_id) ? stage.accent : 'rgba(0,0,0,.35)',
+                    color: lineupIds.has(v.video_id) ? stage.accent : stage.text,
+                    opacity: lineupIds.has(v.video_id) ? 1 : 0.5,
                     fontSize: 16, cursor: 'pointer', flexShrink: 0, lineHeight: 1,
                   }}
                 >
