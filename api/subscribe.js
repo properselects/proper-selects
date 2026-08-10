@@ -45,10 +45,34 @@ async function sendConfirmEmail(email, token) {
   });
 }
 
+async function getCount(path) {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, Prefer: 'count=exact' },
+  });
+  return parseInt((r.headers.get('content-range') || '').split('/')[1] || '0', 10);
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   if (req.method === 'OPTIONS') return res.status(200).end();
+
+  // GET /api/subscribe?stats=1 — aggregate counts for internal reporting
+  if (req.method === 'GET' && req.query.stats === '1') {
+    if (!SUPABASE_KEY) return res.status(500).json({ error: 'Missing config' });
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const [subsTotal, subsConfirmed, subsThisWeek, sets, venues] = await Promise.all([
+      getCount('subscribers?unsubscribed_at=is.null'),
+      getCount('subscribers?confirmed=eq.true&unsubscribed_at=is.null'),
+      getCount(`subscribers?created_at=gte.${encodeURIComponent(weekAgo)}&unsubscribed_at=is.null`),
+      getCount('sets?status=eq.live'),
+      getCount('festivals?active=eq.true'),
+    ]);
+    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
+    return res.json({ subsTotal, subsConfirmed, subsThisWeek, sets, venues });
+  }
+
+
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const { email, website } = req.body || {};
