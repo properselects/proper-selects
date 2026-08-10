@@ -26,22 +26,126 @@ async function sendConfirmEmail(email, token) {
   await createTransport().sendMail({
     from: `"Proper Selects" <${GMAIL_USER}>`,
     to: email,
-    subject: 'Confirm your Proper Selects subscription',
-    html: `
-      <div style="font-family:'Helvetica Neue',Arial,sans-serif;background:#0a0a0e;color:#EDEAE2;max-width:480px;margin:0 auto;padding:32px 24px;border-radius:12px;">
-        <div style="font-weight:800;letter-spacing:.16em;font-size:13px;margin-bottom:24px;">
-          PROPER SELECTS <span style="opacity:.5;letter-spacing:.3em;font-size:10px;margin-left:4px;">WEEKLY DROP</span>
-        </div>
-        <h2 style="font-size:22px;margin:0 0 12px;line-height:1.2;">One click to confirm</h2>
-        <p style="opacity:.7;font-size:14px;line-height:1.6;margin:0 0 28px;">
-          You're almost in. Confirm your email and you'll get the best new sets in your inbox every Monday.
-        </p>
-        <a href="${confirmUrl}" style="display:inline-block;padding:12px 28px;background:#F4A93C;color:#0a0a0e;border-radius:8px;font-weight:800;font-size:14px;text-decoration:none;letter-spacing:.04em;">
-          Confirm subscription →
-        </a>
-        <p style="opacity:.4;font-size:11px;margin-top:28px;">If you didn't sign up, ignore this email.</p>
-      </div>
-    `,
+    subject: 'You\'re one click away from the best DJ sets on the internet',
+    html: `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f5f5f0;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#f5f5f0;padding:32px 16px;">
+    <tr><td align="center">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;background:#0a0a0e;border-radius:16px;overflow:hidden;">
+
+        <!-- Hero -->
+        <tr><td style="padding:48px 40px 32px;text-align:center;background:linear-gradient(180deg,#1a0f05 0%,#0a0a0e 100%);">
+          <div style="font-size:10px;font-weight:800;letter-spacing:.42em;color:#F4A93C;margin-bottom:32px;">
+            [ PROPER SELECTS ]
+          </div>
+          <h1 style="font-size:36px;line-height:1.05;margin:0 0 12px;color:#EDEAE2;font-weight:900;letter-spacing:-.02em;">
+            The world's best<br/>
+            <span style="color:#F4A93C;">DJ sets</span>, curated.
+          </h1>
+          <p style="font-size:15px;line-height:1.5;margin:20px 0 32px;color:rgba(237,234,226,.65);">
+            One email a week. No noise, no algorithms — just the sets that mattered.
+          </p>
+
+          <!-- CTA -->
+          <a href="${confirmUrl}" style="display:inline-block;padding:16px 44px;background:#F4A93C;color:#0a0a0e;border-radius:10px;font-weight:900;font-size:15px;text-decoration:none;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 4px 20px rgba(244,169,60,.4);">
+            ▷ Confirm my subscription
+          </a>
+          <p style="margin:16px 0 0;font-size:11px;color:rgba(237,234,226,.4);letter-spacing:.06em;">Takes one tap. Under 24 hours.</p>
+        </td></tr>
+
+        <!-- What you get -->
+        <tr><td style="padding:0 40px 40px;background:#0a0a0e;">
+          <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:32px;margin-top:8px;">
+            <p style="font-size:11px;font-weight:800;letter-spacing:.16em;color:#F4A93C;margin:0 0 20px;text-transform:uppercase;">
+              What you're getting
+            </p>
+
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+              <tr><td style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06);">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+                  <td style="width:32px;color:#F4A93C;font-size:16px;font-weight:900;vertical-align:top;">◈</td>
+                  <td>
+                    <div style="color:#EDEAE2;font-size:15px;font-weight:700;margin-bottom:2px;">The Weekly Drop</div>
+                    <div style="color:rgba(237,234,226,.55);font-size:13px;line-height:1.5;">Monday morning — 5 sets we couldn't stop playing. Boiler Room, Cercle, fabric, Awakenings, and the underground gems.</div>
+                  </td>
+                </tr></table>
+              </td></tr>
+
+              <tr><td style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06);">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+                  <td style="width:32px;color:#F4A93C;font-size:16px;font-weight:900;vertical-align:top;">⊕</td>
+                  <td>
+                    <div style="color:#EDEAE2;font-size:15px;font-weight:700;margin-bottom:2px;">The Radar</div>
+                    <div style="color:rgba(237,234,226,.55);font-size:13px;line-height:1.5;">What's trending right now — ranked by real views, updated daily. The sets everyone will be talking about next week.</div>
+                  </td>
+                </tr></table>
+              </td></tr>
+
+              <tr><td style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06);">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+                  <td style="width:32px;color:#F4A93C;font-size:16px;font-weight:900;vertical-align:top;">⟶</td>
+                  <td>
+                    <div style="color:#EDEAE2;font-size:15px;font-weight:700;margin-bottom:2px;">The Vault</div>
+                    <div style="color:rgba(237,234,226,.55);font-size:13px;line-height:1.5;">700+ curated sets from 100+ venues worldwide. Build a lineup in 30 seconds, share it with one link.</div>
+                  </td>
+                </tr></table>
+              </td></tr>
+
+              <tr><td style="padding:14px 0;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+                  <td style="width:32px;color:#F4A93C;font-size:16px;font-weight:900;vertical-align:top;">⊞</td>
+                  <td>
+                    <div style="color:#EDEAE2;font-size:15px;font-weight:700;margin-bottom:2px;">The Atlas</div>
+                    <div style="color:rgba(237,234,226,.55);font-size:13px;line-height:1.5;">Discover new venues by city. From Amsterdam to Ibiza to Chicago to Tokyo — see where the sound is happening.</div>
+                  </td>
+                </tr></table>
+              </td></tr>
+            </table>
+          </div>
+        </td></tr>
+
+        <!-- Stats bar -->
+        <tr><td style="padding:24px 40px;background:rgba(244,169,60,.06);border-top:1px solid rgba(244,169,60,.15);">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+            <td style="text-align:center;">
+              <div style="color:#F4A93C;font-size:22px;font-weight:900;">793</div>
+              <div style="color:rgba(237,234,226,.5);font-size:10px;letter-spacing:.1em;text-transform:uppercase;">sets in vault</div>
+            </td>
+            <td style="text-align:center;border-left:1px solid rgba(255,255,255,.08);border-right:1px solid rgba(255,255,255,.08);">
+              <div style="color:#F4A93C;font-size:22px;font-weight:900;">114</div>
+              <div style="color:rgba(237,234,226,.5);font-size:10px;letter-spacing:.1em;text-transform:uppercase;">venues</div>
+            </td>
+            <td style="text-align:center;">
+              <div style="color:#F4A93C;font-size:22px;font-weight:900;">Daily</div>
+              <div style="color:rgba(237,234,226,.5);font-size:10px;letter-spacing:.1em;text-transform:uppercase;">fresh drops</div>
+            </td>
+          </tr></table>
+        </td></tr>
+
+        <!-- Final CTA -->
+        <tr><td style="padding:36px 40px 44px;background:#0a0a0e;text-align:center;">
+          <a href="${confirmUrl}" style="display:inline-block;padding:14px 36px;background:#F4A93C;color:#0a0a0e;border-radius:10px;font-weight:900;font-size:14px;text-decoration:none;letter-spacing:.06em;text-transform:uppercase;">
+            Confirm & unlock the vault →
+          </a>
+          <p style="margin:20px 0 0;font-size:11px;color:rgba(237,234,226,.3);line-height:1.6;">
+            If you didn't sign up, you can ignore this email — you won't hear from us again.
+          </p>
+        </td></tr>
+
+        <!-- Footer -->
+        <tr><td style="padding:20px 40px;background:#050609;text-align:center;">
+          <p style="margin:0;font-size:10px;color:rgba(237,234,226,.3);letter-spacing:.15em;text-transform:uppercase;">
+            Proper Selects · <a href="https://properselects.com" style="color:rgba(244,169,60,.6);text-decoration:none;">properselects.com</a>
+          </p>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`,
   });
 }
 
