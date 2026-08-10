@@ -942,6 +942,14 @@ button { font-family: inherit; cursor: pointer; }
 .jb-near-meta { font-size: 10px; opacity: .65; line-height: 1.4; }
 
 /* ==================== Atlas ==================== */
+/* Leaflet map container — force pixel dimensions on mobile Safari */
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  background: #1a1a20;
+}
+.leaflet-tile { visibility: inherit !important; }
+
 .am-drawer {
   position: absolute;
   top: 0;
