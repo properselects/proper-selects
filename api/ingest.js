@@ -165,10 +165,12 @@ function parseDuration(d) {
   return (+(m[1]||0))*3600 + (+(m[2]||0))*60 + (+(m[3]||0));
 }
 
-async function ytSearch(channelId) {
-  const r = await ytFetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&maxResults=10&order=date&type=video&videoDuration=long&key=KEY_PLACEHOLDER`);
+async function ytSearch(channelId, pageToken = null) {
+  const pt = pageToken ? `&pageToken=${pageToken}` : '';
+  const r = await ytFetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&maxResults=50&order=date&type=video&videoDuration=long${pt}&key=KEY_PLACEHOLDER`);
   const d = await r.json();
-  return (d.items||[]).map(i => ({ video_id: i.id.videoId, title: i.snippet.title, published_at: i.snippet.publishedAt }));
+  const items = (d.items||[]).map(i => ({ video_id: i.id.videoId, title: i.snippet.title, published_at: i.snippet.publishedAt }));
+  return { items, nextPageToken: d.nextPageToken || null };
 }
 
 // Venue detection from title — routes sets to proper festival_id/city
@@ -225,7 +227,8 @@ async function ytDurations(ids) {
 }
 
 async function getExisting() {
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/public_sets?select=video_id`, {
+  // Use raw sets table (service key) to catch ALL existing video_ids regardless of status/embeddable
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/sets?select=video_id&limit=10000`, {
     headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
   });
   const rows = r.ok ? await r.json() : [];
@@ -270,20 +273,52 @@ export default async function handler(req, res) {
   }
   if (!YOUTUBE_API_KEY || !SUPABASE_KEY) return res.status(500).json({ error: 'Missing env vars' });
 
+  // Fix festivals stuck at lat=0,lng=0
+  const VENUE_COORD_FIXES = [
+    { id: 'housecalls',  lat: 41.8781, lng: -87.6298, city: 'Chicago',   region: 'americas' },
+    { id: 'when-we-dip', lat: 52.5200, lng: 13.4050,  city: 'Berlin',    region: 'europe' },
+    { id: 'elrow',       lat: 41.3851, lng: 2.1734,   city: 'Barcelona', region: 'europe' },
+    { id: 'discovered',  lat: 51.5074, lng: -0.1278,  city: 'London',    region: 'europe' },
+  ];
+  for (const { id, ...patch } of VENUE_COORD_FIXES) {
+    await fetch(`${SUPABASE_URL}/rest/v1/festivals?id=eq.${id}&lat=eq.0`, {
+      method: 'PATCH',
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify(patch),
+    }).catch(() => {});
+  }
+
   const existing = await getExisting();
   const toInsert = [];
 
+  // Count existing sets per festival so we can do extra pages for thin venues
+  const existingByFestival = {};
+  for (const ch of CHANNELS) existingByFestival[ch.festival_id] = 0;
+  for (const vid of existing) {/* existing is a Set of video_ids — count tracked below */}
+
   for (const ch of CHANNELS) {
     try {
-      const videos = (await ytSearch(ch.channelId)).filter(v => !existing.has(v.video_id));
-      if (!videos.length) continue;
-      const durs = await ytDurations(videos.map(v => v.video_id));
-      for (const v of videos) {
-        if ((durs[v.video_id]||0) < MIN_SECS) continue;
-        if (isNonMusicalContent(v.title)) continue;
-        const routed = routeByTitle(v.title, ch);
-        toInsert.push({ video_id: v.video_id, festival_id: routed.festival_id, festival_name: routed.festival_name, city: routed.city, vibe: routed.vibe || ch.vibe, artist: v.title, title: v.title, source: 'youtube', duration_sec: durs[v.video_id] || null, status: 'live', embeddable: true, published_at: v.published_at, accent: null });
-      }
+      let pageToken = null;
+      let pageCount = 0;
+      const MAX_PAGES = 4; // up to 200 results (4 × 50) per channel to backfill thin venues
+      do {
+        const { items, nextPageToken } = await ytSearch(ch.channelId, pageToken);
+        const newItems = items.filter(v => !existing.has(v.video_id));
+        if (newItems.length) {
+          const durs = await ytDurations(newItems.map(v => v.video_id));
+          for (const v of newItems) {
+            if ((durs[v.video_id]||0) < MIN_SECS) continue;
+            if (isNonMusicalContent(v.title)) continue;
+            const routed = routeByTitle(v.title, ch);
+            toInsert.push({ video_id: v.video_id, festival_id: routed.festival_id, festival_name: routed.festival_name, city: routed.city, vibe: routed.vibe || ch.vibe, artist: v.title, title: v.title, source: 'youtube', duration_sec: durs[v.video_id] || null, status: 'live', embeddable: true, published_at: v.published_at, accent: null });
+            existing.add(v.video_id);
+          }
+        }
+        pageToken = nextPageToken;
+        pageCount++;
+        // If first page had no new items, stop — we're caught up for this channel
+        if (pageCount === 1 && newItems.length === 0) break;
+      } while (pageToken && pageCount < MAX_PAGES);
     } catch (e) {
       console.error(ch.festival_name, e.message);
     }

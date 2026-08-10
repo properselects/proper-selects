@@ -9,6 +9,8 @@ const STACK = [
   { icon: '⊞', text: 'Free forever. No signup.' },
 ];
 
+const BAR_HEIGHTS = [18, 28, 14, 32, 22, 10, 30, 20, 26, 12, 34, 18, 24, 30, 16, 28, 10, 22, 32, 14, 26, 18, 30, 20];
+
 export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
   const [stats, setStats] = useState({ sets: null, venues: null });
   const [liveIdx, setLiveIdx] = useState(0);
@@ -39,11 +41,20 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
 
   return (
     <div className="jb-gate">
+      {/* Layered background */}
       <div className="jb-gate-bg" aria-hidden="true" />
+      <div className="jb-grid-overlay" aria-hidden="true" />
+      <div className="jb-scanline" aria-hidden="true" />
 
       <div className="jb-gate-inner">
-        <div className="jb-wordmark">PROPER SELECTS</div>
+        {/* Wordmark */}
+        <div className="jb-wordmark">
+          <span className="jb-wordmark-bracket">[</span>
+          PROPER SELECTS
+          <span className="jb-wordmark-bracket">]</span>
+        </div>
 
+        {/* Hero */}
         <h1 className="jb-hero">
           Don't know
           <br />
@@ -52,61 +63,69 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
           <span className="jb-hero-sub">Share a whole lineup.</span>
         </h1>
 
-        <p style={{
-          fontSize: 'clamp(15px, 2.2vw, 20px)',
-          color: 'rgba(237,234,226,.55)',
-          maxWidth: 480,
-          lineHeight: 1.55,
-          margin: '0 auto 32px',
-          fontWeight: 500,
-          letterSpacing: '-.01em',
-        }}>
-          The world's best DJ sets from 75+ venues — Boiler Room, Cercle,
-          RAW CUTS, Thuishaven. Fresh every morning.
+        <p className="jb-desc">
+          The world's best DJ sets from 75+ venues —{' '}
+          <span className="jb-desc-accent">Boiler Room</span>,{' '}
+          <span className="jb-desc-accent">Cercle</span>,{' '}
+          <span className="jb-desc-accent">RAW CUTS</span>,{' '}
+          <span className="jb-desc-accent">Thuishaven</span>.{' '}
+          Fresh every morning.
         </p>
 
-        {/* Value stack */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 10,
-          marginBottom: 36,
-          width: '100%',
-          maxWidth: 380,
-          textAlign: 'left',
-        }}>
-          {STACK.map(({ icon, text }) => (
-            <div key={text} style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-              fontSize: 14,
-              color: 'rgba(237,234,226,.75)',
-              fontWeight: 600,
-            }}>
-              <span style={{ color: '#F4A93C', fontSize: 15, flexShrink: 0 }}>{icon}</span>
-              {text}
+        {/* Feature grid */}
+        <div className="jb-stack">
+          {STACK.map(({ icon, text }, i) => (
+            <div key={text} className="jb-stack-item" style={{ animationDelay: `${i * 80}ms` }}>
+              <span className="jb-stack-icon">{icon}</span>
+              <span className="jb-stack-text">{text}</span>
             </div>
           ))}
         </div>
 
+        {/* Waveform visualizer — CSS animated */}
+        <div className="jb-wave" aria-hidden="true">
+          {BAR_HEIGHTS.map((h, i) => (
+            <div
+              key={i}
+              className="jb-wave-bar"
+              style={{
+                '--h': `${h}px`,
+                animationDelay: `${(i * 97) % 800}ms`,
+                animationDuration: `${600 + (i * 137) % 600}ms`,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Live now playing */}
         {nowPlaying && (
-          <div className="jb-livefeed" style={{ marginBottom: 20 }}>
+          <div className="jb-livefeed">
             <span className="jb-livedot" />
+            <span className="jb-livefeed-label">NOW PLAYING</span>
+            <span className="jb-livefeed-sep">·</span>
             <span className="jb-livefeed-text">
-              Now playing · <strong>{parseArtist(nowPlaying.artist)}</strong>
+              <strong>{parseArtist(nowPlaying.artist)}</strong>
             </span>
           </div>
         )}
 
+        {/* CTA */}
         <button className="jb-enter" onClick={onEnter}>
           <span className="jb-enter-play">▷</span>
           Start Listening
+          <span className="jb-enter-shimmer" />
         </button>
 
+        {/* Stats */}
         {stats.sets && (
-          <div className="jb-gate-meta" style={{ marginTop: 20 }}>
-            <span className="jb-meta-num">{stats.sets}</span> live sets · <span className="jb-meta-num">{stats.venues}</span> venues worldwide
+          <div className="jb-gate-meta">
+            <span className="jb-meta-num">{stats.sets.toLocaleString()}</span>
+            <span className="jb-meta-sep">/</span>
+            sets
+            <span className="jb-meta-sep">·</span>
+            <span className="jb-meta-num">{stats.venues}</span>
+            <span className="jb-meta-sep">/</span>
+            venues worldwide
           </div>
         )}
 

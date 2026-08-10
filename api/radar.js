@@ -24,12 +24,18 @@ const FALLBACK_SETS = [
 
 async function getViewCounts(videoIds) {
   if (!YOUTUBE_API_KEY || !videoIds.length) return {};
-  const url = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds.join(',')}&key=${YOUTUBE_API_KEY}`;
-  try {
-    const r = await fetch(url);
-    const d = await r.json();
-    return Object.fromEntries((d.items || []).map(i => [i.id, parseInt(i.statistics?.viewCount || 0)]));
-  } catch { return {}; }
+  const chunks = [];
+  for (let i = 0; i < videoIds.length; i += 50) chunks.push(videoIds.slice(i, i + 50));
+  const results = {};
+  for (const chunk of chunks) {
+    try {
+      const url = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${chunk.join(',')}&key=${YOUTUBE_API_KEY}`;
+      const r = await fetch(url);
+      const d = await r.json();
+      for (const item of (d.items || [])) results[item.id] = parseInt(item.statistics?.viewCount || 0);
+    } catch { }
+  }
+  return results;
 }
 
 async function getRecentSets() {
@@ -48,6 +54,7 @@ async function getRecentSets() {
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
+
 
   const sets = await getRecentSets();
   const ids = sets.map(s => s.video_id);

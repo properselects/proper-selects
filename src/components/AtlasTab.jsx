@@ -15,7 +15,7 @@ async function fetchVenuesWithSets() {
 
 async function fetchSetsForVenue(festivalId) {
   const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/vault_sets?festival_id=eq.${encodeURIComponent(festivalId)}&select=video_id,artist,festival_name,city&limit=8`,
+    `${SUPABASE_URL}/rest/v1/vault_sets?festival_id=eq.${encodeURIComponent(festivalId)}&select=video_id,artist,festival_name,city&order=published_at.desc&limit=500`,
     { headers: supabaseHeaders }
   );
   return r.ok ? r.json() : [];
