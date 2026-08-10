@@ -434,8 +434,8 @@ button { font-family: inherit; cursor: pointer; }
   padding: 18px 22px 10px;
 }
 .tg-brand { font-weight: 800; letter-spacing: .16em; font-size: 15px; }
-.tg-brand span { opacity: .5; letter-spacing: .3em; font-size: 11px; margin-left: 4px; }
-.tg-date { font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; opacity: .55; }
+.tg-brand span { opacity: .65; letter-spacing: .3em; font-size: 11px; margin-left: 4px; }
+.tg-date { font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; opacity: .7; }
 
 .tg-filters {
   display: flex;
@@ -472,8 +472,8 @@ button { font-family: inherit; cursor: pointer; }
 .tg-chip:hover { transform: translateY(-1px); background: rgba(255,255,255,.1); }
 .tg-chip.on { background: rgba(255,255,255,.1); }
 .tg-chip-dot { width: 8px; height: 8px; border-radius: 50%; }
-.tg-count { opacity: .5; font-weight: 600; }
-.tg-chip-blurb { opacity: .45; font-weight: 500; font-size: 10.5px; display: none; }
+.tg-count { opacity: .7; font-weight: 600; }
+.tg-chip-blurb { opacity: .65; font-weight: 500; font-size: 10.5px; display: none; }
 @media (min-width: 700px) { .tg-chip-blurb { display: inline; } }
 
 .tg-grid {
@@ -522,7 +522,7 @@ button { font-family: inherit; cursor: pointer; }
 .tg-tile:hover .tg-play { transform: scale(1.12); }
 .tg-meta { padding: 12px 14px; }
 .tg-artist { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-.tg-fest { font-size: 11px; opacity: .55; }
+.tg-fest { font-size: 11px; opacity: .72; }
 
 /* ==================== Sub/Submit modal ==================== */
 .jb-sub-overlay {
@@ -708,13 +708,13 @@ button { font-family: inherit; cursor: pointer; }
   text-transform: uppercase;
   font-weight: 700;
 }
-.jb-list-sub { opacity: .5; font-size: 10px; }
+.jb-list-sub { opacity: .65; font-size: 10px; }
 .jb-slot {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(0,0,0,.15);
-  border: 1px solid transparent;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
   color: inherit;
   padding: 10px 14px;
   border-radius: 8px;
@@ -722,12 +722,12 @@ button { font-family: inherit; cursor: pointer; }
   text-align: left;
   font-family: inherit;
 }
-.jb-slot.on { background: rgba(0,0,0,.28); }
-.jb-slot-num { font-size: 13px; font-weight: 800; opacity: .8; font-variant-numeric: tabular-nums; }
+.jb-slot.on { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.18); }
+.jb-slot-num { font-size: 13px; font-weight: 800; opacity: .9; font-variant-numeric: tabular-nums; }
 .jb-slot-main { display: flex; flex-direction: column; flex: 1; gap: 2px; min-width: 0; }
-.jb-slot-artist { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.jb-slot-meta { font-size: 10.5px; opacity: .55; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.jb-empty { padding: 40px; text-align: center; opacity: .5; font-size: 13px; }
+.jb-slot-artist { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #EDEAE2; }
+.jb-slot-meta { font-size: 11px; opacity: .7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.jb-empty { padding: 40px; text-align: center; opacity: .6; font-size: 13px; }
 
 /* Share button + toast */
 .jb-actions { display: flex; gap: 9px; flex-wrap: wrap; }
@@ -833,54 +833,55 @@ button { font-family: inherit; cursor: pointer; }
 .jb-radar {
   margin-top: 12px;
   padding: 12px 14px;
-  background: rgba(0,0,0,.15);
-  border: 1px solid rgba(0,0,0,.15);
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.1);
   border-radius: 10px;
 }
 .jb-radar-head {
   display: flex;
   gap: 10px;
   align-items: baseline;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   font-size: 11px;
   letter-spacing: .14em;
   text-transform: uppercase;
   font-weight: 700;
 }
-.jb-radar-sub { opacity: .5; font-size: 10px; letter-spacing: .08em; text-transform: none; font-weight: 500; }
+.jb-radar-sub { opacity: .7; font-size: 10px; letter-spacing: .06em; text-transform: none; font-weight: 500; }
 .jb-radar-row {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
   max-height: 220px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,.15) transparent;
+  scrollbar-color: rgba(255,255,255,.2) transparent;
   padding-right: 4px;
   -webkit-overflow-scrolling: touch;
 }
 .jb-radar-row::-webkit-scrollbar { width: 4px; }
-.jb-radar-row::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 4px; }
+.jb-radar-row::-webkit-scrollbar-thumb { background: rgba(255,255,255,.22); border-radius: 4px; }
 .jb-radar-row::-webkit-scrollbar-track { background: transparent; }
 .jb-id {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(0,0,0,.2);
-  border: 1px solid rgba(0,0,0,.2);
-  color: inherit;
-  padding: 7px 10px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  color: #EDEAE2;
+  padding: 8px 12px;
   border-radius: 6px;
   cursor: pointer;
   font-family: inherit;
   width: 100%;
   text-align: left;
+  transition: background .15s, border-color .15s;
 }
-.jb-id:hover { background: rgba(0,0,0,.32); }
-.jb-id.resolved { background: rgba(0,0,0,.3); }
+.jb-id:hover { background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.18); }
+.jb-id.resolved { background: rgba(255,255,255,.06); }
 .jb-id-ts { font-size: 12px; font-weight: 800; font-variant-numeric: tabular-nums; flex-shrink: 0; min-width: 44px; }
-.jb-id-label { font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; opacity: .85; }
-.jb-id-likes { font-size: 10px; opacity: .5; flex-shrink: 0; }
+.jb-id-label { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; color: #EDEAE2; }
+.jb-id-likes { font-size: 10px; opacity: .65; flex-shrink: 0; color: #EDEAE2; }
 
 .jb-cast-banner {
   display: flex;
@@ -937,8 +938,8 @@ button { font-family: inherit; cursor: pointer; }
 }
 .jb-near-card:hover { border-color: rgba(0,0,0,.35); background: rgba(0,0,0,.22); }
 .jb-near-venue { font-size: 12px; font-weight: 800; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.jb-near-event { font-size: 11px; opacity: .7; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.jb-near-meta { font-size: 10px; opacity: .45; line-height: 1.4; }
+.jb-near-event { font-size: 11px; opacity: .8; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.jb-near-meta { font-size: 10px; opacity: .65; line-height: 1.4; }
 
 /* ==================== Atlas ==================== */
 .am-drawer {

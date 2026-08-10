@@ -359,7 +359,7 @@ export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, on
                     ))}
                   </div>
                 ) : (
-                  <div style={{ fontSize: 12, opacity: 0.35, padding: '4px 0' }}>
+                  <div style={{ fontSize: 12, opacity: 0.55, padding: '4px 0', color: '#EDEAE2' }}>
                     No IDs mined yet for this set
                   </div>
                 )}
