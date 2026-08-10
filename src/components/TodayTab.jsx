@@ -404,7 +404,7 @@ export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, on
                   title={lineupIds.has(v.video_id) ? 'Remove from lineup' : 'Add to lineup'}
                   style={{
                     background: 'none', border: 'none', padding: '0 12px',
-                    color: lineupIds.has(v.video_id) ? stage.accent : 'rgba(237,234,226,.3)',
+                    color: lineupIds.has(v.video_id) ? stage.accent : 'rgba(0,0,0,.35)',
                     fontSize: 16, cursor: 'pointer', flexShrink: 0, lineHeight: 1,
                   }}
                 >

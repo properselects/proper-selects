@@ -723,10 +723,10 @@ button { font-family: inherit; cursor: pointer; }
   font-family: inherit;
 }
 .jb-slot.on { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.18); }
-.jb-slot-num { font-size: 13px; font-weight: 800; opacity: .9; font-variant-numeric: tabular-nums; }
+.jb-slot-num { font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; }
 .jb-slot-main { display: flex; flex-direction: column; flex: 1; gap: 2px; min-width: 0; }
-.jb-slot-artist { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #EDEAE2; }
-.jb-slot-meta { font-size: 11px; opacity: .7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.jb-slot-artist { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #111; }
+.jb-slot-meta { font-size: 11px; color: rgba(0,0,0,.6); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .jb-empty { padding: 40px; text-align: center; opacity: .6; font-size: 13px; }
 
 /* Share button + toast */
