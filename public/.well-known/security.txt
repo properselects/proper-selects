@@ -1,0 +1,5 @@
+Contact: mailto:security@properselects.com
+Contact: mailto:proper.selects@gmail.com
+Expires: 2027-08-09T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://properselects.com/.well-known/security.txt

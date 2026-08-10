@@ -13,6 +13,37 @@ function isValidEmail(e) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 }
 
+// Simple in-memory sliding-window rate limiter (per IP).
+// Resets on cold start — fine for abuse mitigation, not for strict SLA.
+const rateBuckets = new Map();
+const RATE_LIMIT = 5;              // max attempts
+const RATE_WINDOW_MS = 60 * 60_000; // 1 hour
+
+function checkRateLimit(ip) {
+  if (!ip) return true;
+  const now = Date.now();
+  const bucket = (rateBuckets.get(ip) || []).filter(t => now - t < RATE_WINDOW_MS);
+  if (bucket.length >= RATE_LIMIT) {
+    rateBuckets.set(ip, bucket);
+    return false;
+  }
+  bucket.push(now);
+  rateBuckets.set(ip, bucket);
+  // Periodic GC to prevent unbounded growth
+  if (rateBuckets.size > 5000) {
+    for (const [k, v] of rateBuckets) {
+      if (!v.length || now - v[v.length - 1] > RATE_WINDOW_MS) rateBuckets.delete(k);
+    }
+  }
+  return true;
+}
+
+function getClientIp(req) {
+  const xff = req.headers['x-forwarded-for'];
+  if (typeof xff === 'string') return xff.split(',')[0].trim();
+  return req.headers['x-real-ip'] || req.socket?.remoteAddress || '';
+}
+
 function createTransport() {
   return nodemailer.createTransport({
     service: 'gmail',
@@ -177,7 +208,14 @@ export default async function handler(req, res) {
   }
 
 
+
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  // Rate limit: 5 requests per hour per IP
+  const ip = getClientIp(req);
+  if (!checkRateLimit(ip)) {
+    return res.status(429).json({ error: 'Too many requests. Try again later.' });
+  }
 
   const { email, website } = req.body || {};
 
