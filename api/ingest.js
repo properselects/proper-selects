@@ -92,6 +92,8 @@ const CHANNELS = [
   { channelId: 'UCe710jxByDD7eF1A_C_im7A', festival_id: 'omnia-lv',       festival_name: 'Omnia Las Vegas',       city: 'Las Vegas',        vibe: 'americas' },
   { channelId: 'UCFma8dm2-m5KoFu6FW5i8mA', festival_id: 'xs-lv',          festival_name: 'XS Las Vegas',          city: 'Las Vegas',        vibe: 'americas' },
   { channelId: 'UCfyFtw01Nf973V9gggJVi_Q', festival_id: 'unum',           festival_name: 'UNUM Festival',         city: 'Shëngjin',         vibe: 'europe' },
+  // Latin American showcase added 2026-08-11 (was mis-routing to circuit)
+  { channelId: 'UCJIMunEutszYhRvy-4P5r0Q', festival_id: 'monsoon',        festival_name: 'Monsoon',               city: 'Peru',             vibe: 'americas' },
 ];
 
 const MIN_SECS = 45 * 60;
@@ -211,6 +213,7 @@ const VENUE_ROUTES = [
   { re: /Seismic\s+Dance/i,             festival_id: 'concourse',           festival_name: 'The Concourse Project',   city: 'Austin',       vibe: 'americas' },
   { re: /Academy\s+(LA|Hollywood)/i,    festival_id: 'academy-la',          festival_name: 'Academy LA',              city: 'Los Angeles',  vibe: 'americas' },
   { re: /Trotamundo|Lost\s+Beach\s+Club|Montañita/i, festival_id: 'trotamundo', festival_name: 'Trotamundo @ Lost Beach Club', city: 'Montañita', vibe: 'americas' },
+  { re: /Essential\s+Mix/i,          festival_id: 'essential-mix',       festival_name: 'BBC Radio 1 Essential Mix',    city: 'London',       vibe: 'europe' },
 ];
 
 function routeByTitle(title, defaultCh) {
