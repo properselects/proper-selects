@@ -90,22 +90,32 @@ function applyDiversity(sets, maxPerVenue = 2) {
   });
 }
 
-async function sbFetch(path) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
-    headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
-  });
-  if (!res.ok) return [];
-  return res.json();
+async function sbFetch(path, retries = 1) {
+  // Retry once on transient failure so a single Supabase hiccup doesn't blank a region.
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+    });
+    if (!res.ok) throw new Error(`sb ${res.status}`);
+    return await res.json();
+  } catch (e) {
+    if (retries > 0) return sbFetch(path, retries - 1);
+    return [];
+  }
 }
 
 const REGIONS = ['americas', 'europe', 'worldwide'];
 const TARGET = 20;
 const FRESH_TARGET = 8; // slots reserved for recently published sets
 const FRESH_WINDOW_DAYS = 14;
+const MIN_PER_REGION = 12; // floor before we start relaxing filters to backfill from the vault
 
 async function todayLineup() {
   // Fresh layer: newest sets published in the last 14 days per region (sorted by published_at desc)
   // Fill layer: shuffled vault for variety
+  // Fallback layer: if a region comes up thin (Supabase error, sparse region, or an aggressive
+  // diversity trim), progressively relax the query/filters so the grid is never blank as long as
+  // the database has *any* rows for that region.
   const since = new Date(Date.now() - FRESH_WINDOW_DAYS * 24 * 60 * 60 * 1000).toISOString();
 
   const pools = await Promise.all(
@@ -114,8 +124,19 @@ async function todayLineup() {
     )
   );
 
-  return REGIONS.flatMap((region, i) => {
-    const all = pools[i];
+  const out = [];
+  for (let i = 0; i < REGIONS.length; i++) {
+    const region = REGIONS[i];
+    let all = pools[i];
+
+    // Fallback 1: primary pool empty/thin (Supabase hiccup or sparse region) → re-query the vault
+    // without the source/duration constraints so we still fill entirely from the database.
+    if (all.length < MIN_PER_REGION) {
+      const backfill = await sbFetch(`vault_sets?select=*&vibe=eq.${region}&order=published_at.desc&limit=500`);
+      const seen = new Set(all.map((r) => r.video_id));
+      all = all.concat(backfill.filter((r) => !seen.has(r.video_id)));
+    }
+
     const recent = all.filter((r) => r.published_at && r.published_at >= since);
     const older = all.filter((r) => !r.published_at || r.published_at < since);
 
@@ -128,8 +149,20 @@ async function todayLineup() {
     shuffle(pool);
     const fill = applyDiversity(pool, 2).slice(0, TARGET - fresh.length);
 
-    return [...fresh, ...fill].map((s) => ({ ...s, vibe: region }));
-  });
+    let regionSets = [...fresh, ...fill];
+
+    // Fallback 2: still short after diversity trimming → pad from whatever else is in the vault
+    // (skip only clearly-bad content), so a region always serves as many sets as it can.
+    if (regionSets.length < MIN_PER_REGION) {
+      const used = new Set(regionSets.map((r) => r.video_id));
+      const pad = all.filter((r) => !used.has(r.video_id) && !isBad(r)).slice(0, TARGET - regionSets.length);
+      regionSets = regionSets.concat(pad);
+    }
+
+    out.push(...regionSets.map((s) => ({ ...s, vibe: region })));
+  }
+
+  return out;
 }
 
 // ── Handler ──────────────────────────────────────────────────────────────────
