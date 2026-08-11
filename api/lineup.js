@@ -162,7 +162,16 @@ async function todayLineup() {
     out.push(...regionSets.map((s) => ({ ...s, vibe: region })));
   }
 
-  return out;
+  // Global dedupe: a video mislabeled under two festival_ids can land in different regions
+  // (e.g. a Club Space/Americas row and a Mixmag Lab/Europe row for the same set). Keep the
+  // first occurrence so the same video never shows twice across the whole lineup.
+  const seenVideo = new Set();
+  return out.filter((s) => {
+    if (!s.video_id) return true;
+    if (seenVideo.has(s.video_id)) return false;
+    seenVideo.add(s.video_id);
+    return true;
+  });
 }
 
 // ── Handler ──────────────────────────────────────────────────────────────────

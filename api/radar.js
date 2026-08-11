@@ -52,11 +52,28 @@ async function getRecentSets() {
   } catch { return FALLBACK_SETS; }
 }
 
+// Same YouTube video is sometimes ingested under two festival_ids (venue mislabel),
+// which would render the same set twice. Collapse to one row per video_id, preferring
+// the row whose festival_name actually appears in the title (the correctly-labeled venue).
+function dedupeByVideo(rows) {
+  const best = new Map();
+  for (const r of rows) {
+    const id = r.video_id;
+    if (!id) continue;
+    const existing = best.get(id);
+    if (!existing) { best.set(id, r); continue; }
+    const title = (r.artist || '').toLowerCase();
+    const score = (row) => (row.festival_name && title.includes(row.festival_name.toLowerCase()) ? 1 : 0);
+    if (score(r) > score(existing)) best.set(id, r);
+  }
+  return [...best.values()];
+}
+
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
 
 
-  const sets = await getRecentSets();
+  const sets = dedupeByVideo(await getRecentSets());
   const ids = sets.map(s => s.video_id);
   const views = await getViewCounts(ids);
 
