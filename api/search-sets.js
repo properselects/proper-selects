@@ -63,15 +63,29 @@ async function sbGet(path) {
 
 async function sbInsert(rows) {
   if (!rows.length) return;
-  await fetch(`${SUPABASE_URL}/rest/v1/public_sets`, {
+  // Insert into the base `sets` table (NOT the public_sets view, which isn't insertable).
+  // festival_name/city/accent live on the festivals table; `vibe` on sets is a stages FK, so omit them.
+  const payload = rows.map((r) => ({
+    video_id: r.video_id,
+    festival_id: r.festival_id,
+    artist: r.artist,
+    title: r.title,
+    source: r.source,
+    duration_sec: r.duration_sec,
+    status: r.status,
+    embeddable: r.embeddable,
+    published_at: r.published_at,
+  }));
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/sets`, {
     method: 'POST',
     headers: {
       apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`,
       'Content-Type': 'application/json',
       Prefer: 'return=minimal,resolution=ignore-duplicates',
     },
-    body: JSON.stringify(rows),
+    body: JSON.stringify(payload),
   });
+  if (!res.ok) console.error('search-sets insert failed:', res.status, await res.text().catch(() => ''));
 }
 
 export default async function handler(req, res) {

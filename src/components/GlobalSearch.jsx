@@ -34,7 +34,9 @@ export default function GlobalSearch({ open, onClose, lineup, onLineupChange, on
       try {
         const rows = await searchDB(query);
         setResults(rows);
-        if (rows.length < 2) {
+        // Also run the YouTube finder when catalog matches are thin — a couple of tangential
+        // hits (e.g. an artist appearing only in group/festival sets) shouldn't hide their solo sets.
+        if (rows.length < 5) {
           // Keep spinner while YouTube search runs
           const data = await fetch(`/api/search-sets?q=${encodeURIComponent(query)}`)
             .then(r => r.ok ? r.json() : null)

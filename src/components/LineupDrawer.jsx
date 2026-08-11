@@ -69,7 +69,7 @@ export default function LineupDrawer({ open, onClose, lineup, onLineupChange, on
       try {
         const rows = await searchSets(query);
         setResults(rows);
-        if (rows.length < 2) {
+        if (rows.length < 5) {
           // Keep spinner while YouTube search runs
           const data = await fetch(`/api/search-sets?q=${encodeURIComponent(query)}`)
             .then(r => r.ok ? r.json() : null)
