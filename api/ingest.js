@@ -265,6 +265,61 @@ async function insertTracks(tracks) {
   });
 }
 
+// Mine YouTube comments for timestamped "ID moments" (track callouts) on newly inserted sets.
+// Capped per ingest to conserve YouTube quota. Fully self-contained: never throws to the caller.
+async function mineCommentsFor(videoIds, cap = 10) {
+  const moments = [];
+  const TS_RE = /\b(?:(\d{1,2}):)?(\d{1,2}):(\d{2})\b/;
+  const ID_LABEL_RE = /[-–:]\s*(.+)/;
+  const UNRESOLVED_RE = /\b(?:id\??|what(?:'s|\s+is)\s+(?:this|the\s+track)|what\s+song)\b/i;
+
+  for (const video_id of (videoIds || []).slice(0, cap)) {
+    try {
+      const r = await ytFetch(`https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${video_id}&order=relevance&maxResults=50&key=KEY_PLACEHOLDER`);
+      if (!r.ok) continue;
+      const data = await r.json();
+      for (const item of (data.items || [])) {
+        const text = item.snippet?.topLevelComment?.snippet?.textOriginal || '';
+        const likes = item.snippet?.topLevelComment?.snippet?.likeCount || 0;
+        for (const line of text.split('\n')) {
+          const tsMatch = line.match(TS_RE);
+          if (!tsMatch) continue;
+          const [, h, m, sec] = tsMatch;
+          const t_sec = (parseInt(h || 0) * 3600) + (parseInt(m) * 60) + parseInt(sec);
+          if (t_sec < 30) continue; // skip intros
+          const afterTs = line.slice(line.indexOf(tsMatch[0]) + tsMatch[0].length);
+          const labelMatch = afterTs.match(ID_LABEL_RE);
+          const rawLabel = labelMatch ? labelMatch[1].trim() : afterTs.trim();
+          if (!rawLabel || rawLabel.length < 2 || rawLabel.length > 120) continue;
+          const isUnresolved = UNRESOLVED_RE.test(rawLabel) || rawLabel.toLowerCase().startsWith('id');
+          moments.push({
+            video_id,
+            t_sec,
+            label: isUnresolved ? 'ID?' : rawLabel,
+            resolved: !isUnresolved,
+            likes,
+            source: 'comment',
+          });
+        }
+      }
+    } catch {}
+  }
+  return moments;
+}
+
+async function insertMoments(moments) {
+  if (!moments.length) return;
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/set_id_moments`, {
+      method: 'POST',
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal,resolution=ignore-duplicates' },
+      body: JSON.stringify(moments),
+    });
+  } catch (e) {
+    console.error('insertMoments error:', e.message);
+  }
+}
+
 export default async function handler(req, res) {
   // Cron-only: reject unauthenticated calls
   const CRON_SECRET = process.env.CRON_SECRET;
@@ -376,56 +431,9 @@ export default async function handler(req, res) {
 
   // Mine YouTube comments for ID moments on newly inserted sets
   if (toInsert.length) {
-    try {
-      const moments = [];
-      const TS_RE = /\b(?:(\d{1,2}):)?(\d{1,2}):(\d{2})\b/;
-      const ID_LABEL_RE = /[-–:]\s*(.+)/;
-      const UNRESOLVED_RE = /\b(?:id\??|what(?:'s|\s+is)\s+(?:this|the\s+track)|what\s+song)\b/i;
-
-      for (const s of toInsert.slice(0, 10)) { // cap at 10 per ingest to save quota
-        try {
-          const r = await ytFetch(`https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${s.video_id}&order=relevance&maxResults=50&key=KEY_PLACEHOLDER`);
-          if (!r.ok) continue;
-          const data = await r.json();
-          for (const item of (data.items || [])) {
-            const text = item.snippet?.topLevelComment?.snippet?.textOriginal || '';
-            const likes = item.snippet?.topLevelComment?.snippet?.likeCount || 0;
-            const lines = text.split('\n');
-            for (const line of lines) {
-              const tsMatch = line.match(TS_RE);
-              if (!tsMatch) continue;
-              const [,h,m,sec] = tsMatch;
-              const t_sec = (parseInt(h||0)*3600) + (parseInt(m)*60) + parseInt(sec);
-              if (t_sec < 30) continue; // skip intros
-              const afterTs = line.slice(line.indexOf(tsMatch[0]) + tsMatch[0].length);
-              const labelMatch = afterTs.match(ID_LABEL_RE);
-              const rawLabel = labelMatch ? labelMatch[1].trim() : afterTs.trim();
-              if (!rawLabel || rawLabel.length < 2 || rawLabel.length > 120) continue;
-              const isUnresolved = UNRESOLVED_RE.test(rawLabel) || rawLabel.toLowerCase().startsWith('id');
-              moments.push({
-                video_id: s.video_id,
-                t_sec,
-                label: isUnresolved ? 'ID?' : rawLabel,
-                resolved: !isUnresolved,
-                likes,
-                source: 'comment',
-              });
-            }
-          }
-        } catch {}
-      }
-
-      if (moments.length) {
-        await fetch(`${SUPABASE_URL}/rest/v1/set_id_moments`, {
-          method: 'POST',
-          headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal,resolution=ignore-duplicates' },
-          body: JSON.stringify(moments),
-        });
-        console.log(`Mined ${moments.length} ID moments from comments`);
-      }
-    } catch (e) {
-      console.error('Comment mining error:', e.message);
-    }
+    const moments = await mineCommentsFor(toInsert.map(s => s.video_id), 15);
+    if (moments.length) await insertMoments(moments);
+    console.log(`Mined ${moments.length} ID moments from comments`);
   }
 
   res.json({ inserted: toInsert.length, checked: CHANNELS.length });
