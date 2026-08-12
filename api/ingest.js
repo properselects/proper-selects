@@ -184,11 +184,25 @@ function parseDuration(d) {
   return (+(m[1]||0))*3600 + (+(m[2]||0))*60 + (+(m[3]||0));
 }
 
+// YouTube titles come HTML-encoded (&amp; &#39; &quot; …). Decode so they don't render raw on the site.
+function decodeEntities(s) {
+  if (!s) return s;
+  return s
+    .replace(/&#0?39;|&apos;/g, "'")
+    .replace(/&quot;|&#34;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(+n))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+    .replace(/&amp;/g, '&'); // last, so we don't re-create entities
+}
+
 async function ytSearch(channelId, pageToken = null) {
   const pt = pageToken ? `&pageToken=${pageToken}` : '';
   const r = await ytFetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&maxResults=50&order=date&type=video&videoDuration=long${pt}&key=KEY_PLACEHOLDER`);
   const d = await r.json();
-  const items = (d.items||[]).map(i => ({ video_id: i.id.videoId, title: i.snippet.title, published_at: i.snippet.publishedAt }));
+  const items = (d.items||[]).map(i => ({ video_id: i.id.videoId, title: decodeEntities(i.snippet.title), published_at: i.snippet.publishedAt }));
   return { items, nextPageToken: d.nextPageToken || null };
 }
 

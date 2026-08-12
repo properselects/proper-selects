@@ -87,10 +87,22 @@ async function ytSearch(query, publishedAfter) {
   const d = await r.json();
   return (d.items || []).map((i) => ({
     video_id: i.id.videoId,
-    title: i.snippet.title,
+    title: decodeEntities(i.snippet.title),
     published_at: i.snippet.publishedAt,
     channel: i.snippet.channelTitle,
   }));
+}
+
+// YouTube titles come HTML-encoded (&amp; &#39; &quot; …) — decode so they don't render raw.
+function decodeEntities(s) {
+  if (!s) return s;
+  return s
+    .replace(/&#0?39;|&apos;/g, "'")
+    .replace(/&quot;|&#34;/g, '"')
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ')
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(+n))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+    .replace(/&amp;/g, '&');
 }
 
 async function ytDurations(ids) {
