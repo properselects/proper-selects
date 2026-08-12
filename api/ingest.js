@@ -22,7 +22,7 @@ const CHANNELS = [
   { channelId: 'UCXAuu4lli9oBgKZVGapNvBw', festival_id: 'dgtl',          festival_name: 'DGTL Festival',         city: 'Amsterdam',   vibe: 'europe' },
   { channelId: 'UCJFXYDv0Fy7TavmclGFpaWg', festival_id: 'radion',         festival_name: 'Radion Amsterdam',       city: 'Amsterdam',   vibe: 'europe' },
   { channelId: 'UCxGCaygaT8AKwN2-CZJTHRw', festival_id: 'loveland',       festival_name: 'Loveland Festival',     city: 'Amsterdam',   vibe: 'europe' },
-  { channelId: 'UCwatAPhCuO0UwCZUaqEzzRQ', festival_id: 'rawcuts',       festival_name: 'RAW CUTS',              city: 'New York',    vibe: 'americas' },
+  { channelId: 'UCwatAPhCuO0UwCZUaqEzzRQ', festival_id: 'rawcuts',       festival_name: 'RAW CUTS',              city: 'New York',    vibe: 'worldwide' },
   { channelId: 'UC3ifTl5zKiCAhHIBQYcaTrg', festival_id: 'greenvalley',   festival_name: 'Green Valley',          city: 'Camboriú',    vibe: 'americas' },
   { channelId: 'UCp_MbSA-jJzGjsBBgYZTmjA', festival_id: 'dc10',          festival_name: 'DC-10',                 city: 'Ibiza',       vibe: 'europe' },
   { channelId: 'UCaSjh0kdrd3xEn0zqcjbiDg', festival_id: 'concourse',     festival_name: 'The Concourse Project', city: 'Austin',      vibe: 'americas' },
@@ -30,7 +30,7 @@ const CHANNELS = [
   { channelId: 'UCV6qd2kF9ShJj_vaej6AJ9Q', festival_id: 'awakenings',  festival_name: 'Awakenings',           city: 'Amsterdam',   vibe: 'europe' },
   { channelId: 'UCU7wcDDNY1KkgAXfiShfNiQ', festival_id: 'amnesia',      festival_name: 'Amnesia',              city: 'Ibiza',       vibe: 'europe' },
   { channelId: 'UC7RZ3YtxzlR61_3kfjdolAA', festival_id: 'creamfields',  festival_name: 'Creamfields',          city: 'Warrington',  vibe: 'europe' },
-  { channelId: 'UC3SQZc2g5eUXgJ-X0jkPChQ', festival_id: 'junction2',    festival_name: 'Junction 2',           city: 'London',      vibe: 'europe' },
+  { channelId: 'UC3SQZc2g5eUXgJ-X0jkPChQ', festival_id: 'junction2',    festival_name: 'Junction 2',           city: 'London',      vibe: 'worldwide' },
   { channelId: 'UCjbDDt1C0iIXkhf7cxcHijg', festival_id: 'pacha',        festival_name: 'Pacha Ibiza',          city: 'Ibiza',       vibe: 'europe' },
   { channelId: 'UCWWOjDKnb2iZGlL12afBYzg', festival_id: 'printworks',   festival_name: 'Printworks',           city: 'London',      vibe: 'europe' },
   { channelId: 'UCgTcFmoQx7cA7gVZRbI450g', festival_id: 'sonus',        festival_name: 'Sonus Festival',       city: 'Tisno',       vibe: 'europe' },
@@ -51,7 +51,7 @@ const CHANNELS = [
   // LA collectives added 2026-08-05
   { channelId: 'UCtw41MdFxU4GZNbzB2UuPpg', festival_id: 'tyf-la',      festival_name: 'Tell Your Friends',     city: 'Los Angeles', vibe: 'americas' },
   // Ibiza/Berlin venues added 2026-08-05
-  { channelId: 'UCanV1p6ynx_FzdsraKLousQ', festival_id: 'circoloco',    festival_name: 'Circoloco',             city: 'Ibiza',       vibe: 'europe' },
+  { channelId: 'UCanV1p6ynx_FzdsraKLousQ', festival_id: 'circoloco',    festival_name: 'Circoloco',             city: 'Ibiza',       vibe: 'worldwide' },
   { channelId: 'UC072CZUvhdCg6Dsdvc18NkQ', festival_id: 'hi-ibiza',     festival_name: 'Hï Ibiza',              city: 'Ibiza',       vibe: 'europe' },
   { channelId: 'UCPQNk7oBBfQRf0tDFQBvgCA', festival_id: 'watergate',    festival_name: 'Watergate',             city: 'Berlin',      vibe: 'europe' },
   // US festival channels added 2026-08-05
@@ -64,7 +64,7 @@ const CHANNELS = [
   { channelId: 'UCJEKlziKdxoos1qbptjGgLg', festival_id: 'djmag',         festival_name: 'DJ Mag',                city: 'Worldwide',   vibe: 'worldwide' },
   { channelId: 'UCnLorjUZZ7kORuVEE4d-lMA', festival_id: 'househats',     festival_name: 'House Hats',            city: 'Worldwide',   vibe: 'worldwide' },
   // Underground labels + curator channels added 2026-08-06
-  { channelId: 'UCpiZh3AGeTygzfmUgioOFFg', festival_id: 'toolroom',      festival_name: 'Toolroom Records',      city: 'London',      vibe: 'europe' },
+  { channelId: 'UCpiZh3AGeTygzfmUgioOFFg', festival_id: 'toolroom',      festival_name: 'Toolroom Records',      city: 'London',      vibe: 'worldwide' },
   { channelId: 'UCJ-IRkRfFXrzmkyxZ7hEgcA', festival_id: 'when-we-dip',   festival_name: 'When We Dip',           city: 'Worldwide',   vibe: 'worldwide' },
   { channelId: 'UCzwhGJV9o4KTPD5Nq6GPeqQ', festival_id: 'diynamic',      festival_name: 'DIYNAMIC',              city: 'Hamburg',     vibe: 'europe' },
   { channelId: 'UCC7eKMxcVk1LZwzJlBdsVuQ', festival_id: 'innervisions',  festival_name: 'Innervisions',          city: 'Berlin',      vibe: 'europe' },
@@ -78,7 +78,7 @@ const CHANNELS = [
   { channelId: 'UCr45VhwCBYwMfdN-gz7W_OA', festival_id: 'insomniac',     festival_name: 'Insomniac',             city: 'Los Angeles', vibe: 'americas' },
   { channelId: 'UC5AOhbMw3M618Q2hk6zt5yw', festival_id: 'arc-chicago',   festival_name: 'ARC Music Festival',    city: 'Chicago',     vibe: 'americas' },
   { channelId: 'UCye08Q8h2bkXmH8syuftqmQ', festival_id: 'iii-points',    festival_name: 'III Points',            city: 'Miami',       vibe: 'americas' },
-  { channelId: 'UCsIVrho83JfwUieSs_UKCmA', festival_id: 'john-summit',   festival_name: 'John Summit',           city: 'Chicago',     vibe: 'americas' },
+  { channelId: 'UCsIVrho83JfwUieSs_UKCmA', festival_id: 'john-summit',   festival_name: 'John Summit',           city: 'Chicago',     vibe: 'worldwide' },
   { channelId: 'UCAWEFemmYHWXFDtV_5FPN-w', festival_id: 'anyma',          festival_name: 'Anyma',                 city: 'Los Angeles', vibe: 'americas' },
   // Worldwide venues added 2026-08-04
   { channelId: 'UCglk_nXa4Vfbk255I8Lk4yQ', festival_id: 'tomorrowland',  festival_name: 'Tomorrowland',          city: 'Boom',             vibe: 'worldwide' },
@@ -346,7 +346,7 @@ export default async function handler(req, res) {
     { id: 'housecalls',  lat: 41.8781, lng: -87.6298, city: 'Chicago',   region: 'americas' },
     { id: 'when-we-dip', lat: 52.5200, lng: 13.4050,  city: 'Berlin',    region: 'europe' },
     { id: 'elrow',       lat: 41.3851, lng: 2.1734,   city: 'Barcelona', region: 'europe' },
-    { id: 'discovered',  lat: 51.5074, lng: -0.1278,  city: 'London',    region: 'europe' },
+    { id: 'discovered',  lat: 51.5074, lng: -0.1278,  city: 'London',    region: 'worldwide' },
   ];
   for (const { id, ...patch } of VENUE_COORD_FIXES) {
     await fetch(`${SUPABASE_URL}/rest/v1/festivals?id=eq.${id}&lat=eq.0`, {
