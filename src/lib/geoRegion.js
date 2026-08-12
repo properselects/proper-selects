@@ -29,11 +29,14 @@ const EUR_CITIES = [
 ];
 
 export function geoRegion(row) {
+  // The DB festival region (curated + city-routed at ingest) is authoritative — trust it first.
+  if (row.vibe === 'americas' || row.vibe === 'europe' || row.vibe === 'worldwide') return row.vibe;
+  // Fallback heuristics only for rows without a region (e.g. raw search results):
   const city = (row.city || '').toLowerCase();
   const fest = (row.festival_id || row.festival_name || '').toLowerCase();
   if (AMER_IDS.has(row.festival_id)) return 'americas';
   if (EUR_IDS.has(row.festival_id)) return 'europe';
   if (AMER_CITIES.some((c) => city.includes(c) || fest.includes(c))) return 'americas';
   if (EUR_CITIES.some((c) => city.includes(c) || fest.includes(c))) return 'europe';
-  return row.vibe === 'americas' ? 'americas' : row.vibe === 'europe' ? 'europe' : 'worldwide';
+  return 'worldwide';
 }
