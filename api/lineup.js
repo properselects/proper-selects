@@ -47,6 +47,13 @@ const BAD_CONTENT_RE = [
   /\bfabric\s+\d+\b/i,
   /\bra\.\d+\b/i,
   /\bmix\s+of\s+the\s+day\b/i,
+  // Non-DJ-set junk / branded compilation mixes that slipped past discovery
+  /\bmotivational\b/i,
+  /\bhustle\s+mix\b/i,
+  /\bsunset\s+mix\b/i,
+  /\bgym\s*&(?:amp;)?\s*tonic\b/i,
+  /\bback\s+in\s+da\s+days\b/i,
+  /\bajegunle\b/i,
   // Generic: title ends with a bare episode number ≥ 100 (strong signal of a series)
   /[-–\s]\d{3,}$/,
 ];
@@ -106,22 +113,42 @@ async function sbFetch(path, retries = 1) {
 
 const REGIONS = ['americas', 'europe', 'worldwide'];
 const TARGET = 20;
-const FRESH_TARGET = 8; // slots reserved for recently published sets
-const FRESH_WINDOW_DAYS = 14;
+const FRESH_TARGET = 8; // slots reserved for recently-surfaced sets
+const FRESH_WINDOW_DAYS = 14; // "recently published" window
+const INGEST_WINDOW_DAYS = 7; // "recently added to the vault" window
 const MIN_PER_REGION = 12; // floor before we start relaxing filters to backfill from the vault
 
-async function todayLineup() {
-  // Fresh layer: newest sets published in the last 14 days per region (sorted by published_at desc)
-  // Fill layer: shuffled vault for variety
-  // Fallback layer: if a region comes up thin (Supabase error, sparse region, or an aggressive
-  // diversity trim), progressively relax the query/filters so the grid is never blank as long as
-  // the database has *any* rows for that region.
-  const since = new Date(Date.now() - FRESH_WINDOW_DAYS * 24 * 60 * 60 * 1000).toISOString();
+// Freshness = the more recent of when we ingested it vs when it was published, so a genuinely new
+// upload AND a just-added back-catalog set both surface. ISO timestamps sort lexicographically.
+function freshScore(r) {
+  const c = r.created_at || '';
+  const p = r.published_at || '';
+  return c > p ? c : p;
+}
 
+async function todayLineup() {
+  // Fresh layer: sets recently ADDED to the vault (or recently published) per region, ranked by how
+  //   recently they surfaced — so the Today grid visibly turns over as daily ingest runs, even in a
+  //   publish lull where nothing brand-new was uploaded.
+  // Fill layer: shuffled vault for variety.
+  // Fallback layer: if a region comes up thin (Supabase error, sparse region, or an aggressive
+  //   diversity trim), progressively relax the query/filters so the grid is never blank as long as
+  //   the database has *any* rows for that region.
+  const since = new Date(Date.now() - FRESH_WINDOW_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  const sinceIngest = new Date(Date.now() - INGEST_WINDOW_DAYS * 24 * 60 * 60 * 1000).toISOString();
+
+  // Two pools per region: newest-published (breadth) + newest-ingested (so freshly-added older
+  // uploads aren't buried past the 500-row publish-ordered cutoff). Merge + dedupe.
   const pools = await Promise.all(
-    REGIONS.map((region) =>
-      sbFetch(`vault_sets?select=*&vibe=eq.${region}&source=eq.youtube&duration_sec=gte.2700&order=published_at.desc&limit=500`)
-    )
+    REGIONS.map(async (region) => {
+      const q = `vault_sets?select=*&vibe=eq.${region}&source=eq.youtube&duration_sec=gte.2700`;
+      const [byPub, byNew] = await Promise.all([
+        sbFetch(`${q}&order=published_at.desc&limit=500`),
+        sbFetch(`${q}&order=created_at.desc&limit=120`),
+      ]);
+      const seen = new Set(byPub.map((r) => r.video_id));
+      return byPub.concat(byNew.filter((r) => !seen.has(r.video_id)));
+    })
   );
 
   const out = [];
@@ -137,15 +164,17 @@ async function todayLineup() {
       all = all.concat(backfill.filter((r) => !seen.has(r.video_id)));
     }
 
-    const recent = all.filter((r) => r.published_at && r.published_at >= since);
-    const older = all.filter((r) => !r.published_at || r.published_at < since);
+    // Fresh = recently ingested OR recently published; rank by whichever is more recent.
+    const recent = all
+      .filter((r) => (r.created_at && r.created_at >= sinceIngest) || (r.published_at && r.published_at >= since))
+      .sort((a, b) => freshScore(b).localeCompare(freshScore(a)));
 
-    // Fresh slots: most recently published, diversity-filtered
+    // Fresh slots: most recently surfaced, diversity-filtered
     const fresh = applyDiversity(recent, 2).slice(0, FRESH_TARGET);
     const freshIds = new Set(fresh.map((r) => r.video_id));
 
     // Fill slots: shuffle the rest for variety
-    const pool = older.filter((r) => !freshIds.has(r.video_id));
+    const pool = all.filter((r) => !freshIds.has(r.video_id));
     shuffle(pool);
     const fill = applyDiversity(pool, 2).slice(0, TARGET - fresh.length);
 

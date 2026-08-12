@@ -154,6 +154,13 @@ const NON_MUSICAL_PATTERNS = [
   /\breggaeton\b/i,
   /\bdancehall\b/i,
   /\bjazz\s+(mix|hits)/i,
+  // Non-DJ-set junk / branded compilation mixes
+  /\bmotivational\b/i,
+  /\bhustle\s+mix\b/i,
+  /\bsunset\s+mix\b/i,
+  /\bgym\s*&(?:amp;)?\s*tonic\b/i,
+  /\bback\s+in\s+da\s+days\b/i,
+  /\bajegunle\b/i,
 ];
 
 function isNonMusicalContent(title) {
