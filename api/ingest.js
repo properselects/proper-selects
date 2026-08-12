@@ -223,7 +223,7 @@ const VENUE_ROUTES = [
   { re: /LAROC/i,                   festival_id: 'laroc',               festival_name: 'Laroc Club',                   city: 'Itupeva',      vibe: 'americas' },
   { re: /Universo\s+Paralello/i,    festival_id: 'universo-paralello',  festival_name: 'Universo Paralello',           city: 'Bahia',        vibe: 'americas' },
   { re: /Concourse\s+Project/i,     festival_id: 'concourse',           festival_name: 'The Concourse Project',        city: 'Austin',       vibe: 'americas' },
-  { re: /Destino.*Ibiza|Ibiza.*Destino/i, festival_id: 'dc10',          festival_name: 'DC-10',                        city: 'Ibiza',        vibe: 'europe' },
+  { re: /Destino/i,                 festival_id: 'destino',             festival_name: 'Destino',                      city: 'Ibiza',        vibe: 'europe' },
   { re: /TRIIIPLE/i,                festival_id: 'triiple',             festival_name: 'TRIIIPLE Festival',            city: 'Valinhos',     vibe: 'americas' },
   { re: /SO\s+TRACK\s+BOA/i,        festival_id: 'sotrackboa',          festival_name: 'SO TRACK BOA',                 city: 'São Paulo',    vibe: 'americas' },
   { re: /PARQUE\s+DO\s+POVO/i,      festival_id: 'parque-povo',         festival_name: 'Parque do Povo',               city: 'São Paulo',    vibe: 'americas' },
