@@ -113,3 +113,41 @@ export function parseCity(text) {
   for (const [kw, name] of LOCATIONS) if (t.includes(kw)) return name;
   return null; // no location in title → caller falls back to festival city
 }
+
+// Real venue/event name read out of a title — used to replace the generic "Discovered" bucket
+// label on search-ingested sets. [keyword, DisplayName], most specific first. Returns null if none.
+const VENUES = [
+  ['space miami', 'Space Miami'], ['club space', 'Space Miami'], ['the terrace', 'The Terrace'],
+  ['south beach', 'South Beach'], ['brooklyn mirage', 'Brooklyn Mirage'], ['knockdown center', 'Knockdown Center'],
+  ['nowadays', 'Nowadays'], ['elsewhere', 'Elsewhere'], ['superior ingredients', 'Superior Ingredients'],
+  ['factory 93', 'Factory 93'], ['the midway', 'The Midway'], ['exchange la', 'Exchange LA'],
+  ['sound nightclub', 'Sound'], ['time nightclub', 'Time'], ['e11even', 'E11EVEN'], ['treehouse', 'Treehouse'],
+  ['do not sit', 'Do Not Sit'], ['stereo montreal', 'Stereo'], ['comuna 13', 'Comuna 13'], ['bauhaus', 'Bauhaus'],
+  ['block party', 'Block Party'], ['mayan warrior', 'Mayan Warrior'], ['burning man', 'Burning Man'],
+  ['ushuaïa', 'Ushuaïa'], ['ushuaia', 'Ushuaïa'], ['hï ibiza', 'Hï Ibiza'], ['hi ibiza', 'Hï Ibiza'],
+  ['dc-10', 'DC-10'], ['dc10', 'DC-10'], ['amnesia', 'Amnesia'], ['pacha', 'Pacha'], ['unvrs', 'UNVRS'],
+  ['monegros', 'Monegros'], ['audiodrome', 'Audiodrome'], ['dockyard', 'Dockyard Festival'],
+  ['music on', 'Music On'], ['elrow', 'elrow'], ['sala despiece', 'Sala Despiece'], ['the crane', 'The Crane'],
+  ['tobacco dock', 'Tobacco Dock'], ['kiesgrube', 'Kiesgrube'], ['in-bloom', 'In-Bloom'], ['in bloom', 'In-Bloom'],
+  ['one life', 'One Life'], ['defected', 'Defected'], ['printworks', 'Printworks'], ['fabric', 'fabric'],
+  ['berghain', 'Berghain'], ['panorama bar', 'Panorama Bar'], ['watergate', 'Watergate'], ['paradiso', 'Paradiso'],
+  ['melkweg', 'Melkweg'], ['razzmatazz', 'Razzmatazz'], ['rex club', 'Rex Club'], ['shelter', 'Shelter'],
+  ['de school', 'De School'], ['boomerang beach', 'Boomerang Beach'], ['creamfields', 'Creamfields'],
+  ['hör', 'HÖR'],
+];
+
+export function parseVenue(text) {
+  const t = ' ' + String(text || '').toLowerCase() + ' ';
+  for (const [kw, name] of VENUES) if (t.includes(kw)) return name;
+  return null;
+}
+
+// Cleaned artist/DJ name from a full YouTube title — the fallback label when no venue is found.
+export function cleanArtist(title) {
+  let t = String(title || '');
+  t = t.split(/\s*[|\/]\s*/)[0];                                   // before | or /
+  t = t.split(/\s+[-–—]\s+/)[0];                                    // before " - "
+  t = t.split(/\s+(?:@|live\b|b2b|dj set|full set|presents|pres\.|feat\.?)\b/i)[0]; // before venue/verb cues
+  t = t.replace(/\s*\(.*?\)\s*/g, ' ').replace(/#\S+/g, '').replace(/\s+/g, ' ').trim();
+  return (t || String(title || '')).slice(0, 40);
+}

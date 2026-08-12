@@ -3,7 +3,8 @@
 
 export const maxDuration = 60;
 
-import { classifyRegion, parseCity } from './_region.js';
+import { classifyRegion, parseCity, parseVenue, cleanArtist } from './_region.js';
+const GENERIC_BUCKETS = new Set(['discovered', 'search-ingest']);
 
 // Ingest uses its own key only — search key is reserved for user-facing search
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
@@ -99,6 +100,7 @@ const CHANNELS = [
   // Live-audience studio-session brands (crowd present) — kept per curation rule
   { channelId: 'UCQdCIrTpkhEH5Z8KPsn7NvQ', festival_id: 'mixmag-lab',     festival_name: 'Mixmag Lab',            city: 'London',           vibe: 'europe' },
   { channelId: 'UCcsRjloqh4gIHCCnDZtoniQ', festival_id: 'crimson-kid',    festival_name: "Crimson Kid Studio's",  city: '',                 vibe: 'worldwide' },
+  { channelId: 'UCveda-9Yg2L9SS5NbdNBNpg', festival_id: 'stillmoving',    festival_name: 'StillMoving',           city: 'Netherlands',      vibe: 'europe' },
 ];
 
 const MIN_SECS = 45 * 60;
@@ -279,7 +281,8 @@ async function getExisting() {
 async function insertSets(sets) {
   const rows = sets.map(({ video_id, festival_id, festival_name, source, artist, title, duration_sec, published_at, status, embeddable }) =>
     ({ video_id, festival_id, source, artist, title, duration_sec, published_at, status: status || 'live', embeddable: embeddable !== false,
-       region: classifyRegion(`${title || ''} ${festival_name || ''}`), city: parseCity(title) })
+       region: classifyRegion(`${title || ''} ${festival_name || ''}`), city: parseCity(title),
+       venue: GENERIC_BUCKETS.has(festival_id) ? (parseVenue(title) || cleanArtist(title)) : null })
   );
   const r = await fetch(`${SUPABASE_URL}/rest/v1/sets`, {
     method: 'POST',
