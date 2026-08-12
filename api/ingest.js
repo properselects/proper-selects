@@ -3,7 +3,7 @@
 
 export const maxDuration = 60;
 
-import { classifyRegion } from './_region.js';
+import { classifyRegion, parseCity } from './_region.js';
 
 // Ingest uses its own key only — search key is reserved for user-facing search
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
@@ -279,7 +279,7 @@ async function getExisting() {
 async function insertSets(sets) {
   const rows = sets.map(({ video_id, festival_id, festival_name, source, artist, title, duration_sec, published_at, status, embeddable }) =>
     ({ video_id, festival_id, source, artist, title, duration_sec, published_at, status: status || 'live', embeddable: embeddable !== false,
-       region: classifyRegion(`${title || ''} ${festival_name || ''}`) })
+       region: classifyRegion(`${title || ''} ${festival_name || ''}`), city: parseCity(title) })
   );
   const r = await fetch(`${SUPABASE_URL}/rest/v1/sets`, {
     method: 'POST',

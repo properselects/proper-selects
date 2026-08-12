@@ -64,3 +64,52 @@ export function classifyRegion(text) {
   if (WORLD.some((k) => t.includes(k))) return 'worldwide';
   return null; // unknown → caller falls back to festival region
 }
+
+// Best-guess actual location from a set's title, so the card shows where the set really happened
+// instead of the (often generic) festival/bucket city. [keyword, DisplayName] — most specific first.
+// Returns a display string or null (caller falls back to the festival's city).
+const LOCATIONS = [
+  // Americas — cities
+  ['south beach', 'Miami'], ['wynwood', 'Miami'], ['miami', 'Miami'], ['brooklyn', 'New York'],
+  ['nyc', 'New York'], ['new york', 'New York'], ['chicago', 'Chicago'], ['detroit', 'Detroit'],
+  ['los angeles', 'Los Angeles'], ['hollywood', 'Los Angeles'], ['lab la', 'Los Angeles'],
+  ['lab l.a', 'Los Angeles'], ['las vegas', 'Las Vegas'],
+  ['austin', 'Austin'], ['san francisco', 'San Francisco'], ['san diego', 'San Diego'],
+  ['denver', 'Denver'], ['atlanta', 'Atlanta'], ['seattle', 'Seattle'], ['toronto', 'Toronto'],
+  ['montreal', 'Montreal'], ['tulum', 'Tulum'], ['mexico city', 'Mexico City'], ['guadalajara', 'Guadalajara'],
+  ['são paulo', 'São Paulo'], ['sao paulo', 'São Paulo'], ['rio de janeiro', 'Rio de Janeiro'],
+  ['camboriú', 'Camboriú'], ['camboriu', 'Camboriú'], ['buenos aires', 'Buenos Aires'],
+  ['montañita', 'Montañita'], ['montanita', 'Montañita'], ['lima', 'Lima'], ['bogotá', 'Bogotá'],
+  ['bogota', 'Bogotá'], ['medellín', 'Medellín'], ['medellin', 'Medellín'], ['santiago', 'Santiago'],
+  // Europe — cities
+  ['london', 'London'], ['manchester', 'Manchester'], ['glasgow', 'Glasgow'], ['bristol', 'Bristol'],
+  ['berlin', 'Berlin'], ['munich', 'Munich'], ['cologne', 'Cologne'], ['hamburg', 'Hamburg'],
+  ['frankfurt', 'Frankfurt'], ['mannheim', 'Mannheim'], ['amsterdam', 'Amsterdam'], ['rotterdam', 'Rotterdam'],
+  ['utrecht', 'Utrecht'], ['paris', 'Paris'], ['lyon', 'Lyon'], ['marseille', 'Marseille'],
+  ['ibiza', 'Ibiza'], ['barcelona', 'Barcelona'], ['madrid', 'Madrid'], ['valencia', 'Valencia'],
+  ['milan', 'Milan'], ['milano', 'Milan'], ['rome', 'Rome'], ['naples', 'Naples'], ['turin', 'Turin'],
+  ['lisbon', 'Lisbon'], ['porto', 'Porto'], ['brussels', 'Brussels'], ['antwerp', 'Antwerp'],
+  ['zurich', 'Zurich'], ['geneva', 'Geneva'], ['vienna', 'Vienna'], ['zagreb', 'Zagreb'], ['tisno', 'Tisno'],
+  ['pula', 'Pula'], ['warsaw', 'Warsaw'], ['krakow', 'Kraków'], ['prague', 'Prague'], ['budapest', 'Budapest'],
+  ['bucharest', 'Bucharest'], ['sofia', 'Sofia'], ['athens', 'Athens'], ['stockholm', 'Stockholm'],
+  ['copenhagen', 'Copenhagen'], ['oslo', 'Oslo'], ['helsinki', 'Helsinki'], ['dublin', 'Dublin'],
+  ['tbilisi', 'Tbilisi'], ['tel aviv', 'Tel Aviv'],
+  // Worldwide — cities/countries
+  ['tokyo', 'Tokyo'], ['osaka', 'Osaka'], ['seoul', 'Seoul'], ['bali', 'Bali'], ['jakarta', 'Jakarta'],
+  ['bangkok', 'Bangkok'], ['singapore', 'Singapore'], ['mumbai', 'Mumbai'], ['goa', 'Goa'],
+  ['dubai', 'Dubai'], ['shanghai', 'Shanghai'], ['hong kong', 'Hong Kong'], ['taipei', 'Taipei'],
+  ['sydney', 'Sydney'], ['melbourne', 'Melbourne'], ['cape town', 'Cape Town'],
+  ['johannesburg', 'Johannesburg'], ['durban', 'Durban'], ['limpopo', 'Limpopo'], ['lagos', 'Lagos'],
+  ['nairobi', 'Nairobi'], ['marrakech', 'Marrakech'],
+  // Country-level fallbacks (only if no city matched above)
+  ['thailand', 'Thailand'], ['japan', 'Japan'], ['south korea', 'South Korea'], ['korea', 'South Korea'],
+  ['india', 'India'], ['indonesia', 'Indonesia'], ['australia', 'Australia'], ['south africa', 'South Africa'],
+  ['brazil', 'Brazil'], ['brasil', 'Brazil'], ['mexico', 'Mexico'], ['colombia', 'Colombia'],
+  ['argentina', 'Argentina'], ['chile', 'Chile'], ['peru', 'Peru'], ['ecuador', 'Ecuador'],
+];
+
+export function parseCity(text) {
+  const t = ' ' + String(text || '').toLowerCase() + ' ';
+  for (const [kw, name] of LOCATIONS) if (t.includes(kw)) return name;
+  return null; // no location in title → caller falls back to festival city
+}
