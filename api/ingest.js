@@ -94,6 +94,9 @@ const CHANNELS = [
   { channelId: 'UCfyFtw01Nf973V9gggJVi_Q', festival_id: 'unum',           festival_name: 'UNUM Festival',         city: 'Shëngjin',         vibe: 'europe' },
   // Latin American showcase added 2026-08-11 (was mis-routing to circuit)
   { channelId: 'UCJIMunEutszYhRvy-4P5r0Q', festival_id: 'monsoon',        festival_name: 'Monsoon',               city: 'Peru',             vibe: 'americas' },
+  // Live-audience studio-session brands (crowd present) — kept per curation rule
+  { channelId: 'UCQdCIrTpkhEH5Z8KPsn7NvQ', festival_id: 'mixmag-lab',     festival_name: 'Mixmag Lab',            city: 'London',           vibe: 'worldwide' },
+  { channelId: 'UCcsRjloqh4gIHCCnDZtoniQ', festival_id: 'crimson-kid',    festival_name: "Crimson Kid Studio's",  city: '',                 vibe: 'worldwide' },
 ];
 
 const MIN_SECS = 45 * 60;
@@ -164,7 +167,7 @@ const NON_MUSICAL_PATTERNS = [
   // Radio shows / studio sessions — keep it to live sets at venues, shows & festivals
   /\bradio\b/i,               // Dirtybird/Toolroom/Creamfields/Diynamic/Circoloco Radio, mau5trap radio, BBC Radio 1
   /essential\s*mix/i,         // BBC Radio 1 Essential Mix
-  /mixmag\s*lab/i,            // Mixmag Lab studio livestream
+  // NOTE: Mixmag Lab / The Lab kept on purpose — they have a live studio audience (crowd present)
   /greenhouse\s*session/i,    // RA Greenhouse Sessions (studio)
   /selected\s*sessions/i,
   /\bstudio\s*(mix|set|session)/i,

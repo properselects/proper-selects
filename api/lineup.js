@@ -57,7 +57,6 @@ const BAD_CONTENT_RE = [
   // Radio shows / studio sessions — keep it to live sets at venues, shows & festivals
   /\bradio\b/i,
   /essential\s*mix/i,
-  /mixmag\s*lab/i,
   /greenhouse\s*session/i,
   /selected\s*sessions/i,
   /\bstudio\s*(mix|set|session)/i,
