@@ -38,6 +38,11 @@ const EUR = [
   'serbia','belgrade','slovenia','ljubljana','slovakia','bratislava',
   'glastonbury','warrington','tomorrowland','albania','shëngjin','shengjin','tirana','malta',
   'luxembourg','monaco','tbilisi','israel','tel aviv','jerusalem',
+  // Major UK/European venue names (so London/EU events route right even when the title omits the city)
+  ' fabric','fabriclondon','printworks',' xoyo','phonox','corsica studios','village underground',
+  'drumsheds','tobacco dock','ministry of sound',' koko ','brixton','hackney','peckham','oval space',
+  'fold ldn','e1 london','outernet','berghain','panorama bar','watergate','sisyphos','about blan',
+  'de marktkantine','shelter amsterdam','de school','paradiso','melkweg','razzmatazz','fuse brussels',
 ];
 const WORLD = [
   'tokyo','japan','osaka','seoul','korea','busan','bali','indonesia','jakarta','bandung',
