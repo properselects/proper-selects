@@ -13,7 +13,7 @@ async function ytFetch(url) {
 }
 
 const CHANNELS = [
-  { channelId: 'UCGCoc4fAMC4wvp1vgEOpFzA', festival_id: 'boilerroom',   festival_name: 'Boiler Room',           city: 'Chicago',     vibe: 'americas' },
+  { channelId: 'UCGCoc4fAMC4wvp1vgEOpFzA', festival_id: 'boilerroom',   festival_name: 'Boiler Room',           city: '',            vibe: 'worldwide' },
   { channelId: 'UCl2CLatrfJiU6OqmHZNUDNg', festival_id: 'dekmantel',    festival_name: 'Dekmantel',             city: 'Amsterdam',   vibe: 'europe' },
   { channelId: 'UCDHvlud7Hf86FxFsogrBcMg', festival_id: 'ra',           festival_name: 'Resident Advisor',      city: 'London',      vibe: 'europe' },
   { channelId: 'UCOlJBEcHjFpQ0SQlNNqEuIA', festival_id: 'cercle',       festival_name: 'Cercle',                city: 'Worldwide',   vibe: 'worldwide' },
@@ -221,6 +221,9 @@ const VENUE_ROUTES = [
   { re: /Academy\s+(LA|Hollywood)/i,    festival_id: 'academy-la',          festival_name: 'Academy LA',              city: 'Los Angeles',  vibe: 'americas' },
   { re: /Trotamundo|Lost\s+Beach\s+Club|Montañita/i, festival_id: 'trotamundo', festival_name: 'Trotamundo @ Lost Beach Club', city: 'Montañita', vibe: 'americas' },
   { re: /Essential\s+Mix/i,          festival_id: 'essential-mix',       festival_name: 'BBC Radio 1 Essential Mix',    city: 'London',       vibe: 'europe' },
+  // Boiler Room is a global brand — its channel defaults to the worldwide bucket; pin known cities to the right region.
+  { re: /Boiler\s*Room.*Berlin|Berlin.*Boiler\s*Room/i, festival_id: 'boilerroom-berlin', festival_name: 'Boiler Room Berlin', city: 'Berlin', vibe: 'europe' },
+  { re: /Boiler\s*Room.*London|London.*Boiler\s*Room/i, festival_id: 'boilerroom-london', festival_name: 'Boiler Room London', city: 'London', vibe: 'europe' },
 ];
 
 function routeByTitle(title, defaultCh) {
