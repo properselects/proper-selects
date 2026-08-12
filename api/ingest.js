@@ -95,7 +95,7 @@ const CHANNELS = [
   // Latin American showcase added 2026-08-11 (was mis-routing to circuit)
   { channelId: 'UCJIMunEutszYhRvy-4P5r0Q', festival_id: 'monsoon',        festival_name: 'Monsoon',               city: 'Peru',             vibe: 'americas' },
   // Live-audience studio-session brands (crowd present) — kept per curation rule
-  { channelId: 'UCQdCIrTpkhEH5Z8KPsn7NvQ', festival_id: 'mixmag-lab',     festival_name: 'Mixmag Lab',            city: 'London',           vibe: 'worldwide' },
+  { channelId: 'UCQdCIrTpkhEH5Z8KPsn7NvQ', festival_id: 'mixmag-lab',     festival_name: 'Mixmag Lab',            city: 'London',           vibe: 'europe' },
   { channelId: 'UCcsRjloqh4gIHCCnDZtoniQ', festival_id: 'crimson-kid',    festival_name: "Crimson Kid Studio's",  city: '',                 vibe: 'worldwide' },
 ];
 
@@ -167,8 +167,7 @@ const NON_MUSICAL_PATTERNS = [
   // Radio shows / studio sessions — keep it to live sets at venues, shows & festivals
   /\bradio\b/i,               // Dirtybird/Toolroom/Creamfields/Diynamic/Circoloco Radio, mau5trap radio, BBC Radio 1
   /essential\s*mix/i,         // BBC Radio 1 Essential Mix
-  // NOTE: Mixmag Lab / The Lab kept on purpose — they have a live studio audience (crowd present)
-  /greenhouse\s*session/i,    // RA Greenhouse Sessions (studio)
+  // NOTE: live-crowd / studio-booth sessions kept on purpose (Mixmag Lab, Crimson Kid, RA Greenhouse, HÖR)
   /selected\s*sessions/i,
   /\bstudio\s*(mix|set|session)/i,
   /\bin\s+the\s+lab\b/i,
@@ -235,6 +234,8 @@ const VENUE_ROUTES = [
   // Boiler Room is a global brand — its channel defaults to the worldwide bucket; pin known cities to the right region.
   { re: /Boiler\s*Room.*Berlin|Berlin.*Boiler\s*Room/i, festival_id: 'boilerroom-berlin', festival_name: 'Boiler Room Berlin', city: 'Berlin', vibe: 'europe' },
   { re: /Boiler\s*Room.*London|London.*Boiler\s*Room/i, festival_id: 'boilerroom-london', festival_name: 'Boiler Room London', city: 'London', vibe: 'europe' },
+  // Mixmag Lab: US editions (NYC/LA/Miami) → Americas; The Lab LDN default stays Europe (channel default)
+  { re: /Mixmag\s*Lab.*(NYC|New\s*York|\bLA\b|Los\s*Angeles|Miami)/i, festival_id: 'mixmag-lab-us', festival_name: 'Mixmag Lab US', city: 'New York', vibe: 'americas' },
 ];
 
 function routeByTitle(title, defaultCh) {
