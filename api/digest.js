@@ -52,18 +52,19 @@ async function getTopIds() {
 }
 
 async function getRadarSets() {
-  // Top sets of the CURRENT calendar month by views (matches the site Radar). Sparse month →
-  // append rolling-45d backfill, tagged so month sets always lead.
+  // Top sets of the CURRENT calendar quarter by views (matches the site Radar). Sparse quarter →
+  // append rolling-60d backfill, tagged so in-quarter sets always lead.
   const now = new Date();
-  const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)).toISOString();
-  const pull = (sinceIso, monthTag) =>
-    sb(`vault_sets?published_at=gte.${encodeURIComponent(sinceIso)}&source=eq.youtube&duration_sec=gte.2700&select=video_id,artist,festival_name,city,accent&order=published_at.desc&limit=40`)
-      .then((rows) => rows.map((x) => ({ ...x, _month: monthTag })));
+  const qMonth = Math.floor(now.getUTCMonth() / 3) * 3;
+  const quarterStart = new Date(Date.UTC(now.getUTCFullYear(), qMonth, 1)).toISOString();
+  const pull = (sinceIso, inWindow) =>
+    sb(`vault_sets?published_at=gte.${encodeURIComponent(sinceIso)}&source=eq.youtube&duration_sec=gte.2700&select=video_id,artist,festival_name,city,accent&order=published_at.desc&limit=80`)
+      .then((rows) => rows.map((x) => ({ ...x, _inWindow: inWindow })));
 
-  let sets = await pull(monthStart, true);
+  let sets = await pull(quarterStart, true);
   if (sets.length < 6) {
-    const since45 = new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString();
-    const wide = await pull(since45, false);
+    const since60 = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString();
+    const wide = await pull(since60, false);
     const seen = new Set(sets.map((s) => s.video_id));
     sets = sets.concat(wide.filter((s) => !seen.has(s.video_id)));
   }
@@ -74,7 +75,7 @@ async function getRadarSets() {
     const d = r.ok ? await r.json() : { items: [] };
     const views = Object.fromEntries((d.items || []).map(i => [i.id, parseInt(i.statistics?.viewCount || 0)]));
     return sets.map(s => ({ ...s, views: views[s.video_id] || 0 }))
-      .sort((a, b) => (Number(b._month) - Number(a._month)) || (b.views - a.views))
+      .sort((a, b) => (Number(b._inWindow) - Number(a._inWindow)) || (b.views - a.views))
       .slice(0, 2);
   } catch { return sets.slice(0, 2); }
 }
@@ -155,7 +156,7 @@ function buildEmail(data, unsubToken) {
 
   const radarSection = radarSets.length ? `
     ${sectionHeader('On radar')}
-    <p style="font-size:12px;opacity:.5;margin:0 0 14px;line-height:1.5;">Highest-viewed sets added this month.</p>
+    <p style="font-size:12px;opacity:.5;margin:0 0 14px;line-height:1.5;">Highest-viewed sets this quarter.</p>
     ${radarSets.map(s => setCard(s)).join('')}
   ` : '';
 

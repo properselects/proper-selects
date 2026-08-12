@@ -38,30 +38,34 @@ async function getViewCounts(videoIds) {
   return results;
 }
 
-// Radar = the top set(s) of the CURRENT calendar month, ranked by views. Month sets are tagged
-// `_month` so they always lead; if a month is too sparse to fill the grid we append the next-best
-// recent sets (rolling 45d) as backfill — but the month's top always sits at #1.
-async function fetchSince(sinceIso, monthTag) {
+// Radar = the top set(s) of the CURRENT calendar quarter, ranked by views. In-quarter sets are
+// tagged `_inWindow` so they always lead; if the quarter is somehow too sparse to fill the grid we
+// append the next-best recent sets (rolling 60d) as backfill — but the quarter's top always sits at #1.
+async function fetchSince(sinceIso, inWindow) {
   try {
     const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/vault_sets?select=video_id,artist,festival_id,festival_name,city,accent,published_at&published_at=gte.${encodeURIComponent(sinceIso)}&source=eq.youtube&duration_sec=gte.2700&order=published_at.desc&limit=120`,
+      `${SUPABASE_URL}/rest/v1/vault_sets?select=video_id,artist,festival_id,festival_name,city,accent,published_at&published_at=gte.${encodeURIComponent(sinceIso)}&source=eq.youtube&duration_sec=gte.2700&order=published_at.desc&limit=200`,
       { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
     );
     const rows = r.ok ? await r.json() : [];
-    return rows.map((x) => ({ ...x, _month: monthTag }));
+    return rows.map((x) => ({ ...x, _inWindow: inWindow }));
   } catch { return []; }
+}
+
+function quarterStartISO() {
+  const now = new Date();
+  const qMonth = Math.floor(now.getUTCMonth() / 3) * 3; // 0,3,6,9
+  return new Date(Date.UTC(now.getUTCFullYear(), qMonth, 1)).toISOString();
 }
 
 async function getRecentSets() {
   if (!SUPABASE_URL || !SUPABASE_KEY) return FALLBACK_SETS;
-  const now = new Date();
-  const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)).toISOString();
-  let rows = await fetchSince(monthStart, true);
+  let rows = await fetchSince(quarterStartISO(), true);
 
-  // Sparse month → append rolling-45d backfill (tagged not-month) so Radar stays full.
+  // Sparse quarter → append rolling-60d backfill (tagged out-of-window) so Radar stays full.
   if (rows.length < 10) {
-    const since45 = new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString();
-    const wide = await fetchSince(since45, false);
+    const since60 = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString();
+    const wide = await fetchSince(since60, false);
     const seen = new Set(rows.map((r) => r.video_id));
     rows = rows.concat(wide.filter((r) => !seen.has(r.video_id)));
   }
@@ -93,10 +97,10 @@ export default async function handler(req, res) {
   const ids = sets.map(s => s.video_id);
   const views = await getViewCounts(ids);
 
-  // Current-month sets lead (so #1 is the top set of the month), each group ranked by views.
+  // In-quarter sets lead (so #1 is the top set of the quarter), each group ranked by views.
   const ranked = sets
     .map(s => ({ ...s, views: views[s.video_id] || 0 }))
-    .sort((a, b) => (Number(b._month) - Number(a._month)) || (b.views - a.views))
+    .sort((a, b) => (Number(b._inWindow) - Number(a._inWindow)) || (b.views - a.views))
     .slice(0, 20)
     .map((s, i) => ({
       id: `r${i}`,
