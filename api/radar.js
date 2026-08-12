@@ -38,18 +38,34 @@ async function getViewCounts(videoIds) {
   return results;
 }
 
-async function getRecentSets() {
-  if (!SUPABASE_URL || !SUPABASE_KEY) return FALLBACK_SETS;
+// Radar = the top set(s) of the CURRENT calendar month, ranked by views. Month sets are tagged
+// `_month` so they always lead; if a month is too sparse to fill the grid we append the next-best
+// recent sets (rolling 45d) as backfill — but the month's top always sits at #1.
+async function fetchSince(sinceIso, monthTag) {
   try {
-    // vault_sets has festival_name, city, accent — public_sets does not
-    const since = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString();
     const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/vault_sets?select=video_id,artist,festival_id,festival_name,city,accent&published_at=gte.${encodeURIComponent(since)}&source=eq.youtube&duration_sec=gte.2700&order=published_at.desc&limit=80`,
+      `${SUPABASE_URL}/rest/v1/vault_sets?select=video_id,artist,festival_id,festival_name,city,accent,published_at&published_at=gte.${encodeURIComponent(sinceIso)}&source=eq.youtube&duration_sec=gte.2700&order=published_at.desc&limit=120`,
       { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
     );
     const rows = r.ok ? await r.json() : [];
-    return rows.length >= 5 ? rows : FALLBACK_SETS;
-  } catch { return FALLBACK_SETS; }
+    return rows.map((x) => ({ ...x, _month: monthTag }));
+  } catch { return []; }
+}
+
+async function getRecentSets() {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return FALLBACK_SETS;
+  const now = new Date();
+  const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)).toISOString();
+  let rows = await fetchSince(monthStart, true);
+
+  // Sparse month → append rolling-45d backfill (tagged not-month) so Radar stays full.
+  if (rows.length < 10) {
+    const since45 = new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString();
+    const wide = await fetchSince(since45, false);
+    const seen = new Set(rows.map((r) => r.video_id));
+    rows = rows.concat(wide.filter((r) => !seen.has(r.video_id)));
+  }
+  return rows.length >= 5 ? rows : FALLBACK_SETS;
 }
 
 // Same YouTube video is sometimes ingested under two festival_ids (venue mislabel),
@@ -77,10 +93,10 @@ export default async function handler(req, res) {
   const ids = sets.map(s => s.video_id);
   const views = await getViewCounts(ids);
 
-  // Sort by view count descending, take top 20
+  // Current-month sets lead (so #1 is the top set of the month), each group ranked by views.
   const ranked = sets
     .map(s => ({ ...s, views: views[s.video_id] || 0 }))
-    .sort((a, b) => b.views - a.views)
+    .sort((a, b) => (Number(b._month) - Number(a._month)) || (b.views - a.views))
     .slice(0, 20)
     .map((s, i) => ({
       id: `r${i}`,

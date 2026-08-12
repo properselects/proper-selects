@@ -52,8 +52,21 @@ async function getTopIds() {
 }
 
 async function getRadarSets() {
-  const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-  const sets = await sb(`vault_sets?published_at=gte.${encodeURIComponent(since)}&source=eq.youtube&duration_sec=gte.2700&select=video_id,artist,festival_name,city,accent&order=published_at.desc&limit=20`);
+  // Top sets of the CURRENT calendar month by views (matches the site Radar). Sparse month →
+  // append rolling-45d backfill, tagged so month sets always lead.
+  const now = new Date();
+  const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)).toISOString();
+  const pull = (sinceIso, monthTag) =>
+    sb(`vault_sets?published_at=gte.${encodeURIComponent(sinceIso)}&source=eq.youtube&duration_sec=gte.2700&select=video_id,artist,festival_name,city,accent&order=published_at.desc&limit=40`)
+      .then((rows) => rows.map((x) => ({ ...x, _month: monthTag })));
+
+  let sets = await pull(monthStart, true);
+  if (sets.length < 6) {
+    const since45 = new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString();
+    const wide = await pull(since45, false);
+    const seen = new Set(sets.map((s) => s.video_id));
+    sets = sets.concat(wide.filter((s) => !seen.has(s.video_id)));
+  }
   if (!sets.length || !YOUTUBE_API_KEY) return sets.slice(0, 2);
   const ids = sets.map(s => s.video_id).join(',');
   try {
@@ -61,7 +74,7 @@ async function getRadarSets() {
     const d = r.ok ? await r.json() : { items: [] };
     const views = Object.fromEntries((d.items || []).map(i => [i.id, parseInt(i.statistics?.viewCount || 0)]));
     return sets.map(s => ({ ...s, views: views[s.video_id] || 0 }))
-      .sort((a, b) => b.views - a.views)
+      .sort((a, b) => (Number(b._month) - Number(a._month)) || (b.views - a.views))
       .slice(0, 2);
   } catch { return sets.slice(0, 2); }
 }
