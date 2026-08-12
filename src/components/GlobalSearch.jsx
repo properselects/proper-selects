@@ -14,6 +14,15 @@ async function searchDB(q) {
   return r.json();
 }
 
+// Fire-and-forget: record the (debounced) search term for "most searched" analytics. Anon insert-only.
+function logSearch(q) {
+  fetch(`${SUPABASE_URL}/rest/v1/searches`, {
+    method: 'POST',
+    headers: { ...supabaseHeaders, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+    body: JSON.stringify({ q: q.slice(0, 80) }),
+  }).catch(() => {});
+}
+
 export default function GlobalSearch({ open, onClose, lineup, onLineupChange, onPreview }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -33,6 +42,7 @@ export default function GlobalSearch({ open, onClose, lineup, onLineupChange, on
     debounce.current = setTimeout(async () => {
       try {
         const rows = await searchDB(query);
+        logSearch(query);
         setResults(rows);
         // Also run the YouTube finder when catalog matches are thin — a couple of tangential
         // hits (e.g. an artist appearing only in group/festival sets) shouldn't hide their solo sets.
