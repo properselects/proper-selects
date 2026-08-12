@@ -54,6 +54,14 @@ const BAD_CONTENT_RE = [
   /\bgym\s*&(?:amp;)?\s*tonic\b/i,
   /\bback\s+in\s+da\s+days\b/i,
   /\bajegunle\b/i,
+  // Radio shows / studio sessions — keep it to live sets at venues, shows & festivals
+  /\bradio\b/i,
+  /essential\s*mix/i,
+  /mixmag\s*lab/i,
+  /greenhouse\s*session/i,
+  /selected\s*sessions/i,
+  /\bstudio\s*(mix|set|session)/i,
+  /\bin\s+the\s+lab\b/i,
   // Generic: title ends with a bare episode number ≥ 100 (strong signal of a series)
   /[-–\s]\d{3,}$/,
 ];

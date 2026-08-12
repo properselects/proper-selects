@@ -161,6 +161,14 @@ const NON_MUSICAL_PATTERNS = [
   /\bgym\s*&(?:amp;)?\s*tonic\b/i,
   /\bback\s+in\s+da\s+days\b/i,
   /\bajegunle\b/i,
+  // Radio shows / studio sessions — keep it to live sets at venues, shows & festivals
+  /\bradio\b/i,               // Dirtybird/Toolroom/Creamfields/Diynamic/Circoloco Radio, mau5trap radio, BBC Radio 1
+  /essential\s*mix/i,         // BBC Radio 1 Essential Mix
+  /mixmag\s*lab/i,            // Mixmag Lab studio livestream
+  /greenhouse\s*session/i,    // RA Greenhouse Sessions (studio)
+  /selected\s*sessions/i,
+  /\bstudio\s*(mix|set|session)/i,
+  /\bin\s+the\s+lab\b/i,
 ];
 
 function isNonMusicalContent(title) {
