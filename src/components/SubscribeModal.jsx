@@ -58,7 +58,7 @@ export default function SubscribeModal({ open, onClose }) {
             disabled={state === 'loading' || state === 'done'}
           />
           <button type="submit" className="jb-sub-submit" disabled={state === 'loading' || state === 'done'}>
-            {state === 'loading' ? 'Sending…' : state === 'done' ? 'Check your inbox ✓' : state === 'error' ? 'Try again →' : 'Subscribe →'}
+            {state === 'loading' ? 'Sending…' : state === 'done' ? "You're in ✓" : state === 'error' ? 'Try again →' : 'Subscribe →'}
           </button>
         </form>
       </div>

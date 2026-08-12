@@ -1,5 +1,6 @@
 // POST /api/subscribe — add an email to the Proper Selects weekly digest list
 import nodemailer from 'nodemailer';
+import { getNewSets, getTopLineupSets, getTopIds, getRadarSets, buildEmail } from '../lib/digest-builder.js';
 
 export const maxDuration = 10;
 
@@ -61,13 +62,12 @@ function createTransport() {
   });
 }
 
-async function sendConfirmEmail(email, token) {
+async function sendWelcomeEmail(email) {
   if (!GMAIL_USER || !GMAIL_APP_PASSWORD) return;
-  const confirmUrl = `${SITE_URL}/api/confirm?token=${token}`;
   await createTransport().sendMail({
     from: `"Proper Selects" <${GMAIL_USER}>`,
     to: email,
-    subject: 'You\'re one click away from the best DJ sets on the internet',
+    subject: 'You\'re in — the best DJ sets on the internet, every Monday',
     html: `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
@@ -82,18 +82,16 @@ async function sendConfirmEmail(email, token) {
             [ PROPER SELECTS ]
           </div>
           <h1 style="font-size:36px;line-height:1.05;margin:0 0 12px;color:#EDEAE2;font-weight:900;letter-spacing:-.02em;">
-            The world's best<br/>
-            <span style="color:#F4A93C;">DJ sets</span>, curated.
+            You're in. ✓
           </h1>
           <p style="font-size:15px;line-height:1.5;margin:20px 0 32px;color:rgba(237,234,226,.65);">
-            One email a week. No noise, no algorithms — just the sets that mattered.
+            Every Monday you'll get the best new sets added to the vault — straight to your inbox. No noise, no algorithms.
           </p>
 
           <!-- CTA -->
-          <a href="${confirmUrl}" style="display:inline-block;padding:16px 44px;background:#F4A93C;color:#0a0a0e;border-radius:10px;font-weight:900;font-size:15px;text-decoration:none;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 4px 20px rgba(244,169,60,.4);">
-            ▷ Confirm my subscription
+          <a href="${SITE_URL}" style="display:inline-block;padding:16px 44px;background:#F4A93C;color:#0a0a0e;border-radius:10px;font-weight:900;font-size:15px;text-decoration:none;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 4px 20px rgba(244,169,60,.4);">
+            ▷ Browse the vault
           </a>
-          <p style="margin:16px 0 0;font-size:11px;color:rgba(237,234,226,.4);letter-spacing:.06em;">Takes one tap. Under 24 hours.</p>
         </td></tr>
 
         <!-- What you get -->
@@ -163,16 +161,6 @@ async function sendConfirmEmail(email, token) {
               <div style="color:rgba(237,234,226,.5);font-size:10px;letter-spacing:.1em;text-transform:uppercase;">fresh drops</div>
             </td>
           </tr></table>
-        </td></tr>
-
-        <!-- Final CTA -->
-        <tr><td style="padding:36px 40px 44px;background:#0a0a0e;text-align:center;">
-          <a href="${confirmUrl}" style="display:inline-block;padding:14px 36px;background:#F4A93C;color:#0a0a0e;border-radius:10px;font-weight:900;font-size:14px;text-decoration:none;letter-spacing:.06em;text-transform:uppercase;">
-            Confirm & unlock the vault →
-          </a>
-          <p style="margin:20px 0 0;font-size:11px;color:rgba(237,234,226,.3);line-height:1.6;">
-            If you didn't sign up, you can ignore this email — you won't hear from us again.
-          </p>
         </td></tr>
 
         <!-- Footer -->
@@ -256,10 +244,10 @@ export default async function handler(req, res) {
   );
   const existing = throttleCheck.ok ? await throttleCheck.json() : [];
   if (existing[0]) {
-    return res.status(200).json({ ok: true, message: existing[0].confirmed ? 'Already subscribed' : 'Check your email to confirm' });
+    return res.status(200).json({ ok: true, message: 'Already subscribed' });
   }
 
-  // Insert new subscriber
+  // Insert new subscriber — auto-confirmed, no email click required
   const r = await fetch(`${SUPABASE_URL}/rest/v1/subscribers`, {
     method: 'POST',
     headers: {
@@ -270,7 +258,7 @@ export default async function handler(req, res) {
     },
     body: JSON.stringify({
       email: normalizedEmail,
-      confirmed: false,
+      confirmed: true,
       unsubscribed_at: null,
     }),
   });
@@ -281,10 +269,25 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Failed to save subscription' });
   }
 
-  const [row] = await r.json();
-  if (row?.confirm_token) {
-    await sendConfirmEmail(email, row.confirm_token).catch(console.error);
+  await sendWelcomeEmail(normalizedEmail).catch(console.error);
+
+  // Fire-and-forget: send this week's digest to the new subscriber immediately
+  const [row] = await r.json().catch(() => [null]);
+  if (row?.id) {
+    Promise.all([getNewSets(), getTopLineupSets(), getTopIds(), getRadarSets()])
+      .then(([newSets, lineupSets, topIds, radarSets]) => {
+        if (!newSets.length && !lineupSets.length) return;
+        const data = { newSets, lineupSets, topIds, radarSets, newCount: newSets.length };
+        const week = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        return createTransport().sendMail({
+          from: `"Proper Selects" <${GMAIL_USER}>`,
+          to: normalizedEmail,
+          subject: `Proper Selects — Weekly Drop (${week})`,
+          html: buildEmail(data, row.id),
+        });
+      })
+      .catch(console.error);
   }
 
-  return res.status(200).json({ ok: true, message: 'Check your email to confirm' });
+  return res.status(200).json({ ok: true, message: "You're in" });
 }
