@@ -52,8 +52,13 @@
     }
     </script>
 
-    <!-- Favicon -->
+    <!-- Favicon — raster PNG/ICO first so Google Search shows the logo (SVG-only isn't reliably rendered in search results) -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
     <style>body{margin:0;background:#050609;}</style>
   </head>
