@@ -52,6 +52,19 @@ async function fetchSince(sinceIso, inWindow) {
   } catch { return []; }
 }
 
+// Compilations / mixtapes / non-live junk that may sit in the vault — keep Radar to live sets.
+const RADAR_BAD_RE = [
+  /\bcompil(?:ation|é|e)?\b/i, /\bbest\s+songs?\b/i, /\bbest\s+of\b/i,
+  /\bgreatest\s+hits\b/i, /\bmeilleur/i, /\bmega[\s-]?mix\b/i, /\bmixtape\b/i,
+  /\bnon[\s-]?stop\b/i, /\bplaylist\b/i, /\btop\s+\d+\b/i, /\bradio\b/i,
+  /\bmbol[eé]\b/i, /\bbukutsi\b/i, /\bmakossa\b/i, /\bndombolo\b/i,
+  /\bcoupe[\s-]?d[eé]cal[eé]\b/i, /\bafrodegame\b/i, /\bcamer\b/i, /\bnaija\b/i,
+];
+function radarIsBad(r) {
+  const t = (r.artist || r.festival_name || '').toLowerCase();
+  return RADAR_BAD_RE.some((re) => re.test(t));
+}
+
 function quarterStartISO() {
   const now = new Date();
   const qMonth = Math.floor(now.getUTCMonth() / 3) * 3; // 0,3,6,9
@@ -93,7 +106,7 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
 
 
-  const sets = dedupeByVideo(await getRecentSets());
+  const sets = dedupeByVideo(await getRecentSets()).filter((s) => !radarIsBad(s));
   const ids = sets.map(s => s.video_id);
   const views = await getViewCounts(ids);
 

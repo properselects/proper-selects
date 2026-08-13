@@ -3,6 +3,8 @@
 // POST /api/lineup { name, videoIds, setMetadata } → create and return slug
 // DELETE /api/lineup → purge lineups older than 30 days
 
+import { classifyRegion } from './_region.js';
+
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
@@ -62,6 +64,20 @@ const BAD_CONTENT_RE = [
   /\bin\s+the\s+lab\b/i,
   // Generic: title ends with a bare episode number ≥ 100 (strong signal of a series)
   /[-–\s]\d{3,}$/,
+  // Compilations / mixtapes / "best of" — these are studio compilations, not live DJ sets
+  /\bcompil(?:ation|é|e)?\b/i,
+  /\bbest\s+songs?\b/i,
+  /\bbest\s+of\b/i,
+  /\bgreatest\s+hits\b/i,
+  /\bmeilleur/i,          // FR "best" — comp/mixtape signal ("meilleur … mix compil")
+  /\bmega[\s-]?mix\b/i,
+  /\bmixtape\b/i,
+  /\bnon[\s-]?stop\b/i,
+  /\bplaylist\b/i,
+  /\btop\s+\d+\b/i,       // "Top 50 …"
+  // Non-electronic compilation genres that sneak past a bare "DJ set" search
+  /\bmbol[eé]\b/i, /\bbukutsi\b/i, /\bmakossa\b/i, /\bndombolo\b/i,
+  /\bcoupe[\s-]?d[eé]cal[eé]\b/i, /\bafrodegame\b/i, /\bcamer\b/i, /\bnaija\b/i,
 ];
 
 function isBad(row) {
@@ -168,6 +184,16 @@ async function todayLineup() {
       const backfill = await sbFetch(`vault_sets?select=*&vibe=eq.${region}&order=published_at.desc&limit=500`);
       const seen = new Set(all.map((r) => r.video_id));
       all = all.concat(backfill.filter((r) => !seen.has(r.video_id)));
+    }
+
+    // Worldwide = everywhere that ISN'T clearly the Americas or Europe. Drop any set whose
+    // location resolves to those regions, so worldwide-default festivals (Boiler Room, Cercle,
+    // Discovered…) can't leak a London/NYC set into the Worldwide feed even if its region is stale.
+    if (region === 'worldwide') {
+      all = all.filter((r) => {
+        const reg = classifyRegion(`${r.city || ''} ${r.festival_name || ''} ${r.artist || r.title || ''}`);
+        return reg !== 'americas' && reg !== 'europe';
+      });
     }
 
     // Fresh = recently ingested OR recently published; rank by whichever is more recent.

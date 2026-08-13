@@ -4,6 +4,8 @@
 
 export const maxDuration = 60;
 
+import { mineAndStore } from './_mine.js';
+
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
@@ -44,7 +46,7 @@ const DISCOVERY_QUERIES = [
   'i hate models 2026 techno set',
 ];
 
-const MIN_SECS = 45 * 60;
+const MIN_SECS = 60 * 60; // 60-min floor — discovery ingest, keeps borderline non-sets out
 const MIN_VIEWS_PER_DAY = 500; // discard slow burners
 const MAX_AGE_DAYS = 60;
 
@@ -55,6 +57,12 @@ const NON_MUSICAL_PATTERNS = [
   /\bhip\s*[- ]?hop\b/i, /\bhiphop\b/i, /\bneo\s+soul\b/i, /\br\s*&\s*b\b/i,
   /\brap\s+(mix|set|dj)\b/i, /\blo-?fi\b/i, /\bchillhop\b/i, /\btrap\s+(mix|set)\b/i,
   /\bmix\s+#\d/i, /\brnb\b/i, /\bnu\s*soul\b/i, /\bdrill\b/i, /\bdancehall\b/i,
+  // Compilations / mixtapes / "best of" — not live DJ sets
+  /\bcompil(?:ation|é|e)?\b/i, /\bbest\s+songs?\b/i, /\bbest\s+of\b/i,
+  /\bgreatest\s+hits\b/i, /\bmeilleur/i, /\bmega[\s-]?mix\b/i, /\bmixtape\b/i,
+  /\bnon[\s-]?stop\b/i, /\bplaylist\b/i, /\btop\s+\d+\b/i,
+  /\bmbol[eé]\b/i, /\bbukutsi\b/i, /\bmakossa\b/i, /\bndombolo\b/i,
+  /\bcoupe[\s-]?d[eé]cal[eé]\b/i, /\bafrodegame\b/i, /\bcamer\b/i, /\bnaija\b/i,
 ];
 
 // Reuse VENUE_ROUTES pattern from ingest.js
@@ -205,5 +213,6 @@ export default async function handler(req, res) {
   }
 
   if (toInsert.length) await insertSets(toInsert);
-  res.json({ discovered: candidates.length, inserted: toInsert.length });
+  const mined = toInsert.length ? await mineAndStore(toInsert.map((v) => v.video_id), 30) : 0;
+  res.json({ discovered: candidates.length, inserted: toInsert.length, mined });
 }

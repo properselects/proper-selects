@@ -4,6 +4,8 @@
 
 export const maxDuration = 60;
 
+import { mineAndStore, backfillMissing } from './_mine.js';
+
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
@@ -68,10 +70,10 @@ function parseDuration(d) {
   return m ? (+(m[1] || 0)) * 3600 + (+(m[2] || 0)) * 60 + (+(m[3] || 0)) : 0;
 }
 
-const MIN_SECS = 45 * 60;
+const MIN_SECS = 60 * 60; // 60-min floor — search/discovery ingest, keeps borderline non-sets out
 
 // Reject non-musical content
-const BAD = /\b(podcast|interview|recap|trailer|teaser|aftermovie|documentary|episode\s*\d|talk\b|panel|vlog|reaction|behind the scenes|watch party)\b/i;
+const BAD = /\b(podcast|interview|recap|trailer|teaser|aftermovie|documentary|episode\s*\d|talk\b|panel|vlog|reaction|behind the scenes|watch party|compil(?:ation|é|e)?|best songs?|best of|greatest hits|meilleur|mega[\s-]?mix|mixtape|non[\s-]?stop|playlist|mbol[eé]|bukutsi|makossa|ndombolo|afrodegame|camer|naija)\b/i;
 
 async function ytSearch(query, publishedAfter) {
   const url = new URL('https://www.googleapis.com/youtube/v3/search');
@@ -200,12 +202,17 @@ export default async function handler(req, res) {
   }
 
   if (toInsert.length) await insertSets(toInsert);
+  // Mine IDs for the sets we just added…
+  const mined = toInsert.length ? await mineAndStore(toInsert.map((c) => c.video_id), 30) : 0;
+  // …and sweep a batch of older sets that still have zero IDs (catches live-search sets too).
+  const sweep = await backfillMissing(50);
 
   res.json({
     inserted: toInsert.length,
+    minedNew: mined,
+    sweep,
     candidates: candidates.length,
     searched: DJ_WATCHLIST.length,
-    lookback: '21 days',
     errors,
   });
 }

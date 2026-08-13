@@ -9,7 +9,7 @@ const YT_KEY = process.env.YOUTUBE_SEARCH_KEY || process.env.YOUTUBE_API_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
-const MIN_SECS = 45 * 60;
+const MIN_SECS = 60 * 60; // 60-min floor — search/discovery ingest, keeps borderline non-sets out
 
 const NON_MUSICAL = [
   /\bpanel\b/i, /\bdiscussion\b/i, /\binterview\b/i, /\bconference\b/i,
@@ -17,6 +17,13 @@ const NON_MUSICAL = [
   /\bpodcast\b/i, /\bepisode\s*\d+/i, /#djset\b/i, /\bpres\.\s+\w.*#/i,
   /\bhip\s*[- ]?hop\b/i, /\bneo\s+soul\b/i, /\br\s*&\s*b\b/i,
   /\blo-?fi\b/i, /\btrap\s+(mix|set)\b/i, /\breggaeton\b/i, /\bdancehall\b/i,
+  // Compilations / mixtapes / "best of" — not live DJ sets
+  /\bcompil(?:ation|é|e)?\b/i, /\bbest\s+songs?\b/i, /\bbest\s+of\b/i,
+  /\bgreatest\s+hits\b/i, /\bmeilleur/i, /\bmega[\s-]?mix\b/i, /\bmixtape\b/i,
+  /\bnon[\s-]?stop\b/i, /\bplaylist\b/i, /\btop\s+\d+\b/i,
+  // Non-electronic compilation genres that slip past a bare "DJ set" search
+  /\bmbol[eé]\b/i, /\bbukutsi\b/i, /\bmakossa\b/i, /\bndombolo\b/i,
+  /\bcoupe[\s-]?d[eé]cal[eé]\b/i, /\bafrodegame\b/i, /\bcamer\b/i, /\bnaija\b/i,
 ];
 
 const VENUE_ROUTES = [

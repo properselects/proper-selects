@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { TABS } from './data/stages.js';
 import { supabaseHeaders, SUPABASE_URL } from './lib/supabase.js';
 import LandingGate from './components/LandingGate.jsx';
@@ -35,6 +35,8 @@ export default function App() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [preview, setPreview] = useState(null);
   const [nowPlaying, setNowPlaying] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const playerControls = useRef(null);
 
   useEffect(() => {
     fetch(`${SUPABASE_URL}/rest/v1/public_sets?select=video_id,artist&order=published_at.desc&limit=10`, {
@@ -205,51 +207,94 @@ export default function App() {
 
       {/* main: overflow hidden so atlas map (position:absolute) fills correctly */}
       <main style={{ flex: 1, overflow: 'hidden', position: 'relative', minHeight: 0 }}>
-        {/* All tabs stay mounted so YouTube iframe survives tab switches */}
-        <div style={{ display: tab === 'jukebox' ? 'flex' : 'none', flexDirection: 'column', height: '100%', overflowY: 'auto' }}>
-          <TodayTab lineup={lineup} onLineupChange={setLineup} onOpenLineup={openDrawer} onSetChange={setNowPlaying} />
+        {/*
+          Jukebox stays ALWAYS mounted and visible in normal flow — never display:none.
+          That keeps the YouTube iframe alive so the set keeps playing when you switch
+          tabs. The other tabs render as opaque overlays on top when active.
+        */}
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowY: 'auto' }}>
+          <TodayTab
+            lineup={lineup}
+            onLineupChange={setLineup}
+            onOpenLineup={openDrawer}
+            onSetChange={setNowPlaying}
+            controlsRef={playerControls}
+            onPlayingChange={setIsPlaying}
+          />
         </div>
-        <div style={{ display: tab === 'grid' ? 'flex' : 'none', flexDirection: 'column', height: '100%', overflowY: 'auto' }}>
+        <div style={{ display: tab === 'grid' ? 'flex' : 'none', position: 'absolute', inset: 0, background: '#0a0a0e', flexDirection: 'column', overflowY: 'auto', zIndex: 5 }}>
           <VaultTab lineup={lineup} onLineupChange={setLineup} />
         </div>
         {/* Atlas: position absolute so Leaflet map gets real pixel dimensions */}
-        <div style={{ display: tab === 'atlas' ? 'block' : 'none', position: 'absolute', inset: 0 }}>
+        <div style={{ display: tab === 'atlas' ? 'block' : 'none', position: 'absolute', inset: 0, background: '#06080c', zIndex: 5 }}>
           <AtlasTab lineup={lineup} onLineupChange={setLineup} isActive={tab === 'atlas'} />
         </div>
-        <div style={{ display: tab === 'radar' ? 'flex' : 'none', flexDirection: 'column', height: '100%', overflowY: 'auto' }}>
+        <div style={{ display: tab === 'radar' ? 'flex' : 'none', position: 'absolute', inset: 0, background: '#06080c', flexDirection: 'column', overflowY: 'auto', zIndex: 5 }}>
           <RadarTab />
         </div>
       </main>
 
-      {/* Mini player — shown when something is playing and user is on another tab */}
+      {/* Mini player — shown when something is playing and user is on another tab.
+          The set keeps playing (audio) via the always-mounted jukebox iframe; this bar
+          gives a play/pause toggle and taps back to the full player. */}
       {nowPlaying && tab !== 'jukebox' && (
-        <button
-          onClick={() => setTab('jukebox')}
+        <div
           style={{
             display: 'flex', alignItems: 'center', gap: 10,
             width: '100%', background: 'rgba(10,10,14,.97)',
-            border: 'none', borderTop: '1px solid rgba(255,255,255,.1)',
-            borderBottom: 'none', padding: '8px 14px', cursor: 'pointer',
-            color: '#EDEAE2', textAlign: 'left',
+            borderTop: '1px solid rgba(255,255,255,.1)',
+            padding: '8px 14px', color: '#EDEAE2',
+            zIndex: 10,
           }}
         >
-          <img
-            src={`https://img.youtube.com/vi/${nowPlaying.video_id}/default.jpg`}
-            alt=""
-            style={{ width: 48, height: 36, objectFit: 'cover', borderRadius: 4, flexShrink: 0 }}
-          />
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {nowPlaying.artist}
-            </div>
-            {nowPlaying.festival_name && (
-              <div style={{ fontSize: 11, opacity: 0.5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {nowPlaying.festival_name}{nowPlaying.city ? ` · ${nowPlaying.city}` : ''}
+          <button
+            onClick={() => setTab('jukebox')}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0,
+              background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+              color: '#EDEAE2', textAlign: 'left',
+            }}
+          >
+            <img
+              src={`https://img.youtube.com/vi/${nowPlaying.video_id}/default.jpg`}
+              alt=""
+              style={{ width: 48, height: 36, objectFit: 'cover', borderRadius: 4, flexShrink: 0 }}
+            />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {nowPlaying.artist}
               </div>
-            )}
-          </div>
-          <span style={{ fontSize: 18, color: '#F4A93C', flexShrink: 0 }}>▷</span>
-        </button>
+              {nowPlaying.festival_name && (
+                <div style={{ fontSize: 11, opacity: 0.5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {nowPlaying.festival_name}{nowPlaying.city ? ` · ${nowPlaying.city}` : ''}
+                </div>
+              )}
+            </div>
+          </button>
+          <button
+            onClick={() => playerControls.current?.toggle?.()}
+            aria-label={isPlaying ? 'Pause' : 'Play'}
+            style={{
+              flexShrink: 0, width: 40, height: 40, borderRadius: '50%',
+              background: 'rgba(244,169,60,.14)', border: '1px solid rgba(244,169,60,.4)',
+              color: '#F4A93C', fontSize: 16, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            {isPlaying ? '❚❚' : '▷'}
+          </button>
+          <button
+            onClick={() => setTab('jukebox')}
+            aria-label="Expand player"
+            style={{
+              flexShrink: 0, background: 'none', border: 'none',
+              color: 'rgba(237,234,226,.5)', fontSize: 18, cursor: 'pointer',
+              padding: '4px 2px',
+            }}
+          >
+            ⤢
+          </button>
+        </div>
       )}
 
       <nav

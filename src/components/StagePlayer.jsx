@@ -11,7 +11,7 @@ const IS_APPLE =
   typeof navigator !== 'undefined' &&
   (/^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent));
 
-export default function StagePlayer({ set, onEnded, seekRef, timeRef }) {
+export default function StagePlayer({ set, onEnded, seekRef, timeRef, controlsRef, onPlayingChange }) {
   const hostRef = useRef(null);
   const playerRef = useRef(null);
   const [state, setState] = useState('loading');
@@ -45,11 +45,25 @@ export default function StagePlayer({ set, onEnded, seekRef, timeRef }) {
                 }
               };
             }
+            // Expose play/pause/toggle so the mini player can control playback
+            if (controlsRef) {
+              controlsRef.current = {
+                play: () => { try { e.target.playVideo(); } catch {} },
+                pause: () => { try { e.target.pauseVideo(); } catch {} },
+                toggle: () => {
+                  try {
+                    const S = window.YT.PlayerState;
+                    if (e.target.getPlayerState() === S.PLAYING) e.target.pauseVideo();
+                    else e.target.playVideo();
+                  } catch {}
+                },
+              };
+            }
           },
           onStateChange: (e) => {
             const S = window.YT.PlayerState;
-            if (e.data === S.PLAYING) setState('playing');
-            else if (e.data === S.PAUSED) setState('paused');
+            if (e.data === S.PLAYING) { setState('playing'); onPlayingChange?.(true); }
+            else if (e.data === S.PAUSED) { setState('paused'); onPlayingChange?.(false); }
             else if (e.data === S.ENDED) onEnded();
           },
           onError: () => {
@@ -61,6 +75,7 @@ export default function StagePlayer({ set, onEnded, seekRef, timeRef }) {
     });
     return () => {
       cancelled = true;
+      if (controlsRef) controlsRef.current = null;
       try {
         playerRef.current?.destroy();
       } catch {}

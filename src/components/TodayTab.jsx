@@ -131,7 +131,7 @@ function NearYouRow({ nearby }) {
   );
 }
 
-export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, onSetChange }) {
+export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, onSetChange, controlsRef, onPlayingChange }) {
   const lineupIds = React.useMemo(() => new Set((lineup || []).map((s) => s.video_id)), [lineup]);
 
   function toggleLineup(set) {
@@ -311,7 +311,7 @@ export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, on
         <div className="jb-playcol">
           {current ? (
             <>
-              <StagePlayer set={current} onEnded={advance} seekRef={seekRef} timeRef={timeRef} />
+              <StagePlayer set={current} onEnded={advance} seekRef={seekRef} timeRef={timeRef} controlsRef={controlsRef} onPlayingChange={onPlayingChange} />
               <div className="jb-actions">
                 <button
                   className="jb-share"
