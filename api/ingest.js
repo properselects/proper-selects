@@ -4,6 +4,7 @@
 export const maxDuration = 60;
 
 import { classifyRegion, parseCity, parseVenue, cleanArtist } from './_region.js';
+import { mineAndStore, storeMomentsByVideo } from './_mine.js';
 const GENERIC_BUCKETS = new Set(['discovered', 'search-ingest']);
 
 // Ingest uses its own key only — search key is reserved for user-facing search
@@ -391,16 +392,21 @@ export default async function handler(req, res) {
   const existing = await getExisting();
   const toInsert = [];
 
-  // Count existing sets per festival so we can do extra pages for thin venues
-  const existingByFestival = {};
-  for (const ch of CHANNELS) existingByFestival[ch.festival_id] = 0;
-  for (const vid of existing) {/* existing is a Set of video_ids — count tracked below */}
+  // Shuffle channels so quota exhaustion doesn't always starve the same channels.
+  // Use a deterministic daily seed (day-of-year) so the shuffle is stable within a day
+  // but rotates daily — channels stale for multiple days bubble up in subsequent runs.
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  const shuffled = [...CHANNELS].sort((a, b) => {
+    const ha = (a.channelId.charCodeAt(3) + dayOfYear * 7) % 251;
+    const hb = (b.channelId.charCodeAt(3) + dayOfYear * 7) % 251;
+    return ha - hb;
+  });
 
-  for (const ch of CHANNELS) {
+  for (const ch of shuffled) {
     try {
       let pageToken = null;
       let pageCount = 0;
-      const MAX_PAGES = 4; // up to 200 results (4 × 50) per channel to backfill thin venues
+      const MAX_PAGES = 2; // 2 pages × 50 = 100 results per channel; backfill complete, conserve quota
       do {
         const { items, nextPageToken } = await ytSearch(ch.channelId, pageToken);
         const newItems = items.filter(v => !existing.has(v.video_id));
@@ -461,24 +467,17 @@ export default async function handler(req, res) {
       }
 
       if (allTracks.length) await insertTracks(allTracks);
-      if (descMoments.length) {
-        await fetch(`${SUPABASE_URL}/rest/v1/set_id_moments`, {
-          method: 'POST',
-          headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal,resolution=ignore-duplicates' },
-          body: JSON.stringify(descMoments),
-        });
-      }
+      if (descMoments.length) await storeMomentsByVideo(descMoments); // → id_moments (set_id resolved)
       console.log(`Parsed ${allTracks.length} tracks, ${descMoments.length} ID moments from descriptions`);
     } catch (e) {
       console.error('Tracklist parse error:', e.message);
     }
   }
 
-  // Mine YouTube comments for ID moments on newly inserted sets
+  // Mine YouTube comments for ID moments on newly inserted sets (→ id_moments, set_id resolved)
   if (toInsert.length) {
-    const moments = await mineCommentsFor(toInsert.map(s => s.video_id), 15);
-    if (moments.length) await insertMoments(moments);
-    console.log(`Mined ${moments.length} ID moments from comments`);
+    const n = await mineAndStore(toInsert.map(s => s.video_id), 30);
+    console.log(`Mined ${n} ID moments from comments`);
   }
 
   res.json({ inserted: toInsert.length, checked: CHANNELS.length });
