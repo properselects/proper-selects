@@ -340,7 +340,7 @@ export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, on
               <div className="jb-radar">
                 <div className="jb-radar-head">
                   <span style={{ color: stage.accent }}>ID Radar</span>
-                  <span className="jb-radar-sub">mined from the comments · tap to jump</span>
+                  <span className="jb-radar-sub">auto-identified · tap to jump</span>
                 </div>
                 {(idMoments[current.video_id] || []).length > 0 ? (
                   <div className="jb-radar-row">
