@@ -3,9 +3,9 @@ import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { parseArtist } from '../lib/parseArtist.js';
 
 const STACK = [
-  { icon: '◈', text: 'Build a lineup in 30 seconds' },
-  { icon: '⊕', text: 'Share it with friends — one link' },
-  { icon: '⟶', text: 'They click. It plays. Instantly.' },
+  { icon: '◈', text: 'Tap + on any set to add it to your lineup' },
+  { icon: '⊕', text: 'Share your lineup — one link' },
+  { icon: '⟶', text: 'Friends tap play. It runs the whole thing.' },
   { icon: '⊞', text: 'Free forever. No signup.' },
 ];
 
@@ -56,11 +56,9 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
 
         {/* Hero */}
         <h1 className="jb-hero">
-          Don't know
+          Build a lineup.
           <br />
-          <span className="jb-hero-em">what set to play?</span>
-          <br />
-          <span className="jb-hero-sub">Share a whole lineup.</span>
+          <span className="jb-hero-sub">Share it with friends.</span>
         </h1>
 
         <p className="jb-desc">
