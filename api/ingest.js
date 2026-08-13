@@ -128,7 +128,14 @@ const NON_MUSICAL_PATTERNS = [
   /\bpodcast\b/i,
   /\bmasterclass\b/i,
   /\bworkshop\b/i,
-  /\btalk\b/i,
+  /\btalks?\b/i,                 // "talk" and "talks" — interviews ("X talks Y"), Futures Talks, tech talks
+  /off the record/i,            // "Off the Record Portraits" interview series
+  /\bportraits?\b/i,            // portrait/profile series
+  /production tutorial/i,       // track-production tutorials
+  /\btutorial\b/i,
+  /\bhow to overcome\b/i,       // interview-style "…on how to overcome…"
+  /\bunboxing\b/i,
+  /\blecture\b/i,
   /\bkeynote\b/i,
   /\bq\s*&\s*a\b/i,
   /\bbehind the scenes\b/i,
