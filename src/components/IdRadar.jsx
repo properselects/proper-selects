@@ -43,7 +43,7 @@ export default function IdRadar({ videoId, accent = '#F4A93C', onSeek }) {
         if (mineAttempted.has(videoId)) { setMoments([]); return; }
         mineAttempted.add(videoId);
         setMining(true);
-        fetch(`/api/mine-one?video_id=${encodeURIComponent(videoId)}`)
+        fetch(`/api/radar?mine=${encodeURIComponent(videoId)}`)
           .then((r) => (r.ok ? r.json() : { moments: [] }))
           .then((data) => {
             if (cancelled) return;

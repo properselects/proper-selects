@@ -1,5 +1,9 @@
 // /api/radar — returns sets from our catalog sorted by YouTube view count this month
-// Feeds the Radar "what's hot" view
+// Feeds the Radar "what's hot" view.
+// Also handles on-demand ID mining via ?mine=<video_id> (folded in here to stay
+// under the Hobby-plan 12-function limit).
+
+import { mineAndStore } from './_mine.js';
 
 export const maxDuration = 30;
 
@@ -102,7 +106,27 @@ function dedupeByVideo(rows) {
   return [...best.values()];
 }
 
+// On-demand ID-Radar miner for a single set. Returns the set's mined moments,
+// mining its YouTube comments live if it has none yet.
+async function handleMine(res, videoId) {
+  const headers = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` };
+  const q = `${SUPABASE_URL}/rest/v1/set_id_moments?select=*&video_id=eq.${encodeURIComponent(videoId)}&order=likes.desc&limit=200`;
+  const read = async () => {
+    try { const r = await fetch(q, { headers }); return r.ok ? await r.json() : []; }
+    catch { return []; }
+  };
+  let moments = await read();
+  if (Array.isArray(moments) && moments.length) return res.json({ mined: false, moments });
+  await mineAndStore([videoId], 1);
+  moments = await read();
+  return res.json({ mined: true, moments: Array.isArray(moments) ? moments : [] });
+}
+
 export default async function handler(req, res) {
+  // On-demand single-set mining branch
+  const mineId = req.query && req.query.mine;
+  if (mineId) return handleMine(res, String(mineId).trim());
+
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
 
 
