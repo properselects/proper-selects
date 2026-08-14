@@ -4,6 +4,7 @@ import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { geoRegion } from '../lib/geoRegion.js';
 import { parseArtist } from '../lib/parseArtist.js';
 import StagePlayer from './StagePlayer.jsx';
+import IdRadar from './IdRadar.jsx';
 import { fetchNextEvent, EventStrip } from '../lib/venueEvents.jsx';
 
 const BAD_CONTENT_RE = [
@@ -337,33 +338,11 @@ export default function TodayTab({ lineup = [], onLineupChange, onOpenLineup, on
                 label={current?.festival_name ? `UPCOMING AT ${current.festival_name.toUpperCase()}` : 'UPCOMING'}
               />
 
-              <div className="jb-radar">
-                <div className="jb-radar-head">
-                  <span style={{ color: stage.accent }}>ID Radar</span>
-                  <span className="jb-radar-sub">auto-identified · tap to jump</span>
-                </div>
-                {(idMoments[current.video_id] || []).length > 0 ? (
-                  <div className="jb-radar-row">
-                    {idMoments[current.video_id].map((v, d) => (
-                      <button
-                        key={d}
-                        className={'jb-id' + (v.resolved ? ' resolved' : '')}
-                        style={v.resolved ? { borderColor: stage.accent } : undefined}
-                        onClick={() => seekRef.current && seekRef.current(v.t_sec)}
-                        title={v.label}
-                      >
-                        <span className="jb-id-ts" style={{ color: stage.accent }}>{formatTs(v.t_sec)}</span>
-                        <span className="jb-id-label">{v.resolved ? v.label : 'ID?'}</span>
-                        {v.likes > 0 && <span className="jb-id-likes">▲{v.likes}</span>}
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <div style={{ fontSize: 12, opacity: 0.55, padding: '4px 0', color: '#EDEAE2' }}>
-                    No IDs mined yet for this set
-                  </div>
-                )}
-              </div>
+              <IdRadar
+                videoId={current.video_id}
+                accent={stage.accent}
+                onSeek={(s) => seekRef.current && seekRef.current(s)}
+              />
             </>
           ) : (
             <div className="jb-empty">No sets in today's program for this stage yet.</div>
