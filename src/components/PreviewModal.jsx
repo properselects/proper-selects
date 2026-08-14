@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { parseArtist } from '../lib/parseArtist.js';
 import { venueSubtitle } from '../lib/venueSubtitle.js';
 import { registerPlayer, unregisterPlayer, startExclusive } from '../lib/playbackBus.js';
+import { lockScroll, unlockScroll } from '../lib/scrollLock.js';
 import IdRadar from './IdRadar.jsx';
 import { ytSeek } from '../lib/ytPostMessage.js';
 
@@ -26,6 +27,14 @@ export default function PreviewModal({ set, onClose, onNowPlaying }) {
     });
     return () => unregisterPlayer('preview');
   }, [set?.video_id]);
+
+  // Lock page scroll only for the expanded modal — the minimized floating
+  // player is meant to keep the site interactive.
+  useEffect(() => {
+    if (!set || minimized) return;
+    lockScroll();
+    return () => unlockScroll();
+  }, [set?.video_id, minimized]);
 
   if (!set) return null;
 

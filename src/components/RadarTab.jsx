@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { parseArtist } from '../lib/parseArtist.js';
 import { fetchNextEvent, EventStrip } from '../lib/venueEvents.jsx';
 import { registerPlayer, unregisterPlayer, startExclusive } from '../lib/playbackBus.js';
+import { lockScroll, unlockScroll } from '../lib/scrollLock.js';
 import IdRadar from './IdRadar.jsx';
 import { ytSeek } from '../lib/ytPostMessage.js';
 
@@ -40,6 +41,7 @@ export default function RadarTab({ onNowPlaying }) {
     if (!selected) return;
     startExclusive('radar');
     registerPlayer('radar', () => setSelected(null));
+    lockScroll();
     // Reflect this set as the current set in the nav mini-player
     onNowPlaying?.({
       video_id: selected.video_id,
@@ -47,7 +49,7 @@ export default function RadarTab({ onNowPlaying }) {
       festival_name: selected.festival?.name,
       city: selected.festival?.city,
     });
-    return () => unregisterPlayer('radar');
+    return () => { unregisterPlayer('radar'); unlockScroll(); };
   }, [selected]);
 
   return (

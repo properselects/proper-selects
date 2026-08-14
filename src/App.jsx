@@ -212,7 +212,7 @@ export default function App() {
           That keeps the YouTube iframe alive so the set keeps playing when you switch
           tabs. The other tabs render as opaque overlays on top when active.
         */}
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowY: 'auto' }}>
+        <div className="tab-scroll" style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowY: 'auto' }}>
           <TodayTab
             lineup={lineup}
             onLineupChange={setLineup}
@@ -222,14 +222,14 @@ export default function App() {
             onPlayingChange={setIsPlaying}
           />
         </div>
-        <div style={{ display: tab === 'grid' ? 'flex' : 'none', position: 'absolute', inset: 0, background: '#0a0a0e', flexDirection: 'column', overflowY: 'auto', zIndex: 5 }}>
+        <div className="tab-scroll" style={{ display: tab === 'grid' ? 'flex' : 'none', position: 'absolute', inset: 0, background: '#0a0a0e', flexDirection: 'column', overflowY: 'auto', zIndex: 5 }}>
           <VaultTab lineup={lineup} onLineupChange={setLineup} onNowPlaying={setNowPlaying} />
         </div>
         {/* Atlas: position absolute so Leaflet map gets real pixel dimensions */}
         <div style={{ display: tab === 'atlas' ? 'block' : 'none', position: 'absolute', inset: 0, background: '#06080c', zIndex: 5 }}>
           <AtlasTab lineup={lineup} onLineupChange={setLineup} isActive={tab === 'atlas'} onNowPlaying={setNowPlaying} />
         </div>
-        <div style={{ display: tab === 'radar' ? 'flex' : 'none', position: 'absolute', inset: 0, background: '#06080c', flexDirection: 'column', overflowY: 'auto', zIndex: 5 }}>
+        <div className="tab-scroll" style={{ display: tab === 'radar' ? 'flex' : 'none', position: 'absolute', inset: 0, background: '#06080c', flexDirection: 'column', overflowY: 'auto', zIndex: 5 }}>
           <RadarTab onNowPlaying={setNowPlaying} />
         </div>
       </main>

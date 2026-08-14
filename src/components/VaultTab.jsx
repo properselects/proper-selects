@@ -3,6 +3,7 @@ import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { parseArtist } from '../lib/parseArtist.js';
 import { fetchNextEvent, EventStrip } from '../lib/venueEvents.jsx';
 import { registerPlayer, unregisterPlayer, startExclusive } from '../lib/playbackBus.js';
+import { lockScroll, unlockScroll } from '../lib/scrollLock.js';
 import IdRadar from './IdRadar.jsx';
 import { ytSeek } from '../lib/ytPostMessage.js';
 
@@ -53,13 +54,14 @@ export default function VaultTab({ lineup = [], onLineupChange, onNowPlaying }) 
     if (!playing) return;
     startExclusive('vault');
     registerPlayer('vault', () => setPlaying(null));
+    lockScroll();
     onNowPlaying?.({
       video_id: playing.video_id,
       artist: playing.artist,
       festival_name: playing.festival_name,
       city: playing.city,
     });
-    return () => unregisterPlayer('vault');
+    return () => { unregisterPlayer('vault'); unlockScroll(); };
   }, [playing]);
 
   // On load, pick venue from localStorage or fall back to top-set-count

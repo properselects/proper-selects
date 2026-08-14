@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { loadLeaflet } from '../lib/leaflet.js';
 import { registerPlayer, unregisterPlayer, startExclusive } from '../lib/playbackBus.js';
+import { lockScroll, unlockScroll } from '../lib/scrollLock.js';
 import IdRadar from './IdRadar.jsx';
 import { ytSeek } from '../lib/ytPostMessage.js';
 
@@ -72,13 +73,14 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
     if (!playing) return;
     startExclusive('atlas');
     registerPlayer('atlas', () => setPlaying(null));
+    lockScroll();
     onNowPlaying?.({
       video_id: playing.video_id,
       artist: playing.artist,
       festival_name: playing.festival_name,
       city: playing.city,
     });
-    return () => unregisterPlayer('atlas');
+    return () => { unregisterPlayer('atlas'); unlockScroll(); };
   }, [playing]);
 
   useEffect(() => {
