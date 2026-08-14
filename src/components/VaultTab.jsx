@@ -138,20 +138,37 @@ export default function VaultTab({ lineup = [], onLineupChange, onNowPlaying }) 
     return [...map.values()].sort((a, b) => (counts[b.k] || 0) - (counts[a.k] || 0)).slice(0, 30);
   }, [sets, counts]);
 
-  const filtered = useMemo(() => {
-    if (!sets) return [];
-    if (!selectedVenue || selectedVenue === 'all') {
-      // Cap at 3 per venue so no single venue dominates the All view
-      const seen = {};
-      return sets.filter((s) => {
-        seen[s.festival_id] = (seen[s.festival_id] || 0) + 1;
-        return seen[s.festival_id] <= 3;
-      });
-    }
-    return sets.filter((s) => s.festival_id === selectedVenue);
-  }, [sets, selectedVenue]);
+  // When a specific venue is selected, fetch its FULL set list — the initial
+  // 500-set (newest-first) load can miss a venue's older classics (e.g. Boiler
+  // Room sets from 2013–2019 that fall outside the recency window).
+  const [venueSets, setVenueSets] = useState(null);
+  useEffect(() => {
+    if (!selectedVenue || selectedVenue === 'all') { setVenueSets(null); return; }
+    let cancelled = false;
+    setVenueSets(null);
+    fetch(`${SUPABASE_URL}/rest/v1/vault_sets?select=*&festival_id=eq.${encodeURIComponent(selectedVenue)}&order=published_at.desc&limit=200`, { headers: supabaseHeaders })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((rows) => { if (!cancelled) setVenueSets(Array.isArray(rows) ? rows : []); })
+      .catch(() => { if (!cancelled) setVenueSets([]); });
+    return () => { cancelled = true; };
+  }, [selectedVenue]);
 
-  const featured = sets?.find((s) => s.festival_id === selectedVenue);
+  const filtered = useMemo(() => {
+    if (selectedVenue && selectedVenue !== 'all') {
+      // Prefer the complete per-venue fetch; fall back to the cached page while it loads
+      if (venueSets) return venueSets;
+      return sets ? sets.filter((s) => s.festival_id === selectedVenue) : [];
+    }
+    if (!sets) return [];
+    // Cap at 3 per venue so no single venue dominates the All view
+    const seen = {};
+    return sets.filter((s) => {
+      seen[s.festival_id] = (seen[s.festival_id] || 0) + 1;
+      return seen[s.festival_id] <= 3;
+    });
+  }, [sets, selectedVenue, venueSets]);
+
+  const featured = (venueSets && venueSets[0]) || sets?.find((s) => s.festival_id === selectedVenue);
 
   if (!sets) return <div style={{ padding: 40, opacity: 0.5, textAlign: 'center' }}>Loading vault…</div>;
 
@@ -249,7 +266,7 @@ export default function VaultTab({ lineup = [], onLineupChange, onNowPlaying }) 
             {featured.festival_name || featured.festival_id}
           </h2>
           <div style={{ fontSize: 13, opacity: 0.6 }}>
-            {counts[selectedVenue] || 0} sets in vault{featured.city ? ' · ' + featured.city : ''}
+            {(venueSets ? venueSets.length : counts[selectedVenue]) || 0} sets in vault{featured.city ? ' · ' + featured.city : ''}
           </div>
         </div>
       )}
