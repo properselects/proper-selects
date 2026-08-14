@@ -4,7 +4,7 @@ import { registerPlayer, unregisterPlayer, startExclusive } from '../lib/playbac
 import IdRadar from './IdRadar.jsx';
 import { ytSeek } from '../lib/ytPostMessage.js';
 
-export default function PreviewModal({ set, onClose }) {
+export default function PreviewModal({ set, onClose, onNowPlaying }) {
   const [minimized, setMinimized] = useState(false);
   const playerFrame = useRef(null);
 
@@ -17,6 +17,12 @@ export default function PreviewModal({ set, onClose }) {
     if (!set) return;
     startExclusive('preview');
     registerPlayer('preview', () => onClose?.());
+    onNowPlaying?.({
+      video_id: set.video_id,
+      artist: set.artist || set.title,
+      festival_name: set.festival_name,
+      city: set.city,
+    });
     return () => unregisterPlayer('preview');
   }, [set?.video_id]);
 

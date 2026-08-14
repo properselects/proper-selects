@@ -24,7 +24,7 @@ async function fetchVault() {
 }
 
 
-export default function VaultTab({ lineup = [], onLineupChange }) {
+export default function VaultTab({ lineup = [], onLineupChange, onNowPlaying }) {
   const lineupIds = React.useMemo(() => new Set((lineup || []).map((s) => s.video_id)), [lineup]);
 
   function toggleLineup(s) {
@@ -53,6 +53,12 @@ export default function VaultTab({ lineup = [], onLineupChange }) {
     if (!playing) return;
     startExclusive('vault');
     registerPlayer('vault', () => setPlaying(null));
+    onNowPlaying?.({
+      video_id: playing.video_id,
+      artist: playing.artist,
+      festival_name: playing.festival_name,
+      city: playing.city,
+    });
     return () => unregisterPlayer('vault');
   }, [playing]);
 

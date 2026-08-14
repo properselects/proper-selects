@@ -223,14 +223,14 @@ export default function App() {
           />
         </div>
         <div style={{ display: tab === 'grid' ? 'flex' : 'none', position: 'absolute', inset: 0, background: '#0a0a0e', flexDirection: 'column', overflowY: 'auto', zIndex: 5 }}>
-          <VaultTab lineup={lineup} onLineupChange={setLineup} />
+          <VaultTab lineup={lineup} onLineupChange={setLineup} onNowPlaying={setNowPlaying} />
         </div>
         {/* Atlas: position absolute so Leaflet map gets real pixel dimensions */}
         <div style={{ display: tab === 'atlas' ? 'block' : 'none', position: 'absolute', inset: 0, background: '#06080c', zIndex: 5 }}>
-          <AtlasTab lineup={lineup} onLineupChange={setLineup} isActive={tab === 'atlas'} />
+          <AtlasTab lineup={lineup} onLineupChange={setLineup} isActive={tab === 'atlas'} onNowPlaying={setNowPlaying} />
         </div>
         <div style={{ display: tab === 'radar' ? 'flex' : 'none', position: 'absolute', inset: 0, background: '#06080c', flexDirection: 'column', overflowY: 'auto', zIndex: 5 }}>
-          <RadarTab />
+          <RadarTab onNowPlaying={setNowPlaying} />
         </div>
       </main>
 
@@ -347,7 +347,7 @@ export default function App() {
         onLineupChange={setLineup}
         onPreview={setPreview}
       />
-      <PreviewModal set={preview} onClose={() => setPreview(null)} />
+      <PreviewModal set={preview} onClose={() => setPreview(null)} onNowPlaying={setNowPlaying} />
       <SubscribeModal open={subscribeOpen} onClose={() => setSubscribeOpen(false)} />
       <SubmitModal open={submitOpen} onClose={() => setSubmitOpen(false)} />
     </div>

@@ -12,7 +12,7 @@ function formatViews(v) {
   return '< 1K';
 }
 
-export default function RadarTab() {
+export default function RadarTab({ onNowPlaying }) {
   const [sets, setSets] = useState([]);
   const [selected, setSelected] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -40,6 +40,13 @@ export default function RadarTab() {
     if (!selected) return;
     startExclusive('radar');
     registerPlayer('radar', () => setSelected(null));
+    // Reflect this set as the current set in the nav mini-player
+    onNowPlaying?.({
+      video_id: selected.video_id,
+      artist: selected.artist,
+      festival_name: selected.festival?.name,
+      city: selected.festival?.city,
+    });
     return () => unregisterPlayer('radar');
   }, [selected]);
 

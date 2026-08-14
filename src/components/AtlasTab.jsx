@@ -40,7 +40,7 @@ const REGIONS = [
   { id: 'worldwide', label: 'Worldwide', color: '#FF3B57' },
 ];
 
-export default function AtlasTab({ lineup = [], onLineupChange, isActive = false }) {
+export default function AtlasTab({ lineup = [], onLineupChange, isActive = false, onNowPlaying }) {
   const lineupIds = React.useMemo(() => new Set((lineup || []).map((s) => s.video_id)), [lineup]);
 
   function toggleLineup(s) {
@@ -72,6 +72,12 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
     if (!playing) return;
     startExclusive('atlas');
     registerPlayer('atlas', () => setPlaying(null));
+    onNowPlaying?.({
+      video_id: playing.video_id,
+      artist: playing.artist,
+      festival_name: playing.festival_name,
+      city: playing.city,
+    });
     return () => unregisterPlayer('atlas');
   }, [playing]);
 
