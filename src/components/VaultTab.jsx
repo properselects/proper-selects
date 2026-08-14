@@ -3,6 +3,8 @@ import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { parseArtist } from '../lib/parseArtist.js';
 import { fetchNextEvent, EventStrip } from '../lib/venueEvents.jsx';
 import { registerPlayer, unregisterPlayer, startExclusive } from '../lib/playbackBus.js';
+import IdRadar from './IdRadar.jsx';
+import { ytSeek } from '../lib/ytPostMessage.js';
 
 const CHIPS_VISIBLE = 10;
 
@@ -37,6 +39,7 @@ export default function VaultTab({ lineup = [], onLineupChange }) {
   const [sets, setSets] = useState(null);
   const [selectedVenue, setSelectedVenue] = useState('');
   const [playing, setPlaying] = useState(null);
+  const playerFrame = React.useRef(null);
   const [nextEvent, setNextEvent] = useState(null);
   const [playingEvent, setPlayingEvent] = useState(null);
   const [showAllChips, setShowAllChips] = useState(false);
@@ -295,12 +298,13 @@ export default function VaultTab({ lineup = [], onLineupChange }) {
             padding: 20,
           }}
         >
-          <div style={{ width: '100%', maxWidth: 900 }}>
+          <div style={{ width: '100%', maxWidth: 900, maxHeight: '92vh', overflowY: 'auto' }}>
             <div style={{ aspectRatio: '16/9' }}>
               <iframe
+                ref={playerFrame}
                 width="100%"
                 height="100%"
-                src={`https://www.youtube.com/embed/${playing.video_id}?autoplay=1&rel=0`}
+                src={`https://www.youtube.com/embed/${playing.video_id}?autoplay=1&rel=0&enablejsapi=1`}
                 allow="autoplay; encrypted-media; picture-in-picture"
                 allowFullScreen
                 style={{ border: 0, borderRadius: 12 }}
@@ -310,6 +314,11 @@ export default function VaultTab({ lineup = [], onLineupChange }) {
               event={playingEvent}
               accent={playing.accent || '#F4A93C'}
               label={playing.festival_name ? `UPCOMING AT ${playing.festival_name.toUpperCase()}` : 'UPCOMING'}
+            />
+            <IdRadar
+              videoId={playing.video_id}
+              accent={playing.accent || '#F4A93C'}
+              onSeek={(s) => ytSeek(playerFrame.current, s)}
             />
           </div>
         </div>

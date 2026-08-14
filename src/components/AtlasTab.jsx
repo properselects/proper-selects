@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { loadLeaflet } from '../lib/leaflet.js';
 import { registerPlayer, unregisterPlayer, startExclusive } from '../lib/playbackBus.js';
+import IdRadar from './IdRadar.jsx';
+import { ytSeek } from '../lib/ytPostMessage.js';
 
 async function fetchVenuesWithSets() {
   const [venueRes, setRes] = await Promise.all([
@@ -59,6 +61,7 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [playing, setPlaying] = useState(null);
   const [regionFilter, setRegionFilter] = useState('all');
+  const playerFrame = useRef(null);
 
   useEffect(() => {
     fetchVenuesWithSets().then(setVenues).catch(() => {});
@@ -300,14 +303,22 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
             padding: 20,
           }}
         >
-          <div style={{ width: '100%', maxWidth: 900, aspectRatio: '16/9' }}>
-            <iframe
-              width="100%"
-              height="100%"
-              src={`https://www.youtube.com/embed/${playing.video_id}?autoplay=1&rel=0`}
-              allow="autoplay; encrypted-media; picture-in-picture"
-              allowFullScreen
-              style={{ border: 0, borderRadius: 12 }}
+          <div style={{ width: '100%', maxWidth: 900, maxHeight: '92vh', overflowY: 'auto' }}>
+            <div style={{ aspectRatio: '16/9' }}>
+              <iframe
+                ref={playerFrame}
+                width="100%"
+                height="100%"
+                src={`https://www.youtube.com/embed/${playing.video_id}?autoplay=1&rel=0&enablejsapi=1`}
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowFullScreen
+                style={{ border: 0, borderRadius: 12 }}
+              />
+            </div>
+            <IdRadar
+              videoId={playing.video_id}
+              accent={playing.accent || '#F4A93C'}
+              onSeek={(s) => ytSeek(playerFrame.current, s)}
             />
           </div>
         </div>

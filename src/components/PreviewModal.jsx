@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { parseArtist } from '../lib/parseArtist.js';
 import { registerPlayer, unregisterPlayer, startExclusive } from '../lib/playbackBus.js';
+import IdRadar from './IdRadar.jsx';
+import { ytSeek } from '../lib/ytPostMessage.js';
 
 export default function PreviewModal({ set, onClose }) {
   const [minimized, setMinimized] = useState(false);
+  const playerFrame = useRef(null);
 
   // Reset to expanded when a new set is opened
   useEffect(() => { if (set) setMinimized(false); }, [set?.video_id]);
@@ -62,6 +65,7 @@ export default function PreviewModal({ set, onClose }) {
         position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
         width: 'min(720px, 94vw)', background: '#0a0a0e',
         border: '1px solid rgba(255,255,255,.15)', borderRadius: 12, overflow: 'hidden',
+        maxHeight: '92vh', overflowY: 'auto',
         zIndex: 2001, boxShadow: '0 30px 80px rgba(0,0,0,.7)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,.08)' }}>
@@ -85,11 +89,15 @@ export default function PreviewModal({ set, onClose }) {
         <div style={{ position: 'relative', aspectRatio: '16/9', background: '#000' }}>
           <iframe
             key={set.video_id}
-            src={`https://www.youtube.com/embed/${set.video_id}?autoplay=1&rel=0`}
+            ref={playerFrame}
+            src={`https://www.youtube.com/embed/${set.video_id}?autoplay=1&rel=0&enablejsapi=1`}
             allow="autoplay; encrypted-media; picture-in-picture"
             allowFullScreen
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none' }}
           />
+        </div>
+        <div style={{ padding: '0 14px' }}>
+          <IdRadar videoId={set.video_id} onSeek={(s) => ytSeek(playerFrame.current, s)} />
         </div>
         <div style={{ padding: '10px 14px', fontSize: 11, opacity: 0.65, textAlign: 'center', lineHeight: 1.5 }}>
           <div style={{ marginBottom: 3 }}>📺 Cast or AirPlay to a screen near you</div>

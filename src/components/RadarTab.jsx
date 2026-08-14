@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { parseArtist } from '../lib/parseArtist.js';
 import { fetchNextEvent, EventStrip } from '../lib/venueEvents.jsx';
 import { registerPlayer, unregisterPlayer, startExclusive } from '../lib/playbackBus.js';
+import IdRadar from './IdRadar.jsx';
+import { ytSeek } from '../lib/ytPostMessage.js';
 
 function formatViews(v) {
   if (!v || v === 0) return null;
@@ -14,6 +16,7 @@ export default function RadarTab() {
   const [sets, setSets] = useState([]);
   const [selected, setSelected] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const playerFrame = React.useRef(null);
 
   useEffect(() => {
     fetch('/api/radar')
@@ -122,12 +125,13 @@ export default function RadarTab() {
             padding: 20,
           }}
         >
-          <div style={{ width: '100%', maxWidth: 900 }}>
+          <div style={{ width: '100%', maxWidth: 900, maxHeight: '92vh', overflowY: 'auto' }}>
             <div style={{ aspectRatio: '16/9' }}>
               <iframe
+                ref={playerFrame}
                 width="100%"
                 height="100%"
-                src={`https://www.youtube.com/embed/${selected.video_id}?autoplay=1&rel=0`}
+                src={`https://www.youtube.com/embed/${selected.video_id}?autoplay=1&rel=0&enablejsapi=1`}
                 allow="autoplay; encrypted-media; picture-in-picture"
                 allowFullScreen
                 style={{ border: 0, borderRadius: 12 }}
@@ -137,6 +141,11 @@ export default function RadarTab() {
               event={selectedEvent}
               accent={selected.festival?.accent || '#F4A93C'}
               label={selected.festival?.name ? `UPCOMING AT ${selected.festival.name.toUpperCase()}` : 'UPCOMING'}
+            />
+            <IdRadar
+              videoId={selected.video_id}
+              accent={selected.festival?.accent || '#F4A93C'}
+              onSeek={(s) => ytSeek(playerFrame.current, s)}
             />
           </div>
         </div>
