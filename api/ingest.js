@@ -4,7 +4,7 @@
 export const maxDuration = 60;
 
 import { classifyRegion, parseCity, parseVenue, cleanArtist } from './_region.js';
-import { mineAndStore, storeMomentsByVideo } from './_mine.js';
+import { mineAndStore, storeMomentsByVideo, backfillMissing } from './_mine.js';
 const GENERIC_BUCKETS = new Set(['discovered', 'search-ingest']);
 
 // Ingest uses its own key only — search key is reserved for user-facing search
@@ -487,5 +487,15 @@ export default async function handler(req, res) {
     console.log(`Mined ${n} ID moments from comments`);
   }
 
-  res.json({ inserted: toInsert.length, checked: CHANNELS.length });
+  // Daily sweep: proactively mine a batch of older live sets that still have zero
+  // IDs, so ID Radar keeps filling in across the whole vault (not just on-play).
+  let backfill = { swept: 0, moments: 0 };
+  try {
+    backfill = await backfillMissing(150);
+    console.log(`Backfill swept ${backfill.swept} sets, +${backfill.moments} IDs`);
+  } catch (e) {
+    console.error('Backfill error:', e.message);
+  }
+
+  res.json({ inserted: toInsert.length, checked: CHANNELS.length, backfill });
 }
