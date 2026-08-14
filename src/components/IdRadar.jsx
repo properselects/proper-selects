@@ -79,7 +79,7 @@ export default function IdRadar({ videoId, accent = '#F4A93C', onSeek }) {
       <div className="jb-radar-head">
         <span style={{ color: accent }}>ID Radar</span>
         <span className="jb-radar-sub">
-          auto-identified{onSeek ? ' · tap to jump' : ''}
+          Mined IDs{onSeek ? ' · tap to jump' : ''}
         </span>
       </div>
       <div className="jb-radar-row">
