@@ -135,6 +135,9 @@ export default function RadarTab({ onNowPlaying }) {
           }}
         >
           <div style={{ width: '100%', maxWidth: 900, maxHeight: '92vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
+              <button onClick={() => setSelected(null)} className="jb-modal-close">✕ Close</button>
+            </div>
             <div style={{ aspectRatio: '16/9' }}>
               <iframe
                 ref={playerFrame}
