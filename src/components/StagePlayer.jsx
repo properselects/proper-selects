@@ -11,10 +11,45 @@ const IS_APPLE =
   typeof navigator !== 'undefined' &&
   (/^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent));
 
+const PIP_SUPPORTED = typeof window !== 'undefined' && 'documentPictureInPicture' in window;
+
 export default function StagePlayer({ set, onEnded, seekRef, timeRef, controlsRef, onPlayingChange }) {
   const hostRef = useRef(null);
   const playerRef = useRef(null);
+  const screenRef = useRef(null);       // the video container we pop out
+  const pipHomeRef = useRef(null);       // { parent, next } to restore on close
   const [state, setState] = useState('loading');
+  const [pipActive, setPipActive] = useState(false);
+
+  // Document Picture-in-Picture: pop the live player into a floating,
+  // always-on-top window that keeps playing while you use other tabs/apps.
+  // (The only web mechanism that works for a cross-origin YouTube embed —
+  //  the video element itself is unreachable, so standard video-PiP can't be used.)
+  async function togglePiP() {
+    try {
+      if (window.documentPictureInPicture?.window) {
+        window.documentPictureInPicture.window.close();
+        return;
+      }
+      const screen = screenRef.current;
+      if (!screen) return;
+      const pip = await window.documentPictureInPicture.requestWindow({ width: 480, height: 270 });
+      // Carry over styles so the player renders correctly in the PiP window
+      pip.document.body.style.margin = '0';
+      pip.document.body.style.background = '#000';
+      // Remember where it lived so we can put it back
+      pipHomeRef.current = { parent: screen.parentNode, next: screen.nextSibling };
+      pip.document.body.append(screen);
+      setPipActive(true);
+      pip.addEventListener('pagehide', () => {
+        const home = pipHomeRef.current;
+        if (home?.parent) home.parent.insertBefore(screen, home.next);
+        setPipActive(false);
+      });
+    } catch {
+      /* user dismissed or unsupported — no-op */
+    }
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -85,7 +120,7 @@ export default function StagePlayer({ set, onEnded, seekRef, timeRef, controlsRe
 
   return (
     <div className="jb-player">
-      <div className="jb-screen">
+      <div ref={screenRef} className="jb-screen">
         <div ref={hostRef} className="jb-host" />
         {state === 'error' && (
           <div className="jb-err">
@@ -94,6 +129,11 @@ export default function StagePlayer({ set, onEnded, seekRef, timeRef, controlsRe
           </div>
         )}
       </div>
+      {pipActive && (
+        <div className="jb-pip-placeholder">
+          ▢ Playing in floating window — <button className="jb-pip-return" onClick={togglePiP}>bring back</button>
+        </div>
+      )}
       <div className="jb-now-row">
         <div className="jb-now">
           {state === 'playing' ? 'Now playing' : state === 'error' ? 'Unavailable' : 'Cueing'} · {parseArtist(set.artist)}
@@ -104,6 +144,15 @@ export default function StagePlayer({ set, onEnded, seekRef, timeRef, controlsRe
             </span>
           )}
         </div>
+        {PIP_SUPPORTED && state !== 'error' && (
+          <button
+            className="jb-pip-btn"
+            onClick={togglePiP}
+            title="Pop out — keeps playing while you use other apps/tabs"
+          >
+            {pipActive ? '▢ Bring back' : '⧉ Pop out'}
+          </button>
+        )}
       </div>
     </div>
   );
