@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { parseArtist } from '../lib/parseArtist.js';
+import { venueSubtitle } from '../lib/venueSubtitle.js';
 
 const ACCENT = '#F4A93C';
 
@@ -128,7 +129,7 @@ export default function GlobalSearch({ open, onClose, lineup, onLineupChange, on
                     {parseArtist(s.artist || s.title)}
                   </div>
                   <div style={{ fontSize: 11, opacity: 0.45, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {s.festival_name ? `${s.festival_name}${s.city ? ` · ${s.city}` : ''}` : (s.title || '')}
+                    {venueSubtitle(s)}
                   </div>
                 </div>
                 <button
