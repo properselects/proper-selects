@@ -2,10 +2,25 @@
 // Real-time YouTube search → filter → insert new sets → return results
 // Fires only when the local DB search returns few/no results.
 
+import { parseVenue, parseCity, cleanArtist } from './_region.js';
+
 export const maxDuration = 20;
 
 // Dedicated search key keeps its own quota separate from the ingest key
 const YT_KEY = process.env.YOUTUBE_SEARCH_KEY || process.env.YOUTUBE_API_KEY;
+
+// Best-effort venue name from a YouTube title: known-venue keyword first, then
+// generic "@ Venue" / "Live from|at Venue" patterns. Returns null if nothing clean.
+function venueFromTitle(title) {
+  const kw = parseVenue(title);
+  if (kw) return kw;
+  const m = String(title || '').match(/(?:@|live\s+(?:from|at)|\bfrom\b)\s+([^|,\-–—()]{2,40})/i);
+  if (m) {
+    const v = m[1].replace(/\s+/g, ' ').trim();
+    if (v && /[a-z]/i.test(v)) return v.slice(0, 40);
+  }
+  return null;
+}
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
@@ -52,7 +67,14 @@ function route(title) {
   for (const r of VENUE_ROUTES) {
     if (r.re.test(title)) return r;
   }
-  return { festival_id: 'discovered', festival_name: 'Discovered', city: 'Worldwide', vibe: 'worldwide' };
+  // Un-matched → discovered bucket, but derive display fields from the actual
+  // title instead of the generic "Discovered · Worldwide".
+  return {
+    festival_id: 'discovered',
+    festival_name: venueFromTitle(title),   // real venue or null (never "Discovered")
+    city: parseCity(title) || '',           // real city or '' (never "Worldwide")
+    vibe: 'worldwide',
+  };
 }
 
 function parseDuration(d) {
@@ -82,6 +104,10 @@ async function sbInsert(rows) {
     status: r.status,
     embeddable: r.embeddable,
     published_at: r.published_at,
+    // For the generic discovered bucket, persist the parsed venue/city so the
+    // vault view (COALESCE on s.venue / s.city) shows real info, not "Discovered".
+    venue: r.festival_id === 'discovered' ? (venueFromTitle(r.title) || cleanArtist(r.title)) : null,
+    city: parseCity(r.title) || null,
   }));
   const res = await fetch(`${SUPABASE_URL}/rest/v1/sets`, {
     method: 'POST',

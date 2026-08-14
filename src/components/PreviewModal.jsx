@@ -44,7 +44,7 @@ export default function PreviewModal({ set, onClose, onNowPlaying }) {
               {parseArtist(set.artist || set.title)}
             </div>
             <div style={{ fontSize: 9, opacity: 0.5 }}>
-              {set.festival_name || 'Discovered'}{set.city ? ` · ${set.city}` : ''}
+              {set.festival_name ? `${set.festival_name}${set.city ? ` · ${set.city}` : ''}` : (set.title || 'Discovered')}
             </div>
           </div>
           <button onClick={() => setMinimized(false)} title="Expand" style={{ background: 'none', border: 'none', color: '#F4A93C', fontSize: 12, cursor: 'pointer', padding: 4, lineHeight: 1 }}>⤢</button>
@@ -80,7 +80,7 @@ export default function PreviewModal({ set, onClose, onNowPlaying }) {
               {parseArtist(set.artist || set.title)}
             </div>
             <div style={{ fontSize: 11, opacity: 0.5 }}>
-              {set.festival_name || 'Discovered'}{set.city ? ` · ${set.city}` : ''}
+              {set.festival_name ? `${set.festival_name}${set.city ? ` · ${set.city}` : ''}` : (set.title || 'Discovered')}
             </div>
           </div>
           <button

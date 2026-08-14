@@ -127,8 +127,8 @@ export default function GlobalSearch({ open, onClose, lineup, onLineupChange, on
                   <div style={{ fontSize: 13, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {parseArtist(s.artist || s.title)}
                   </div>
-                  <div style={{ fontSize: 11, opacity: 0.45 }}>
-                    {s.festival_name || 'Discovered'}{s.city ? ` · ${s.city}` : ''}
+                  <div style={{ fontSize: 11, opacity: 0.45, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {s.festival_name ? `${s.festival_name}${s.city ? ` · ${s.city}` : ''}` : (s.title || '')}
                   </div>
                 </div>
                 <button
