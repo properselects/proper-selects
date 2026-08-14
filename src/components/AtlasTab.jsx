@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { loadLeaflet } from '../lib/leaflet.js';
+import { registerPlayer, unregisterPlayer, startExclusive } from '../lib/playbackBus.js';
 
 async function fetchVenuesWithSets() {
   const [venueRes, setRes] = await Promise.all([
@@ -62,6 +63,14 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
   useEffect(() => {
     fetchVenuesWithSets().then(setVenues).catch(() => {});
   }, []);
+
+  // Single-player coordination.
+  useEffect(() => {
+    if (!playing) return;
+    startExclusive('atlas');
+    registerPlayer('atlas', () => setPlaying(null));
+    return () => unregisterPlayer('atlas');
+  }, [playing]);
 
   useEffect(() => {
     if (!venues.length || mapInstance.current) return;

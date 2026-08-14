@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { loadYT } from '../lib/youtubePlayer.js';
 import { parseArtist } from '../lib/parseArtist.js';
+import { registerPlayer, unregisterPlayer, startExclusive } from '../lib/playbackBus.js';
 
 /**
  * YouTube player that fires onEnded when a set finishes, and auto-fires
@@ -94,10 +95,16 @@ export default function StagePlayer({ set, onEnded, seekRef, timeRef, controlsRe
                 },
               };
             }
+            // Register with the global bus so other surfaces can pause us
+            registerPlayer('stage', () => { try { e.target.pauseVideo(); } catch {} });
           },
           onStateChange: (e) => {
             const S = window.YT.PlayerState;
-            if (e.data === S.PLAYING) { setState('playing'); onPlayingChange?.(true); }
+            if (e.data === S.PLAYING) {
+              setState('playing');
+              onPlayingChange?.(true);
+              startExclusive('stage'); // stop any other surface that's playing
+            }
             else if (e.data === S.PAUSED) { setState('paused'); onPlayingChange?.(false); }
             else if (e.data === S.ENDED) onEnded();
           },
@@ -111,6 +118,7 @@ export default function StagePlayer({ set, onEnded, seekRef, timeRef, controlsRe
     return () => {
       cancelled = true;
       if (controlsRef) controlsRef.current = null;
+      unregisterPlayer('stage');
       try {
         playerRef.current?.destroy();
       } catch {}

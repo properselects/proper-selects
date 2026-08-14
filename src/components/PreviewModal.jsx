@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { parseArtist } from '../lib/parseArtist.js';
+import { registerPlayer, unregisterPlayer, startExclusive } from '../lib/playbackBus.js';
 
 export default function PreviewModal({ set, onClose }) {
   const [minimized, setMinimized] = useState(false);
 
   // Reset to expanded when a new set is opened
   useEffect(() => { if (set) setMinimized(false); }, [set?.video_id]);
+
+  // Single-player coordination: when previewing, stop other surfaces; and let
+  // others close this preview (which unmounts the iframe and stops audio).
+  useEffect(() => {
+    if (!set) return;
+    startExclusive('preview');
+    registerPlayer('preview', () => onClose?.());
+    return () => unregisterPlayer('preview');
+  }, [set?.video_id]);
 
   if (!set) return null;
 

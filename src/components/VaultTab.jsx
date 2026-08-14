@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 import { parseArtist } from '../lib/parseArtist.js';
 import { fetchNextEvent, EventStrip } from '../lib/venueEvents.jsx';
+import { registerPlayer, unregisterPlayer, startExclusive } from '../lib/playbackBus.js';
 
 const CHIPS_VISIBLE = 10;
 
@@ -43,6 +44,14 @@ export default function VaultTab({ lineup = [], onLineupChange }) {
   useEffect(() => {
     fetchVault().then(setSets).catch(() => setSets([]));
   }, []);
+
+  // Single-player coordination: when a set is playing here, stop other surfaces.
+  useEffect(() => {
+    if (!playing) return;
+    startExclusive('vault');
+    registerPlayer('vault', () => setPlaying(null));
+    return () => unregisterPlayer('vault');
+  }, [playing]);
 
   // On load, pick venue from localStorage or fall back to top-set-count
   useEffect(() => {

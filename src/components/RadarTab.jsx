@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { parseArtist } from '../lib/parseArtist.js';
 import { fetchNextEvent, EventStrip } from '../lib/venueEvents.jsx';
+import { registerPlayer, unregisterPlayer, startExclusive } from '../lib/playbackBus.js';
 
 function formatViews(v) {
   if (!v || v === 0) return null;
@@ -29,6 +30,15 @@ export default function RadarTab() {
     const fid = s?.festival_id;
     if (fid) fetchNextEvent(fid).then(setSelectedEvent).catch(() => {});
   }
+
+  // Single-player: when this modal is open, stop everyone else; and let others
+  // close it. Closing (setSelected null) unmounts the iframe, stopping audio.
+  useEffect(() => {
+    if (!selected) return;
+    startExclusive('radar');
+    registerPlayer('radar', () => setSelected(null));
+    return () => unregisterPlayer('radar');
+  }, [selected]);
 
   return (
     <div style={{ background: '#06080c', minHeight: '100%', color: '#EDEAE2' }}>
