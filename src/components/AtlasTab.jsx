@@ -13,7 +13,7 @@ const hiddenOnAtlas = (s) => ATLAS_HIDE_RE.test(`${s.artist || ''} ${s.title || 
 async function fetchVenuesWithSets() {
   const [venueRes, setRes] = await Promise.all([
     fetch(`${SUPABASE_URL}/rest/v1/festivals?select=id,name,city,country,lat,lng,accent,region,promo_code,promo_label,promo_url,ticket_url,partner&active=eq.true`, { headers: supabaseHeaders }),
-    fetch(`${SUPABASE_URL}/rest/v1/public_sets?select=festival_id,artist,title&limit=4000`, { headers: supabaseHeaders }),
+    fetch(`${SUPABASE_URL}/rest/v1/vault_sets?select=festival_id,artist,title&limit=4000`, { headers: supabaseHeaders }),
   ]);
   const venues = venueRes.ok ? await venueRes.json() : [];
   const sets = setRes.ok ? await setRes.json() : [];
