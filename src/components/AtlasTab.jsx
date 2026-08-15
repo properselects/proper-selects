@@ -76,6 +76,7 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markersRef = useRef([]);
+  const mapInitialized = useRef(false);
   const [venues, setVenues] = useState([]);
   const [selected, setSelected] = useState(null);
   const [selectedSets, setSelectedSets] = useState([]);
@@ -103,8 +104,13 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
     return () => { unregisterPlayer('atlas'); unlockScroll(); };
   }, [playing]);
 
+  // Initialize only when the tab is visible — if we init in a display:none container,
+  // MapLibre gets 0×0 dimensions and pins are placed wrong, causing a jump when the
+  // tab becomes visible. Gate on isActive so the first render always has real dimensions.
   useEffect(() => {
-    if (!venues.length || mapInstance.current || !mapRef.current) return;
+    if (!venues.length || !isActive || mapInitialized.current || !mapRef.current) return;
+    mapInitialized.current = true;
+
     const map = new maplibregl.Map({
       container: mapRef.current,
       style: 'https://tiles.openfreemap.org/styles/dark',
@@ -139,13 +145,19 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
       markersRef.current.push(marker);
     }
     mapInstance.current = map;
+    // No cleanup here — map stays alive across tab switches (display:none/block).
+  }, [venues, isActive]);
+
+  // True cleanup only on component unmount.
+  useEffect(() => {
     return () => {
       try { markersRef.current.forEach((m) => m.remove()); } catch {}
       markersRef.current = [];
       try { mapInstance.current?.remove(); } catch {}
       mapInstance.current = null;
+      mapInitialized.current = false;
     };
-  }, [venues]);
+  }, []);
 
   useEffect(() => {
     if (!selected) {
@@ -157,10 +169,10 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
     fetchUpcomingEvents(selected.id).then(setSelectedEvents).catch(() => setSelectedEvents([]));
   }, [selected]);
 
-  // When tab becomes visible, tell MapLibre to recalculate its size
+  // When tab becomes visible, tell MapLibre to recalculate its size after paint.
   useEffect(() => {
     if (isActive && mapInstance.current) {
-      setTimeout(() => { try { mapInstance.current?.resize(); } catch {} }, 60);
+      requestAnimationFrame(() => { try { mapInstance.current?.resize(); } catch {} });
     }
   }, [isActive]);
 
