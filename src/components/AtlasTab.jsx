@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
-import { loadLeaflet } from '../lib/leaflet.js';
+import maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
 import { registerPlayer, unregisterPlayer, startExclusive } from '../lib/playbackBus.js';
 import { lockScroll, unlockScroll } from '../lib/scrollLock.js';
 import IdRadar from './IdRadar.jsx';
@@ -103,44 +104,45 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
   }, [playing]);
 
   useEffect(() => {
-    if (!venues.length || mapInstance.current) return;
-    let cancelled = false;
-    loadLeaflet().then((L) => {
-      if (cancelled || !mapRef.current) return;
-      const map = L.map(mapRef.current, {
-        center: [30, 0],
-        zoom: 2,
-        worldCopyJump: true,
-        zoomControl: true,
-      });
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '© OpenStreetMap © CartoDB',
-        subdomains: 'abcd',
-        maxZoom: 19,
-      }).addTo(map);
-      for (const v of venues) {
-        if (v.lat == null || v.lng == null) continue;
-        const accent = v.accent || '#F4A93C';
-        const isPartner = v.partner === true;
-        const pin = L.circleMarker([v.lat, v.lng], {
-          radius: isPartner ? 10 : 7,
-          fillColor: accent,
-          color: isPartner ? accent : '#0a0a0e',
-          weight: isPartner ? 3 : 2,
-          fillOpacity: isPartner ? 1 : 0.95,
-        });
-        pin.on('click', () => setSelected(v));
-        pin.addTo(map);
-        pin._venueRegion = v.region;
-        markersRef.current.push(pin);
-      }
-      mapInstance.current = map;
+    if (!venues.length || mapInstance.current || !mapRef.current) return;
+    const map = new maplibregl.Map({
+      container: mapRef.current,
+      style: 'https://tiles.openfreemap.org/styles/dark',
+      center: [10, 25],
+      zoom: 1.4,
+      minZoom: 1,
+      maxZoom: 16,
+      attributionControl: false,
+      dragRotate: false,
+      pitchWithRotate: false,
     });
+    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left');
+    map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
+    map.on('load', () => { try { map.resize(); } catch {} });
+
+    for (const v of venues) {
+      if (v.lat == null || v.lng == null) continue;
+      const accent = v.accent || '#F4A93C';
+      const isPartner = v.partner === true;
+      const el = document.createElement('div');
+      const size = isPartner ? 20 : 14;
+      el.style.cssText = `width:${size}px;height:${size}px;border-radius:50%;background:${accent};`
+        + `border:2px solid ${isPartner ? accent : '#0a0a0e'};box-shadow:0 0 0 2px rgba(0,0,0,.35),0 0 12px ${accent}66;`
+        + `cursor:pointer;transition:transform .12s,opacity .2s;`;
+      if (isPartner) el.style.boxShadow = `0 0 0 3px rgba(0,0,0,.4),0 0 18px ${accent}`;
+      el.addEventListener('mouseenter', () => { el.style.transform = 'scale(1.35)'; });
+      el.addEventListener('mouseleave', () => { el.style.transform = 'scale(1)'; });
+      el.addEventListener('click', (e) => { e.stopPropagation(); setSelected(v); });
+      const marker = new maplibregl.Marker({ element: el }).setLngLat([v.lng, v.lat]).addTo(map);
+      marker._venueRegion = v.region;
+      marker._el = el;
+      markersRef.current.push(marker);
+    }
+    mapInstance.current = map;
     return () => {
-      cancelled = true;
-      try {
-        mapInstance.current?.remove();
-      } catch {}
+      try { markersRef.current.forEach((m) => m.remove()); } catch {}
+      markersRef.current = [];
+      try { mapInstance.current?.remove(); } catch {}
       mapInstance.current = null;
     };
   }, [venues]);
@@ -155,10 +157,10 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
     fetchUpcomingEvents(selected.id).then(setSelectedEvents).catch(() => setSelectedEvents([]));
   }, [selected]);
 
-  // When tab becomes visible, tell Leaflet to recalculate its size
+  // When tab becomes visible, tell MapLibre to recalculate its size
   useEffect(() => {
     if (isActive && mapInstance.current) {
-      setTimeout(() => mapInstance.current?.invalidateSize(), 50);
+      setTimeout(() => { try { mapInstance.current?.resize(); } catch {} }, 60);
     }
   }, [isActive]);
 
@@ -166,8 +168,10 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
   useEffect(() => {
     for (const m of markersRef.current) {
       const show = regionFilter === 'all' || m._venueRegion === regionFilter;
-      if (show) m.setStyle({ fillOpacity: 0.95, opacity: 1 });
-      else m.setStyle({ fillOpacity: 0.08, opacity: 0.15 });
+      if (m._el) {
+        m._el.style.opacity = show ? '1' : '0.12';
+        m._el.style.pointerEvents = show ? 'auto' : 'none';
+      }
     }
   }, [regionFilter]);
 
