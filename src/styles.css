@@ -315,6 +315,20 @@ body.modal-scroll-lock .tab-scroll { overflow: hidden !important; overscroll-beh
 }
 .jb-submitlink:hover { color: rgba(244,169,60,.6); }
 
+.jb-contactlink {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: rgba(237,234,226,.18);
+  font-size: 11px;
+  letter-spacing: .05em;
+  margin-top: 8px;
+  padding: 6px 10px;
+  font-family: inherit;
+  transition: color .15s;
+}
+.jb-contactlink:hover { color: rgba(244,169,60,.6); }
+
 /* Mobile tweaks */
 @media (max-height: 760px) {
   .jb-wave { display: none; }

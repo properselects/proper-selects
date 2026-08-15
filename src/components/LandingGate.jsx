@@ -130,6 +130,14 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
         <button className="jb-submitlink" onClick={(e) => { e.stopPropagation(); onOpenSubmit?.(); }}>
           Know a set that belongs here? →
         </button>
+
+        <a
+          className="jb-contactlink"
+          href="mailto:properselects@gmail.com?subject=Proper%20Selects%20Inquiry"
+          onClick={(e) => e.stopPropagation()}
+        >
+          Inquiries · properselects@gmail.com
+        </a>
       </div>
     </div>
   );
