@@ -24,6 +24,23 @@ async function fetchVault() {
   return r.ok ? r.json() : [];
 }
 
+// Fetch all festival_ids (paginated) for accurate chip counts — lightweight rows, no data bloat.
+async function fetchAllFestivalIds() {
+  const rows = [];
+  const PAGE = 1000;
+  for (let offset = 0; offset < 10000; offset += PAGE) {
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/vault_sets?select=festival_id&limit=${PAGE}&offset=${offset}`,
+      { headers: supabaseHeaders }
+    );
+    if (!r.ok) break;
+    const batch = await r.json();
+    rows.push(...batch);
+    if (batch.length < PAGE) break;
+  }
+  return rows;
+}
+
 
 export default function VaultTab({ lineup = [], onLineupChange, onNowPlaying }) {
   const lineupIds = React.useMemo(() => new Set((lineup || []).map((s) => s.video_id)), [lineup]);
@@ -38,6 +55,7 @@ export default function VaultTab({ lineup = [], onLineupChange, onNowPlaying }) 
   }
 
   const [sets, setSets] = useState(null);
+  const [allIds, setAllIds] = useState(null);
   const [selectedVenue, setSelectedVenue] = useState('');
   const [playing, setPlaying] = useState(null);
   const playerFrame = React.useRef(null);
@@ -47,6 +65,7 @@ export default function VaultTab({ lineup = [], onLineupChange, onNowPlaying }) 
 
   useEffect(() => {
     fetchVault().then(setSets).catch(() => setSets([]));
+    fetchAllFestivalIds().then(setAllIds).catch(() => {});
   }, []);
 
   // Single-player coordination: when a set is playing here, stop other surfaces.
@@ -118,10 +137,12 @@ export default function VaultTab({ lineup = [], onLineupChange, onNowPlaying }) 
   }, [selectedVenue]);
 
   const counts = useMemo(() => {
-    const c = { all: sets?.length || 0 };
-    if (sets) for (const s of sets) if (s.festival_id) c[s.festival_id] = (c[s.festival_id] || 0) + 1;
+    // Use paginated allIds for accurate per-venue totals; fall back to the 500-set sample while loading.
+    const source = allIds || sets || [];
+    const c = { all: (allIds ? allIds.length : sets?.length) || 0 };
+    for (const s of source) if (s.festival_id) c[s.festival_id] = (c[s.festival_id] || 0) + 1;
     return c;
-  }, [sets]);
+  }, [sets, allIds]);
 
   const chips = useMemo(() => {
     if (!sets) return [];
