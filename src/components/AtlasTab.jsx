@@ -6,23 +6,31 @@ import { lockScroll, unlockScroll } from '../lib/scrollLock.js';
 import IdRadar from './IdRadar.jsx';
 import { ytSeek } from '../lib/ytPostMessage.js';
 
+// Artists hidden from the Atlas map (still fully searchable via the vault/search).
+const ATLAS_HIDE_RE = /\badam\s*ten\b|\bmaccabi\b/i;
+const hiddenOnAtlas = (s) => ATLAS_HIDE_RE.test(`${s.artist || ''} ${s.title || ''}`);
+
 async function fetchVenuesWithSets() {
   const [venueRes, setRes] = await Promise.all([
     fetch(`${SUPABASE_URL}/rest/v1/festivals?select=id,name,city,country,lat,lng,accent,region,promo_code,promo_label,promo_url,ticket_url,partner&active=eq.true`, { headers: supabaseHeaders }),
-    fetch(`${SUPABASE_URL}/rest/v1/public_sets?select=festival_id&limit=2000`, { headers: supabaseHeaders }),
+    fetch(`${SUPABASE_URL}/rest/v1/public_sets?select=festival_id,artist,title&limit=4000`, { headers: supabaseHeaders }),
   ]);
   const venues = venueRes.ok ? await venueRes.json() : [];
   const sets = setRes.ok ? await setRes.json() : [];
-  const festIdsWithSets = new Set(sets.map((s) => s.festival_id));
+  // A venue only earns a pin if it has at least one set that ISN'T a hidden artist,
+  // so venues whose entire catalog is Adam Ten / Maccabi drop off the map.
+  const festIdsWithSets = new Set(sets.filter((s) => !hiddenOnAtlas(s)).map((s) => s.festival_id));
   return venues.filter((v) => festIdsWithSets.has(v.id));
 }
 
 async function fetchSetsForVenue(festivalId) {
   const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/vault_sets?festival_id=eq.${encodeURIComponent(festivalId)}&select=video_id,artist,festival_name,city&order=published_at.desc&limit=500`,
+    `${SUPABASE_URL}/rest/v1/vault_sets?festival_id=eq.${encodeURIComponent(festivalId)}&select=video_id,artist,title,festival_name,city&order=published_at.desc&limit=500`,
     { headers: supabaseHeaders }
   );
-  return r.ok ? r.json() : [];
+  if (!r.ok) return [];
+  const sets = await r.json();
+  return sets.filter((s) => !hiddenOnAtlas(s));
 }
 
 async function fetchUpcomingEvents(festivalId) {
