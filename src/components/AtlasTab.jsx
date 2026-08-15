@@ -11,15 +11,26 @@ const ATLAS_HIDE_RE = /\badam\s*ten\b|\bmaccabi\b/i;
 const hiddenOnAtlas = (s) => ATLAS_HIDE_RE.test(`${s.artist || ''} ${s.title || ''}`);
 
 async function fetchVenuesWithSets() {
-  const [venueRes, setRes] = await Promise.all([
-    fetch(`${SUPABASE_URL}/rest/v1/festivals?select=id,name,city,country,lat,lng,accent,region,promo_code,promo_label,promo_url,ticket_url,partner&active=eq.true`, { headers: supabaseHeaders }),
-    fetch(`${SUPABASE_URL}/rest/v1/vault_sets?select=festival_id,artist,title&limit=4000`, { headers: supabaseHeaders }),
-  ]);
+  const venueRes = await fetch(`${SUPABASE_URL}/rest/v1/festivals?select=id,name,city,country,lat,lng,accent,region,promo_code,promo_label,promo_url,ticket_url,partner&active=eq.true`, { headers: supabaseHeaders });
   const venues = venueRes.ok ? await venueRes.json() : [];
-  const sets = setRes.ok ? await setRes.json() : [];
-  // A venue only earns a pin if it has at least one set that ISN'T a hidden artist,
-  // so venues whose entire catalog is Adam Ten / Maccabi drop off the map.
-  const festIdsWithSets = new Set(sets.filter((s) => !hiddenOnAtlas(s)).map((s) => s.festival_id));
+
+  // PostgREST caps every response at 1000 rows, so a single limit=4000 query only sees the 1000
+  // newest sets — which silently drops any venue whose only sets are older (e.g. 2018 Boiler Rooms).
+  // Page through the whole vault so every venue with a qualifying set earns its pin.
+  const festIdsWithSets = new Set();
+  const PAGE = 1000;
+  for (let offset = 0; offset < 20000; offset += PAGE) {
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/vault_sets?select=festival_id,artist,title&order=video_id.asc&limit=${PAGE}&offset=${offset}`,
+      { headers: supabaseHeaders }
+    );
+    if (!r.ok) break;
+    const batch = await r.json();
+    // A venue only earns a pin if it has at least one set that ISN'T a hidden artist,
+    // so venues whose entire catalog is Adam Ten / Maccabi drop off the map.
+    batch.filter((s) => !hiddenOnAtlas(s)).forEach((s) => festIdsWithSets.add(s.festival_id));
+    if (batch.length < PAGE) break;
+  }
   return venues.filter((v) => festIdsWithSets.has(v.id));
 }
 
