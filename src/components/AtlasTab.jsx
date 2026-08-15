@@ -138,6 +138,10 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
       if (isPartner) el.style.boxShadow = `0 0 0 3px rgba(0,0,0,.4),0 0 18px ${accent}`;
       el.addEventListener('mouseenter', () => { el.style.transform = 'scale(1.35)'; });
       el.addEventListener('mouseleave', () => { el.style.transform = 'scale(1)'; });
+      // Stop touch events from bubbling to MapLibre's container — otherwise a tap on a
+      // marker also triggers MapLibre's drag tracker, panning the map under the dot.
+      el.addEventListener('touchstart', (e) => { e.stopPropagation(); }, { passive: true });
+      el.addEventListener('touchend', (e) => { e.stopPropagation(); });
       el.addEventListener('click', (e) => { e.stopPropagation(); setSelected(v); });
       const marker = new maplibregl.Marker({ element: el }).setLngLat([v.lng, v.lat]).addTo(map);
       marker._venueRegion = v.region;
