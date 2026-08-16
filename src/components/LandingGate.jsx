@@ -16,14 +16,25 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
   const [liveIdx, setLiveIdx] = useState(0);
 
   useEffect(() => {
-    fetch(`${SUPABASE_URL}/rest/v1/public_sets?select=video_id,festival_id`, {
-      headers: supabaseHeaders,
-    })
-      .then((r) => r.json())
-      .then((rows) => {
-        if (!Array.isArray(rows)) return;
-        const venues = new Set(rows.map((r) => r.festival_id).filter(Boolean));
-        setStats({ sets: rows.length, venues: venues.size });
+    // Use Prefer:count=exact to get real totals without fetching all rows.
+    // PostgREST returns the count in the Content-Range header: "0-0/1723"
+    Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/vault_sets?select=video_id&limit=1`, {
+        headers: { ...supabaseHeaders, 'Prefer': 'count=exact', 'Range-Unit': 'items', 'Range': '0-0' },
+      }),
+      fetch(`${SUPABASE_URL}/rest/v1/festivals?active=eq.true&select=id&limit=1`, {
+        headers: { ...supabaseHeaders, 'Prefer': 'count=exact', 'Range-Unit': 'items', 'Range': '0-0' },
+      }),
+    ])
+      .then(([setsRes, venuesRes]) => {
+        const parseCount = (res) => {
+          const cr = res.headers.get('Content-Range') || '';
+          const m = cr.match(/\/(\d+)$/);
+          return m ? parseInt(m[1], 10) : null;
+        };
+        const sets = parseCount(setsRes);
+        const venues = parseCount(venuesRes);
+        if (sets !== null) setStats({ sets, venues });
       })
       .catch(() => {});
   }, []);
