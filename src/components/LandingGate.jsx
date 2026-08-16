@@ -58,12 +58,8 @@ export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
       <div className="jb-scanline" aria-hidden="true" />
 
       <div className="jb-gate-inner">
-        {/* Wordmark */}
-        <div className="jb-wordmark">
-          <span className="jb-wordmark-bracket">[</span>
-          PROPER SELECTS
-          <span className="jb-wordmark-bracket">]</span>
-        </div>
+        {/* Logo */}
+        <img className="jb-logo" src="/logo.png" alt="Proper Selects" width="96" height="96" />
 
         {/* Hero */}
         <h1 className="jb-hero">

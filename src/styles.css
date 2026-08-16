@@ -86,7 +86,18 @@ body.modal-scroll-lock .tab-scroll { overflow: hidden !important; overscroll-beh
   width: 100%;
 }
 
-/* Wordmark with brackets */
+/* Logo mark */
+.jb-logo {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  margin-bottom: 24px;
+  display: block;
+  /* Logo art is on black — blend seamlessly with the dark gate background */
+  mix-blend-mode: screen;
+}
+
+/* Wordmark with brackets (legacy) */
 .jb-wordmark {
   display: flex;
   align-items: center;
@@ -333,6 +344,7 @@ body.modal-scroll-lock .tab-scroll { overflow: hidden !important; overscroll-beh
 @media (max-height: 760px) {
   .jb-wave { display: none; }
   .jb-wordmark { margin-bottom: 16px; }
+  .jb-logo { width: 76px; height: 76px; margin-bottom: 16px; }
   .jb-hero { margin-bottom: 12px; }
   .jb-desc { margin-bottom: 14px; }
   .jb-stack { margin-bottom: 12px; }
