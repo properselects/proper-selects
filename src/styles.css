@@ -93,8 +93,6 @@ body.modal-scroll-lock .tab-scroll { overflow: hidden !important; overscroll-beh
   object-fit: contain;
   margin-bottom: 24px;
   display: block;
-  /* Logo art is on black — blend seamlessly with the dark gate background */
-  mix-blend-mode: screen;
 }
 
 /* Wordmark with brackets (legacy) */
