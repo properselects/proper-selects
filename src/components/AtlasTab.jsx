@@ -148,7 +148,7 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
       // Stop touch events from bubbling to MapLibre's container — otherwise a tap on a
       // marker also triggers MapLibre's drag tracker, panning the map under the dot.
       el.addEventListener('touchstart', (e) => { e.stopPropagation(); }, { passive: true });
-      el.addEventListener('touchend', (e) => { e.stopPropagation(); e.preventDefault(); setSelected(v); });
+      el.addEventListener('touchend', (e) => { e.stopPropagation(); }, { passive: true });
       el.addEventListener('click', (e) => { e.stopPropagation(); setSelected(v); });
       const marker = new maplibregl.Marker({ element: el }).setLngLat([v.lng, v.lat]).addTo(map);
       marker._venueRegion = v.region;
