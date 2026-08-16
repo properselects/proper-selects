@@ -3,7 +3,7 @@ import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
 
 const VENUE_CARDS = [
   { img: '/landing/rossi.jpg',      artist: 'Rossi.',       venue: 'Boiler Room' },
-  { img: '/landing/cloonee.jpg',    artist: 'Cloonee',      venue: 'Club Space' },
+  { img: '/landing/franky.jpg',     artist: 'Franky Rizardo', venue: 'Coachella' },
   { img: '/landing/johnsummit.jpg', artist: 'John Summit',  venue: 'Lollapalooza' },
   { img: '/landing/alleycvt.jpg',   artist: 'ALLEYCVT',     venue: 'Concourse' },
 ];
