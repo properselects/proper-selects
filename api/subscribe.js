@@ -200,15 +200,18 @@ export default async function handler(req, res) {
   if (req.method === 'GET' && req.query.stats === '1') {
     if (!SUPABASE_KEY) return res.status(500).json({ error: 'Missing config' });
     const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-    const [subsTotal, subsConfirmed, subsThisWeek, sets, venues] = await Promise.all([
+    const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const [subsTotal, subsConfirmed, subsThisWeek, sets, venues, lineupsTotal, lineupsToday] = await Promise.all([
       getCount('subscribers?unsubscribed_at=is.null'),
       getCount('subscribers?confirmed=eq.true&unsubscribed_at=is.null'),
       getCount(`subscribers?created_at=gte.${encodeURIComponent(weekAgo)}&unsubscribed_at=is.null`),
       getCount('sets?status=eq.live'),
       getCount('festivals?active=eq.true'),
+      getCount('lineups?slug=not.is.null'),
+      getCount(`lineups?created_at=gte.${encodeURIComponent(dayAgo)}`),
     ]);
     res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
-    return res.json({ subsTotal, subsConfirmed, subsThisWeek, sets, venues });
+    return res.json({ subsTotal, subsConfirmed, subsThisWeek, sets, venues, lineupsTotal, lineupsToday });
   }
 
 
