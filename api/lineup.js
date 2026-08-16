@@ -138,7 +138,9 @@ const TARGET = 20;
 const FRESH_TARGET = 8; // slots reserved for recently-surfaced sets
 const FRESH_WINDOW_DAYS = 14; // "recently published" window (legacy)
 const FRESH_PUBLISH_DAYS = 75; // a set counts as a "new release" if published within this window
-const INGEST_WINDOW_DAYS = 7; // "recently added to the vault" window
+const INGEST_WINDOW_DAYS = 21; // "recently added to the vault" window — keeps new adds surfacing for a few weeks
+const FRESH_MAX_RELEASE_AGE_DAYS = 180; // a set can't sit in the fresh slots if it was released longer ago than this,
+                                        // even if just re-ingested — keeps old catalog from masquerading as "new"
 const MIN_PER_REGION = 12; // floor before we start relaxing filters to backfill from the vault
 
 // Freshness = the more recent of when we ingested it vs when it was published, so a genuinely new
@@ -197,22 +199,25 @@ async function todayLineup() {
       });
     }
 
-    // Fresh = genuinely new *releases* first, ranked by publish date so actually-new sets lead.
-    // If a region is short on new releases, top up with recently-*ingested* sets so the grid still
-    // turns over during a publish lull — but re-ingested old catalog can never outrank a real new
-    // release (that's what used to bury the newest festival sets under years-old re-adds).
+    // Fresh = the sets that most recently *surfaced*, so the grid turns over as daily ingest runs —
+    // even in a publish lull where nothing brand-new was released. A set qualifies if it was either
+    // published recently (a true new release) OR just added to the vault (a newly-ingested upload).
+    // We then rank by freshScore (the more recent of ingest-time vs publish-time) so both a genuine
+    // new release AND a freshly-added recent set lead. Guardrail: a set released longer ago than
+    // FRESH_MAX_RELEASE_AGE_DAYS can never sit in the fresh slots even if just re-ingested, so years-old
+    // back-catalog can't masquerade as "new" (the bug the publish-date sort was trying to avoid).
     const sincePublish = new Date(Date.now() - FRESH_PUBLISH_DAYS * 24 * 60 * 60 * 1000).toISOString();
-    const newReleases = all
-      .filter((r) => r.published_at && r.published_at >= sincePublish)
-      .sort((a, b) => (b.published_at || '').localeCompare(a.published_at || ''));
-    let recent = newReleases;
-    if (newReleases.length < FRESH_TARGET) {
-      const haveIds = new Set(newReleases.map((r) => r.video_id));
-      const ingestFill = all
-        .filter((r) => !haveIds.has(r.video_id) && r.created_at && r.created_at >= sinceIngest)
-        .sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
-      recent = newReleases.concat(ingestFill);
-    }
+    const staleRelease = new Date(Date.now() - FRESH_MAX_RELEASE_AGE_DAYS * 24 * 60 * 60 * 1000).toISOString();
+    const recent = all
+      .filter((r) => {
+        const newRelease = r.published_at && r.published_at >= sincePublish;
+        const newlyIngested = r.created_at && r.created_at >= sinceIngest;
+        if (!newRelease && !newlyIngested) return false;
+        // Never let a genuinely OLD release into the fresh slots, however recently it was re-ingested.
+        if (r.published_at && r.published_at < staleRelease) return false;
+        return true;
+      })
+      .sort((a, b) => freshScore(b).localeCompare(freshScore(a)));
 
     // Fresh slots: new releases first, diversity-filtered
     const fresh = applyDiversity(recent, 2).slice(0, FRESH_TARGET);
