@@ -1,150 +1,133 @@
 import React, { useEffect, useState } from 'react';
 import { supabaseHeaders, SUPABASE_URL } from '../lib/supabase.js';
-import { parseArtist } from '../lib/parseArtist.js';
 
-const STACK = [
-  { icon: '◈', text: 'Tap + on any set to add it to your lineup' },
-  { icon: '⊕', text: 'Share your lineup — one link' },
-  { icon: '⟶', text: 'Friends tap play. It runs the whole thing.' },
-  { icon: '⊞', text: 'Free forever. No signup.' },
+const VENUE_CARDS = [
+  { img: '/landing/rossi.jpg',      artist: 'Rossi.',       venue: 'Boiler Room' },
+  { img: '/landing/cloonee.jpg',    artist: 'Cloonee',      venue: 'Club Space' },
+  { img: '/landing/johnsummit.jpg', artist: 'John Summit',  venue: 'Lollapalooza' },
+  { img: '/landing/alleycvt.jpg',   artist: 'ALLEYCVT',     venue: 'Concourse' },
 ];
 
-const BAR_HEIGHTS = [18, 28, 14, 32, 22, 10, 30, 20, 26, 12, 34, 18, 24, 30, 16, 28, 10, 22, 32, 14, 26, 18, 30, 20];
+// Feature pillars — inline SVG glyphs so they render crisp on every device.
+const IconCurate = () => (
+  <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+    <line x1="4" y1="7" x2="20" y2="7" /><line x1="4" y1="12" x2="15" y2="12" /><line x1="4" y1="17" x2="18" y2="17" />
+  </svg>
+);
+const IconFind = () => (
+  <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+    <circle cx="11" cy="11" r="7" /><line x1="16.5" y1="16.5" x2="21" y2="21" />
+  </svg>
+);
+const IconCast = () => (
+  <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="4" width="18" height="13" rx="2" /><path d="M2 20 h4" /><path d="M2 16.5 a4 4 0 0 1 4 4" /><path d="M2 13 a8 8 0 0 1 8 8" />
+  </svg>
+);
+const IconShare = () => (
+  <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="6" cy="12" r="2.6" /><circle cx="18" cy="6" r="2.6" /><circle cx="18" cy="18" r="2.6" />
+    <line x1="8.3" y1="10.8" x2="15.7" y2="7.2" /><line x1="8.3" y1="13.2" x2="15.7" y2="16.8" />
+  </svg>
+);
 
-export default function LandingGate({ onEnter, onOpenSubmit, topSets = [] }) {
+const FEATURES = [
+  { key: 'curate', Icon: IconCurate, title: 'Curate a lineup', sub: '1,700+ sets' },
+  { key: 'find',   Icon: IconFind,   title: 'Find track IDs',  sub: 'timestamped', highlight: true },
+  { key: 'cast',   Icon: IconCast,   title: 'Cast to screen',  sub: 'TV or projector' },
+  { key: 'share',  Icon: IconShare,  title: 'Share one link',  sub: 'friends tap play' },
+];
+
+export default function LandingGate({ onEnter, onOpenSubmit }) {
   const [stats, setStats] = useState({ sets: null, venues: null });
-  const [liveIdx, setLiveIdx] = useState(0);
 
   useEffect(() => {
-    // Use Prefer:count=exact to get real totals without fetching all rows.
-    // PostgREST returns the count in the Content-Range header: "0-0/1723"
+    // Real totals via Prefer:count=exact (count is in the Content-Range header).
     Promise.all([
       fetch(`${SUPABASE_URL}/rest/v1/vault_sets?select=video_id&limit=1`, {
-        headers: { ...supabaseHeaders, 'Prefer': 'count=exact', 'Range-Unit': 'items', 'Range': '0-0' },
+        headers: { ...supabaseHeaders, Prefer: 'count=exact', 'Range-Unit': 'items', Range: '0-0' },
       }),
       fetch(`${SUPABASE_URL}/rest/v1/festivals?active=eq.true&select=id&limit=1`, {
-        headers: { ...supabaseHeaders, 'Prefer': 'count=exact', 'Range-Unit': 'items', 'Range': '0-0' },
+        headers: { ...supabaseHeaders, Prefer: 'count=exact', 'Range-Unit': 'items', Range: '0-0' },
       }),
     ])
       .then(([setsRes, venuesRes]) => {
-        const parseCount = (res) => {
-          const cr = res.headers.get('Content-Range') || '';
-          const m = cr.match(/\/(\d+)$/);
+        const parse = (res) => {
+          const m = (res.headers.get('Content-Range') || '').match(/\/(\d+)$/);
           return m ? parseInt(m[1], 10) : null;
         };
-        const sets = parseCount(setsRes);
-        const venues = parseCount(venuesRes);
-        if (sets !== null) setStats({ sets, venues });
+        const sets = parse(setsRes);
+        if (sets !== null) setStats({ sets, venues: parse(venuesRes) });
       })
       .catch(() => {});
   }, []);
 
-  useEffect(() => {
-    if (!topSets || topSets.length < 2) return;
-    const id = setInterval(
-      () => setLiveIdx((i) => (i + 1) % Math.min(topSets.length, 10)),
-      5000
-    );
-    return () => clearInterval(id);
-  }, [topSets.length]);
-
-  const nowPlaying = topSets[liveIdx];
-
   return (
-    <div className="jb-gate">
-      {/* Layered background */}
-      <div className="jb-gate-bg" aria-hidden="true" />
-      <div className="jb-grid-overlay" aria-hidden="true" />
-      <div className="jb-scanline" aria-hidden="true" />
+    <div className="ng-gate">
+      {/* Hero */}
+      <div className="ng-hero">
+        <div className="ng-hero-img" aria-hidden="true" />
+        <div className="ng-hero-scrim" aria-hidden="true" />
+        <div className="ng-hero-inner">
+          <img className="ng-logo" src="/logo.png" alt="Proper Selects" width="150" height="150" />
+          <h1 className="ng-headline">
+            Your lineup.<br />
+            <span className="ng-headline-accent">Their best sets.</span>
+          </h1>
+          <p className="ng-venues">Boiler Room · Awakenings · Cercle · Hï Ibiza · Tresor · Club Space</p>
+        </div>
+      </div>
 
-      <div className="jb-gate-inner">
-        {/* Logo */}
-        <img className="jb-logo" src="/logo.png" alt="Proper Selects" width="96" height="96" />
-
-        {/* Hero */}
-        <h1 className="jb-hero">
-          Build a lineup.
-          <br />
-          <span className="jb-hero-sub">Share it with friends.</span>
-        </h1>
-
-        <p className="jb-desc">
-          The world's best DJ sets from 75+ venues —{' '}
-          <span className="jb-desc-accent">Boiler Room</span>,{' '}
-          <span className="jb-desc-accent">Cercle</span>,{' '}
-          <span className="jb-desc-accent">RAW CUTS</span>,{' '}
-          <span className="jb-desc-accent">Thuishaven</span>.{' '}
-          Fresh every morning.
-        </p>
-
-        {/* Feature grid */}
-        <div className="jb-stack">
-          {STACK.map(({ icon, text }, i) => (
-            <div key={text} className="jb-stack-item" style={{ animationDelay: `${i * 80}ms` }}>
-              <span className="jb-stack-icon">{icon}</span>
-              <span className="jb-stack-text">{text}</span>
+      {/* Content */}
+      <div className="ng-body">
+        {/* Venue strip */}
+        <div className="ng-strip">
+          {VENUE_CARDS.map((c) => (
+            <div key={c.artist} className="ng-card" onClick={onEnter}>
+              <img className="ng-card-img" src={c.img} alt={c.artist} loading="lazy" />
+              <div className="ng-card-scrim" />
+              <div className="ng-card-meta">
+                <div className="ng-card-artist">{c.artist}</div>
+                <div className="ng-card-venue">{c.venue}</div>
+              </div>
             </div>
           ))}
         </div>
 
-        {/* Waveform visualizer — CSS animated */}
-        <div className="jb-wave" aria-hidden="true">
-          {BAR_HEIGHTS.map((h, i) => (
-            <div
-              key={i}
-              className="jb-wave-bar"
-              style={{
-                '--h': `${h}px`,
-                animationDelay: `${(i * 97) % 800}ms`,
-                animationDuration: `${600 + (i * 137) % 600}ms`,
-              }}
-            />
+        {/* Feature pillars */}
+        <div className="ng-features">
+          {FEATURES.map(({ key, Icon, title, sub, highlight }) => (
+            <div key={key} className={'ng-feat' + (highlight ? ' ng-feat-hl' : '')}>
+              <span className="ng-feat-icon"><Icon /></span>
+              <div className="ng-feat-title">{title}</div>
+              <div className="ng-feat-sub">{sub}</div>
+            </div>
           ))}
         </div>
 
-        {/* Live now playing */}
-        {nowPlaying && (
-          <div className="jb-livefeed">
-            <span className="jb-livedot" />
-            <span className="jb-livefeed-label">NOW PLAYING</span>
-            <span className="jb-livefeed-sep">·</span>
-            <span className="jb-livefeed-text">
-              <strong>{parseArtist(nowPlaying.artist)}</strong>
-            </span>
-          </div>
-        )}
-
         {/* CTA */}
-        <button className="jb-enter" onClick={onEnter}>
-          <span className="jb-enter-play">▷</span>
-          Start Listening
-          <span className="jb-enter-shimmer" />
+        <button className="ng-cta" onClick={onEnter}>
+          Browse Sets <span className="ng-cta-arrow">→</span>
         </button>
 
-        {/* Stats */}
-        {stats.sets && (
-          <div className="jb-gate-meta">
-            <span className="jb-meta-num">{stats.sets.toLocaleString()}</span>
-            <span className="jb-meta-sep">/</span>
-            sets
-            <span className="jb-meta-sep">·</span>
-            <span className="jb-meta-num">{stats.venues}</span>
-            <span className="jb-meta-sep">/</span>
-            venues worldwide
-          </div>
-        )}
-
-        <button className="jb-submitlink" onClick={(e) => { e.stopPropagation(); onOpenSubmit?.(); }}>
-          Know a set that belongs here? →
-        </button>
-
-        <a
-          className="jb-contactlink"
-          href="mailto:properselects@gmail.com?subject=Proper%20Selects%20Inquiry"
-          onClick={(e) => e.stopPropagation()}
-        >
-          Inquiries · properselects@gmail.com
-        </a>
+        {/* Footer */}
+        <div className="ng-footer">
+          <button className="ng-submitlink" onClick={(e) => { e.stopPropagation(); onOpenSubmit?.(); }}>
+            Know a set that belongs here? →
+          </button>
+          <a
+            className="ng-contactlink"
+            href="mailto:properselects@gmail.com?subject=Proper%20Selects%20Inquiry"
+            onClick={(e) => e.stopPropagation()}
+          >
+            Inquiries · properselects@gmail.com
+          </a>
+          {stats.sets && (
+            <div className="ng-stats">
+              {stats.sets.toLocaleString()} sets · {stats.venues} venues worldwide
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

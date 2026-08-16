@@ -1131,3 +1131,130 @@ body.modal-scroll-lock .tab-scroll { overflow: hidden !important; overscroll-beh
   0%,100% { box-shadow: none; }
   50% { box-shadow: 0 0 0 3px rgba(244,169,60,.18); }
 }
+
+/* ============================================================
+   Landing Gate v2 — full-bleed hero + venue strip + features
+   ============================================================ */
+.ng-gate {
+  position: absolute; inset: 0;
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  background: #06080c;
+  color: #edeae2;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Hero */
+.ng-hero { position: relative; width: 100%; min-height: 62vh; overflow: hidden; }
+.ng-hero-img {
+  position: absolute; inset: 0;
+  background: url('/landing/hero.jpg') center 28% / cover no-repeat;
+}
+.ng-hero-scrim {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(6,8,12,.55) 0%, rgba(6,8,12,.15) 22%, rgba(6,8,12,.30) 55%, rgba(6,8,12,.85) 82%, #06080c 100%);
+}
+.ng-hero-inner {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 26px 24px 40px; text-align: center;
+}
+.ng-logo { width: 150px; height: 150px; object-fit: contain; margin-bottom: 6px; }
+.ng-headline {
+  font-family: 'DIN Condensed', 'Oswald', 'Bebas Neue', 'Helvetica Neue', sans-serif;
+  font-weight: 700; font-stretch: condensed;
+  font-size: clamp(52px, 13vw, 96px);
+  line-height: .92; letter-spacing: -0.01em; margin: 8px 0 0;
+  text-transform: none;
+}
+.ng-headline-accent { color: #f4a93c; }
+.ng-venues {
+  margin: 18px 0 0; font-size: clamp(13px, 3.4vw, 17px);
+  color: rgba(237,234,226,.5); letter-spacing: .01em;
+}
+
+/* Body */
+.ng-body { padding: 4px 20px 60px; max-width: 1100px; margin: 0 auto; }
+
+/* Venue strip — horizontal scroll on mobile */
+.ng-strip {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  margin-top: 8px;
+}
+.ng-card {
+  position: relative; aspect-ratio: 3 / 4; border-radius: 16px; overflow: hidden;
+  cursor: pointer; border: 1px solid rgba(255,255,255,.08);
+  transition: transform .18s ease, border-color .18s ease;
+}
+.ng-card:hover { transform: translateY(-3px); border-color: rgba(46,214,232,.4); }
+.ng-card-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ng-card-scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 45%, rgba(6,8,12,.92) 100%);
+}
+.ng-card-meta { position: absolute; left: 12px; bottom: 10px; right: 10px; }
+.ng-card-artist {
+  font-family: 'DIN Condensed', 'Oswald', 'Helvetica Neue', sans-serif; font-weight: 700;
+  font-size: clamp(16px, 4.2vw, 26px); line-height: 1; letter-spacing: .01em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ng-card-venue { font-size: clamp(10px, 2.6vw, 14px); color: #2ed6e8; margin-top: 3px; }
+
+/* Feature pillars */
+.ng-features {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+  margin: 34px 0 0;
+}
+.ng-feat {
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: 18px 8px; border-radius: 16px; border: 1px solid transparent;
+  color: #edeae2;
+}
+.ng-feat-hl {
+  background: rgba(46,214,232,.06); border-color: rgba(46,214,232,.35);
+  color: #2ed6e8;
+}
+.ng-feat-icon { display: block; margin-bottom: 10px; opacity: .92; }
+.ng-feat-title { font-size: clamp(13px, 3vw, 16px); font-weight: 700; }
+.ng-feat-sub { font-size: clamp(11px, 2.6vw, 13px); color: rgba(237,234,226,.5); margin-top: 3px; }
+.ng-feat-hl .ng-feat-sub { color: rgba(237,234,226,.7); }
+
+/* CTA */
+.ng-cta {
+  display: block; margin: 34px auto 0; padding: 20px 46px;
+  background: #f4a93c; color: #06080c; border: none; border-radius: 999px;
+  font-size: clamp(17px, 4.4vw, 21px); font-weight: 800; letter-spacing: .01em;
+  cursor: pointer; transition: transform .15s ease, box-shadow .2s ease;
+  box-shadow: 0 8px 30px rgba(244,169,60,.28);
+}
+.ng-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(244,169,60,.4); }
+.ng-cta-arrow { margin-left: 6px; }
+
+/* Footer */
+.ng-footer {
+  margin-top: 40px; padding-top: 26px; border-top: 1px solid rgba(255,255,255,.07);
+  display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;
+}
+.ng-submitlink {
+  background: none; border: none; cursor: pointer;
+  color: rgba(237,234,226,.55); font-size: 15px;
+}
+.ng-submitlink:hover { color: rgba(237,234,226,.85); }
+.ng-contactlink { color: #2ed6e8; font-size: 15px; text-decoration: none; }
+.ng-contactlink:hover { text-decoration: underline; }
+.ng-stats { font-size: 12px; color: rgba(237,234,226,.3); letter-spacing: .04em; margin-top: 2px; }
+
+@media (max-width: 560px) {
+  .ng-hero { min-height: 56vh; }
+  .ng-logo { width: 112px; height: 112px; }
+  /* venue strip scrolls horizontally on small screens */
+  .ng-strip {
+    display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch; gap: 12px; padding-bottom: 6px;
+    margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px;
+  }
+  .ng-strip::-webkit-scrollbar { display: none; }
+  .ng-card { flex: 0 0 46%; scroll-snap-align: start; }
+  /* pillars → 2x2 */
+  .ng-features { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+}
