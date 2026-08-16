@@ -11,7 +11,8 @@
 const fs = require('fs');
 const SB = 'https://bcodfuggztfosuzsyyla.supabase.co';
 const SVC = fs.readFileSync('/tmp/ps_svc.txt', 'utf8').trim();
-const YT = process.env.YT_KEY || 'AIzaSyAxhobAGoVMmXTokIyY0JEtioKngH23YnU';
+const YT = process.env.YT_KEY;
+if (!YT) { console.error('Set YT_KEY env var (YouTube Data API key)'); process.exit(1); }
 
 const args = Object.fromEntries(process.argv.slice(2).map(a => {
   const m = a.match(/^--([^=]+)(?:=(.*))?$/); return m ? [m[1], m[2] ?? true] : [a, true];
