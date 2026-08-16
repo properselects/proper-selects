@@ -130,18 +130,25 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
       if (v.lat == null || v.lng == null) continue;
       const accent = v.accent || '#F4A93C';
       const isPartner = v.partner === true;
-      const el = document.createElement('div');
       const size = isPartner ? 20 : 14;
-      el.style.cssText = `width:${size}px;height:${size}px;border-radius:50%;background:${accent};`
+      // Outer wrapper is a 44px transparent hit-area (Apple's min touch target) so pins are
+      // easy to tap on mobile; the visible dot is a centered child at its real size.
+      const el = document.createElement('div');
+      const HIT = 44;
+      el.style.cssText = `width:${HIT}px;height:${HIT}px;display:flex;align-items:center;justify-content:center;`
+        + `cursor:pointer;transition:opacity .2s;background:transparent;`;
+      const dot = document.createElement('div');
+      dot.style.cssText = `width:${size}px;height:${size}px;border-radius:50%;background:${accent};`
         + `border:2px solid ${isPartner ? accent : '#0a0a0e'};box-shadow:0 0 0 2px rgba(0,0,0,.35),0 0 12px ${accent}66;`
-        + `cursor:pointer;transition:transform .12s,opacity .2s;`;
-      if (isPartner) el.style.boxShadow = `0 0 0 3px rgba(0,0,0,.4),0 0 18px ${accent}`;
-      el.addEventListener('mouseenter', () => { el.style.transform = 'scale(1.35)'; });
-      el.addEventListener('mouseleave', () => { el.style.transform = 'scale(1)'; });
+        + `transition:transform .12s;pointer-events:none;`;
+      if (isPartner) dot.style.boxShadow = `0 0 0 3px rgba(0,0,0,.4),0 0 18px ${accent}`;
+      el.appendChild(dot);
+      el.addEventListener('mouseenter', () => { dot.style.transform = 'scale(1.35)'; });
+      el.addEventListener('mouseleave', () => { dot.style.transform = 'scale(1)'; });
       // Stop touch events from bubbling to MapLibre's container — otherwise a tap on a
       // marker also triggers MapLibre's drag tracker, panning the map under the dot.
       el.addEventListener('touchstart', (e) => { e.stopPropagation(); }, { passive: true });
-      el.addEventListener('touchend', (e) => { e.stopPropagation(); });
+      el.addEventListener('touchend', (e) => { e.stopPropagation(); e.preventDefault(); setSelected(v); });
       el.addEventListener('click', (e) => { e.stopPropagation(); setSelected(v); });
       const marker = new maplibregl.Marker({ element: el }).setLngLat([v.lng, v.lat]).addTo(map);
       marker._venueRegion = v.region;
