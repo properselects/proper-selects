@@ -47,6 +47,8 @@ export default function LineupDrawer({ open, onClose, lineup, onLineupChange, on
   const [toast, setToast] = useState(null);
   const [dragIdx, setDragIdx] = useState(null);
   const [overIdx, setOverIdx] = useState(null);
+  const [subEmail, setSubEmail] = useState('');
+  const [subState, setSubState] = useState(null); // null | 'sending' | 'done' | 'error'
   const inputRef = useRef(null);
   const debounce = useRef(null);
 
@@ -58,6 +60,8 @@ export default function LineupDrawer({ open, onClose, lineup, onLineupChange, on
       setQuery('');
       setResults([]);
       setShared(null);
+      setSubEmail('');
+      setSubState(null);
     }
   }, [open]);
 
@@ -130,6 +134,22 @@ export default function LineupDrawer({ open, onClose, lineup, onLineupChange, on
       showToast('Share failed — try again');
     } finally {
       setSharing(false);
+    }
+  }
+
+  async function subscribe() {
+    const email = subEmail.trim();
+    if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { setSubState('error'); return; }
+    setSubState('sending');
+    try {
+      const r = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      setSubState(r.ok ? 'done' : 'error');
+    } catch {
+      setSubState('error');
     }
   }
 
@@ -425,6 +445,52 @@ export default function LineupDrawer({ open, onClose, lineup, onLineupChange, on
               )}
             </>
           )}
+
+          {/* Weekly updates subscribe */}
+          <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid rgba(255,255,255,.07)' }}>
+            {subState === 'done' ? (
+              <div style={{ textAlign: 'center', fontSize: 12, color: ACCENT, fontWeight: 700, padding: '4px 0' }}>
+                ✓ You're in — weekly picks incoming.
+              </div>
+            ) : (
+              <>
+                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.04em', color: 'rgba(237,234,226,.6)', marginBottom: 7 }}>
+                  🎧 The best new sets, every week
+                </div>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <input
+                    type="email"
+                    value={subEmail}
+                    onChange={(e) => { setSubEmail(e.target.value); if (subState === 'error') setSubState(null); }}
+                    onKeyDown={(e) => { if (e.key === 'Enter') subscribe(); }}
+                    placeholder="your@email.com"
+                    style={{
+                      flex: 1, minWidth: 0, background: 'rgba(255,255,255,.06)',
+                      border: `1px solid ${subState === 'error' ? 'rgba(255,90,90,.6)' : 'rgba(255,255,255,.12)'}`,
+                      borderRadius: 8, padding: '9px 11px', color: '#EDEAE2', fontSize: 13,
+                      outline: 'none', boxSizing: 'border-box',
+                    }}
+                  />
+                  <button
+                    onClick={subscribe}
+                    disabled={subState === 'sending'}
+                    style={{
+                      flexShrink: 0, padding: '9px 14px', background: 'rgba(244,169,60,.15)',
+                      border: `1px solid ${ACCENT}`, borderRadius: 8, color: ACCENT,
+                      fontSize: 13, fontWeight: 800, cursor: 'pointer', whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {subState === 'sending' ? '…' : 'Subscribe'}
+                  </button>
+                </div>
+                {subState === 'error' && (
+                  <div style={{ fontSize: 10, color: 'rgba(255,120,120,.9)', marginTop: 5 }}>
+                    Enter a valid email and try again.
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </div>
 
         {toast && (
