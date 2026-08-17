@@ -104,6 +104,29 @@ function shuffle(arr) {
   return arr;
 }
 
+// Integer seed that changes once per day (UTC date). Drives the daily rotation so the Today grid
+// looks different every morning even when no new sets were ingested for a given region.
+function daySeed() {
+  return Math.floor(Date.now() / 86400000); // days since epoch
+}
+
+// Deterministic shuffle from a numeric seed (mulberry32). Same seed → same order all day, new order
+// tomorrow. Keeps the feed stable within a day (no flicker on refresh) but rotating across days.
+function seededShuffle(arr, seed) {
+  let s = seed >>> 0;
+  const rnd = () => {
+    s |= 0; s = (s + 0x6D2B79F5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 function applyDiversity(sets, maxPerVenue = 2) {
   const seenDj = new Set();
   const venueCounts = {};
@@ -141,6 +164,8 @@ const FRESH_PUBLISH_DAYS = 75; // a set counts as a "new release" if published w
 const INGEST_WINDOW_DAYS = 21; // "recently added to the vault" window — keeps new adds surfacing for a few weeks
 const FRESH_MAX_RELEASE_AGE_DAYS = 180; // a set can't sit in the fresh slots if it was released longer ago than this,
                                         // even if just re-ingested — keeps old catalog from masquerading as "new"
+const PIN_DAYS = 14; // genuinely-new releases (published within this window) pin to the top of the fresh row;
+                     // everything else rotates daily via the day-seed
 const MIN_PER_REGION = 12; // floor before we start relaxing filters to backfill from the vault
 
 // Freshness = the more recent of when we ingested it vs when it was published, so a genuinely new
@@ -199,33 +224,39 @@ async function todayLineup() {
       });
     }
 
-    // Fresh = the sets that most recently *surfaced*, so the grid turns over as daily ingest runs —
-    // even in a publish lull where nothing brand-new was released. A set qualifies if it was either
-    // published recently (a true new release) OR just added to the vault (a newly-ingested upload).
-    // We then rank by freshScore (the more recent of ingest-time vs publish-time) so both a genuine
-    // new release AND a freshly-added recent set lead. Guardrail: a set released longer ago than
-    // FRESH_MAX_RELEASE_AGE_DAYS can never sit in the fresh slots even if just re-ingested, so years-old
-    // back-catalog can't masquerade as "new" (the bug the publish-date sort was trying to avoid).
-    const sincePublish = new Date(Date.now() - FRESH_PUBLISH_DAYS * 24 * 60 * 60 * 1000).toISOString();
+    // Fresh = recent-enough releases for this region, ROTATED daily so the grid visibly turns over
+    // every morning — even when a region got no new ingest that day. Genuinely-new drops (last
+    // PIN_DAYS) still float to the very top so a fresh release always leads; everything else is
+    // shuffled by a day-seed (stable within a day, new order tomorrow). Guardrail: nothing released
+    // longer ago than FRESH_MAX_RELEASE_AGE_DAYS can sit in the fresh slots, so old catalog can't
+    // masquerade as "new".
     const staleRelease = new Date(Date.now() - FRESH_MAX_RELEASE_AGE_DAYS * 24 * 60 * 60 * 1000).toISOString();
-    const recent = all
-      .filter((r) => {
-        const newRelease = r.published_at && r.published_at >= sincePublish;
-        const newlyIngested = r.created_at && r.created_at >= sinceIngest;
-        if (!newRelease && !newlyIngested) return false;
-        // Never let a genuinely OLD release into the fresh slots, however recently it was re-ingested.
-        if (r.published_at && r.published_at < staleRelease) return false;
-        return true;
-      })
-      .sort((a, b) => freshScore(b).localeCompare(freshScore(a)));
+    const pinCutoff = new Date(Date.now() - PIN_DAYS * 24 * 60 * 60 * 1000).toISOString();
+    const seed = daySeed() + i; // per-region offset so regions don't rotate in lockstep
 
-    // Fresh slots: new releases first, diversity-filtered
-    const fresh = applyDiversity(recent, 2).slice(0, FRESH_TARGET);
+    // Rotation pool: any set released within the guardrail window (or a freshly-ingested recent add).
+    const freshPool = all.filter((r) => {
+      const okRelease = r.published_at && r.published_at >= staleRelease;
+      const newlyIngested = r.created_at && r.created_at >= sinceIngest && (!r.published_at || r.published_at >= staleRelease);
+      return okRelease || newlyIngested;
+    });
+    seededShuffle(freshPool, seed);
+    // Genuinely-new (<= PIN_DAYS) leads, newest first; the rest keeps the day-seeded rotation order.
+    freshPool.sort((a, b) => {
+      const an = a.published_at && a.published_at >= pinCutoff;
+      const bn = b.published_at && b.published_at >= pinCutoff;
+      if (an && bn) return (b.published_at || '').localeCompare(a.published_at || '');
+      if (an) return -1;
+      if (bn) return 1;
+      return 0; // preserve seeded order for everything older than PIN_DAYS
+    });
+
+    const fresh = applyDiversity(freshPool, 2).slice(0, FRESH_TARGET);
     const freshIds = new Set(fresh.map((r) => r.video_id));
 
-    // Fill slots: shuffle the rest for variety
+    // Fill slots: day-seeded shuffle of the rest (stable within a day, rotates daily).
     const pool = all.filter((r) => !freshIds.has(r.video_id));
-    shuffle(pool);
+    seededShuffle(pool, seed + 101);
     const fill = applyDiversity(pool, 2).slice(0, TARGET - fresh.length);
 
     let regionSets = [...fresh, ...fill];
