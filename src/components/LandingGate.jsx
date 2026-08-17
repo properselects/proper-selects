@@ -80,6 +80,11 @@ export default function LandingGate({ onEnter, onOpenSubmit }) {
 
       {/* Content */}
       <div className="ng-body">
+        {/* CTA — sits between the headline and the carousel */}
+        <button className="ng-cta ng-cta-top" onClick={onEnter}>
+          Browse Sets <span className="ng-cta-arrow">→</span>
+        </button>
+
         {/* Venue strip */}
         <div className="ng-strip">
           {VENUE_CARDS.map((c) => (
@@ -104,11 +109,6 @@ export default function LandingGate({ onEnter, onOpenSubmit }) {
             </div>
           ))}
         </div>
-
-        {/* CTA */}
-        <button className="ng-cta" onClick={onEnter}>
-          Browse Sets <span className="ng-cta-arrow">→</span>
-        </button>
 
         {/* Footer */}
         <div className="ng-footer">
