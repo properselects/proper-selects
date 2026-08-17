@@ -164,8 +164,8 @@ const FRESH_PUBLISH_DAYS = 75; // a set counts as a "new release" if published w
 const INGEST_WINDOW_DAYS = 21; // "recently added to the vault" window — keeps new adds surfacing for a few weeks
 const FRESH_MAX_RELEASE_AGE_DAYS = 180; // a set can't sit in the fresh slots if it was released longer ago than this,
                                         // even if just re-ingested — keeps old catalog from masquerading as "new"
-const PIN_DAYS = 14; // genuinely-new releases (published within this window) pin to the top of the fresh row;
-                     // everything else rotates daily via the day-seed
+const PIN_DAYS = 3; // only just-dropped releases (last few days) pin to the top; everything else rotates
+                    // daily via the day-seed so the grid visibly turns over every morning
 const MIN_PER_REGION = 12; // floor before we start relaxing filters to backfill from the vault
 
 // Freshness = the more recent of when we ingested it vs when it was published, so a genuinely new
