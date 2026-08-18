@@ -32,7 +32,7 @@ export const STAGES = [
 
 export const TABS = [
   { id: 'jukebox', label: 'Today', icon: '◈', desc: "Tonight's lineup" },
-  { id: 'grid',    label: 'Vault', icon: '⊞', desc: 'Every set, every venue' },
+  { id: 'grid',    label: 'Vault', icon: '⊞', desc: 'Every set, every artist' },
   { id: 'atlas',   label: 'Atlas', icon: '◎', desc: 'World map' },
   { id: 'radar',   label: 'Radar', icon: '◉', desc: 'Discover sets' },
 ];

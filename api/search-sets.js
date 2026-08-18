@@ -21,6 +21,16 @@ function venueFromTitle(title) {
   }
   return null;
 }
+// A derived "venue" that's really a YouTube channel / show name (DJsounds, Mixmag,
+// a radio show, a record label, "… Presents", etc.) should NOT masquerade as a real
+// venue. Be conservative: real venues ("Club Space", "Berghain", "1st floor Eiffel
+// Tower") must not match.
+function isChannelName(name) {
+  const n = String(name || '').trim();
+  if (!n) return true;
+  return /dj\s*sounds|djsounds|mixmag|boiler\s*room\s*tv|radio|\brecords?\b|\bshow\b|\bsessions?\b|\bpresents?\b|\bpodcast\b|\bTV\b|uploads?/i.test(n);
+}
+
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
@@ -69,9 +79,15 @@ function route(title) {
   }
   // Un-matched → discovered bucket, but derive display fields from the actual
   // title instead of the generic "Discovered · Worldwide".
+  const venue = venueFromTitle(title);
+  // If the derived "venue" is really a channel/show name, don't fake a venue —
+  // bucket it as MISC instead.
+  if (isChannelName(venue)) {
+    return { festival_id: 'misc', festival_name: 'MISC', city: '', vibe: 'worldwide' };
+  }
   return {
     festival_id: 'discovered',
-    festival_name: venueFromTitle(title),   // real venue or null (never "Discovered")
+    festival_name: venue,                   // real venue or null (never "Discovered")
     city: parseCity(title) || '',           // real city or '' (never "Worldwide")
     vibe: 'worldwide',
   };
@@ -106,8 +122,9 @@ async function sbInsert(rows) {
     published_at: r.published_at,
     // For the generic discovered bucket, persist the parsed venue/city so the
     // vault view (COALESCE on s.venue / s.city) shows real info, not "Discovered".
+    // MISC rows persist venue=null (no fake venue for channel/show uploads).
     venue: r.festival_id === 'discovered' ? (venueFromTitle(r.title) || cleanArtist(r.title)) : null,
-    city: parseCity(r.title) || null,
+    city: r.festival_id === 'misc' ? null : (parseCity(r.title) || null),
   }));
   const res = await fetch(`${SUPABASE_URL}/rest/v1/sets`, {
     method: 'POST',
