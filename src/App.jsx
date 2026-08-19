@@ -12,11 +12,24 @@ import LineupDrawer from './components/LineupDrawer.jsx';
 import LineupSharePage from './components/LineupSharePage.jsx';
 import GlobalSearch from './components/GlobalSearch.jsx';
 import PreviewModal from './components/PreviewModal.jsx';
+import StaysArc from './components/StaysArc.jsx';
+import StaysSeismic from './components/StaysSeismic.jsx';
+import StayDealCard from './components/StayDealCard.jsx';
 
 // Detect /l/{slug} share pages
 function getShareSlug() {
   const m = window.location.pathname.match(/^\/l\/([a-zA-Z0-9]{4,10})$/);
   return m ? m[1] : null;
+}
+
+// Detect /stays/arc page
+function isStaysArc() {
+  return window.location.pathname === '/stays/arc';
+}
+
+// Detect /stays/seismic page
+function isStaysSeismic() {
+  return window.location.pathname === '/stays/seismic';
 }
 
 export default function App() {
@@ -68,6 +81,12 @@ export default function App() {
       try { localStorage.setItem('psLineupTipSeen', '1'); } catch {}
     }
   }
+
+  // Stays/ARC page
+  if (isStaysArc()) return <StaysArc />;
+
+  // Stays/Seismic page
+  if (isStaysSeismic()) return <StaysSeismic />;
 
   // Share page
   if (shareSlug) {
@@ -348,6 +367,7 @@ export default function App() {
         onPreview={setPreview}
       />
       <PreviewModal set={preview} onClose={() => setPreview(null)} onNowPlaying={setNowPlaying} />
+      <StayDealCard nowPlaying={nowPlaying} tab={tab} />
       <SubscribeModal open={subscribeOpen} onClose={() => setSubscribeOpen(false)} />
       <SubmitModal open={submitOpen} onClose={() => setSubmitOpen(false)} />
     </div>

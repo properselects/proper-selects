@@ -2,7 +2,8 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/l/:slug", "destination": "/index.html" }
+    { "source": "/l/:slug", "destination": "/index.html" },
+    { "source": "/stays/:path*", "destination": "/index.html" }
   ],
   "headers": [
     {

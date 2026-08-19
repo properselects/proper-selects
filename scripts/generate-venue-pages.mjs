@@ -2,12 +2,64 @@
 // Output: dist/venue/[id]/index.html
 // Each page is fully indexable by Google, then hands off to the SPA
 
-import { writeFileSync, mkdirSync } from 'fs';
+import { writeFileSync, mkdirSync, readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = resolve(__dirname, '../dist');
+
+// Static stays landing pages — clone the built index.html (so the SPA still
+// boots) but swap the social-share meta so link previews match each page.
+const STAYS_PAGES = [
+  {
+    slug: 'arc',
+    title: 'ARC Music Festival — Where to Stay | Proper Selects × Dream Rentals',
+    desc: 'Curated Chicago stays for ARC Music Festival 2026 weekend. Group-friendly homes near Union Park + prep sets from past ARC performances.',
+    image: 'https://arcmusicfestival.com/wp-content/uploads/2026/08/ARC2026_ArtSocialSized_IG-1.png',
+  },
+  {
+    slug: 'seismic',
+    title: 'Seismic Dance Event — Where to Stay | Proper Selects × Dream Rentals',
+    desc: 'Curated Austin stays for Seismic Dance Event 2026 at The Concourse Project. Group-friendly homes + prep sets from the Concourse vault.',
+    image: 'https://www.seismicdanceevent.com/wp-content/uploads/2026/05/SDE9-OPENGRAPH.png',
+  },
+];
+
+function generateStaysPages() {
+  let indexHtml;
+  try {
+    indexHtml = readFileSync(resolve(DIST, 'index.html'), 'utf8');
+  } catch {
+    console.log('  ⚠ dist/index.html not found — skipping stays pages');
+    return 0;
+  }
+  let count = 0;
+  for (const page of STAYS_PAGES) {
+    const url = `https://properselects.com/stays/${page.slug}`;
+    let html = indexHtml
+      // og:image + twitter:image
+      .replace(/(<meta property="og:image" content=")[^"]*(")/,       `$1${page.image}$2`)
+      .replace(/(<meta name="twitter:image" content=")[^"]*(")/,      `$1${page.image}$2`)
+      // titles
+      .replace(/(<title>)[^<]*(<\/title>)/,                            `$1${page.title}$2`)
+      .replace(/(<meta property="og:title" content=")[^"]*(")/,       `$1${page.title}$2`)
+      .replace(/(<meta name="twitter:title" content=")[^"]*(")/,      `$1${page.title}$2`)
+      // descriptions
+      .replace(/(<meta name="description" content=")[^"]*(")/,        `$1${page.desc}$2`)
+      .replace(/(<meta property="og:description" content=")[^"]*(")/, `$1${page.desc}$2`)
+      .replace(/(<meta name="twitter:description" content=")[^"]*(")/,`$1${page.desc}$2`)
+      // canonical + og:url
+      .replace(/(<link rel="canonical" href=")[^"]*(")/,              `$1${url}$2`)
+      .replace(/(<meta property="og:url" content=")[^"]*(")/,         `$1${url}$2`);
+    const dir = resolve(DIST, 'stays', page.slug);
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(resolve(dir, 'index.html'), html);
+    count++;
+    process.stdout.write(`  ✓ stays/${page.slug} (social image set)\n`);
+  }
+  return count;
+}
 
 const SUPABASE_URL = 'https://bcodfuggztfosuzsyyla.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjb2RmdWdnenRmb3N1enN5eWxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0MjgyNTQsImV4cCI6MjEwMDAwNDI1NH0.RSD_E1f0Qy9E2s3vHMK5H9Mch0_-aCOrNhJs1hxCv5Y';
@@ -134,7 +186,9 @@ ${sitemapUrls.map(url => `  <url>\n    <loc>${url}</loc>\n    <changefreq>daily<
 </urlset>`;
   writeFileSync(resolve(DIST, 'sitemap.xml'), sitemapXml);
 
-  console.log(`\nGenerated ${generated} venue pages + updated sitemap with ${sitemapUrls.length} URLs`);
+  const staysCount = generateStaysPages();
+
+  console.log(`\nGenerated ${generated} venue pages + ${staysCount} stays pages + updated sitemap with ${sitemapUrls.length} URLs`);
 }
 
 main().catch(console.error);
