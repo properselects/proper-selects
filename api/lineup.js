@@ -241,14 +241,16 @@ async function todayLineup() {
       return okRelease || newlyIngested;
     });
     seededShuffle(freshPool, seed);
-    // Genuinely-new (<= PIN_DAYS) leads, newest first; the rest keeps the day-seeded rotation order.
+    // Genuinely-new (<= PIN_DAYS) or freshly-ingested (last 24h) leads, newest first;
+    // the rest keeps the day-seeded rotation order so the grid visibly turns over each day.
+    const ingestCutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
     freshPool.sort((a, b) => {
-      const an = a.published_at && a.published_at >= pinCutoff;
-      const bn = b.published_at && b.published_at >= pinCutoff;
+      const an = (a.published_at && a.published_at >= pinCutoff) || (a.created_at && a.created_at >= ingestCutoff);
+      const bn = (b.published_at && b.published_at >= pinCutoff) || (b.created_at && b.created_at >= ingestCutoff);
       if (an && bn) return (b.published_at || '').localeCompare(a.published_at || '');
       if (an) return -1;
       if (bn) return 1;
-      return 0; // preserve seeded order for everything older than PIN_DAYS
+      return 0; // preserve seeded order for everything older
     });
 
     const fresh = applyDiversity(freshPool, 2).slice(0, FRESH_TARGET);
