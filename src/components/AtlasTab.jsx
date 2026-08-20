@@ -15,24 +15,29 @@ async function fetchVenuesWithSets() {
   const venueRes = await fetch(`${SUPABASE_URL}/rest/v1/festivals?select=id,name,city,country,lat,lng,accent,region,promo_code,promo_label,promo_url,ticket_url,partner&active=eq.true`, { headers: supabaseHeaders });
   const venues = venueRes.ok ? await venueRes.json() : [];
 
-  // PostgREST caps every response at 1000 rows, so a single limit=4000 query only sees the 1000
-  // newest sets — which silently drops any venue whose only sets are older (e.g. 2018 Boiler Rooms).
-  // Page through the whole vault so every venue with a qualifying set earns its pin.
+  // Page through the whole vault to collect per-festival stats (count + latest thumbnail).
   const festIdsWithSets = new Set();
+  const festCounts = {};
+  const festThumb = {}; // latest video_id per festival (vault is ordered by published_at desc via video_id asc here, so we take last seen)
   const PAGE = 1000;
   for (let offset = 0; offset < 20000; offset += PAGE) {
     const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/vault_sets?select=festival_id,artist,title&order=video_id.asc&limit=${PAGE}&offset=${offset}`,
+      `${SUPABASE_URL}/rest/v1/vault_sets?select=festival_id,video_id,artist,title&order=published_at.desc&limit=${PAGE}&offset=${offset}`,
       { headers: supabaseHeaders }
     );
     if (!r.ok) break;
     const batch = await r.json();
-    // A venue only earns a pin if it has at least one set that ISN'T a hidden artist,
-    // so venues whose entire catalog is Adam Ten / Maccabi drop off the map.
-    batch.filter((s) => !hiddenOnAtlas(s)).forEach((s) => festIdsWithSets.add(s.festival_id));
+    batch.filter((s) => !hiddenOnAtlas(s)).forEach((s) => {
+      festIdsWithSets.add(s.festival_id);
+      festCounts[s.festival_id] = (festCounts[s.festival_id] || 0) + 1;
+      // First occurrence = most-recent set (order=published_at.desc)
+      if (!festThumb[s.festival_id]) festThumb[s.festival_id] = s.video_id;
+    });
     if (batch.length < PAGE) break;
   }
-  return venues.filter((v) => festIdsWithSets.has(v.id));
+  return venues
+    .filter((v) => festIdsWithSets.has(v.id))
+    .map((v) => ({ ...v, setCount: festCounts[v.id] || 0, thumbId: festThumb[v.id] || null }));
 }
 
 async function fetchSetsForVenue(festivalId) {
@@ -83,6 +88,7 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [playing, setPlaying] = useState(null);
   const [regionFilter, setRegionFilter] = useState('all');
+  const [atlasView, setAtlasView] = useState('map'); // 'map' | 'directory'
   const playerFrame = useRef(null);
 
   useEffect(() => {
@@ -198,12 +204,94 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
     }
   }, [regionFilter]);
 
+  const filteredVenues = regionFilter === 'all'
+    ? venues
+    : venues.filter((v) => v.region === regionFilter);
+
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%', background: '#0a0a0e' }}>
-      <div ref={mapRef} style={{ position: 'absolute', inset: 0 }} />
+      <div ref={mapRef} style={{ position: 'absolute', inset: 0, display: atlasView === 'map' ? 'block' : 'none' }} />
 
-      {/* Region filter chips + legend */}
+      {/* Directory grid */}
+      {atlasView === 'directory' && (
+        <div style={{ position: 'absolute', inset: 0, overflowY: 'auto', padding: '60px 12px 20px' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+            gap: 10,
+          }}>
+            {filteredVenues
+              .filter((v) => v.setCount > 0)
+              .sort((a, b) => b.setCount - a.setCount)
+              .map((v) => (
+                <button
+                  key={v.id}
+                  onClick={() => setSelected(v)}
+                  style={{
+                    background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+                    textAlign: 'left', borderRadius: 10, overflow: 'hidden',
+                    boxShadow: selected?.id === v.id ? `0 0 0 2px ${v.accent || '#F4A93C'}` : '0 0 0 1px rgba(255,255,255,.08)',
+                    transition: 'box-shadow .15s',
+                  }}
+                >
+                  {/* Thumbnail */}
+                  <div style={{ position: 'relative', aspectRatio: '16/9', background: '#111' }}>
+                    {v.thumbId && (
+                      <img
+                        src={`https://img.youtube.com/vi/${v.thumbId}/mqdefault.jpg`}
+                        alt={v.name}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        loading="lazy"
+                      />
+                    )}
+                    {/* Gradient overlay */}
+                    <div style={{
+                      position: 'absolute', inset: 0,
+                      background: 'linear-gradient(to top, rgba(10,10,14,.95) 0%, rgba(10,10,14,.2) 60%, transparent 100%)',
+                    }} />
+                    {/* Set count badge */}
+                    <div style={{
+                      position: 'absolute', top: 6, right: 6,
+                      background: 'rgba(0,0,0,.65)', borderRadius: 4,
+                      fontSize: 9, fontWeight: 800, letterSpacing: '.06em',
+                      color: v.accent || '#F4A93C', padding: '2px 5px',
+                    }}>
+                      {v.setCount} sets
+                    </div>
+                  </div>
+                  {/* Info */}
+                  <div style={{ padding: '8px 10px 10px', background: '#111' }}>
+                    <div style={{
+                      fontSize: 12, fontWeight: 800, color: '#EDEAE2',
+                      whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                    }}>
+                      {v.name}
+                    </div>
+                    <div style={{ fontSize: 10, opacity: .45, marginTop: 2, color: v.accent || '#EDEAE2' }}>
+                      {[v.city, v.country].filter(Boolean).join(', ')}
+                    </div>
+                  </div>
+                </button>
+              ))}
+          </div>
+        </div>
+      )}
+
+      {/* Controls: view toggle + region filter chips */}
       <div className="am-controls">
+        {/* Map / Directory toggle */}
+        <div style={{ display: 'flex', gap: 4, marginRight: 8, borderRight: '1px solid rgba(255,255,255,.12)', paddingRight: 8 }}>
+          {['map', 'directory'].map((v) => (
+            <button
+              key={v}
+              className={'am-region-chip' + (atlasView === v ? ' on' : '')}
+              onClick={() => setAtlasView(v)}
+              style={atlasView === v ? { borderColor: '#EDEAE2', color: '#EDEAE2' } : undefined}
+            >
+              {v === 'map' ? '🗺 Map' : '◈ Festivals'}
+            </button>
+          ))}
+        </div>
         {REGIONS.map((r) => (
           <button
             key={r.id}
