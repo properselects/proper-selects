@@ -12,7 +12,7 @@ const ATLAS_HIDE_RE = /\badam\s*ten\b|\bmaccabi\b/i;
 const hiddenOnAtlas = (s) => ATLAS_HIDE_RE.test(`${s.artist || ''} ${s.title || ''}`);
 
 async function fetchVenuesWithSets() {
-  const venueRes = await fetch(`${SUPABASE_URL}/rest/v1/festivals?select=id,name,city,country,lat,lng,accent,region,promo_code,promo_label,promo_url,ticket_url,partner&active=eq.true`, { headers: supabaseHeaders });
+  const venueRes = await fetch(`${SUPABASE_URL}/rest/v1/festivals?select=id,name,city,country,lat,lng,accent,region,promo_code,promo_label,promo_url,ticket_url,partner,is_venue&active=eq.true`, { headers: supabaseHeaders });
   const venues = venueRes.ok ? await venueRes.json() : [];
 
   // Page through the whole vault to collect per-festival stats (count + latest thumbnail).
@@ -89,6 +89,7 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
   const [playing, setPlaying] = useState(null);
   const [regionFilter, setRegionFilter] = useState('all');
   const [atlasView, setAtlasView] = useState('map'); // 'map' | 'directory'
+  const [dirRegion, setDirRegion] = useState(null); // null = region picker, else 'americas'|'europe'|'worldwide'
   const playerFrame = useRef(null);
 
   useEffect(() => {
@@ -212,96 +213,140 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
     <div style={{ position: 'relative', width: '100%', height: '100%', background: '#0a0a0e' }}>
       <div ref={mapRef} style={{ position: 'absolute', inset: 0, display: atlasView === 'map' ? 'block' : 'none' }} />
 
-      {/* Directory grid */}
+      {/* Festival Directory: drill-down flow */}
       {atlasView === 'directory' && (
-        <div style={{ position: 'absolute', inset: 0, overflowY: 'auto', padding: '60px 12px 20px' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
-            gap: 10,
-          }}>
-            {filteredVenues
-              .filter((v) => v.setCount > 0)
-              .sort((a, b) => b.setCount - a.setCount)
-              .map((v) => (
-                <button
-                  key={v.id}
-                  onClick={() => setSelected(v)}
-                  style={{
-                    background: 'none', border: 'none', padding: 0, cursor: 'pointer',
-                    textAlign: 'left', borderRadius: 10, overflow: 'hidden',
-                    boxShadow: selected?.id === v.id ? `0 0 0 2px ${v.accent || '#F4A93C'}` : '0 0 0 1px rgba(255,255,255,.08)',
-                    transition: 'box-shadow .15s',
-                  }}
-                >
-                  {/* Thumbnail */}
-                  <div style={{ position: 'relative', aspectRatio: '16/9', background: '#111' }}>
-                    {v.thumbId && (
-                      <img
-                        src={`https://img.youtube.com/vi/${v.thumbId}/mqdefault.jpg`}
-                        alt={v.name}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                        loading="lazy"
-                      />
-                    )}
-                    {/* Gradient overlay */}
-                    <div style={{
-                      position: 'absolute', inset: 0,
-                      background: 'linear-gradient(to top, rgba(10,10,14,.95) 0%, rgba(10,10,14,.2) 60%, transparent 100%)',
-                    }} />
-                    {/* Set count badge */}
-                    <div style={{
-                      position: 'absolute', top: 6, right: 6,
-                      background: 'rgba(0,0,0,.65)', borderRadius: 4,
-                      fontSize: 9, fontWeight: 800, letterSpacing: '.06em',
-                      color: v.accent || '#F4A93C', padding: '2px 5px',
-                    }}>
-                      {v.setCount} sets
-                    </div>
-                  </div>
-                  {/* Info */}
-                  <div style={{ padding: '8px 10px 10px', background: '#111' }}>
-                    <div style={{
-                      fontSize: 12, fontWeight: 800, color: '#EDEAE2',
-                      whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                    }}>
-                      {v.name}
-                    </div>
-                    <div style={{ fontSize: 10, opacity: .45, marginTop: 2, color: v.accent || '#EDEAE2' }}>
-                      {[v.city, v.country].filter(Boolean).join(', ')}
-                    </div>
-                  </div>
-                </button>
-              ))}
-          </div>
+        <div style={{ position: 'absolute', inset: 0, overflowY: 'auto', background: '#0a0a0e' }}>
+          {!dirRegion ? (
+            /* Step 1: Region picker */
+            <div style={{ padding: '48px 16px 24px' }}>
+              <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.18em', opacity: .35, marginBottom: 20, textTransform: 'uppercase' }}>
+                Explore by Region
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {[
+                  { id: 'americas', label: 'Americas', sub: 'Club Space · ARC · Movement · CRSSD', color: '#F4A93C' },
+                  { id: 'europe',   label: 'Europe',   sub: 'Awakenings · Tresor · DC-10 · Loveland', color: '#4FC3F7' },
+                  { id: 'worldwide',label: 'Worldwide', sub: 'Cercle · Boiler Room · Mayan Warrior', color: '#FF3B57' },
+                ].map((r) => {
+                  const count = venues.filter((v) => v.region === r.id && v.is_venue !== false && v.setCount > 0).length;
+                  return (
+                    <button
+                      key={r.id}
+                      onClick={() => setDirRegion(r.id)}
+                      style={{
+                        background: `linear-gradient(135deg, rgba(${r.id==='americas'?'244,169,60':'r.id'==='europe'?'79,195,247':'255,59,87'},.08) 0%, rgba(10,10,14,0) 100%)`,
+                        border: `1px solid ${r.color}33`,
+                        borderRadius: 14, padding: '20px 20px', cursor: 'pointer',
+                        textAlign: 'left', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        transition: 'border-color .15s',
+                      }}
+                    >
+                      <div>
+                        <div style={{ fontSize: 22, fontWeight: 900, color: r.color, letterSpacing: '-.02em' }}>{r.label}</div>
+                        <div style={{ fontSize: 11, opacity: .45, marginTop: 4, color: '#EDEAE2' }}>{r.sub}</div>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontSize: 18, fontWeight: 800, color: r.color }}>{count}</div>
+                        <div style={{ fontSize: 9, opacity: .4, letterSpacing: '.08em' }}>VENUES</div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            /* Step 2: Festival grid for selected region */
+            <div style={{ padding: '48px 12px 24px' }}>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(148px, 1fr))',
+                gap: 10,
+              }}>
+                {venues
+                  .filter((v) => v.region === dirRegion && v.is_venue !== false && v.setCount > 0)
+                  .sort((a, b) => b.setCount - a.setCount)
+                  .map((v) => (
+                    <button
+                      key={v.id}
+                      onClick={() => setSelected(v)}
+                      style={{
+                        background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+                        textAlign: 'left', borderRadius: 10, overflow: 'hidden',
+                        boxShadow: selected?.id === v.id
+                          ? `0 0 0 2px ${v.accent || '#F4A93C'}`
+                          : '0 0 0 1px rgba(255,255,255,.08)',
+                        transition: 'box-shadow .15s',
+                      }}
+                    >
+                      <div style={{ position: 'relative', aspectRatio: '16/9', background: '#111' }}>
+                        {v.thumbId && (
+                          <img
+                            src={`https://img.youtube.com/vi/${v.thumbId}/mqdefault.jpg`}
+                            alt={v.name}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                            loading="lazy"
+                          />
+                        )}
+                        <div style={{
+                          position: 'absolute', inset: 0,
+                          background: 'linear-gradient(to top, rgba(10,10,14,.95) 0%, rgba(10,10,14,.15) 60%, transparent 100%)',
+                        }} />
+                        <div style={{
+                          position: 'absolute', top: 6, right: 6,
+                          background: 'rgba(0,0,0,.7)', borderRadius: 4,
+                          fontSize: 9, fontWeight: 800, letterSpacing: '.06em',
+                          color: v.accent || '#F4A93C', padding: '2px 5px',
+                        }}>
+                          {v.setCount} sets
+                        </div>
+                      </div>
+                      <div style={{ padding: '8px 10px 10px', background: '#111' }}>
+                        <div style={{ fontSize: 12, fontWeight: 800, color: '#EDEAE2', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {v.name}
+                        </div>
+                        <div style={{ fontSize: 10, opacity: .4, marginTop: 2 }}>
+                          {[v.city, v.country].filter(Boolean).join(', ')}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
-      {/* Controls: view toggle + region filter chips */}
+      {/* Controls: view toggle + back button in directory mode */}
       <div className="am-controls">
-        {/* Map / Directory toggle */}
         <div style={{ display: 'flex', gap: 4, marginRight: 8, borderRight: '1px solid rgba(255,255,255,.12)', paddingRight: 8 }}>
           {['map', 'directory'].map((v) => (
             <button
               key={v}
               className={'am-region-chip' + (atlasView === v ? ' on' : '')}
-              onClick={() => setAtlasView(v)}
+              onClick={() => { setAtlasView(v); if (v === 'directory') { setDirRegion(null); setSelected(null); } }}
               style={atlasView === v ? { borderColor: '#EDEAE2', color: '#EDEAE2' } : undefined}
             >
               {v === 'map' ? '🗺 Map' : '◈ Festivals'}
             </button>
           ))}
         </div>
-        {REGIONS.map((r) => (
+        {atlasView === 'directory' && dirRegion && (
+          <button
+            className="am-region-chip"
+            onClick={() => { setDirRegion(null); setSelected(null); }}
+            style={{ marginRight: 4 }}
+          >
+            ← Back
+          </button>
+        )}
+        {atlasView === 'map' && REGIONS.map((r) => (
           <button
             key={r.id}
             className={'am-region-chip' + (regionFilter === r.id ? ' on' : '')}
             onClick={() => setRegionFilter(r.id)}
             style={regionFilter === r.id ? { borderColor: r.color, color: r.color } : undefined}
           >
-            {r.id !== 'all' && (
-              <span className="am-region-dot" style={{ background: r.color }} />
-            )}
+            {r.id !== 'all' && <span className="am-region-dot" style={{ background: r.color }} />}
             {r.label}
           </button>
         ))}
