@@ -96,6 +96,18 @@ function djKey(t) {
     .trim();
 }
 
+// Extract all artist names from a b2b/multi-artist string so we can dedupe
+// any set where a given DJ appears, regardless of billing order.
+function djKeys(row) {
+  const raw = (row.artist || row.title || '').toLowerCase();
+  // Split on b2b, b3b, x, & separators to get individual names
+  const parts = raw
+    .split(/\s+(?:b[2-9]b|x|&(?:amp;)?|\+)\s+/i)
+    .map((p) => djKey(p))
+    .filter(Boolean);
+  return parts.length ? parts : [djKey(raw)];
+}
+
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -132,11 +144,11 @@ function applyDiversity(sets, maxPerVenue = 2) {
   const venueCounts = {};
   return sets.filter((r) => {
     if (isBad(r)) return false;
-    const k = djKey(r.artist || r.title);
-    if (!k || seenDj.has(k)) return false;
+    const keys = djKeys(r);
+    if (!keys.length || keys.some((k) => seenDj.has(k))) return false;
     const vid = r.festival_id || 'unknown';
     if ((venueCounts[vid] || 0) >= maxPerVenue) return false;
-    seenDj.add(k);
+    keys.forEach((k) => seenDj.add(k));
     venueCounts[vid] = (venueCounts[vid] || 0) + 1;
     return true;
   });
