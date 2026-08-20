@@ -398,6 +398,10 @@ export default async function handler(req, res) {
 
   const existing = await getExisting();
   const toInsert = [];
+  // Persist as we go: the function has a 60s maxDuration and looping every channel
+  // can exceed it. Inserting per-channel means a mid-run timeout still saves progress
+  // instead of losing the whole batch (bug: vault froze when the tail insert never ran).
+  let insertedCount = 0;
 
   // Shuffle channels so quota exhaustion doesn't always starve the same channels.
   // Use a deterministic daily seed (day-of-year) so the shuffle is stable within a day
@@ -435,10 +439,20 @@ export default async function handler(req, res) {
     } catch (e) {
       console.error(ch.festival_name, e.message);
     }
+    // Flush this channel's finds immediately so a 60s timeout can't wipe the batch.
+    if (toInsert.length > insertedCount) {
+      try {
+        await insertSets(toInsert.slice(insertedCount));
+        insertedCount = toInsert.length;
+      } catch (e) {
+        console.error('incremental insert failed:', e.message);
+      }
+    }
   }
 
   if (toInsert.length) {
-    await insertSets(toInsert);
+    // Sets are already inserted incrementally above; this pass only handles the
+    // heavier tracklist/ID-mining post-processing on the full batch.
 
     // Fetch descriptions, parse tracklists, and extract ID moments
     try {
