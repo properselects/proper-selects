@@ -110,7 +110,7 @@ export default function StaysArc() {
       await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, website }),
+        body: JSON.stringify({ email, website, source: 'arc-stays' }),
       });
     } catch { /* still unlock — email best-effort */ }
     try { localStorage.setItem('psArcCoupon', '1'); } catch {}

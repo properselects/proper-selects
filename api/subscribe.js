@@ -224,10 +224,15 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: 'Too many requests. Try again later.' });
   }
 
-  const { email, website } = req.body || {};
+  const { email, website, source } = req.body || {};
 
   // Honeypot — bots fill hidden fields, humans don't
   if (website) return res.status(200).json({ ok: true, message: 'Check your email to confirm' });
+
+  // Sanitize source tag (where the signup came from) — short slug only
+  const src = typeof source === 'string' && source.trim()
+    ? source.trim().slice(0, 40).replace(/[^\w.-]/g, '')
+    : null;
 
   if (!email || !isValidEmail(email)) {
     return res.status(400).json({ error: 'Valid email required' });
@@ -263,6 +268,7 @@ export default async function handler(req, res) {
       email: normalizedEmail,
       confirmed: true,
       unsubscribed_at: null,
+      ...(src ? { source: src } : {}),
     }),
   });
 

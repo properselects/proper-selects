@@ -145,7 +145,7 @@ export default function LineupDrawer({ open, onClose, lineup, onLineupChange, on
       const r = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, source: 'lineup-share' }),
       });
       setSubState(r.ok ? 'done' : 'error');
     } catch {

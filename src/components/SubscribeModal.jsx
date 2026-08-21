@@ -15,7 +15,7 @@ export default function SubscribeModal({ open, onClose }) {
       const r = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, website }),
+        body: JSON.stringify({ email, website, source: 'modal' }),
       });
       setState(r.ok ? 'done' : 'error');
     } catch {
