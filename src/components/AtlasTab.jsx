@@ -66,34 +66,6 @@ const REGIONS = [
   { id: 'worldwide', label: 'Worldwide', color: '#FF3B57' },
 ];
 
-// Group venues by city for city-level map pins.
-// Returns array of { key, city, country, lat, lng, region, accent, venues[] }
-function groupByCity(venues) {
-  const groups = {};
-  for (const v of venues) {
-    if (v.lat == null || v.lng == null) continue;
-    const key = `${v.city || ''}_${v.country || ''}`.toLowerCase().replace(/\s+/g, '_');
-    if (!groups[key]) {
-      groups[key] = {
-        key,
-        city: v.city || '',
-        country: v.country || '',
-        lat: v.lat,
-        lng: v.lng,
-        region: v.region,
-        accent: v.accent || '#F4A93C',
-        venues: [],
-      };
-    }
-    groups[key].venues.push(v);
-  }
-  // Use the venue with the most sets as the color representative
-  return Object.values(groups).map((g) => {
-    const top = g.venues.slice().sort((a, b) => b.setCount - a.setCount)[0];
-    return { ...g, accent: top?.accent || g.accent };
-  });
-}
-
 export default function AtlasTab({ lineup = [], onLineupChange, isActive = false, onNowPlaying }) {
   const lineupIds = React.useMemo(() => new Set((lineup || []).map((s) => s.video_id)), [lineup]);
 
@@ -111,9 +83,7 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
   const markersRef = useRef([]);
   const mapInitialized = useRef(false);
   const [venues, setVenues] = useState([]);
-  const [cityGroups, setCityGroups] = useState([]);
-  const [selectedCity, setSelectedCity] = useState(null); // city group (has .venues[])
-  const [selected, setSelected] = useState(null);         // specific festival
+  const [selected, setSelected] = useState(null);
   const [selectedSets, setSelectedSets] = useState([]);
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [playing, setPlaying] = useState(null);
@@ -122,21 +92,8 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
   const [dirRegion, setDirRegion] = useState(null); // null = region picker, else 'americas'|'europe'|'worldwide'
   const playerFrame = useRef(null);
 
-  function openCity(group) {
-    if (group.venues.length === 1) {
-      setSelectedCity(null);
-      setSelected(group.venues[0]);
-    } else {
-      setSelectedCity(group);
-      setSelected(null);
-    }
-  }
-
   useEffect(() => {
-    fetchVenuesWithSets().then((v) => {
-      setVenues(v);
-      setCityGroups(groupByCity(v));
-    }).catch(() => {});
+    fetchVenuesWithSets().then(setVenues).catch(() => {});
   }, []);
 
   // Single-player coordination.
@@ -154,15 +111,11 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
     return () => { unregisterPlayer('atlas'); unlockScroll(); };
   }, [playing]);
 
-  // Keep openCity in a ref so the stable map marker click handlers can always call the latest version.
-  const openCityRef = useRef(openCity);
-  useEffect(() => { openCityRef.current = openCity; });
-
   // Initialize only when the tab is visible — if we init in a display:none container,
   // MapLibre gets 0×0 dimensions and pins are placed wrong, causing a jump when the
   // tab becomes visible. Gate on isActive so the first render always has real dimensions.
   useEffect(() => {
-    if (!cityGroups.length || !isActive || mapInitialized.current || !mapRef.current) return;
+    if (!venues.length || !isActive || mapInitialized.current || !mapRef.current) return;
     mapInitialized.current = true;
 
     const map = new maplibregl.Map({
@@ -180,50 +133,38 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
     map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
     map.on('load', () => { try { map.resize(); } catch {} });
 
-    // One pin per city group. Multi-festival cities show a count badge.
-    for (const g of cityGroups) {
-      const accent = g.accent || '#F4A93C';
-      const multi = g.venues.length > 1;
-      const isPartner = g.venues.some((v) => v.partner);
-      const size = isPartner ? 20 : multi ? 18 : 14;
-
+    for (const v of venues) {
+      if (v.lat == null || v.lng == null) continue;
+      const accent = v.accent || '#F4A93C';
+      const isPartner = v.partner === true;
+      const size = isPartner ? 20 : 14;
+      // Outer wrapper is a 44px transparent hit-area (Apple's min touch target) so pins are
+      // easy to tap on mobile; the visible dot is a centered child at its real size.
       const el = document.createElement('div');
       const HIT = 44;
       el.style.cssText = `width:${HIT}px;height:${HIT}px;display:flex;align-items:center;justify-content:center;`
-        + `cursor:pointer;transition:opacity .2s;background:transparent;position:relative;`;
-
+        + `cursor:pointer;transition:opacity .2s;background:transparent;`;
       const dot = document.createElement('div');
       dot.style.cssText = `width:${size}px;height:${size}px;border-radius:50%;background:${accent};`
         + `border:2px solid ${isPartner ? accent : '#0a0a0e'};box-shadow:0 0 0 2px rgba(0,0,0,.35),0 0 12px ${accent}66;`
         + `transition:transform .12s;pointer-events:none;`;
       if (isPartner) dot.style.boxShadow = `0 0 0 3px rgba(0,0,0,.4),0 0 18px ${accent}`;
       el.appendChild(dot);
-
-      // Badge showing festival count for cities with multiple venues
-      if (multi) {
-        const badge = document.createElement('div');
-        badge.style.cssText = `position:absolute;top:3px;right:3px;min-width:14px;height:14px;`
-          + `border-radius:7px;background:${accent};color:#0a0a0e;font-size:8px;font-weight:900;`
-          + `display:flex;align-items:center;justify-content:center;padding:0 3px;pointer-events:none;`
-          + `border:1.5px solid #0a0a0e;`;
-        badge.textContent = g.venues.length;
-        el.appendChild(badge);
-      }
-
       el.addEventListener('mouseenter', () => { dot.style.transform = 'scale(1.35)'; });
       el.addEventListener('mouseleave', () => { dot.style.transform = 'scale(1)'; });
+      // Stop touch events from bubbling to MapLibre's container — otherwise a tap on a
+      // marker also triggers MapLibre's drag tracker, panning the map under the dot.
       el.addEventListener('touchstart', (e) => { e.stopPropagation(); }, { passive: true });
       el.addEventListener('touchend', (e) => { e.stopPropagation(); }, { passive: true });
-      el.addEventListener('click', (e) => { e.stopPropagation(); openCityRef.current(g); });
-
-      const marker = new maplibregl.Marker({ element: el }).setLngLat([g.lng, g.lat]).addTo(map);
-      marker._venueRegion = g.region;
+      el.addEventListener('click', (e) => { e.stopPropagation(); setSelected(v); });
+      const marker = new maplibregl.Marker({ element: el }).setLngLat([v.lng, v.lat]).addTo(map);
+      marker._venueRegion = v.region;
       marker._el = el;
       markersRef.current.push(marker);
     }
     mapInstance.current = map;
     // No cleanup here — map stays alive across tab switches (display:none/block).
-  }, [cityGroups, isActive]);
+  }, [venues, isActive]);
 
   // True cleanup only on component unmount.
   useEffect(() => {
@@ -411,62 +352,11 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
         ))}
       </div>
 
-      {/* Level 1 drawer: city with multiple festivals */}
-      {selectedCity && !selected && (
-        <div className={'am-drawer open'} style={{ borderColor: selectedCity.accent || '#F4A93C' }}>
-          <button className="am-drawer-close" onClick={() => setSelectedCity(null)}>✕</button>
-          <div className="am-drawer-city" style={{ color: selectedCity.accent || '#F4A93C' }}>
-            {selectedCity.city}{selectedCity.country ? `, ${selectedCity.country}` : ''}
-          </div>
-          <h2 className="am-drawer-name" style={{ margin: '4px 0 16px' }}>
-            {selectedCity.venues.length} Festivals
-          </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {selectedCity.venues
-              .slice()
-              .sort((a, b) => b.setCount - a.setCount)
-              .map((v) => (
-                <button
-                  key={v.id}
-                  onClick={() => setSelected(v)}
-                  style={{
-                    background: 'rgba(255,255,255,.04)', border: `1px solid ${v.accent || '#F4A93C'}33`,
-                    borderRadius: 10, padding: '10px 12px', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', gap: 10, textAlign: 'left',
-                  }}
-                >
-                  {v.thumbId && (
-                    <img
-                      src={`https://img.youtube.com/vi/${v.thumbId}/mqdefault.jpg`}
-                      alt={v.name}
-                      style={{ width: 52, height: 34, objectFit: 'cover', borderRadius: 5, flexShrink: 0 }}
-                    />
-                  )}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 800, color: '#EDEAE2', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{v.name}</div>
-                    <div style={{ fontSize: 10, color: v.accent || '#F4A93C', marginTop: 2 }}>{v.setCount} sets</div>
-                  </div>
-                  <span style={{ color: v.accent || '#F4A93C', fontSize: 14, flexShrink: 0 }}>›</span>
-                </button>
-              ))}
-          </div>
-        </div>
-      )}
-
-      {/* Level 2 drawer: sets for a specific festival */}
       {selected && (
         <div className={'am-drawer open'} style={{ borderColor: selected.accent || '#F4A93C' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
-            {selectedCity && (
-              <button
-                onClick={() => setSelected(null)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(237,234,226,.4)', fontSize: 13, padding: '0 4px 0 0', flexShrink: 0 }}
-              >
-                ‹
-              </button>
-            )}
-            <button className="am-drawer-close" onClick={() => { setSelected(null); setSelectedCity(null); }}>✕</button>
-          </div>
+          <button className="am-drawer-close" onClick={() => setSelected(null)}>
+            ✕
+          </button>
           <div className="am-drawer-city" style={{ color: selected.accent || '#F4A93C' }}>
             {selected.city}
             {selected.country ? `, ${selected.country}` : ''}
