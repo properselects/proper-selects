@@ -168,7 +168,7 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
 
     const map = new maplibregl.Map({
       container: mapRef.current,
-      style: 'https://tiles.openfreemap.org/styles/dark',
+      style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
       center: [10, 25],
       zoom: 1.4,
       minZoom: 1,
