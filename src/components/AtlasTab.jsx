@@ -118,8 +118,9 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [playing, setPlaying] = useState(null);
   const [regionFilter, setRegionFilter] = useState('all');
-  const [atlasView, setAtlasView] = useState('map'); // 'map' | 'directory'
+  const [atlasView, setAtlasView] = useState('map'); // 'map' | 'directory' | 'cities'
   const [dirRegion, setDirRegion] = useState(null); // null = region picker, else 'americas'|'europe'|'worldwide'
+  const [citySearch, setCitySearch] = useState('');
   const playerFrame = useRef(null);
 
   function openCity(group) {
@@ -375,17 +376,99 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
         </div>
       )}
 
+      {/* City index view — alphabetical city grid with set counts */}
+      {atlasView === 'cities' && (
+        <div style={{ position: 'absolute', inset: 0, overflowY: 'auto', background: '#0a0a0e' }}>
+          <div style={{ padding: '48px 14px 24px' }}>
+            {/* Search */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.05)', borderRadius: 10, padding: '8px 12px', border: '1px solid rgba(255,255,255,0.08)', marginBottom: 20 }}>
+              <span style={{ opacity: .35, fontSize: 14 }}>⌕</span>
+              <input
+                type="text"
+                placeholder="Search cities…"
+                value={citySearch}
+                onChange={(e) => setCitySearch(e.target.value)}
+                style={{ background: 'none', border: 'none', outline: 'none', color: '#EDEAE2', fontSize: 13, flex: 1, fontFamily: 'inherit' }}
+              />
+            </div>
+            {/* City grid */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {cityGroups
+                .filter((g) => {
+                  const q = citySearch.trim().toLowerCase();
+                  return !q || (g.city || '').toLowerCase().includes(q) || (g.country || '').toLowerCase().includes(q);
+                })
+                .slice()
+                .sort((a, b) => (a.city || '').localeCompare(b.city || ''))
+                .map((g) => {
+                  const totalSets = g.venues.reduce((sum, v) => sum + (v.setCount || 0), 0);
+                  const venueNames = g.venues.map((v) => v.name).join(' · ');
+                  return (
+                    <button
+                      key={g.key}
+                      onClick={() => {
+                        setAtlasView('map');
+                        setTimeout(() => {
+                          openCity(g);
+                          if (mapInstance.current) {
+                            mapInstance.current.flyTo({ center: [g.lng, g.lat], zoom: 10, duration: 800 });
+                          }
+                        }, 50);
+                      }}
+                      style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        padding: '11px 12px', borderRadius: 8,
+                        background: 'none', border: 'none',
+                        borderBottom: '1px solid rgba(255,255,255,0.05)',
+                        cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit',
+                        transition: 'background .1s',
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.04)'}
+                      onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
+                    >
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                          <span style={{ fontSize: 15, fontWeight: 800, color: '#EDEAE2', letterSpacing: '-.01em' }}>
+                            {(g.city || '').toUpperCase()}
+                          </span>
+                          <span style={{ fontSize: 11, opacity: .35, color: '#EDEAE2' }}>{g.country}</span>
+                        </div>
+                        <div style={{ fontSize: 10, opacity: .35, marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 240 }}>
+                          {venueNames}
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0, marginLeft: 12 }}>
+                        <span style={{ fontSize: 13, fontWeight: 800, color: g.accent || '#F4A93C' }}>{totalSets}</span>
+                        <span style={{ fontSize: 9, opacity: .4, letterSpacing: '.08em' }}>sets</span>
+                        <span style={{ color: g.accent || '#F4A93C', opacity: .5, fontSize: 12 }}>›</span>
+                      </div>
+                    </button>
+                  );
+                })}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Controls: view toggle + back button in directory mode */}
       <div className="am-controls">
         <div style={{ display: 'flex', gap: 4, marginRight: 8, borderRight: '1px solid rgba(255,255,255,.12)', paddingRight: 8 }}>
-          {['map', 'directory'].map((v) => (
+          {[
+              { id: 'map', label: '🗺 Map' },
+              { id: 'cities', label: '◉ Cities' },
+              { id: 'directory', label: '◈ Festivals' },
+            ].map((v) => (
             <button
-              key={v}
-              className={'am-region-chip' + (atlasView === v ? ' on' : '')}
-              onClick={() => { setAtlasView(v); if (v === 'directory') { setDirRegion(null); setSelected(null); } }}
-              style={atlasView === v ? { borderColor: '#EDEAE2', color: '#EDEAE2' } : undefined}
+              key={v.id}
+              className={'am-region-chip' + (atlasView === v.id ? ' on' : '')}
+              onClick={() => {
+                setAtlasView(v.id);
+                if (v.id === 'directory') { setDirRegion(null); setSelected(null); }
+                if (v.id === 'cities') { setSelected(null); setSelectedCity(null); setSideOpen(false); setCitySearch(''); }
+              }}
+              style={atlasView === v.id ? { borderColor: '#EDEAE2', color: '#EDEAE2' } : undefined}
             >
-              {v === 'map' ? '🗺 Map' : '◈ Festivals'}
+              {v.label}
             </button>
           ))}
         </div>
