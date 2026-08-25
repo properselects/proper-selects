@@ -14,6 +14,22 @@ function isValidEmail(e) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 }
 
+// Disposable / throwaway email domains — common signup-spam sources.
+// Extend via env DISPOSABLE_EMAIL_DOMAINS (comma-separated) without a redeploy.
+const DISPOSABLE_DOMAINS = new Set([
+  'mailinator.com', 'guerrillamail.com', 'guerrillamail.info', 'sharklasers.com',
+  '10minutemail.com', 'tempmail.com', 'temp-mail.org', 'throwawaymail.com',
+  'yopmail.com', 'getnada.com', 'trashmail.com', 'maildrop.cc', 'dispostable.com',
+  'fakeinbox.com', 'mailnesia.com', 'mohmal.com', 'emailondeck.com', 'moakt.com',
+  'tempmailo.com', 'mintemail.com', 'spamgourmet.com', 'mailcatch.com', 'inboxbear.com',
+  ...(process.env.DISPOSABLE_EMAIL_DOMAINS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean),
+]);
+
+function isDisposableEmail(e) {
+  const domain = String(e).toLowerCase().split('@')[1] || '';
+  return DISPOSABLE_DOMAINS.has(domain);
+}
+
 // Simple in-memory sliding-window rate limiter (per IP).
 // Resets on cold start — fine for abuse mitigation, not for strict SLA.
 const rateBuckets = new Map();
@@ -236,6 +252,11 @@ export default async function handler(req, res) {
 
   if (!email || !isValidEmail(email)) {
     return res.status(400).json({ error: 'Valid email required' });
+  }
+
+  // Block disposable/throwaway addresses — respond like the honeypot so bots get no signal
+  if (isDisposableEmail(email)) {
+    return res.status(200).json({ ok: true, message: 'Check your email to confirm' });
   }
 
   if (!SUPABASE_URL || !SUPABASE_KEY) {
