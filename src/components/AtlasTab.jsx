@@ -68,16 +68,26 @@ const REGIONS = [
 
 // Group venues by city for city-level map pins.
 // Returns array of { key, city, country, lat, lng, region, accent, venues[] }
+// Canonicalize country so the same country typed different ways collapses to one code.
+const COUNTRY_ALIASES = {
+  'netherlands': 'nl', 'holland': 'nl', 'the netherlands': 'nl',
+  'united kingdom': 'gb', 'uk': 'gb', 'great britain': 'gb', 'england': 'gb', 'britain': 'gb',
+  'united states': 'us', 'united states of america': 'us', 'usa': 'us', 'america': 'us',
+  'deutschland': 'de', 'germany': 'de',
+  'españa': 'es', 'spain': 'es',
+};
+function normCountry(c) {
+  const k = (c || '').trim().toLowerCase();
+  return COUNTRY_ALIASES[k] || k;
+}
+
 function groupByCity(venues) {
   const groups = {};
   for (const v of venues) {
     if (v.lat == null || v.lng == null) continue;
-    // Key by city name + a rounded geo-bucket (not the country string) so the same
-    // physical city merges even when country codes differ (e.g. Amsterdam NL vs
-    // Netherlands, London GB vs UK). Same-named cities in different countries stay
-    // separate because their lat/lng buckets differ.
-    const cityKey = (v.city || '').trim().toLowerCase();
-    const key = `${cityKey}_${Math.round(v.lat)}_${Math.round(v.lng)}`;
+    // Key by city name + normalized country so the same physical city merges even when
+    // the country is typed differently (e.g. Amsterdam NL vs Netherlands, London GB vs UK).
+    const key = `${(v.city || '').trim().toLowerCase()}_${normCountry(v.country)}`;
     if (!groups[key]) {
       groups[key] = {
         key,
