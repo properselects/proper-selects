@@ -72,7 +72,12 @@ function groupByCity(venues) {
   const groups = {};
   for (const v of venues) {
     if (v.lat == null || v.lng == null) continue;
-    const key = `${v.city || ''}_${v.country || ''}`.toLowerCase().replace(/\s+/g, '_');
+    // Key by city name + a rounded geo-bucket (not the country string) so the same
+    // physical city merges even when country codes differ (e.g. Amsterdam NL vs
+    // Netherlands, London GB vs UK). Same-named cities in different countries stay
+    // separate because their lat/lng buckets differ.
+    const cityKey = (v.city || '').trim().toLowerCase();
+    const key = `${cityKey}_${Math.round(v.lat)}_${Math.round(v.lng)}`;
     if (!groups[key]) {
       groups[key] = {
         key,
