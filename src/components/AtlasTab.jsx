@@ -178,8 +178,8 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
     const map = new maplibregl.Map({
       container: mapRef.current,
       style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-      center: [10, 25],
-      zoom: 1.4,
+      center: [-20, 42],
+      zoom: 2.7,
       minZoom: 1,
       maxZoom: 16,
       attributionControl: false,
@@ -246,7 +246,7 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
       el.appendChild(label);
       // Bigger cities reveal their title at lower zoom levels
       el._label = label;
-      el._labelMinZoom = totalSets >= 1000 ? 0 : totalSets >= 300 ? 2.4 : totalSets >= 60 ? 3.2 : 4.2;
+      el._labelMinZoom = totalSets >= 1000 ? 0 : totalSets >= 250 ? 1.6 : totalSets >= 80 ? 2.4 : totalSets >= 30 ? 3.4 : 4.4;
 
       el.addEventListener('mouseenter', () => { dot.style.transform = 'scale(1.35)'; });
       el.addEventListener('mouseleave', () => { dot.style.transform = 'scale(1)'; });
