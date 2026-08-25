@@ -176,9 +176,16 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
       attributionControl: false,
       dragRotate: false,
       pitchWithRotate: false,
+      scrollZoom: true,
+      doubleClickZoom: true,
+      touchZoomRotate: true,
     });
-    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left');
-    map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
+    // Smooth scroll/pinch zoom (Set Roulette-style feel)
+    try { map.scrollZoom.setWheelZoomRate(1 / 220); } catch {}
+    try { map.scrollZoom.setZoomRate(1 / 110); } catch {}
+    // Prominent +/- zoom controls, bottom-right
+    map.addControl(new maplibregl.NavigationControl({ showCompass: false, visualizePitch: false }), 'bottom-right');
+    map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-left');
     map.on('load', () => { try { map.resize(); } catch {} });
 
     // One pin per city group. Multi-festival cities show a count badge.

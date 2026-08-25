@@ -1097,6 +1097,23 @@ body.modal-scroll-lock .tab-scroll { overflow: hidden !important; overscroll-beh
   padding: 6px 10px;
   border-radius: 30px;
 }
+
+/* Prominent Set-Roulette-style zoom controls (bottom-right) */
+.maplibregl-ctrl-bottom-right { margin: 0 16px 22px 0; }
+.maplibregl-ctrl-group {
+  border-radius: 14px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,.25) !important;
+  border: 1px solid rgba(0,0,0,.08) !important;
+}
+.maplibregl-ctrl-group button {
+  width: 44px !important;
+  height: 44px !important;
+}
+.maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+  transform: scale(1.25);
+}
+.maplibregl-ctrl-group button + button { border-top: 1px solid rgba(0,0,0,.08) !important; }
 .am-region-chip {
   display: flex;
   align-items: center;
