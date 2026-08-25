@@ -68,44 +68,38 @@ const REGIONS = [
 
 // Group venues by city for city-level map pins.
 // Returns array of { key, city, country, lat, lng, region, accent, venues[] }
-// Canonicalize country so the same country typed different ways collapses to one code.
-const COUNTRY_ALIASES = {
-  'netherlands': 'nl', 'holland': 'nl', 'the netherlands': 'nl',
-  'united kingdom': 'gb', 'uk': 'gb', 'great britain': 'gb', 'england': 'gb', 'britain': 'gb',
-  'united states': 'us', 'united states of america': 'us', 'usa': 'us', 'america': 'us',
-  'deutschland': 'de', 'germany': 'de',
-  'españa': 'es', 'spain': 'es',
-};
-function normCountry(c) {
-  const k = (c || '').trim().toLowerCase();
-  return COUNTRY_ALIASES[k] || k;
-}
-
+// Group venues into one pin per physical city. The `country` field is unreliable
+// (same city tagged DE/Germany/"Worldwide", US/USA, ES/null…), so we ignore it and
+// cluster by city name + geographic proximity instead: venues sharing a (normalized)
+// city name that sit within ~1.2° of each other merge; genuinely different same-named
+// cities (e.g. Paris FR vs Paris TX) stay separate because they're far apart.
 function groupByCity(venues) {
-  const groups = {};
+  const NEAR = 1.2; // degrees (~130km): larger than any city's sprawl, small enough to split distinct cities
+  const byName = {};
   for (const v of venues) {
     if (v.lat == null || v.lng == null) continue;
-    // Key by city name + normalized country so the same physical city merges even when
-    // the country is typed differently (e.g. Amsterdam NL vs Netherlands, London GB vs UK).
-    const key = `${(v.city || '').trim().toLowerCase()}_${normCountry(v.country)}`;
-    if (!groups[key]) {
-      groups[key] = {
-        key,
-        city: v.city || '',
-        country: v.country || '',
-        lat: v.lat,
-        lng: v.lng,
-        region: v.region,
-        accent: v.accent || '#F4A93C',
-        venues: [],
-      };
-    }
-    groups[key].venues.push(v);
+    const nk = (v.city || '').trim().toLowerCase();
+    (byName[nk] = byName[nk] || []).push(v);
   }
-  // Use the venue with the most sets as the color representative
-  return Object.values(groups).map((g) => {
+  const groups = [];
+  for (const nk in byName) {
+    const clusters = [];
+    for (const v of byName[nk]) {
+      let c = clusters.find((cl) => Math.abs(cl.lat - v.lat) < NEAR && Math.abs(cl.lng - v.lng) < NEAR);
+      if (!c) {
+        c = { key: `${nk}_${clusters.length}`, city: v.city || '', country: v.country || '',
+              lat: v.lat, lng: v.lng, region: v.region, accent: v.accent || '#F4A93C', venues: [] };
+        clusters.push(c);
+      }
+      c.venues.push(v);
+    }
+    groups.push(...clusters);
+  }
+  // Represent each city by its highest-set venue (color, exact coords, region label).
+  return groups.map((g) => {
     const top = g.venues.slice().sort((a, b) => b.setCount - a.setCount)[0];
-    return { ...g, accent: top?.accent || g.accent };
+    return { ...g, accent: top?.accent || g.accent, city: top?.city || g.city,
+             lat: top?.lat ?? g.lat, lng: top?.lng ?? g.lng, region: top?.region || g.region };
   });
 }
 
