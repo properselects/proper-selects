@@ -218,6 +218,27 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
         el.appendChild(badge);
       }
 
+      // City-name title (Set Roulette-style), revealed on zoom-in.
+      const totalSets = g.venues.reduce((s, v) => s + (v.setCount || 0), 0);
+      const fmtCount = (n) => (n >= 1000 ? (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : String(n));
+      const label = document.createElement('div');
+      label.style.cssText = `position:absolute;left:calc(50% + ${size / 2 + 8}px);top:50%;`
+        + `transform:translateY(-50%);white-space:nowrap;pointer-events:none;display:flex;`
+        + `align-items:baseline;gap:5px;opacity:0;transition:opacity .18s;`;
+      const nameEl = document.createElement('span');
+      nameEl.textContent = (g.city || '').toUpperCase();
+      nameEl.style.cssText = `font-size:11px;font-weight:800;letter-spacing:.02em;color:#101828;`
+        + `text-shadow:0 0 3px #fff,0 1px 4px rgba(255,255,255,.95);`;
+      const cntEl = document.createElement('span');
+      cntEl.textContent = fmtCount(totalSets);
+      cntEl.style.cssText = `font-size:10px;font-weight:700;color:${accent};`
+        + `text-shadow:0 0 3px #fff,0 1px 4px rgba(255,255,255,.95);`;
+      label.appendChild(nameEl); label.appendChild(cntEl);
+      el.appendChild(label);
+      // Bigger cities reveal their title at lower zoom levels
+      el._label = label;
+      el._labelMinZoom = totalSets >= 1000 ? 0 : totalSets >= 300 ? 2.4 : totalSets >= 60 ? 3.2 : 4.2;
+
       el.addEventListener('mouseenter', () => { dot.style.transform = 'scale(1.35)'; });
       el.addEventListener('mouseleave', () => { dot.style.transform = 'scale(1)'; });
       el.addEventListener('touchstart', (e) => { e.stopPropagation(); }, { passive: true });
@@ -229,6 +250,19 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
       marker._el = el;
       markersRef.current.push(marker);
     }
+
+    // Reveal city-name titles progressively as the map zooms in (Set Roulette-style).
+    const syncLabels = () => {
+      const z = map.getZoom();
+      for (const mk of markersRef.current) {
+        const el = mk._el;
+        if (el && el._label) el._label.style.opacity = z >= el._labelMinZoom ? '1' : '0';
+      }
+    };
+    map.on('zoom', syncLabels);
+    map.on('load', syncLabels);
+    syncLabels();
+
     mapInstance.current = map;
     // No cleanup here — map stays alive across tab switches (display:none/block).
   }, [cityGroups, isActive]);
