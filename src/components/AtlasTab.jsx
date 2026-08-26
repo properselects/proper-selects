@@ -178,8 +178,8 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
     const map = new maplibregl.Map({
       container: mapRef.current,
       style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-      center: [-20, 42],
-      zoom: 2.7,
+      center: [5, 48],
+      zoom: 3,
       minZoom: 1,
       maxZoom: 16,
       attributionControl: false,
@@ -195,10 +195,23 @@ export default function AtlasTab({ lineup = [], onLineupChange, isActive = false
     // Prominent +/- zoom controls, bottom-right
     map.addControl(new maplibregl.NavigationControl({ showCompass: false, visualizePitch: false }), 'bottom-right');
     map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-left');
-    map.on('load', () => { try { map.resize(); } catch {} });
+    map.on('load', () => {
+      try { map.resize(); } catch {}
+      // Auto-fit to all real city pins (skip "worldwide" catch-all entries with fake coords)
+      const realGroups = cityGroups.filter((g) => (g.city || '').toLowerCase() !== 'worldwide');
+      if (realGroups.length > 1) {
+        const lngs = realGroups.map((g) => g.lng);
+        const lats = realGroups.map((g) => g.lat);
+        map.fitBounds(
+          [[Math.min(...lngs), Math.min(...lats)], [Math.max(...lngs), Math.max(...lats)]],
+          { padding: { top: 70, bottom: 80, left: 50, right: 50 }, maxZoom: 3.8, duration: 0 }
+        );
+      }
+    });
 
     // One pin per city group. Multi-festival cities show a count badge.
-    for (const g of cityGroups) {
+    // Skip non-geographic "Worldwide" catch-all entries — they have fake coordinates.
+    for (const g of cityGroups.filter((g) => (g.city || '').toLowerCase() !== 'worldwide')) {
       const accent = g.accent || '#F4A93C';
       const multi = g.venues.length > 1;
       const isPartner = g.venues.some((v) => v.partner);
