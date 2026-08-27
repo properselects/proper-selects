@@ -52,27 +52,28 @@ const PROPS = [
     url: 'https://www.cribsconsulting.com/', amen: 'Spectacular pool · lake views' },
 ];
 
+const IMG = (id) => `https://images.unsplash.com/photo-${id}?w=680&h=420&fit=crop&q=80`;
 const ADDONS = {
   gear: [
-    { id: 'g1', ico: '🎛️', name: '2× CDJ-3000 + DJM-A9', vend: 'Rock N Roll Rentals', desc: 'Club-standard Pioneer booth for artist rehearsal / green room.', price: 425, unit: '/day', per: 'night' },
-    { id: 'g2', ico: '🔊', name: 'QSC PA System (2 tops + 2 subs)', vend: 'Rock N Roll Rentals', desc: 'Room-filling sound for artist housing sessions.', price: 350, unit: '/day', per: 'night' },
-    { id: 'g3', ico: '🎚️', name: 'XDJ-XZ All-in-One', vend: 'Rock N Roll Rentals', desc: 'Standalone practice rig for support acts.', price: 180, unit: '/day', per: 'night' },
-    { id: 'g4', ico: '🎤', name: 'Booth Monitor + Mic Pack', vend: 'Rock N Roll Rentals', desc: 'Wedge monitor + wireless mics.', price: 120, unit: '/day', per: 'night' },
+    { id: 'g1', img: IMG('1682006294765-45c81d7f366d'), name: '2× CDJ-3000 + DJM-A9', vend: 'Rock N Roll Rentals', desc: 'Club-standard Pioneer booth for artist rehearsal / green room.', price: 425, unit: '/day', per: 'night' },
+    { id: 'g2', img: IMG('1611523627563-40dc862ee241'), name: 'QSC PA System (2 tops + 2 subs)', vend: 'Rock N Roll Rentals', desc: 'Room-filling sound for artist housing sessions.', price: 350, unit: '/day', per: 'night' },
+    { id: 'g3', img: IMG('1572327918628-bf61496743ce'), name: 'XDJ-XZ All-in-One', vend: 'Rock N Roll Rentals', desc: 'Standalone practice rig for support acts.', price: 180, unit: '/day', per: 'night' },
+    { id: 'g4', img: IMG('1581548708095-7158f2e63857'), name: 'Booth Monitor + Mic Pack', vend: 'Rock N Roll Rentals', desc: 'Wedge monitor + wireless mics.', price: 120, unit: '/day', per: 'night' },
   ],
   chef: [
-    { id: 'c1', ico: '🍽️', name: 'Private Chef Dinner', vend: 'Airbnb Experiences', desc: 'Multi-course crew dinner, per guest (min 6).', price: 125, unit: '/guest', per: 'one' },
-    { id: 'c2', ico: '🥂', name: 'Recovery Brunch Service', vend: 'Airbnb Experiences', desc: 'Post-show brunch for artists & crew, per guest.', price: 85, unit: '/guest', per: 'one' },
-    { id: 'c3', ico: '👨‍🍳', name: 'Full-Day Chef (per house)', vend: 'Airbnb Experiences', desc: 'Dedicated chef, all meals, per day.', price: 800, unit: '/day', per: 'night' },
+    { id: 'c1', img: IMG('1758892170660-3ad271f3d672'), name: 'Private Chef Dinner', vend: 'Airbnb Experiences', desc: 'Multi-course crew dinner, per guest (min 6).', price: 125, unit: '/guest', per: 'one' },
+    { id: 'c2', img: IMG('1786918467070-65f61fcbe44f'), name: 'Recovery Brunch Service', vend: 'Airbnb Experiences', desc: 'Post-show brunch for artists & crew, per guest.', price: 85, unit: '/guest', per: 'one' },
+    { id: 'c3', img: IMG('1786918517993-38764ffcb264'), name: 'Full-Day Chef (per house)', vend: 'Airbnb Experiences', desc: 'Dedicated chef, all meals, per day.', price: 800, unit: '/day', per: 'night' },
   ],
   sec: [
-    { id: 's1', ico: '🛡️', name: 'Unarmed Guard (8-hr shift)', vend: 'Licensed subcontractor', desc: 'Uniformed guard for artist housing / load-in.', price: 420, unit: '/shift', per: 'one' },
-    { id: 's2', ico: '🕴️', name: 'Executive Protection (Armed)', vend: 'Licensed subcontractor', desc: 'Trained EP agent assigned to headliner.', price: 820, unit: '/shift', per: 'one' },
-    { id: 's3', ico: '📋', name: 'Overnight Property Watch', vend: 'Licensed subcontractor', desc: 'On-site guard per house, per night.', price: 520, unit: '/night', per: 'night' },
+    { id: 's1', img: IMG('1566245024852-04fbf7842ce9'), name: 'Unarmed Guard (8-hr shift)', vend: 'Licensed subcontractor', desc: 'Uniformed guard for artist housing / load-in.', price: 420, unit: '/shift', per: 'one' },
+    { id: 's2', img: IMG('1659273144088-202efb9b86c8'), name: 'Executive Protection (Armed)', vend: 'Licensed subcontractor', desc: 'Trained EP agent assigned to headliner.', price: 820, unit: '/shift', per: 'one' },
+    { id: 's3', img: IMG('1653592956557-48ae49fc5ef5'), name: 'Overnight Property Watch', vend: 'Licensed subcontractor', desc: 'On-site guard per house, per night.', price: 520, unit: '/night', per: 'night' },
   ],
   van: [
-    { id: 'v1', ico: '🚐', name: 'Sprinter + Driver (4-hr block)', vend: 'Fetii', desc: 'Up to 14 pax — housing ↔ venue runs.', price: 600, unit: '/block', per: 'one' },
-    { id: 'v2', ico: '✈️', name: 'Airport Transfer (AUS)', vend: 'Fetii', desc: 'One-way group transfer per vehicle.', price: 260, unit: '/trip', per: 'one' },
-    { id: 'v3', ico: '🛣️', name: 'Full-Day Charter', vend: 'Fetii', desc: 'Van + driver on call all day.', price: 1350, unit: '/day', per: 'night' },
+    { id: 'v1', img: IMG('1656426650699-a76ffe479608'), name: 'Sprinter + Driver (4-hr block)', vend: 'Fetii', desc: 'Up to 14 pax — housing ↔ venue runs.', price: 600, unit: '/block', per: 'one' },
+    { id: 'v2', img: IMG('1569520884908-682f382556e1'), name: 'Airport Transfer (AUS)', vend: 'Fetii', desc: 'One-way group transfer per vehicle.', price: 260, unit: '/trip', per: 'one' },
+    { id: 'v3', img: IMG('1656426672889-31d16c31f4de'), name: 'Full-Day Charter', vend: 'Fetii', desc: 'Van + driver on call all day.', price: 1350, unit: '/day', per: 'night' },
   ],
 };
 const findAddon = (id) => { for (const c in ADDONS) { const f = ADDONS[c].find((a) => a.id === id); if (f) return f; } };
@@ -414,19 +415,27 @@ function Section({ num, title, sub, children }) {
 function AddonSection({ num, title, sub, cat, qty, chg, stepper, C }) {
   return (
     <Section num={num} title={title} sub={sub}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(260px,1fr))', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(260px,1fr))', gap: 18 }}>
         {ADDONS[cat].map((a) => {
           const q = qty[a.id] || 0;
           return (
-            <div key={a.id} className="ps-addon" style={{ background: q > 0 ? `linear-gradient(180deg,rgba(244,169,60,.07),transparent)` : C.card, border: `1px solid ${q > 0 ? C.gold : C.line}`, borderRadius: 16, padding: 16 }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                <div style={{ width: 42, height: 42, borderRadius: 11, background: C.card2, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 21, flex: '0 0 auto' }}>{a.ico}</div>
-                <div><h3 style={{ fontFamily: "'Sora'", fontSize: 14.5, fontWeight: 700 }}>{a.name}</h3><div style={{ fontSize: 11, color: C.gold, marginTop: 2 }}>{a.vend}</div></div>
+            <div key={a.id} className="ps-prop" style={{ background: C.card, border: `1px solid ${q > 0 ? C.gold : C.line}`, borderRadius: 18, overflow: 'hidden', boxShadow: q > 0 ? `0 0 0 1px ${C.gold}, 0 18px 44px rgba(244,169,60,.10)` : 'none' }}>
+              {/* Photo header (listing-style) */}
+              <div style={{ height: 140, position: 'relative', overflow: 'hidden' }}>
+                <div className="ps-img" style={{ position: 'absolute', inset: 0, backgroundImage: `url('${a.img}')`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg,rgba(10,10,15,.12) 0%,transparent 32%,transparent 55%,rgba(10,10,15,.62) 100%)' }} />
+                <span style={{ position: 'absolute', top: 11, left: 11, background: 'rgba(10,10,15,.6)', backdropFilter: 'blur(10px)', color: C.gold, fontSize: 10, fontWeight: 700, letterSpacing: '.05em', padding: '5px 10px', borderRadius: 20, border: '1px solid rgba(255,255,255,.08)' }}>{a.vend}</span>
+                {q > 0 && <span style={{ position: 'absolute', top: 11, right: 11, minWidth: 22, height: 22, background: C.gold, color: C.bg, fontFamily: "'Sora'", fontWeight: 800, fontSize: 12, borderRadius: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 7px' }}>{q}</span>}
+                <div style={{ position: 'absolute', bottom: 10, left: 12, right: 12 }}>
+                  <div style={{ fontFamily: "'Sora'", fontSize: 15, fontWeight: 700, color: '#fff', textShadow: '0 1px 8px rgba(0,0,0,.6)' }}>{a.name}</div>
+                </div>
               </div>
-              <div style={{ fontSize: 12.5, color: C.dim, marginTop: 10, minHeight: 34 }}>{a.desc}</div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 12, paddingTop: 12, borderTop: `1px solid ${C.line}` }}>
-                <div style={{ fontFamily: "'Sora'", fontWeight: 700, fontSize: 15 }}>{fmt(a.price)}<small style={{ fontSize: 11, color: C.dim2, fontWeight: 400 }}>{a.unit}</small></div>
-                {stepper(() => chg(a.id, -1), q, () => chg(a.id, 1))}
+              <div style={{ padding: '13px 15px 15px' }}>
+                <div style={{ fontSize: 12.5, color: C.dim, minHeight: 34 }}>{a.desc}</div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 12, paddingTop: 12, borderTop: `1px solid ${C.line}` }}>
+                  <div style={{ fontFamily: "'Sora'", fontWeight: 800, fontSize: 17 }}>{fmt(a.price)}<small style={{ fontSize: 11.5, color: C.dim2, fontWeight: 400 }}> {a.unit}</small></div>
+                  {stepper(() => chg(a.id, -1), q, () => chg(a.id, 1))}
+                </div>
               </div>
             </div>
           );
