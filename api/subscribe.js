@@ -359,7 +359,7 @@ async function handleB2BInquiry(body, res) {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f0;padding:28px 14px;"><tr><td align="center">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:14px;overflow:hidden;border:1px solid #e6e6e6;">
         <tr><td style="background:#0a0a0f;padding:22px 24px;">
-          <div style="color:#F4A93C;font-weight:800;letter-spacing:.04em;font-size:13px;">PROPER SELECTS · EVENT HOSPITALITY</div>
+          <div style="color:#F4A93C;font-weight:800;letter-spacing:.04em;font-size:13px;">PROPER SELECTS · ${isVIP ? 'VIP CONCIERGE' : 'PRODUCTION CONCIERGE'}</div>
           <div style="color:#fff;font-size:20px;font-weight:700;margin-top:6px;">New ${kindLabel}</div>
           <div style="color:#9aa0ad;font-size:13px;margin-top:2px;">Powered by 4TC Concierge Hospitality Group</div>
         </td></tr>

@@ -56,7 +56,7 @@ const IMG = (id) => `https://images.unsplash.com/photo-${id}?w=680&h=420&fit=cro
 const ADDONS = {
   gear: [
     { id: 'g1', img: IMG('1682006294765-45c81d7f366d'), name: '2× CDJ-3000 + DJM-A9', vend: 'Pro AV Rental', desc: 'Club-standard Pioneer booth for artist rehearsal / green room.', price: 425, unit: '/day', per: 'night' },
-    { id: 'g2', img: IMG('1611523627563-40dc862ee241'), name: 'QSC PA System (2 tops + 2 subs)', vend: 'Pro AV Rental', desc: 'Room-filling sound for artist housing sessions.', price: 350, unit: '/day', per: 'night' },
+    { id: 'g2', img: IMG('1563680401337-b77b5e0be9f7'), name: 'QSC PA System (2 tops + 2 subs)', vend: 'Pro AV Rental', desc: 'Room-filling sound for artist housing sessions.', price: 350, unit: '/day', per: 'night' },
     { id: 'g3', img: IMG('1572327918628-bf61496743ce'), name: 'XDJ-XZ All-in-One', vend: 'Pro AV Rental', desc: 'Standalone practice rig for support acts.', price: 180, unit: '/day', per: 'night' },
     { id: 'g4', img: IMG('1581548708095-7158f2e63857'), name: 'Booth Monitor + Mic Pack', vend: 'Pro AV Rental', desc: 'Wedge monitor + wireless mics.', price: 120, unit: '/day', per: 'night' },
   ],
@@ -362,7 +362,7 @@ export default function StaysVIP() {
       </div>
 
       <div style={{ borderTop: `1px solid ${C.line}`, padding: '30px 0', color: C.dim2, fontSize: 12, textAlign: 'center' }}>
-        Proper Selects · Event Hospitality Portal · Powered by 4TC Concierge Hospitality Group · properselects.com
+        Proper Selects · VIP Concierge · Powered by 4TC Concierge Hospitality Group · properselects.com
       </div>
 
       <style>{`
