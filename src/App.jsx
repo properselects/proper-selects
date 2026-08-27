@@ -15,6 +15,7 @@ import PreviewModal from './components/PreviewModal.jsx';
 import StaysArc from './components/StaysArc.jsx';
 import StaysSeismic from './components/StaysSeismic.jsx';
 import StaysB2B from './components/StaysB2B.jsx';
+import StaysVIP from './components/StaysVIP.jsx';
 import StayDealCard from './components/StayDealCard.jsx';
 
 // Detect /l/{slug} share pages
@@ -36,6 +37,11 @@ function isStaysSeismic() {
 // Detect /stays/b2b page (production-company concierge portal)
 function isStaysB2B() {
   return window.location.pathname.replace(/\/$/, '') === '/stays/b2b';
+}
+
+// Detect /stays/vip page (B2C luxury concierge for private clientele)
+function isStaysVIP() {
+  return window.location.pathname.replace(/\/$/, '') === '/stays/vip';
 }
 
 export default function App() {
@@ -96,6 +102,9 @@ export default function App() {
 
   // Stays/B2B concierge portal
   if (isStaysB2B()) return <StaysB2B />;
+
+  // Stays/VIP — B2C luxury concierge
+  if (isStaysVIP()) return <StaysVIP />;
 
   // Share page
   if (shareSlug) {

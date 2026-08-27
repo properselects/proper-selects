@@ -339,9 +339,11 @@ async function handleB2BInquiry(body, res) {
   const {
     prodCo = '', eventName = '', checkIn = '', checkOut = '', nights = '',
     headcount = '', subtotal = 0, fee = 0, total = 0, lines = [],
-    contactName = '', contactEmail = '',
+    contactName = '', contactEmail = '', source = 'b2b',
   } = body;
   if (!Array.isArray(lines) || lines.length === 0) return res.status(400).json({ error: 'Empty order' });
+  const isVIP = source === 'vip';
+  const kindLabel = isVIP ? 'VIP concierge inquiry' : 'concierge inquiry';
 
   const rows = lines.map((l) => `
     <tr>
@@ -358,7 +360,7 @@ async function handleB2BInquiry(body, res) {
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:14px;overflow:hidden;border:1px solid #e6e6e6;">
         <tr><td style="background:#0a0a0f;padding:22px 24px;">
           <div style="color:#F4A93C;font-weight:800;letter-spacing:.04em;font-size:13px;">PROPER SELECTS · EVENT HOSPITALITY</div>
-          <div style="color:#fff;font-size:20px;font-weight:700;margin-top:6px;">New concierge inquiry</div>
+          <div style="color:#fff;font-size:20px;font-weight:700;margin-top:6px;">New ${kindLabel}</div>
           <div style="color:#9aa0ad;font-size:13px;margin-top:2px;">Powered by 4TC Concierge Hospitality Group</div>
         </td></tr>
         <tr><td style="padding:20px 24px;">
@@ -390,7 +392,7 @@ async function handleB2BInquiry(body, res) {
       to: 'contact@4tcproductions.com',
       cc: 'proper.selects@gmail.com',
       replyTo: contactEmail || undefined,
-      subject: `New concierge inquiry — ${prodCo || 'Group'} (${checkIn || 'dates TBD'}) · ${_money(total)}`,
+      subject: `New ${kindLabel} — ${prodCo || 'Guest'} (${checkIn || 'dates TBD'}) · ${_money(total)}`,
       html,
     });
     return res.status(200).json({ ok: true, id: info.messageId });

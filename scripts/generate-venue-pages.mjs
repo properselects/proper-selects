@@ -30,6 +30,12 @@ const STAYS_PAGES = [
     desc: 'B2B concierge for production companies — provision housing, DJ gear, private chefs, security & transport for your artists, crew & staff in one itemized order.',
     image: 'https://thedreamrentals.com/wp-content/uploads/2026/06/fq52vxb7991srcgosgj0-scaled.jpg',
   },
+  {
+    slug: 'vip',
+    title: 'VIP Concierge | Proper Selects × 4TC',
+    desc: 'Private luxury concierge for streamers, artists & VIPs at F1, ACL and marquee events — estates, personal chefs, executive security & chauffeured transport, handled end to end.',
+    image: 'https://thedreamrentals.com/wp-content/uploads/2026/06/fq52vxb7991srcgosgj0-scaled.jpg',
+  },
 ];
 
 function generateStaysPages() {
