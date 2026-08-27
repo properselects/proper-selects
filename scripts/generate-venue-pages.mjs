@@ -24,6 +24,12 @@ const STAYS_PAGES = [
     desc: 'Curated Austin stays for Seismic Dance Event 2026 at The Concourse Project. Group-friendly homes + prep sets from the Concourse vault.',
     image: 'https://www.seismicdanceevent.com/wp-content/uploads/2026/05/SDE9-OPENGRAPH.png',
   },
+  {
+    slug: 'b2b',
+    title: 'Event Hospitality Portal | Proper Selects × Dream Rentals',
+    desc: 'B2B concierge for production companies — provision housing, DJ gear, private chefs, security & transport for your artists, crew & staff in one itemized order.',
+    image: 'https://thedreamrentals.com/wp-content/uploads/2026/06/fq52vxb7991srcgosgj0-scaled.jpg',
+  },
 ];
 
 function generateStaysPages() {
