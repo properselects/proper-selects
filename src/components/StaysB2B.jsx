@@ -13,17 +13,29 @@ const C = {
 const CONCIERGE_RATE = 0.15;
 const PARTY_COLOR = { Artists: C.blue, Crew: C.gold, Staff: C.green };
 
-// Real Dream Rentals Austin inventory (nightly rates indicative).
+// Real Austin inventory from two partner property managers (nightly rates indicative).
+const MGR = { dream: { name: 'Dream Rentals', color: '#F4A93C' }, five: { name: 'Five Star VHR', color: '#8b7cf6' } };
 const PROPS = [
-  { id: 'p1', name: 'ATX 4BD Oasis', badge: 'Headliner-ready', price: 1450, br: '4 BR · sleeps 19', hood: 'Austin',
+  // ── Dream Rentals ──
+  { id: 'p1', mgr: 'dream', name: 'ATX 4BD Oasis', badge: 'Headliner-ready', price: 1450, br: '4 BR · sleeps 19', hood: 'Austin',
     img: 'https://thedreamrentals.com/wp-content/uploads/2026/06/fq52vxb7991srcgosgj0-scaled.jpg',
     url: 'https://thedreamrentals.com/listing/austin-4bd-oasis-sauna-cold-plunge-beauty-bar/', amen: 'Sauna · Cold Plunge · Beauty Bar' },
-  { id: 'p2', name: 'ATX Getaway', badge: 'Crew favorite', price: 895, br: '3 BR · sleeps 14', hood: 'Austin',
+  { id: 'p2', mgr: 'dream', name: 'ATX Getaway', badge: 'Crew favorite', price: 895, br: '3 BR · sleeps 14', hood: 'Austin',
     img: 'https://thedreamrentals.com/wp-content/uploads/2026/06/szr2hafqsmrmwoppk2s1-scaled.jpg',
     url: 'https://thedreamrentals.com/listing/atx-getaway-with-cowboy-pool-fire-pit-rooftop/', amen: 'Cowboy Pool · Fire Pit · Rooftop' },
-  { id: 'p3', name: 'Luxury Austin Retreat', badge: 'Full compound', price: 2100, br: '7 BR · sleeps 30', hood: 'Austin',
+  { id: 'p3', mgr: 'dream', name: 'Luxury Austin Retreat', badge: 'Full compound', price: 2100, br: '7 BR · sleeps 30', hood: 'Austin',
     img: 'https://thedreamrentals.com/wp-content/uploads/2026/07/zva0hfsyhmnnxxdruh6w-scaled.jpg',
     url: 'https://thedreamrentals.com/listing/luxury-7bd-austin-retreat-for-30-w-outdoor-oasis/', amen: 'Pool · Sauna · Cold Plunge · Outdoor Oasis' },
+  // ── Five Star Vacation Home Rentals ──
+  { id: 'p4', mgr: 'five', name: 'Serenita Estate', badge: 'Hill Country', price: 1850, br: '10 acres · large groups', hood: 'Austin',
+    img: 'https://uc.orez.io/i/3b74ac54f80c4d0d87af495a70616e3c-Medium',
+    url: 'https://www.fivestarvacationhomerentals.com/serenita-estatehill-country-retreat-10-acres-pooljacuzzi-orp5b6cffbx', amen: 'Pool · Jacuzzi · 10 private acres' },
+  { id: 'p5', mgr: 'five', name: 'La Mariposa', badge: 'Biggest group', price: 2400, br: '2 homes · sleeps 25', hood: 'Austin',
+    img: 'https://uc.orez.io/i/a110e28a0f32492c89869f40d84faa38-Medium',
+    url: 'https://www.fivestarvacationhomerentals.com/la-mariposa-2-luxury-homes-on-full-acre-sleeps-25-orp5b6addcx', amen: 'Two luxury homes on a full acre' },
+  { id: 'p6', mgr: 'five', name: 'Estrella Azul', badge: 'Central Austin', price: 1250, br: 'Luxury · central', hood: 'Austin',
+    img: 'https://uc.orez.io/i/02207f1c3726418798aae00f0e39b1b0-Medium',
+    url: 'https://www.fivestarvacationhomerentals.com/estrella-azul-a-luxury-escape-in-the-heart-of-austin-orp5b6d7c1x', amen: 'Luxury escape in the heart of Austin' },
 ];
 
 const ADDONS = {
@@ -58,6 +70,7 @@ export default function StaysB2B() {
   const [propParty, setPropParty] = useState({});
   const [qty, setQty] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [mgrFilter, setMgrFilter] = useState('all'); // 'all' | 'dream' | 'five'
 
   // The SPA locks html/body/#root to overflow:hidden for the tabbed app shell.
   // This is a standalone scrolling page, so re-enable scroll while it's mounted.
@@ -95,7 +108,7 @@ export default function StaysB2B() {
     const p = PROPS.find((x) => x.id === id);
     const t = p.price * q * nights; sub += t;
     const party = propParty[id] || 'Artists'; const col = PARTY_COLOR[party];
-    lines.push({ name: p.name, party, col, sub: `${fmt(p.price)}/night × ${q} home${q > 1 ? 's' : ''} × ${nights} nts`, v: t });
+    lines.push({ name: p.name, party, col, mgr: MGR[p.mgr]?.name, sub: `${fmt(p.price)}/night × ${q} home${q > 1 ? 's' : ''} × ${nights} nts`, v: t });
   }
   for (const id in qty) {
     const q = qty[id]; if (q <= 0) continue;
@@ -174,14 +187,24 @@ export default function StaysB2B() {
       <div style={{ ...s.wrap, display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 372px', gap: 32, padding: '26px 0 90px', alignItems: 'start' }} className="ps-b2b-grid">
         <div>
           {/* Section 1: Housing */}
-          <Section num="1" title="Housing — assign by group" sub="Book one or more Dream Rentals homes and tag each to a party: Artists · Crew · Staff. Set quantity per property.">
+          <Section num="1" title="Housing — assign by group" sub="Book homes from either partner property manager and tag each to a party: Artists · Crew · Staff. Set quantity per property.">
+            {/* Property-manager filter */}
+            <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+              <span style={{ fontSize: 11, color: C.dim2, textTransform: 'uppercase', letterSpacing: '.1em', marginRight: 2 }}>Managed by</span>
+              {[['all', 'All partners', C.txt], ['dream', MGR.dream.name, MGR.dream.color], ['five', MGR.five.name, MGR.five.color]].map(([k, label, col]) => {
+                const on = mgrFilter === k;
+                return <span key={k} onClick={() => setMgrFilter(k)} style={{ fontSize: 12, fontWeight: 600, padding: '6px 13px', borderRadius: 20, cursor: 'pointer', border: `1px solid ${on ? col : C.line}`, background: on ? `${col}1f` : 'transparent', color: on ? col : C.dim }}>{label}</span>;
+              })}
+            </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(260px,1fr))', gap: 18 }}>
-              {PROPS.map((p) => {
+              {PROPS.filter((p) => mgrFilter === 'all' || p.mgr === mgrFilter).map((p) => {
                 const q = propQty[p.id] || 0; const party = propParty[p.id] || 'Artists';
+                const m = MGR[p.mgr];
                 return (
                   <div key={p.id} style={{ background: C.card, border: `1px solid ${q > 0 ? C.gold : C.line}`, borderRadius: 18, overflow: 'hidden', boxShadow: q > 0 ? `0 0 0 1px ${C.gold}` : 'none', transition: '.2s' }}>
                     <div style={{ height: 150, backgroundImage: `url('${p.img}')`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
                       {p.badge && <span style={{ position: 'absolute', top: 12, left: 12, background: 'rgba(10,10,15,.78)', backdropFilter: 'blur(6px)', color: C.gold, fontSize: 10.5, fontWeight: 700, letterSpacing: '.06em', padding: '5px 10px', borderRadius: 20, textTransform: 'uppercase' }}>{p.badge}</span>}
+                      <span style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(10,10,15,.82)', backdropFilter: 'blur(6px)', color: m.color, fontSize: 10, fontWeight: 700, letterSpacing: '.04em', padding: '5px 9px', borderRadius: 20, border: `1px solid ${m.color}66`, display: 'flex', alignItems: 'center', gap: 5 }}><span style={{ width: 6, height: 6, borderRadius: '50%', background: m.color }} />{m.name}</span>
                     </div>
                     <div style={{ padding: '15px 16px 16px' }}>
                       <h3 style={{ fontFamily: "'Sora'", fontSize: 16, fontWeight: 700 }}>{p.name}</h3>
@@ -230,7 +253,7 @@ export default function StaysB2B() {
                   <div style={{ color: C.txt }}>
                     {l.name}
                     {l.party && <span style={{ fontSize: 9, padding: '1px 6px', borderRadius: 10, marginLeft: 6, background: `${l.col}22`, color: l.col, fontWeight: 700 }}>{l.party}</span>}
-                    <small style={{ display: 'block', color: C.dim2, fontSize: 11, marginTop: 2 }}>{l.sub}</small>
+                    <small style={{ display: 'block', color: C.dim2, fontSize: 11, marginTop: 2 }}>{l.mgr ? `${l.mgr} · ` : ''}{l.sub}</small>
                   </div>
                   <div style={{ fontFamily: "'Sora'", fontWeight: 600, whiteSpace: 'nowrap' }}>{fmt(l.v)}</div>
                 </div>
