@@ -179,24 +179,24 @@ export default function StaysB2B() {
           <span style={{ width: 26, height: 26, borderRadius: 7, background: `linear-gradient(135deg,${C.gold},${C.gold2})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.bg, fontSize: 15 }}>◆</span>
           PROPER SELECTS <span style={{ color: C.gold, fontWeight: 600, fontSize: 11, letterSpacing: '.12em' }}>· EVENT HOSPITALITY</span>
         </a>
-        <div style={{ fontSize: 11, color: C.dim, border: `1px solid ${C.line}`, padding: '5px 12px', borderRadius: 20 }}>B2B Portal · Powered by Dream Rentals</div>
+        <div style={{ fontSize: 11, color: C.dim, border: `1px solid ${C.line}`, padding: '5px 12px', borderRadius: 20 }}>Concierge Portal · Powered by 4TC Concierge Hospitality Group</div>
       </div></div>
 
       {/* Hero */}
       <section style={s.hero}>
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(900px 380px at 78% -10%,rgba(244,169,60,.16),transparent 60%),radial-gradient(700px 400px at 8% 120%,rgba(96,165,250,.10),transparent 55%)' }} />
         <div style={{ ...s.wrap, position: 'relative' }}>
-          <span style={s.kick}>◆ For production companies · Powered by Dream Rentals</span>
+          <span style={s.kick}>◆ For tours, teams &amp; private groups · Powered by 4TC Concierge Hospitality Group</span>
           <h1 style={{ fontFamily: "'Sora'", fontSize: 46, lineHeight: 1.06, fontWeight: 800, letterSpacing: '-.02em', maxWidth: '17ch' }}>
             Provision your <span style={{ background: `linear-gradient(120deg,${C.gold},${C.gold2})`, WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>entire event's hospitality</span> in one order.
           </h1>
           <p style={{ color: C.dim, fontSize: 17, maxWidth: '60ch', marginTop: 16 }}>
-            Book housing and on-site services for your artists, touring crew, and event staff — all in a single itemized order. Proper Selects coordinates every vendor; you get one invoice, one point of contact, net-30 terms.
+            Book housing and on-site services for your whole group — tours &amp; crews, corporate teams, wedding parties, or private getaways — in a single itemized order. 4TC Concierge coordinates every vendor; you get one invoice, one point of contact, net-30 terms.
           </p>
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 26 }}>
             <div style={{ ...s.field, minWidth: 210 }}>
-              <label style={s.fieldLabel}>Production Company</label>
-              <input value={prodCo} onChange={(e) => setProdCo(e.target.value)} placeholder="Your company" style={s.fieldInput} />
+              <label style={s.fieldLabel}>Company / Group</label>
+              <input value={prodCo} onChange={(e) => setProdCo(e.target.value)} placeholder="Your company or group" style={s.fieldInput} />
             </div>
             <div style={{ ...s.field, minWidth: 210 }}>
               <label style={s.fieldLabel}>Event</label>
@@ -327,7 +327,7 @@ export default function StaysB2B() {
       </div>
 
       <div style={{ borderTop: `1px solid ${C.line}`, padding: '30px 0', color: C.dim2, fontSize: 12, textAlign: 'center' }}>
-        Proper Selects × Dream Rentals · B2B Event Hospitality Portal · properselects.com
+        Proper Selects · Event Hospitality Portal · Powered by 4TC Concierge Hospitality Group · properselects.com
       </div>
 
       <style>{`@media(max-width:980px){.ps-b2b-grid{grid-template-columns:1fr !important}}`}</style>
