@@ -161,9 +161,9 @@ export default function StaysB2B() {
     }
     setSending(true);
     try {
-      const r = await fetch('/api/b2b-inquiry', {
+      const r = await fetch('/api/subscribe', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prodCo, eventName, checkIn, checkOut, nights, headcount, subtotal: sub, fee, total: grand, lines, contactName, contactEmail }),
+        body: JSON.stringify({ kind: 'b2b_inquiry', prodCo, eventName, checkIn, checkOut, nights, headcount, subtotal: sub, fee, total: grand, lines, contactName, contactEmail }),
       });
       if (!r.ok) throw new Error('send failed');
       setSubmitted(true);
