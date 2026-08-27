@@ -202,12 +202,15 @@ export default function StaysB2B() {
                 const m = MGR[p.mgr];
                 return (
                   <div key={p.id} style={{ background: C.card, border: `1px solid ${q > 0 ? C.gold : C.line}`, borderRadius: 18, overflow: 'hidden', boxShadow: q > 0 ? `0 0 0 1px ${C.gold}` : 'none', transition: '.2s' }}>
-                    <div style={{ height: 150, backgroundImage: `url('${p.img}')`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
+                    <a href={p.url} target="_blank" rel="noopener noreferrer" title={`View ${p.name} on ${m.name}`} style={{ display: 'block', height: 150, backgroundImage: `url('${p.img}')`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', cursor: 'pointer' }}>
                       {p.badge && <span style={{ position: 'absolute', top: 12, left: 12, background: 'rgba(10,10,15,.78)', backdropFilter: 'blur(6px)', color: C.gold, fontSize: 10.5, fontWeight: 700, letterSpacing: '.06em', padding: '5px 10px', borderRadius: 20, textTransform: 'uppercase' }}>{p.badge}</span>}
                       <span style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(10,10,15,.82)', backdropFilter: 'blur(6px)', color: m.color, fontSize: 10, fontWeight: 700, letterSpacing: '.04em', padding: '5px 9px', borderRadius: 20, border: `1px solid ${m.color}66`, display: 'flex', alignItems: 'center', gap: 5 }}><span style={{ width: 6, height: 6, borderRadius: '50%', background: m.color }} />{m.name}</span>
-                    </div>
+                      <span style={{ position: 'absolute', bottom: 10, right: 12, background: 'rgba(10,10,15,.82)', backdropFilter: 'blur(6px)', color: C.txt, fontSize: 10.5, fontWeight: 600, padding: '4px 9px', borderRadius: 20 }}>View listing ↗</span>
+                    </a>
                     <div style={{ padding: '15px 16px 16px' }}>
-                      <h3 style={{ fontFamily: "'Sora'", fontSize: 16, fontWeight: 700 }}>{p.name}</h3>
+                      <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                        <h3 style={{ fontFamily: "'Sora'", fontSize: 16, fontWeight: 700, color: C.txt }}>{p.name}</h3>
+                      </a>
                       <div style={{ color: C.dim, fontSize: 12.5, marginTop: 4, display: 'flex', gap: 10, flexWrap: 'wrap' }}><span>📍 {p.hood}</span><span>🛏️ {p.br}</span></div>
                       <div style={{ color: C.dim2, fontSize: 11.5, marginTop: 6 }}>{p.amen}</div>
                       <div style={{ marginTop: 11, display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
