@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SUPABASE_URL } from '../lib/supabase.js';
 
 // Proper Selects × Dream Rentals — B2B Event Hospitality Portal.
@@ -58,6 +58,23 @@ export default function StaysB2B() {
   const [propParty, setPropParty] = useState({});
   const [qty, setQty] = useState({});
   const [submitted, setSubmitted] = useState(false);
+
+  // The SPA locks html/body/#root to overflow:hidden for the tabbed app shell.
+  // This is a standalone scrolling page, so re-enable scroll while it's mounted.
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    const root = document.getElementById('root');
+    const prev = { html: html.style.overflow, body: body.style.overflow, root: root?.style.overflow };
+    html.style.overflow = 'auto';
+    body.style.overflow = 'auto';
+    if (root) root.style.overflow = 'auto';
+    return () => {
+      html.style.overflow = prev.html;
+      body.style.overflow = prev.body;
+      if (root) root.style.overflow = prev.root;
+    };
+  }, []);
 
   const chgProp = (id, d) => {
     setPropQty((p) => ({ ...p, [id]: Math.max(0, (p[id] || 0) + d) }));
