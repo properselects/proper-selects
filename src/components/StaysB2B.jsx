@@ -193,7 +193,14 @@ export default function StaysB2B() {
           <p style={{ color: C.dim, fontSize: 17, maxWidth: '60ch', marginTop: 16 }}>
             Book housing and on-site services for your whole group — tours &amp; crews, corporate teams, wedding parties, or private getaways — in a single itemized order. 4TC Concierge coordinates every vendor; you get one invoice, one point of contact, net-30 terms.
           </p>
-          <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 26 }}>
+          <div style={{ marginTop: 30, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span style={{ ...s.secNum }}>✓</span>
+            <div>
+              <div style={{ fontFamily: "'Sora'", fontWeight: 700, fontSize: 16, color: C.txt }}>Start your request</div>
+              <div style={{ fontSize: 12.5, color: C.dim2 }}>Tell us who's coming and when — everything below prices to it automatically.</div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 6 }}>
             <div style={{ ...s.field, minWidth: 210 }}>
               <label style={s.fieldLabel}>Company / Group</label>
               <input value={prodCo} onChange={(e) => setProdCo(e.target.value)} placeholder="Your company or group" style={s.fieldInput} />
@@ -309,11 +316,11 @@ export default function StaysB2B() {
             </div>
             <div style={{ marginTop: 14, borderTop: `1px solid ${C.line}`, paddingTop: 14 }}>
               <Row label="Subtotal" val={fmt(sub)} C={C} />
-              <Row label="Proper Selects concierge fee (15%)" val={fmt(fee)} C={C} />
+              <Row label="4TC concierge fee (15%)" val={fmt(fee)} C={C} />
               <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: "'Sora'", fontSize: 21, fontWeight: 800, marginTop: 6 }}>
                 <span>Order total (est.)</span><span style={{ color: C.gold }}>{fmt(grand)}</span>
               </div>
-              <div style={{ fontSize: 11, color: C.dim2, marginTop: 4 }}>Single itemized invoice · all vendors coordinated by Proper Selects</div>
+              <div style={{ fontSize: 11, color: C.dim2, marginTop: 4 }}>Single itemized invoice · all vendors coordinated by 4TC Concierge</div>
             </div>
             <button onClick={submit} style={{ display: 'block', width: '100%', marginTop: 16, background: submitted ? C.green : `linear-gradient(120deg,${C.gold},${C.gold2})`, color: C.bg, border: 'none', padding: 15, borderRadius: 13, fontFamily: "'Sora'", fontWeight: 800, fontSize: 15, cursor: 'pointer', transition: '.2s' }}>
               {submitted ? '✓ Order submitted — coordinator notified' : 'Submit Order for Confirmation →'}
