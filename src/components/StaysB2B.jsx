@@ -13,8 +13,12 @@ const C = {
 const CONCIERGE_RATE = 0.15;
 const PARTY_COLOR = { Artists: C.blue, Crew: C.gold, Staff: C.green };
 
-// Real Austin inventory from two partner property managers (nightly rates indicative).
-const MGR = { dream: { name: 'Dream Rentals', color: '#F4A93C' }, five: { name: 'Five Star VHR', color: '#8b7cf6' } };
+// Real Austin inventory from partner property managers (Dream Rentals & Five Star rates indicative; Cribs live).
+const MGR = {
+  dream: { name: 'Dream Rentals', color: '#F4A93C' },
+  five: { name: 'Five Star VHR', color: '#a78bfa' },
+  cribs: { name: 'CRIBS', color: '#2dd4bf' },
+};
 const PROPS = [
   // ── Dream Rentals ──
   { id: 'p1', mgr: 'dream', name: 'ATX 4BD Oasis', badge: 'Headliner-ready', price: 1450, br: '4 BR · sleeps 19', hood: 'Austin',
@@ -36,6 +40,16 @@ const PROPS = [
   { id: 'p6', mgr: 'five', name: 'Estrella Azul', badge: 'Central Austin', price: 1250, br: 'Luxury · central', hood: 'Austin',
     img: 'https://uc.orez.io/i/02207f1c3726418798aae00f0e39b1b0-Medium',
     url: 'https://www.fivestarvacationhomerentals.com/estrella-azul-a-luxury-escape-in-the-heart-of-austin-orp5b6d7c1x', amen: 'Luxury escape in the heart of Austin' },
+  // ── CRIBS (real listings + live nightly rates) ──
+  { id: 'p7', mgr: 'cribs', name: 'Eastside Lux Group Retreat', badge: 'Near downtown', price: 250, br: '5 BR · 4 BA', hood: 'East Austin',
+    img: 'https://assets.wander.com/639647620880404389/1200.webp',
+    url: 'https://www.cribsconsulting.com/', amen: 'Pool · Group retreat · walk to downtown' },
+  { id: 'p8', mgr: 'cribs', name: 'ATX Creekside Duplex', badge: 'Value pick', price: 295, br: '6 BR · 6.5 BA', hood: 'Austin',
+    img: 'https://assets.wander.com/639648356141892280/1200.webp',
+    url: 'https://www.cribsconsulting.com/', amen: 'Modern full duplex · Hot Tub · creekside' },
+  { id: 'p9', mgr: 'cribs', name: 'Lake Travis Estate', badge: 'Waterfront', price: 342, br: '7 BR · 4.5 BA', hood: 'Lake Travis',
+    img: 'https://assets.wander.com/639650825639038929/1200.webp',
+    url: 'https://www.cribsconsulting.com/', amen: 'Spectacular pool · lake views' },
 ];
 
 const ADDONS = {
@@ -183,14 +197,17 @@ export default function StaysB2B() {
       </div></div>
 
       {/* Hero */}
-      <section style={s.hero}>
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(900px 380px at 78% -10%,rgba(244,169,60,.16),transparent 60%),radial-gradient(700px 400px at 8% 120%,rgba(96,165,250,.10),transparent 55%)' }} />
+      <section style={{ ...s.hero, position: 'relative' }}>
+        {/* Cinematic background image */}
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('https://thedreamrentals.com/wp-content/uploads/2026/07/zva0hfsyhmnnxxdruh6w-scaled.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.28 }} />
+        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(180deg, rgba(10,10,15,.72) 0%, rgba(10,10,15,.86) 55%, ${C.bg} 100%)` }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(1100px 460px at 82% -12%,rgba(244,169,60,.22),transparent 62%),radial-gradient(760px 420px at 4% 118%,rgba(167,139,250,.12),transparent 58%)' }} />
         <div style={{ ...s.wrap, position: 'relative' }}>
           <span style={s.kick}>◆ For tours, teams &amp; private groups · Powered by 4TC Concierge Hospitality Group</span>
-          <h1 style={{ fontFamily: "'Sora'", fontSize: 46, lineHeight: 1.06, fontWeight: 800, letterSpacing: '-.02em', maxWidth: '17ch' }}>
+          <h1 style={{ fontFamily: "'Sora'", fontSize: 56, lineHeight: 1.02, fontWeight: 800, letterSpacing: '-.03em', maxWidth: '15ch', textShadow: '0 2px 30px rgba(0,0,0,.5)' }}>
             Provision your <span style={{ background: `linear-gradient(120deg,${C.gold},${C.gold2})`, WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>entire event's hospitality</span> in one order.
           </h1>
-          <p style={{ color: C.dim, fontSize: 17, maxWidth: '60ch', marginTop: 16 }}>
+          <p style={{ color: 'rgba(237,234,226,.72)', fontSize: 17.5, maxWidth: '58ch', marginTop: 18, lineHeight: 1.6 }}>
             Book housing and on-site services for your whole group — tours &amp; crews, corporate teams, wedding parties, or private getaways — in a single itemized order. 4TC Concierge coordinates every vendor; you get one invoice, one point of contact, net-30 terms.
           </p>
           <div style={{ marginTop: 30, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -201,23 +218,23 @@ export default function StaysB2B() {
             </div>
           </div>
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 6 }}>
-            <div style={{ ...s.field, minWidth: 210 }}>
+            <div className="ps-field" style={{ ...s.field, minWidth: 210 }}>
               <label style={s.fieldLabel}>Company / Group</label>
               <input value={prodCo} onChange={(e) => setProdCo(e.target.value)} placeholder="Your company or group" style={s.fieldInput} />
             </div>
-            <div style={{ ...s.field, minWidth: 210 }}>
+            <div className="ps-field" style={{ ...s.field, minWidth: 210 }}>
               <label style={s.fieldLabel}>Event</label>
               <input value={eventName} onChange={(e) => setEventName(e.target.value)} placeholder="Event name" style={s.fieldInput} />
             </div>
-            <div style={s.field}>
+            <div className="ps-field" style={s.field}>
               <label style={s.fieldLabel}>Check-in</label>
               <input type="date" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} style={{ ...s.fieldInput, colorScheme: 'dark' }} />
             </div>
-            <div style={s.field}>
+            <div className="ps-field" style={s.field}>
               <label style={s.fieldLabel}>Check-out</label>
               <input type="date" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} style={{ ...s.fieldInput, colorScheme: 'dark' }} />
             </div>
-            <div style={{ ...s.field, minWidth: 130 }}>
+            <div className="ps-field" style={{ ...s.field, minWidth: 130 }}>
               <label style={s.fieldLabel}>Total Headcount</label>
               <input type="number" min="1" value={headcount} onChange={(e) => setHeadcount(e.target.value)} placeholder="0" style={s.fieldInput} />
             </div>
@@ -233,7 +250,7 @@ export default function StaysB2B() {
             {/* Property-manager filter */}
             <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
               <span style={{ fontSize: 11, color: C.dim2, textTransform: 'uppercase', letterSpacing: '.1em', marginRight: 2 }}>Managed by</span>
-              {[['all', 'All partners', C.txt], ['dream', MGR.dream.name, MGR.dream.color], ['five', MGR.five.name, MGR.five.color]].map(([k, label, col]) => {
+              {[['all', 'All partners', C.txt], ['dream', MGR.dream.name, MGR.dream.color], ['five', MGR.five.name, MGR.five.color], ['cribs', MGR.cribs.name, MGR.cribs.color]].map(([k, label, col]) => {
                 const on = mgrFilter === k;
                 return <span key={k} onClick={() => setMgrFilter(k)} style={{ fontSize: 12, fontWeight: 600, padding: '6px 13px', borderRadius: 20, cursor: 'pointer', border: `1px solid ${on ? col : C.line}`, background: on ? `${col}1f` : 'transparent', color: on ? col : C.dim }}>{label}</span>;
               })}
@@ -243,11 +260,13 @@ export default function StaysB2B() {
                 const q = propQty[p.id] || 0; const party = propParty[p.id] || 'Artists';
                 const m = MGR[p.mgr];
                 return (
-                  <div key={p.id} style={{ background: C.card, border: `1px solid ${q > 0 ? C.gold : C.line}`, borderRadius: 18, overflow: 'hidden', boxShadow: q > 0 ? `0 0 0 1px ${C.gold}` : 'none', transition: '.2s' }}>
-                    <a href={p.url} target="_blank" rel="noopener noreferrer" title={`View ${p.name} on ${m.name}`} style={{ display: 'block', height: 150, backgroundImage: `url('${p.img}')`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', cursor: 'pointer' }}>
-                      {p.badge && <span style={{ position: 'absolute', top: 12, left: 12, background: 'rgba(10,10,15,.78)', backdropFilter: 'blur(6px)', color: C.gold, fontSize: 10.5, fontWeight: 700, letterSpacing: '.06em', padding: '5px 10px', borderRadius: 20, textTransform: 'uppercase' }}>{p.badge}</span>}
-                      <span style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(10,10,15,.82)', backdropFilter: 'blur(6px)', color: m.color, fontSize: 10, fontWeight: 700, letterSpacing: '.04em', padding: '5px 9px', borderRadius: 20, border: `1px solid ${m.color}66`, display: 'flex', alignItems: 'center', gap: 5 }}><span style={{ width: 6, height: 6, borderRadius: '50%', background: m.color }} />{m.name}</span>
-                      <span style={{ position: 'absolute', bottom: 10, right: 12, background: 'rgba(10,10,15,.82)', backdropFilter: 'blur(6px)', color: C.txt, fontSize: 10.5, fontWeight: 600, padding: '4px 9px', borderRadius: 20 }}>View listing ↗</span>
+                  <div key={p.id} className="ps-prop" style={{ background: C.card, border: `1px solid ${q > 0 ? C.gold : C.line}`, borderRadius: 18, overflow: 'hidden', boxShadow: q > 0 ? `0 0 0 1px ${C.gold}, 0 18px 44px rgba(244,169,60,.10)` : 'none' }}>
+                    <a href={p.url} target="_blank" rel="noopener noreferrer" title={`View ${p.name} on ${m.name}`} style={{ display: 'block', height: 158, position: 'relative', cursor: 'pointer', overflow: 'hidden' }}>
+                      <div className="ps-img" style={{ position: 'absolute', inset: 0, backgroundImage: `url('${p.img}')`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg,rgba(10,10,15,.15) 0%,transparent 30%,transparent 60%,rgba(10,10,15,.55) 100%)' }} />
+                      {p.badge && <span style={{ position: 'absolute', top: 12, left: 12, background: 'rgba(10,10,15,.6)', backdropFilter: 'blur(10px)', color: C.gold, fontSize: 10, fontWeight: 700, letterSpacing: '.08em', padding: '5px 10px', borderRadius: 20, textTransform: 'uppercase', border: '1px solid rgba(255,255,255,.08)' }}>{p.badge}</span>}
+                      <span style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(10,10,15,.6)', backdropFilter: 'blur(10px)', color: m.color, fontSize: 10, fontWeight: 700, letterSpacing: '.04em', padding: '5px 9px', borderRadius: 20, border: `1px solid ${m.color}55`, display: 'flex', alignItems: 'center', gap: 5 }}><span style={{ width: 6, height: 6, borderRadius: '50%', background: m.color, boxShadow: `0 0 8px ${m.color}` }} />{m.name}</span>
+                      <span style={{ position: 'absolute', bottom: 11, right: 12, background: 'rgba(255,255,255,.12)', backdropFilter: 'blur(10px)', color: C.txt, fontSize: 10.5, fontWeight: 600, padding: '4px 10px', borderRadius: 20, border: '1px solid rgba(255,255,255,.14)' }}>View listing ↗</span>
                     </a>
                     <div style={{ padding: '15px 16px 16px' }}>
                       <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
@@ -322,7 +341,7 @@ export default function StaysB2B() {
               </div>
               <div style={{ fontSize: 11, color: C.dim2, marginTop: 4 }}>Single itemized invoice · all vendors coordinated by 4TC Concierge</div>
             </div>
-            <button onClick={submit} style={{ display: 'block', width: '100%', marginTop: 16, background: submitted ? C.green : `linear-gradient(120deg,${C.gold},${C.gold2})`, color: C.bg, border: 'none', padding: 15, borderRadius: 13, fontFamily: "'Sora'", fontWeight: 800, fontSize: 15, cursor: 'pointer', transition: '.2s' }}>
+            <button onClick={submit} className="ps-cta" style={{ display: 'block', width: '100%', marginTop: 16, background: submitted ? C.green : `linear-gradient(120deg,${C.gold},${C.gold2})`, color: C.bg, border: 'none', padding: 15, borderRadius: 13, fontFamily: "'Sora'", fontWeight: 800, fontSize: 15, cursor: 'pointer', boxShadow: '0 10px 26px rgba(244,169,60,.22)' }}>
               {submitted ? '✓ Order submitted — coordinator notified' : 'Submit Order for Confirmation →'}
             </button>
             <div style={{ display: 'flex', gap: 8, marginTop: 12, fontSize: 11, color: C.dim2, alignItems: 'center', justifyContent: 'center' }}>
@@ -337,7 +356,22 @@ export default function StaysB2B() {
         Proper Selects · Event Hospitality Portal · Powered by 4TC Concierge Hospitality Group · properselects.com
       </div>
 
-      <style>{`@media(max-width:980px){.ps-b2b-grid{grid-template-columns:1fr !important}}`}</style>
+      <style>{`
+        @media(max-width:980px){.ps-b2b-grid{grid-template-columns:1fr !important}}
+        .ps-prop{transition:transform .28s cubic-bezier(.2,.7,.3,1),box-shadow .28s,border-color .2s;will-change:transform}
+        .ps-prop:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,.55)}
+        .ps-prop .ps-img{transition:transform .6s cubic-bezier(.2,.7,.3,1)}
+        .ps-prop:hover .ps-img{transform:scale(1.07)}
+        .ps-addon{transition:transform .2s,border-color .2s,background .2s}
+        .ps-addon:hover{transform:translateY(-2px)}
+        .ps-cta{transition:transform .2s,box-shadow .2s,filter .2s}
+        .ps-cta:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(244,169,60,.34);filter:brightness(1.05)}
+        .ps-field input:focus{outline:none}
+        .ps-field:focus-within{border-color:${C.gold}77 !important;box-shadow:0 0 0 3px rgba(244,169,60,.10)}
+        .ps-chip{transition:all .16s}
+        ::selection{background:${C.gold};color:${C.bg}}
+        input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.7) sepia(1) saturate(3) hue-rotate(5deg);cursor:pointer}
+      `}</style>
     </div>
   );
 }
@@ -362,7 +396,7 @@ function AddonSection({ num, title, sub, cat, qty, chg, stepper, C }) {
         {ADDONS[cat].map((a) => {
           const q = qty[a.id] || 0;
           return (
-            <div key={a.id} style={{ background: C.card, border: `1px solid ${q > 0 ? C.gold : C.line}`, borderRadius: 16, padding: 16, background: q > 0 ? `linear-gradient(180deg,rgba(244,169,60,.06),transparent)` : C.card }}>
+            <div key={a.id} className="ps-addon" style={{ background: q > 0 ? `linear-gradient(180deg,rgba(244,169,60,.07),transparent)` : C.card, border: `1px solid ${q > 0 ? C.gold : C.line}`, borderRadius: 16, padding: 16 }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
                 <div style={{ width: 42, height: 42, borderRadius: 11, background: C.card2, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 21, flex: '0 0 auto' }}>{a.ico}</div>
                 <div><h3 style={{ fontFamily: "'Sora'", fontSize: 14.5, fontWeight: 700 }}>{a.name}</h3><div style={{ fontSize: 11, color: C.gold, marginTop: 2 }}>{a.vend}</div></div>
