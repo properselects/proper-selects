@@ -63,14 +63,32 @@ const ADDONS = {
 };
 const findAddon = (id) => { for (const c in ADDONS) { const f = ADDONS[c].find((a) => a.id === id); if (f) return f; } };
 const fmt = (n) => '$' + Math.round(n).toLocaleString();
+const fmtDate = (iso) => {
+  if (!iso) return '—';
+  const d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+};
 
 export default function StaysB2B() {
-  const [nights, setNights] = useState(3);
   const [propQty, setPropQty] = useState({});
   const [propParty, setPropParty] = useState({});
   const [qty, setQty] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [mgrFilter, setMgrFilter] = useState('all'); // 'all' | 'dream' | 'five'
+  // Editable intake — pre-filled with the demo event, fully overridable.
+  const [prodCo, setProdCo] = useState('The Concourse Project');
+  const [eventName, setEventName] = useState('Seismic Dance Event 9.0');
+  const [checkIn, setCheckIn] = useState('2026-11-13');
+  const [checkOut, setCheckOut] = useState('2026-11-16');
+  const [headcount, setHeadcount] = useState('34');
+
+  // Nights derive from the actual reservation window; min 1 night.
+  const nights = (() => {
+    if (!checkIn || !checkOut) return 1;
+    const ms = new Date(checkOut) - new Date(checkIn);
+    const n = Math.round(ms / 86400000);
+    return n > 0 ? n : 1;
+  })();
 
   // The SPA locks html/body/#root to overflow:hidden for the tabbed app shell.
   // This is a standalone scrolling page, so re-enable scroll while it's mounted.
@@ -123,7 +141,7 @@ export default function StaysB2B() {
     // Fire-and-forget lead capture (reuses subscribe endpoint pattern)
     try {
       fetch(`${SUPABASE_URL}/rest/v1/rpc/log_event`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ kind: 'b2b_concierge_order', total: grand }) }).catch(() => {});
+        body: JSON.stringify({ kind: 'b2b_concierge_order', total: grand, prodCo, eventName, checkIn, checkOut, nights, headcount }) }).catch(() => {});
     } catch {}
     setSubmitted(true);
     setTimeout(() => setSubmitted(false), 2600);
@@ -176,9 +194,26 @@ export default function StaysB2B() {
             Book housing and on-site services for your artists, touring crew, and event staff — all in a single itemized order. Proper Selects coordinates every vendor; you get one invoice, one point of contact, net-30 terms.
           </p>
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 26 }}>
-            {[['Production Company', 'The Concourse Project'], ['Event', 'Seismic Dance Event 9.0'], ['Dates', 'Nov 13–15, 2026'], ['Total Headcount', '34 (artists + crew + staff)']].map(([l, v]) => (
-              <div key={l} style={s.field}><label style={s.fieldLabel}>{l}</label><input defaultValue={v} style={s.fieldInput} /></div>
-            ))}
+            <div style={{ ...s.field, minWidth: 210 }}>
+              <label style={s.fieldLabel}>Production Company</label>
+              <input value={prodCo} onChange={(e) => setProdCo(e.target.value)} placeholder="Your company" style={s.fieldInput} />
+            </div>
+            <div style={{ ...s.field, minWidth: 210 }}>
+              <label style={s.fieldLabel}>Event</label>
+              <input value={eventName} onChange={(e) => setEventName(e.target.value)} placeholder="Event name" style={s.fieldInput} />
+            </div>
+            <div style={s.field}>
+              <label style={s.fieldLabel}>Check-in</label>
+              <input type="date" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} style={{ ...s.fieldInput, colorScheme: 'dark' }} />
+            </div>
+            <div style={s.field}>
+              <label style={s.fieldLabel}>Check-out</label>
+              <input type="date" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} style={{ ...s.fieldInput, colorScheme: 'dark' }} />
+            </div>
+            <div style={{ ...s.field, minWidth: 130 }}>
+              <label style={s.fieldLabel}>Total Headcount</label>
+              <input type="number" min="1" value={headcount} onChange={(e) => setHeadcount(e.target.value)} placeholder="0" style={s.fieldInput} />
+            </div>
           </div>
         </div>
       </section>
@@ -246,9 +281,19 @@ export default function StaysB2B() {
               Event Hospitality Order
               <span onClick={clearAll} style={{ fontSize: 11, color: C.dim2, cursor: 'pointer', fontWeight: 500 }}>Clear</span>
             </h3>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '15px 0', padding: '11px 14px', background: C.bg2, borderRadius: 12, border: `1px solid ${C.line}` }}>
-              <label style={{ fontSize: 13, color: C.dim }}>Nights of housing</label>
-              {stepper(() => setNights((n) => Math.max(1, n - 1)), nights, () => setNights((n) => n + 1))}
+            {(prodCo || eventName) && (
+              <div style={{ margin: '13px 0 6px', fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
+                {prodCo && <div style={{ color: C.txt, fontWeight: 600, fontFamily: "'Sora'" }}>{prodCo}</div>}
+                {eventName && <div>{eventName}</div>}
+                {headcount && <div style={{ color: C.dim2 }}>{headcount} guests · artists + crew + staff</div>}
+              </div>
+            )}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '12px 0', padding: '11px 14px', background: C.bg2, borderRadius: 12, border: `1px solid ${C.line}` }}>
+              <div>
+                <label style={{ fontSize: 13, color: C.dim }}>Reservation</label>
+                <div style={{ fontSize: 11, color: C.dim2, marginTop: 2 }}>{fmtDate(checkIn)} → {fmtDate(checkOut)}</div>
+              </div>
+              <div style={{ fontFamily: "'Sora'", fontWeight: 700, fontSize: 15, color: C.gold, whiteSpace: 'nowrap' }}>{nights} {nights === 1 ? 'night' : 'nights'}</div>
             </div>
             <div style={{ marginTop: 6, maxHeight: 300, overflowY: 'auto' }}>
               {lines.length ? lines.map((l, i) => (
