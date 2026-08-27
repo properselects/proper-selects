@@ -99,6 +99,9 @@ export default function StaysVIP() {
   const [contactName, setContactName] = useState('');
   const [contactEmail, setContactEmail] = useState('');
   const [sending, setSending] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+  const [showInvoice, setShowInvoice] = useState(false);
+  const [invNum, setInvNum] = useState('');
 
   // Nights derive from the actual reservation window; min 1 night.
   const nights = (() => {
@@ -167,8 +170,10 @@ export default function StaysVIP() {
         body: JSON.stringify({ kind: 'b2b_inquiry', source: 'vip', prodCo, eventName, checkIn, checkOut, nights, headcount, subtotal: sub, fee, total: grand, lines, contactName: prodCo, contactEmail }),
       });
       if (!r.ok) throw new Error('send failed');
+      const now = new Date();
+      const stamp = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
+      setInvNum(`INV-${stamp}-${Math.floor(1000 + Math.random() * 9000)}`);
       setSubmitted(true);
-      setTimeout(() => setSubmitted(false), 3200);
     } catch {
       alert('Something went wrong sending your request. Please email contact@4tcproductions.com directly.');
     } finally {
@@ -350,13 +355,27 @@ export default function StaysVIP() {
               </div>
               <div style={{ fontSize: 11, color: C.dim2, marginTop: 4 }}>Single itemized invoice · all vendors coordinated by 4TC Concierge</div>
             </div>
-            <button onClick={submit} disabled={sending} className="ps-cta" style={{ display: 'block', width: '100%', marginTop: 16, background: submitted ? C.green : `linear-gradient(120deg,${C.gold},${C.gold2})`, color: C.bg, border: 'none', padding: 15, borderRadius: 13, fontFamily: "'Sora'", fontWeight: 800, fontSize: 15, cursor: sending ? 'wait' : 'pointer', opacity: sending ? 0.75 : 1, boxShadow: '0 10px 26px rgba(244,169,60,.22)' }}>
-              {submitted ? '✓ Request sent — 4TC will reply within 24h' : sending ? 'Sending…' : 'Submit Request for Confirmation →'}
-            </button>
+            {!submitted ? (
+              <button onClick={submit} disabled={sending} className="ps-cta" style={{ display: 'block', width: '100%', marginTop: 16, background: `linear-gradient(120deg,${C.gold},${C.gold2})`, color: C.bg, border: 'none', padding: 15, borderRadius: 13, fontFamily: "'Sora'", fontWeight: 800, fontSize: 15, cursor: sending ? 'wait' : 'pointer', opacity: sending ? 0.75 : 1, boxShadow: '0 10px 26px rgba(244,169,60,.22)' }}>
+                {sending ? 'Sending…' : 'Submit Request for Confirmation →'}
+              </button>
+            ) : (
+              <div style={{ marginTop: 16 }}>
+                <div style={{ background: 'rgba(52,211,153,.12)', border: '1px solid rgba(52,211,153,.3)', borderRadius: 13, padding: '13px 16px', textAlign: 'center', fontFamily: "'Sora'", fontWeight: 700, color: C.green, fontSize: 14 }}>
+                  ✓ Request sent — 4TC will reply within 24h
+                </div>
+                <button onClick={() => setShowInvoice(true)} style={{ display: 'block', width: '100%', marginTop: 10, background: C.card2, color: C.gold, border: `1px solid rgba(244,169,60,.35)`, padding: '11px 15px', borderRadius: 13, fontFamily: "'Sora'", fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>
+                  ↓ Save Invoice / Print
+                </button>
+              </div>
+            )}
             <div style={{ display: 'flex', gap: 8, marginTop: 12, fontSize: 11, color: C.dim2, alignItems: 'center', justifyContent: 'center' }}>
               {['Net-30 terms', 'One invoice', 'Dedicated coordinator'].map((t) => <span key={t} style={{ border: `1px solid ${C.line}`, borderRadius: 8, padding: '4px 8px' }}>{t}</span>)}
             </div>
-            <div style={{ fontSize: 11, color: C.dim2, textAlign: 'center', marginTop: 11, lineHeight: 1.5 }}>No charge today · a PS coordinator confirms vendor availability & returns a signed quote within 24h.</div>
+            <div style={{ fontSize: 11, color: C.dim2, textAlign: 'center', marginTop: 11, lineHeight: 1.5 }}>
+              No charge today · a PS coordinator confirms vendor availability &amp; returns a signed quote within 24h.<br />
+              <button onClick={() => setShowTerms(true)} style={{ background: 'none', border: 'none', color: C.dim, fontSize: 11, cursor: 'pointer', textDecoration: 'underline', marginTop: 5 }}>Terms &amp; Conditions</button>
+            </div>
           </div>
         </aside>
       </div>
@@ -364,6 +383,121 @@ export default function StaysVIP() {
       <div style={{ borderTop: `1px solid ${C.line}`, padding: '30px 0', color: C.dim2, fontSize: 12, textAlign: 'center' }}>
         Proper Selects · VIP Concierge · Powered by 4TC Concierge Hospitality Group · properselects.com
       </div>
+
+      {/* ── Terms & Conditions modal ── */}
+      {showTerms && (
+        <div onClick={() => setShowTerms(false)} style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(0,0,0,.72)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: '#16161f', border: '1px solid rgba(255,255,255,.1)', borderRadius: 18, maxWidth: 680, width: '100%', maxHeight: '85vh', overflowY: 'auto', padding: '32px 36px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
+              <div>
+                <div style={{ fontFamily: "'Sora'", fontWeight: 800, fontSize: 18, color: C.txt }}>Terms &amp; Conditions</div>
+                <div style={{ fontSize: 12, color: C.dim, marginTop: 3 }}>4TC Concierge Hospitality Group · VIP Concierge Services Agreement</div>
+              </div>
+              <button onClick={() => setShowTerms(false)} style={{ background: 'none', border: 'none', color: C.dim, fontSize: 22, cursor: 'pointer', lineHeight: 1 }}>×</button>
+            </div>
+            {[
+              ['1. Concierge Liaison Role', '4TC Concierge Hospitality Group ("4TC") and Proper Selects act solely as concierge coordinators and booking liaisons. We do not own, operate, manage, or control any of the properties, equipment, vehicles, catering services, or security personnel listed on this platform. All inventory and services are provided by independent third-party vendors.'],
+              ['2. No Inventory Ownership', 'All properties are independently owned and managed by Dream Rentals Austin, Five Star Vacation Home Rentals, CRIBS Consulting, or other third-party operators. All AV and backline equipment is provided by independent rental companies. All catering, security, and transport services are provided by independent licensed operators. 4TC and Proper Selects have no ownership interest in any of the above.'],
+              ['3. Pricing Estimates', 'All prices shown are estimates based on current vendor rate cards and are subject to change without notice. Final pricing will be confirmed in a written quote provided by 4TC within 24 hours of your request submission. Actual charges may vary based on availability, season, specific property terms, and vendor-imposed minimums.'],
+              ['4. Vendor Availability', '4TC makes no guarantee of availability for any property, equipment, or service listed. Submission of an inquiry does not constitute a confirmed reservation. A binding reservation is only established upon receipt of a signed confirmation and applicable deposit as outlined in the vendor\'s individual agreement.'],
+              ['5. Third-Party Performance', '4TC is not liable for the performance, quality, conduct, or failure of any third-party vendor. All disputes regarding the quality of a property, equipment, catering, security, or transport must be addressed directly with the applicable vendor. 4TC will use commercially reasonable efforts to assist in resolution but is not a party to vendor-client disputes.'],
+              ['6. Cancellation & Refunds', 'Cancellation policies are determined solely by the individual vendors and are outlined in each vendor\'s separate agreement. 4TC\'s concierge coordination fee (15% of estimated order value) is earned upon the execution of coordination services and is non-refundable once a vendor has been contacted on your behalf. Force majeure events (including but not limited to natural disasters, government-mandated cancellations, or festival cancellations) do not obligate 4TC to issue refunds of its coordination fee.'],
+              ['7. Limitation of Liability', 'To the maximum extent permitted by law, 4TC and Proper Selects shall not be liable for any indirect, incidental, consequential, or punitive damages arising out of or relating to the concierge services, vendor performance, or platform use. 4TC\'s total aggregate liability shall not exceed the concierge coordination fee paid by the client for the specific inquiry in question.'],
+              ['8. Indemnification', 'You agree to indemnify, defend, and hold harmless 4TC Concierge Hospitality Group, Proper Selects, and their respective officers, employees, and agents from and against any claims, damages, losses, or expenses (including reasonable attorneys\' fees) arising out of or relating to: (a) your use of the services, (b) any breach of these terms, or (c) any dispute between you and a third-party vendor.'],
+              ['9. No Guarantee of Events', '4TC makes no representations regarding the occurrence, scheduling, or quality of any festival, event, or gathering referenced on this platform (including but not limited to Formula 1, Austin City Limits, or Seismic Dance Event). Occurrence of a referenced event is not a condition of vendor agreements.'],
+              ['10. Governing Law', 'These Terms shall be governed by and construed in accordance with the laws of the State of Texas, without regard to conflict of law principles. Any dispute shall be resolved exclusively in the state or federal courts located in Travis County, Texas.'],
+              ['11. Contact', 'Questions regarding these terms may be directed to contact@4tcproductions.com.'],
+            ].map(([heading, body]) => (
+              <div key={heading} style={{ marginBottom: 20 }}>
+                <div style={{ fontFamily: "'Sora'", fontWeight: 700, fontSize: 13, color: C.gold, marginBottom: 5 }}>{heading}</div>
+                <div style={{ fontSize: 13, color: C.dim, lineHeight: 1.7 }}>{body}</div>
+              </div>
+            ))}
+            <div style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,.08)', fontSize: 11, color: C.dim2 }}>
+              By submitting an inquiry through this platform, you acknowledge that you have read, understood, and agree to these Terms &amp; Conditions. Last updated: August 2026.
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Invoice overlay ── */}
+      {showInvoice && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 300, background: 'rgba(0,0,0,.85)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '20px 20px 40px', overflowY: 'auto' }}>
+          <div style={{ maxWidth: 720, width: '100%' }}>
+            <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+              <button onClick={() => window.print()} style={{ flex: 1, background: C.gold, color: C.bg, border: 'none', padding: '12px 20px', borderRadius: 11, fontFamily: "'Sora'", fontWeight: 800, fontSize: 14, cursor: 'pointer' }}>Print / Save as PDF</button>
+              <button onClick={() => setShowInvoice(false)} style={{ background: C.card2, color: C.txt, border: `1px solid ${C.line}`, padding: '12px 20px', borderRadius: 11, fontFamily: "'Sora'", fontWeight: 600, fontSize: 14, cursor: 'pointer' }}>Close</button>
+            </div>
+            <div id="ps-invoice" style={{ background: '#fff', color: '#111', borderRadius: 16, padding: '48px 52px', fontFamily: "'Helvetica Neue',Arial,sans-serif" }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 36 }}>
+                <div>
+                  <div style={{ fontWeight: 900, fontSize: 22, letterSpacing: '-.01em', color: '#0a0a0f' }}>4TC Concierge Hospitality Group</div>
+                  <div style={{ fontSize: 13, color: '#6b7280', marginTop: 3 }}>Proper Selects · VIP Concierge</div>
+                  <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 2 }}>contact@4tcproductions.com · properselects.com</div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontWeight: 900, fontSize: 28, color: '#F4A93C', letterSpacing: '-.02em' }}>ESTIMATE</div>
+                  <div style={{ fontWeight: 700, fontSize: 13, color: '#374151', marginTop: 4 }}>{invNum}</div>
+                  <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 2 }}>{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                </div>
+              </div>
+              <div style={{ height: 3, background: 'linear-gradient(90deg,#F4A93C,#ffcb6b)', borderRadius: 2, marginBottom: 32 }} />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 32 }}>
+                <div>
+                  <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: '.12em', textTransform: 'uppercase', color: '#9ca3af', marginBottom: 8 }}>Prepared For</div>
+                  <div style={{ fontWeight: 700, fontSize: 15, color: '#111' }}>{prodCo || contactName || '—'}</div>
+                  {contactEmail && <div style={{ fontSize: 13, color: '#6b7280', marginTop: 1 }}>{contactEmail}</div>}
+                </div>
+                <div>
+                  <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: '.12em', textTransform: 'uppercase', color: '#9ca3af', marginBottom: 8 }}>Event Details</div>
+                  <div style={{ fontWeight: 700, fontSize: 15, color: '#111' }}>{eventName || '—'}</div>
+                  <div style={{ fontSize: 13, color: '#6b7280', marginTop: 2 }}>{checkIn && checkOut ? `${new Date(checkIn+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${new Date(checkOut+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}` : '—'} · {nights} {nights===1?'night':'nights'}</div>
+                  <div style={{ fontSize: 13, color: '#6b7280', marginTop: 1 }}>Party of {headcount}</div>
+                </div>
+              </div>
+              <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 24 }}>
+                <thead>
+                  <tr style={{ background: '#f9fafb', borderBottom: '2px solid #e5e7eb' }}>
+                    {['Item', 'Detail', 'Amount'].map((h, i) => (
+                      <th key={h} style={{ padding: '10px 12px', fontSize: 11, fontWeight: 800, letterSpacing: '.08em', textTransform: 'uppercase', color: '#6b7280', textAlign: i === 2 ? 'right' : 'left' }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {lines.map((l, i) => (
+                    <tr key={i} style={{ borderBottom: '1px solid #f3f4f6' }}>
+                      <td style={{ padding: '11px 12px', fontSize: 14, fontWeight: 600, color: '#111', maxWidth: 200 }}>{l.name}</td>
+                      <td style={{ padding: '11px 12px', fontSize: 12, color: '#6b7280' }}>{l.mgr ? `${l.mgr} · ` : ''}{l.sub}</td>
+                      <td style={{ padding: '11px 12px', fontSize: 14, fontWeight: 600, color: '#111', textAlign: 'right', whiteSpace: 'nowrap' }}>{fmt(l.v)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <div style={{ minWidth: 280 }}>
+                  {[['Subtotal', fmt(sub)], ['4TC Concierge Fee (15%)', fmt(fee)]].map(([k, v]) => (
+                    <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 0', borderBottom: '1px solid #f3f4f6', fontSize: 14, color: '#374151' }}>
+                      <span>{k}</span><span style={{ fontWeight: 600 }}>{v}</span>
+                    </div>
+                  ))}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0 0', fontSize: 20, fontWeight: 900, color: '#0a0a0f' }}>
+                    <span>Estimated Total</span><span style={{ color: '#F4A93C' }}>{fmt(grand)}</span>
+                  </div>
+                </div>
+              </div>
+              <div style={{ marginTop: 36, paddingTop: 20, borderTop: '1px solid #e5e7eb' }}>
+                <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.1em', textTransform: 'uppercase', color: '#9ca3af', marginBottom: 8 }}>Important Notes</div>
+                <div style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.7 }}>
+                  This document is a <strong style={{color:'#374151'}}>non-binding estimate</strong>. All pricing is subject to vendor availability and final confirmation. A formal agreement and payment schedule will be provided by 4TC within 24 hours of your request.<br /><br />
+                  4TC Concierge Hospitality Group acts solely as a concierge coordinator and liaison. 4TC does not own or operate any of the properties, equipment, or services listed above. All vendors are independent third parties. Client agreements with vendors are separate from this concierge coordination engagement.<br /><br />
+                  <strong style={{color:'#374151'}}>Payment Terms:</strong> Net-30 from signed quote. Concierge coordination fee (15%) is due upon engagement confirmation and is non-refundable once vendor coordination has commenced.<br /><br />
+                  Questions? Contact <strong style={{color:'#374151'}}>contact@4tcproductions.com</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`
         @media(max-width:980px){.ps-b2b-grid{grid-template-columns:1fr !important}}
@@ -380,6 +514,7 @@ export default function StaysVIP() {
         .ps-chip{transition:all .16s}
         ::selection{background:${C.gold};color:${C.bg}}
         input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.7) sepia(1) saturate(3) hue-rotate(5deg);cursor:pointer}
+        @media print{body>*:not(#ps-invoice){display:none !important}#ps-invoice{display:block !important;position:fixed;inset:0;z-index:9999;padding:0;border-radius:0}}
       `}</style>
     </div>
   );
