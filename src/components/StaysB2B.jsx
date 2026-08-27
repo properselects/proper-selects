@@ -95,6 +95,9 @@ export default function StaysB2B() {
   const [checkIn, setCheckIn] = useState('2026-11-13');
   const [checkOut, setCheckOut] = useState('2026-11-16');
   const [headcount, setHeadcount] = useState('34');
+  const [contactName, setContactName] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [sending, setSending] = useState(false);
 
   // Nights derive from the actual reservation window; min 1 night.
   const nights = (() => {
@@ -150,15 +153,26 @@ export default function StaysB2B() {
   const fee = Math.round(sub * CONCIERGE_RATE);
   const grand = sub + fee;
 
-  const submit = () => {
-    if (!Object.values(propQty).some((v) => v > 0)) { alert('Add at least one property to submit the order.'); return; }
-    // Fire-and-forget lead capture (reuses subscribe endpoint pattern)
+  const submit = async () => {
+    if (!Object.values(propQty).some((v) => v > 0)) { alert('Add at least one property to submit your request.'); return; }
+    if (!contactEmail || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(contactEmail)) {
+      alert('Add your email so 4TC can send your quote.');
+      return;
+    }
+    setSending(true);
     try {
-      fetch(`${SUPABASE_URL}/rest/v1/rpc/log_event`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ kind: 'b2b_concierge_order', total: grand, prodCo, eventName, checkIn, checkOut, nights, headcount }) }).catch(() => {});
-    } catch {}
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 2600);
+      const r = await fetch('/api/b2b-inquiry', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prodCo, eventName, checkIn, checkOut, nights, headcount, subtotal: sub, fee, total: grand, lines, contactName, contactEmail }),
+      });
+      if (!r.ok) throw new Error('send failed');
+      setSubmitted(true);
+      setTimeout(() => setSubmitted(false), 3200);
+    } catch {
+      alert('Something went wrong sending your request. Please email contact@4tcproductions.com directly.');
+    } finally {
+      setSending(false);
+    }
   };
 
   // ---- styles ----
@@ -237,6 +251,14 @@ export default function StaysB2B() {
             <div className="ps-field" style={{ ...s.field, minWidth: 130 }}>
               <label style={s.fieldLabel}>Total Headcount</label>
               <input type="number" min="1" value={headcount} onChange={(e) => setHeadcount(e.target.value)} placeholder="0" style={s.fieldInput} />
+            </div>
+            <div className="ps-field" style={{ ...s.field, minWidth: 180 }}>
+              <label style={s.fieldLabel}>Your Name</label>
+              <input value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Full name" style={s.fieldInput} />
+            </div>
+            <div className="ps-field" style={{ ...s.field, minWidth: 210 }}>
+              <label style={s.fieldLabel}>Your Email <span style={{ color: C.gold }}>*</span></label>
+              <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="you@company.com" style={s.fieldInput} />
             </div>
           </div>
         </div>
@@ -341,8 +363,8 @@ export default function StaysB2B() {
               </div>
               <div style={{ fontSize: 11, color: C.dim2, marginTop: 4 }}>Single itemized invoice · all vendors coordinated by 4TC Concierge</div>
             </div>
-            <button onClick={submit} className="ps-cta" style={{ display: 'block', width: '100%', marginTop: 16, background: submitted ? C.green : `linear-gradient(120deg,${C.gold},${C.gold2})`, color: C.bg, border: 'none', padding: 15, borderRadius: 13, fontFamily: "'Sora'", fontWeight: 800, fontSize: 15, cursor: 'pointer', boxShadow: '0 10px 26px rgba(244,169,60,.22)' }}>
-              {submitted ? '✓ Order submitted — coordinator notified' : 'Submit Order for Confirmation →'}
+            <button onClick={submit} disabled={sending} className="ps-cta" style={{ display: 'block', width: '100%', marginTop: 16, background: submitted ? C.green : `linear-gradient(120deg,${C.gold},${C.gold2})`, color: C.bg, border: 'none', padding: 15, borderRadius: 13, fontFamily: "'Sora'", fontWeight: 800, fontSize: 15, cursor: sending ? 'wait' : 'pointer', opacity: sending ? 0.75 : 1, boxShadow: '0 10px 26px rgba(244,169,60,.22)' }}>
+              {submitted ? '✓ Request sent — 4TC will reply within 24h' : sending ? 'Sending…' : 'Submit Request for Confirmation →'}
             </button>
             <div style={{ display: 'flex', gap: 8, marginTop: 12, fontSize: 11, color: C.dim2, alignItems: 'center', justifyContent: 'center' }}>
               {['Net-30 terms', 'One invoice', 'Dedicated coordinator'].map((t) => <span key={t} style={{ border: `1px solid ${C.line}`, borderRadius: 8, padding: '4px 8px' }}>{t}</span>)}
