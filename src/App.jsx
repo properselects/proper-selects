@@ -14,6 +14,7 @@ import GlobalSearch from './components/GlobalSearch.jsx';
 import PreviewModal from './components/PreviewModal.jsx';
 import StaysArc from './components/StaysArc.jsx';
 import StaysSeismic from './components/StaysSeismic.jsx';
+import StaysB2B from './components/StaysB2B.jsx';
 import StayDealCard from './components/StayDealCard.jsx';
 
 // Detect /l/{slug} share pages
@@ -30,6 +31,11 @@ function isStaysArc() {
 // Detect /stays/seismic page
 function isStaysSeismic() {
   return window.location.pathname === '/stays/seismic';
+}
+
+// Detect /stays/b2b page (production-company concierge portal)
+function isStaysB2B() {
+  return window.location.pathname.replace(/\/$/, '') === '/stays/b2b';
 }
 
 export default function App() {
@@ -87,6 +93,9 @@ export default function App() {
 
   // Stays/Seismic page
   if (isStaysSeismic()) return <StaysSeismic />;
+
+  // Stays/B2B concierge portal
+  if (isStaysB2B()) return <StaysB2B />;
 
   // Share page
   if (shareSlug) {
