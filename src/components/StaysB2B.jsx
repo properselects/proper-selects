@@ -285,7 +285,7 @@ export default function StaysB2B() {
               <div style={{ margin: '13px 0 6px', fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
                 {prodCo && <div style={{ color: C.txt, fontWeight: 600, fontFamily: "'Sora'" }}>{prodCo}</div>}
                 {eventName && <div>{eventName}</div>}
-                {headcount && <div style={{ color: C.dim2 }}>{headcount} guests · artists + crew + staff</div>}
+                {headcount && <div style={{ color: C.dim2 }}>{headcount} guests in your group</div>}
               </div>
             )}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '12px 0', padding: '11px 14px', background: C.bg2, borderRadius: 12, border: `1px solid ${C.line}` }}>
