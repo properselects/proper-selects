@@ -26,7 +26,7 @@ const STAYS_PAGES = [
   },
   {
     slug: 'b2b',
-    title: 'Production Concierge | Proper Selects × Dream Rentals',
+    title: 'Corporate Concierge | Proper Selects × Dream Rentals',
     desc: 'B2B concierge for production companies — provision housing, DJ gear, private chefs, security & transport for your artists, crew & staff in one itemized order.',
     image: 'https://thedreamrentals.com/wp-content/uploads/2026/06/fq52vxb7991srcgosgj0-scaled.jpg',
   },

@@ -211,7 +211,7 @@ export default function StaysB2B() {
       <div style={s.topbar}><div style={{ ...s.wrap, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
         <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, fontFamily: "'Sora'", fontWeight: 800, letterSpacing: '.03em', fontSize: 14, color: C.txt, textDecoration: 'none' }}>
           <span style={{ width: 26, height: 26, borderRadius: 7, background: `linear-gradient(135deg,${C.gold},${C.gold2})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.bg, fontSize: 15 }}>◆</span>
-          PROPER SELECTS <span style={{ color: C.gold, fontWeight: 600, fontSize: 11, letterSpacing: '.12em' }}>· PRODUCTION CONCIERGE</span>
+          PROPER SELECTS <span style={{ color: C.gold, fontWeight: 600, fontSize: 11, letterSpacing: '.12em' }}>· CORPORATE CONCIERGE</span>
         </a>
         <div style={{ fontSize: 11, color: C.dim, border: `1px solid ${C.line}`, padding: '5px 12px', borderRadius: 20 }}>Powered by 4TC Concierge Hospitality Group</div>
       </div></div>
@@ -332,7 +332,7 @@ export default function StaysB2B() {
         <aside>
           <div style={{ position: 'sticky', top: 88, background: `linear-gradient(180deg,${C.card2},${C.card})`, border: `1px solid ${C.line}`, borderRadius: 20, padding: 22, boxShadow: '0 20px 50px rgba(0,0,0,.35)' }}>
             <h3 style={{ fontFamily: "'Sora'", fontSize: 16, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              Production Concierge Order
+              Corporate Concierge Order
               <span onClick={clearAll} style={{ fontSize: 11, color: C.dim2, cursor: 'pointer', fontWeight: 500 }}>Clear</span>
             </h3>
             {(prodCo || eventName) && (
@@ -395,7 +395,7 @@ export default function StaysB2B() {
       </div>
 
       <div style={{ borderTop: `1px solid ${C.line}`, padding: '30px 0', color: C.dim2, fontSize: 12, textAlign: 'center' }}>
-        Proper Selects · Production Concierge · Powered by 4TC Concierge Hospitality Group · properselects.com
+        Proper Selects · Corporate Concierge · Powered by 4TC Concierge Hospitality Group · properselects.com
       </div>
 
       {/* ── Terms & Conditions modal ── */}
@@ -405,7 +405,7 @@ export default function StaysB2B() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
               <div>
                 <div style={{ fontFamily: "'Sora'", fontWeight: 800, fontSize: 18, color: C.txt }}>Terms &amp; Conditions</div>
-                <div style={{ fontSize: 12, color: C.dim, marginTop: 3 }}>4TC Concierge Hospitality Group · Concierge Services Agreement</div>
+                <div style={{ fontSize: 12, color: C.dim, marginTop: 3 }}>4TC Concierge Hospitality Group · Corporate Concierge Services Agreement</div>
               </div>
               <button onClick={() => setShowTerms(false)} style={{ background: 'none', border: 'none', color: C.dim, fontSize: 22, cursor: 'pointer', lineHeight: 1 }}>×</button>
             </div>
