@@ -55,10 +55,10 @@ const PROPS = [
 const IMG = (id) => `https://images.unsplash.com/photo-${id}?w=680&h=420&fit=crop&q=80`;
 const ADDONS = {
   gear: [
-    { id: 'g1', img: IMG('1682006294765-45c81d7f366d'), name: '2× CDJ-3000 + DJM-A9', vend: 'Rock N Roll Rentals', desc: 'Club-standard Pioneer booth for artist rehearsal / green room.', price: 425, unit: '/day', per: 'night' },
-    { id: 'g2', img: IMG('1611523627563-40dc862ee241'), name: 'QSC PA System (2 tops + 2 subs)', vend: 'Rock N Roll Rentals', desc: 'Room-filling sound for artist housing sessions.', price: 350, unit: '/day', per: 'night' },
-    { id: 'g3', img: IMG('1572327918628-bf61496743ce'), name: 'XDJ-XZ All-in-One', vend: 'Rock N Roll Rentals', desc: 'Standalone practice rig for support acts.', price: 180, unit: '/day', per: 'night' },
-    { id: 'g4', img: IMG('1581548708095-7158f2e63857'), name: 'Booth Monitor + Mic Pack', vend: 'Rock N Roll Rentals', desc: 'Wedge monitor + wireless mics.', price: 120, unit: '/day', per: 'night' },
+    { id: 'g1', img: IMG('1682006294765-45c81d7f366d'), name: '2× CDJ-3000 + DJM-A9', vend: 'Pro AV Rental', desc: 'Club-standard Pioneer booth for artist rehearsal / green room.', price: 425, unit: '/day', per: 'night' },
+    { id: 'g2', img: IMG('1611523627563-40dc862ee241'), name: 'QSC PA System (2 tops + 2 subs)', vend: 'Pro AV Rental', desc: 'Room-filling sound for artist housing sessions.', price: 350, unit: '/day', per: 'night' },
+    { id: 'g3', img: IMG('1572327918628-bf61496743ce'), name: 'XDJ-XZ All-in-One', vend: 'Pro AV Rental', desc: 'Standalone practice rig for support acts.', price: 180, unit: '/day', per: 'night' },
+    { id: 'g4', img: IMG('1581548708095-7158f2e63857'), name: 'Booth Monitor + Mic Pack', vend: 'Pro AV Rental', desc: 'Wedge monitor + wireless mics.', price: 120, unit: '/day', per: 'night' },
   ],
   chef: [
     { id: 'c1', img: IMG('1758892170660-3ad271f3d672'), name: 'Private Chef Dinner', vend: 'Airbnb Experiences', desc: 'Multi-course crew dinner, per guest (min 6).', price: 125, unit: '/guest', per: 'one' },
@@ -71,9 +71,9 @@ const ADDONS = {
     { id: 's3', img: IMG('1653592956557-48ae49fc5ef5'), name: 'Overnight Property Watch', vend: 'Licensed subcontractor', desc: 'On-site guard per house, per night.', price: 520, unit: '/night', per: 'night' },
   ],
   van: [
-    { id: 'v1', img: IMG('1656426650699-a76ffe479608'), name: 'Sprinter + Driver (4-hr block)', vend: 'Fetii', desc: 'Up to 14 pax — housing ↔ venue runs.', price: 600, unit: '/block', per: 'one' },
-    { id: 'v2', img: IMG('1569520884908-682f382556e1'), name: 'Airport Transfer (AUS)', vend: 'Fetii', desc: 'One-way group transfer per vehicle.', price: 260, unit: '/trip', per: 'one' },
-    { id: 'v3', img: IMG('1656426672889-31d16c31f4de'), name: 'Full-Day Charter', vend: 'Fetii', desc: 'Van + driver on call all day.', price: 1350, unit: '/day', per: 'night' },
+    { id: 'v1', img: IMG('1656426650699-a76ffe479608'), name: 'Sprinter + Driver (4-hr block)', vend: 'Group Transport', desc: 'Up to 14 pax — housing ↔ venue runs.', price: 600, unit: '/block', per: 'one' },
+    { id: 'v2', img: IMG('1569520884908-682f382556e1'), name: 'Airport Transfer (AUS)', vend: 'Group Transport', desc: 'One-way group transfer per vehicle.', price: 260, unit: '/trip', per: 'one' },
+    { id: 'v3', img: IMG('1656426672889-31d16c31f4de'), name: 'Full-Day Charter', vend: 'Group Transport', desc: 'Van + driver on call all day.', price: 1350, unit: '/day', per: 'night' },
   ],
 };
 const findAddon = (id) => { for (const c in ADDONS) { const f = ADDONS[c].find((a) => a.id === id); if (f) return f; } };
@@ -208,7 +208,7 @@ export default function StaysB2B() {
           <span style={{ width: 26, height: 26, borderRadius: 7, background: `linear-gradient(135deg,${C.gold},${C.gold2})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.bg, fontSize: 15 }}>◆</span>
           PROPER SELECTS <span style={{ color: C.gold, fontWeight: 600, fontSize: 11, letterSpacing: '.12em' }}>· EVENT HOSPITALITY</span>
         </a>
-        <div style={{ fontSize: 11, color: C.dim, border: `1px solid ${C.line}`, padding: '5px 12px', borderRadius: 20 }}>Concierge Portal · Powered by 4TC Concierge Hospitality Group</div>
+        <div style={{ fontSize: 11, color: C.dim, border: `1px solid ${C.line}`, padding: '5px 12px', borderRadius: 20 }}>Powered by 4TC Concierge Hospitality Group</div>
       </div></div>
 
       {/* Hero */}
@@ -317,10 +317,10 @@ export default function StaysB2B() {
             </div>
           </Section>
 
-          <AddonSection num="2" title="Artist backline & sound" sub="Green-room / rehearsal gear delivered to artist housing · Rock N Roll Rentals (daily)" cat="gear" qty={qty} chg={chg} stepper={stepper} C={C} />
+          <AddonSection num="2" title="Artist backline & sound" sub="Green-room / rehearsal gear delivered to artist housing" cat="gear" qty={qty} chg={chg} stepper={stepper} C={C} />
           <AddonSection num="3" title="Catering & private chef" sub="Feed artists & crew on-site · Airbnb Experience chefs (per guest / service)" cat="chef" qty={qty} chg={chg} stepper={stepper} C={C} />
           <AddonSection num="4" title="Security & staffing" sub="Licensed Austin subcontractors for protection & property watch · per guard / shift" cat="sec" qty={qty} chg={chg} stepper={stepper} C={C} />
-          <AddonSection num="5" title="Ground transport" sub="Move artists, crew & staff between housing, venue & airport · Fetii (per vehicle)" cat="van" qty={qty} chg={chg} stepper={stepper} C={C} />
+          <AddonSection num="5" title="Ground transport" sub="Move artists, crew & staff between housing, venue & airport" cat="van" qty={qty} chg={chg} stepper={stepper} C={C} />
         </div>
 
         {/* Cart */}
