@@ -43,13 +43,13 @@ const PROPS = [
   // ── CRIBS (real listings + live nightly rates) ──
   { id: 'p7', mgr: 'cribs', name: 'Eastside Lux Group Retreat', badge: 'Near downtown', price: 250, br: '5 BR · 4 BA', hood: 'East Austin',
     img: 'https://assets.wander.com/639647620880404389/1200.webp',
-    url: 'https://www.cribsconsulting.com/', amen: 'Pool · Group retreat · walk to downtown' },
-  { id: 'p8', mgr: 'cribs', name: 'ATX Creekside Duplex', badge: 'Value pick', price: 295, br: '6 BR · 6.5 BA', hood: 'Austin',
+    url: 'https://www.cribsconsulting.com/property/639647542077817984/holly-st-5br', amen: 'Pool · Group retreat · walk to downtown' },
+  { id: 'p8', mgr: 'cribs', name: 'Domain-Area Estate · Heated Pool + Spa', badge: 'Pool + hot tub', price: 295, br: '6 BR · 2.5 BA', hood: 'North Austin',
     img: 'https://assets.wander.com/639648356141892280/1200.webp',
-    url: 'https://www.cribsconsulting.com/', amen: 'Modern full duplex · Hot Tub · creekside' },
-  { id: 'p9', mgr: 'cribs', name: 'Lake Travis Estate', badge: 'Waterfront', price: 342, br: '7 BR · 4.5 BA', hood: 'Lake Travis',
+    url: 'https://www.cribsconsulting.com/property/639649001569783735/rocky-creek-6br', amen: 'Heated pool · Hot tub · Near The Domain' },
+  { id: 'p9', mgr: 'cribs', name: 'Lake Travis Estate · Spectacular Pool', badge: 'Waterfront views', price: 342, br: '7 BR · 4.5 BA', hood: 'Lake Travis',
     img: 'https://assets.wander.com/639650825639038929/1200.webp',
-    url: 'https://www.cribsconsulting.com/', amen: 'Spectacular pool · lake views' },
+    url: 'https://www.cribsconsulting.com/property/639650584013571266/parakeet-7br', amen: 'Lap pool · Hill Country views · 3,500 sq ft' },
 ];
 
 const IMG = (id) => `https://images.unsplash.com/photo-${id}?w=680&h=420&fit=crop&q=80`;
