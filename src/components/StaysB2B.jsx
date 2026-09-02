@@ -10,7 +10,9 @@ const C = {
   gold: '#F4A93C', gold2: '#ffcb6b', line: 'rgba(255,255,255,.08)',
   txt: '#EDEAE2', dim: '#9aa0ad', dim2: '#6b7280', green: '#34d399', blue: '#60a5fa',
 };
-const CONCIERGE_RATE = 0.15;
+// Concierge fee scales with order size. Partners & repeat clients are quoted preferred
+// rates off-platform; this auto-tier is the public default.
+function conciergeRate(sub) { return sub >= 75000 ? 0.10 : sub >= 25000 ? 0.12 : 0.15; }
 const PARTY_COLOR = { Artists: C.blue, Crew: C.gold, Staff: C.green };
 
 // Real Austin inventory from partner property managers (Dream Rentals & Five Star rates indicative; Cribs live).
@@ -154,7 +156,9 @@ export default function StaysB2B() {
     const a = findAddon(id); const mult = a.per === 'night' ? nights : 1; const t = a.price * q * mult; sub += t;
     lines.push({ name: a.name, sub: a.per === 'night' ? `${fmt(a.price)}${a.unit} × ${q} × ${nights} nts` : `${fmt(a.price)}${a.unit} × ${q}`, v: t });
   }
-  const fee = Math.round(sub * CONCIERGE_RATE);
+  const rate = conciergeRate(sub);
+  const ratePct = Math.round(rate * 100);
+  const fee = Math.round(sub * rate);
   const grand = sub + fee;
 
   const submit = async () => {
@@ -363,7 +367,7 @@ export default function StaysB2B() {
             </div>
             <div style={{ marginTop: 14, borderTop: `1px solid ${C.line}`, paddingTop: 14 }}>
               <Row label="Subtotal" val={fmt(sub)} C={C} />
-              <Row label="4TC concierge fee (15%)" val={fmt(fee)} C={C} />
+              <Row label={`4TC concierge fee (${ratePct}%)`} val={fmt(fee)} C={C} />
               <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: "'Sora'", fontSize: 21, fontWeight: 800, marginTop: 6 }}>
                 <span>Order total (est.)</span><span style={{ color: C.gold }}>{fmt(grand)}</span>
               </div>
@@ -415,7 +419,7 @@ export default function StaysB2B() {
               ['3. Pricing Estimates', 'All prices shown are estimates based on current vendor rate cards and are subject to change without notice. Final pricing will be confirmed in a written quote provided by 4TC within 24 hours of your request submission. Actual charges may vary based on availability, season, specific property terms, and vendor-imposed minimums.'],
               ['4. Vendor Availability', '4TC makes no guarantee of availability for any property, equipment, or service listed. Submission of an inquiry does not constitute a confirmed reservation. A binding reservation is only established upon receipt of a signed confirmation and applicable deposit as outlined in the vendor\'s individual agreement.'],
               ['5. Third-Party Performance', '4TC is not liable for the performance, quality, conduct, or failure of any third-party vendor. All disputes regarding the quality of a property, equipment, catering, security, or transport must be addressed directly with the applicable vendor. 4TC will use commercially reasonable efforts to assist in resolution but is not a party to vendor-client disputes.'],
-              ['6. Cancellation & Refunds', 'Cancellation policies are determined solely by the individual vendors and are outlined in each vendor\'s separate agreement. 4TC\'s concierge coordination fee (15% of estimated order value) is earned upon the execution of coordination services and is non-refundable once a vendor has been contacted on your behalf. Force majeure events (including but not limited to natural disasters, government-mandated cancellations, or festival cancellations) do not obligate 4TC to issue refunds of its coordination fee.'],
+              ['6. Cancellation & Refunds', 'Cancellation policies are determined solely by the individual vendors and are outlined in each vendor\'s separate agreement. 4TC\'s concierge coordination fee (a scaled rate of 10–15% of estimated order value, determined by order size and stated on your quote) is earned upon the execution of coordination services and is non-refundable once a vendor has been contacted on your behalf. Force majeure events (including but not limited to natural disasters, government-mandated cancellations, or festival cancellations) do not obligate 4TC to issue refunds of its coordination fee.'],
               ['7. Limitation of Liability', 'To the maximum extent permitted by law, 4TC and Proper Selects shall not be liable for any indirect, incidental, consequential, or punitive damages arising out of or relating to the concierge services, vendor performance, or platform use. 4TC\'s total aggregate liability shall not exceed the concierge coordination fee paid by the client for the specific inquiry in question.'],
               ['8. Indemnification', 'You agree to indemnify, defend, and hold harmless 4TC Concierge Hospitality Group, Proper Selects, and their respective officers, employees, and agents from and against any claims, damages, losses, or expenses (including reasonable attorneys\' fees) arising out of or relating to: (a) your use of the services, (b) any breach of these terms, or (c) any dispute between you and a third-party vendor.'],
               ['9. No Guarantee of Events', '4TC makes no representations regarding the occurrence, scheduling, or quality of any festival, event, or gathering referenced on this platform (including but not limited to Formula 1, Austin City Limits, or Seismic Dance Event). Occurrence of a referenced event is not a condition of vendor agreements.'],
@@ -494,7 +498,7 @@ export default function StaysB2B() {
               {/* Totals */}
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <div style={{ minWidth: 280 }}>
-                  {[['Subtotal', fmt(sub)], ['4TC Concierge Fee (15%)', fmt(fee)]].map(([k, v]) => (
+                  {[['Subtotal', fmt(sub)], [`4TC Concierge Fee (${ratePct}%)`, fmt(fee)]].map(([k, v]) => (
                     <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 0', borderBottom: '1px solid #f3f4f6', fontSize: 14, color: '#374151' }}>
                       <span>{k}</span><span style={{ fontWeight: 600 }}>{v}</span>
                     </div>
@@ -510,7 +514,7 @@ export default function StaysB2B() {
                 <div style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.7 }}>
                   This document is a <strong style={{color:'#374151'}}>non-binding estimate</strong>. All pricing is subject to vendor availability and final confirmation. A formal agreement and payment schedule will be provided by 4TC within 24 hours of your request.<br /><br />
                   4TC Concierge Hospitality Group acts solely as a concierge coordinator and liaison. 4TC does not own or operate any of the properties, equipment, or services listed above. All vendors are independent third parties. Client agreements with vendors are separate from this concierge coordination engagement.<br /><br />
-                  <strong style={{color:'#374151'}}>Payment Terms:</strong> Net-30 from signed quote. Concierge coordination fee (15%) is due upon engagement confirmation and is non-refundable once vendor coordination has commenced.<br /><br />
+                  <strong style={{color:'#374151'}}>Payment Terms:</strong> Net-30 from signed quote. The concierge coordination fee (rate shown above, scaled to order size) is due upon engagement confirmation and is non-refundable once vendor coordination has commenced.<br /><br />
                   Questions? Reply to this estimate or contact <strong style={{color:'#374151'}}>contact@4tcproductions.com</strong>
                 </div>
               </div>
