@@ -319,7 +319,28 @@ async function todayLineup() {
 
 // ── Handler ──────────────────────────────────────────────────────────────────
 
+const YT_ID_RE = /^[A-Za-z0-9_-]{11}$/;
+
 export default async function handler(req, res) {
+  // POST /api/lineup?flag=embed { video_id } — the stage player reports a set YouTube refuses to
+  // embed (error 100/101/150). Flag it embeddable=false so today's lineup drops it going forward.
+  // Folded into this route (not a separate function) to stay under the Hobby 12-function cap.
+  if (req.method === 'POST' && req.query.flag === 'embed') {
+    let body = req.body;
+    if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
+    const video_id = body?.video_id;
+    if (!video_id || !YT_ID_RE.test(video_id)) {
+      return res.status(400).json({ error: 'valid video_id required' });
+    }
+    const { ok, status } = await sb(`sets?video_id=eq.${video_id}`, {
+      method: 'PATCH',
+      headers: { Prefer: 'return=minimal' },
+      body: JSON.stringify({ embeddable: false, status: 'unavailable' }),
+    });
+    if (!ok) return res.status(502).json({ error: 'flag failed', status });
+    return res.status(200).json({ ok: true, video_id });
+  }
+
   if (req.method === 'GET') {
     if (req.query.today) {
       const sets = await todayLineup();

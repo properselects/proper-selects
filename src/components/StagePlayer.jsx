@@ -89,9 +89,9 @@ export default function StagePlayer({ set, onEnded, seekRef, timeRef, controlsRe
               try {
                 const payload = JSON.stringify({ video_id: set.video_id });
                 if (navigator.sendBeacon) {
-                  navigator.sendBeacon('/api/flag-embed', new Blob([payload], { type: 'application/json' }));
+                  navigator.sendBeacon('/api/lineup?flag=embed', new Blob([payload], { type: 'application/json' }));
                 } else {
-                  fetch('/api/flag-embed', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true });
+                  fetch('/api/lineup?flag=embed', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true });
                 }
               } catch {}
             }
