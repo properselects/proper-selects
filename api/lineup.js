@@ -78,6 +78,12 @@ const BAD_CONTENT_RE = [
   // Non-electronic compilation genres that sneak past a bare "DJ set" search
   /\bmbol[eé]\b/i, /\bbukutsi\b/i, /\bmakossa\b/i, /\bndombolo\b/i,
   /\bcoupe[\s-]?d[eé]cal[eé]\b/i, /\bafrodegame\b/i, /\bcamer\b/i, /\bnaija\b/i,
+  // RA-style talking-head clips titled "<artist> on the <topic>" (evolution/intersection of
+  // techno, the music industry, power dynamics, etc). These aren't DJ sets and RA disables
+  // embedding on them → they render "This set can't be embedded". Venue names ("on the
+  // Williamsburg Bridge", "on the rooftop") are deliberately NOT matched.
+  /\bon\s+the\s+(evolution|intersection|future|importance|meaning|state|art|business|power|politics|key|role|rise|history|philosophy|unequal)\b/i,
+  /\bon\s+their\s+(sound|journey|career|approach|creative)\b/i,
 ];
 
 function isBad(row) {
@@ -201,6 +207,17 @@ async function todayLineup() {
 
   // Two pools per region: newest-published (breadth) + newest-ingested (so freshly-added older
   // uploads aren't buried past the 500-row publish-ordered cutoff). Merge + dedupe.
+  // Non-embeddable exclusion: the vault_sets view doesn't expose `embeddable`, so pull the set of
+  // video_ids flagged embeddable=false directly from the base table and drop them from every pool.
+  // These are sets YouTube won't allow in an iframe (RA talks, label-locked uploads) — serving one
+  // just renders "This set can't be embedded". The player auto-reports new offenders to
+  // /api/flag-embed, so this list grows itself and the whole class of bug self-heals.
+  const deadEmbeds = new Set(
+    (await sbFetch('sets?select=video_id&embeddable=eq.false&limit=5000') || [])
+      .map((r) => r.video_id)
+      .filter(Boolean)
+  );
+
   const pools = await Promise.all(
     REGIONS.map(async (region) => {
       const q = `vault_sets?select=*&vibe=eq.${region}&source=eq.youtube&duration_sec=gte.2700`;
@@ -209,7 +226,9 @@ async function todayLineup() {
         sbFetch(`${q}&order=created_at.desc&limit=120`),
       ]);
       const seen = new Set(byPub.map((r) => r.video_id));
-      return byPub.concat(byNew.filter((r) => !seen.has(r.video_id)));
+      return byPub
+        .concat(byNew.filter((r) => !seen.has(r.video_id)))
+        .filter((r) => !deadEmbeds.has(r.video_id));
     })
   );
 
@@ -223,7 +242,7 @@ async function todayLineup() {
     if (all.length < MIN_PER_REGION) {
       const backfill = await sbFetch(`vault_sets?select=*&vibe=eq.${region}&order=published_at.desc&limit=500`);
       const seen = new Set(all.map((r) => r.video_id));
-      all = all.concat(backfill.filter((r) => !seen.has(r.video_id)));
+      all = all.concat(backfill.filter((r) => !seen.has(r.video_id) && !deadEmbeds.has(r.video_id)));
     }
 
     // Worldwide = everywhere that ISN'T clearly the Americas or Europe. Drop any set whose
