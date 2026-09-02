@@ -79,8 +79,22 @@ export default function StagePlayer({ set, onEnded, seekRef, timeRef, controlsRe
             else if (e.data === S.PAUSED) { setState('paused'); onPlayingChange?.(false); }
             else if (e.data === S.ENDED) onEnded();
           },
-          onError: () => {
+          onError: (err) => {
             setState('error');
+            // YouTube error codes: 100 = removed/private, 101 & 150 = embedding disabled by owner.
+            // Only these mean "will never play in an iframe" — report so the vault self-heals.
+            // (2 = bad param, 5 = HTML5 error are transient; don't nuke a good set over those.)
+            const code = err?.data;
+            if (code === 100 || code === 101 || code === 150) {
+              try {
+                const payload = JSON.stringify({ video_id: set.video_id });
+                if (navigator.sendBeacon) {
+                  navigator.sendBeacon('/api/lineup?flag=embed', new Blob([payload], { type: 'application/json' }));
+                } else {
+                  fetch('/api/lineup?flag=embed', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true });
+                }
+              } catch {}
+            }
             setTimeout(onEnded, 3000);
           },
         },
