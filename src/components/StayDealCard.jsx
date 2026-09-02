@@ -3,16 +3,7 @@ import React, { useEffect, useState } from 'react';
 // Festivals that have a curated Dream Rentals stays page.
 // Matched against the currently-playing set's festival_name.
 const STAY_DEALS = [
-  {
-    match: /\barc\b/i,
-    href: '/stays/arc',
-    accent: '#4FEB9A',
-    hook: 'Headed to ARC?',
-    eyebrow: 'Where to stay · Sept 4–7 · Chicago',
-    name: 'Pilsen Retreat',
-    meta: '4BR · Sleeps 8 · 8-min walk to Union Park',
-    img: 'https://thedreamrentals.com/wp-content/uploads/2026/04/tqpc4ysxafw8jpgpijqf-scaled.jpg',
-  },
+  // ARC stays popup removed (campaign ended / per request 2026-09-02).
   {
     match: /concourse|seismic/i,
     href: '/stays/seismic',
@@ -33,9 +24,9 @@ function dealFor(nowPlaying) {
   return STAY_DEALS.find((d) => d.match.test(hay)) || null;
 }
 
-// The nearest upcoming festival with a stays page — shown as a default prompt
-// on the Today's Lineup tab even when the current set isn't from that festival.
-const ACTIVE_CAMPAIGN = STAY_DEALS[0]; // ARC · Sept 4–7
+// No default campaign popup on the Today's Lineup tab. Stay deals now only appear
+// contextually when a matching festival set is actually playing. (ARC default removed.)
+const ACTIVE_CAMPAIGN = null;
 
 /**
  * StayDealCard — slides up over the player while a festival set is playing,
