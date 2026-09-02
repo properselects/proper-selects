@@ -332,9 +332,11 @@ export default async function handler(req, res) {
     if (!video_id || !YT_ID_RE.test(video_id)) {
       return res.status(400).json({ error: 'valid video_id required' });
     }
+    // NB: don't force Prefer:return=minimal here — the shared sb() helper always parses the
+    // response as JSON, and a 204 (empty body) would throw. Default return=representation gives
+    // back a JSON array that parses cleanly.
     const { ok, status } = await sb(`sets?video_id=eq.${video_id}`, {
       method: 'PATCH',
-      headers: { Prefer: 'return=minimal' },
       body: JSON.stringify({ embeddable: false, status: 'unavailable' }),
     });
     if (!ok) return res.status(502).json({ error: 'flag failed', status });
