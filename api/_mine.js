@@ -39,15 +39,31 @@ function parseComment(text) {
 async function mineVideo(video_id, set_id, YT) {
   // Pull replies inline too (part=replies gives up to 5 per thread) — tracklists are very often
   // posted as a REPLY to a "track ID?" comment, which a top-level-only scan would miss entirely.
+  // For threads with more than 5 replies, do a follow-up comments.list call to get them all.
   const data = await jget(`https://www.googleapis.com/youtube/v3/commentThreads?part=snippet,replies&videoId=${video_id}&order=relevance&maxResults=100&key=${YT}`);
   if (!data) return [];
   const comments = [];
   for (const it of (data.items || [])) {
     const top = it.snippet?.topLevelComment?.snippet;
     comments.push({ lines: parseComment(top?.textOriginal || ''), likes: top?.likeCount || 0 });
-    for (const rep of (it.replies?.comments || [])) {
+    const inlineReplies = it.replies?.comments || [];
+    const totalReplyCount = it.snippet?.totalReplyCount || 0;
+    for (const rep of inlineReplies) {
       const rs = rep.snippet;
       comments.push({ lines: parseComment(rs?.textOriginal || ''), likes: rs?.likeCount || 0 });
+    }
+    // If the thread has more replies than the API returned inline (>5), fetch all of them
+    if (totalReplyCount > inlineReplies.length) {
+      const threadId = it.snippet?.topLevelComment?.id;
+      if (threadId) {
+        const allReplies = await jget(`https://www.googleapis.com/youtube/v3/comments?part=snippet&parentId=${encodeURIComponent(threadId)}&maxResults=100&key=${YT}`);
+        const seen = new Set(inlineReplies.map((r) => r.id));
+        for (const rep of (allReplies?.items || [])) {
+          if (seen.has(rep.id)) continue;
+          const rs = rep.snippet;
+          comments.push({ lines: parseComment(rs?.textOriginal || ''), likes: rs?.likeCount || 0 });
+        }
+      }
     }
   }
   // Prefer the single richest tracklist comment; else merge scattered individual IDs.
