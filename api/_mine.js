@@ -26,7 +26,7 @@ function parseComment(text) {
     if (!ts) continue;
     const t_sec = (parseInt(ts[1] || 0) * 3600) + (parseInt(ts[2]) * 60) + parseInt(ts[3]);
     if (t_sec < 30) continue; // skip intro / 0:00
-    let after = line.slice(line.indexOf(ts[0]) + ts[0].length).replace(/^[\s.·•\-–—)\]]+/, '').trim();
+    let after = line.slice(line.indexOf(ts[0]) + ts[0].length).replace(/^[\s.·•\-–—)\]|:>»]+/, '').trim();
     after = after.replace(/\s+/g, ' ').slice(0, 120);
     if (after.length < 2 || !/[a-z]/i.test(after)) continue;
     const isID = UNRESOLVED_RE.test(after) || /^id\s*[-–—]?\s*id?$/i.test(after);
@@ -37,12 +37,19 @@ function parseComment(text) {
 
 // Mine one video's comments → moment rows for a given set_id (or [] if nothing usable)
 async function mineVideo(video_id, set_id, YT) {
-  const data = await jget(`https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${video_id}&order=relevance&maxResults=100&key=${YT}`);
+  // Pull replies inline too (part=replies gives up to 5 per thread) — tracklists are very often
+  // posted as a REPLY to a "track ID?" comment, which a top-level-only scan would miss entirely.
+  const data = await jget(`https://www.googleapis.com/youtube/v3/commentThreads?part=snippet,replies&videoId=${video_id}&order=relevance&maxResults=100&key=${YT}`);
   if (!data) return [];
-  const comments = (data.items || []).map((it) => ({
-    lines: parseComment(it.snippet?.topLevelComment?.snippet?.textOriginal || ''),
-    likes: it.snippet?.topLevelComment?.snippet?.likeCount || 0,
-  }));
+  const comments = [];
+  for (const it of (data.items || [])) {
+    const top = it.snippet?.topLevelComment?.snippet;
+    comments.push({ lines: parseComment(top?.textOriginal || ''), likes: top?.likeCount || 0 });
+    for (const rep of (it.replies?.comments || [])) {
+      const rs = rep.snippet;
+      comments.push({ lines: parseComment(rs?.textOriginal || ''), likes: rs?.likeCount || 0 });
+    }
+  }
   // Prefer the single richest tracklist comment; else merge scattered individual IDs.
   let best = null;
   for (const c of comments) if (c.lines.length >= 3 && (!best || c.lines.length > best.lines.length)) best = c;
