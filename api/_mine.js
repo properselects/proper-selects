@@ -67,8 +67,13 @@ async function mineVideo(video_id, set_id, YT) {
     }
   }
   // Prefer the single richest tracklist comment; else merge scattered individual IDs.
+  // Score = line count * 10 + log(likes+1) so a highly-liked comment wins ties.
   let best = null;
-  for (const c of comments) if (c.lines.length >= 3 && (!best || c.lines.length > best.lines.length)) best = c;
+  for (const c of comments) {
+    if (c.lines.length < 3) continue;
+    const score = c.lines.length * 10 + Math.log(c.likes + 1);
+    if (!best || score > best._score) best = { ...c, _score: score };
+  }
   const chosen = best ? [best] : comments;
   const seen = new Set();
   const rows = [];

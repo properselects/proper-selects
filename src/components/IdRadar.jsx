@@ -130,16 +130,20 @@ export default function IdRadar({ videoId, accent = '#F4A93C', onSeek }) {
       <div className="jb-radar-row">
         {ordered.map((v, d) => {
           const Tag = onSeek ? 'button' : 'div';
+          const confirmed = v.resolved && v.likes >= 5;
           return (
             <Tag
               key={d}
-              className={'jb-id' + (v.resolved ? ' resolved' : '')}
+              className={'jb-id' + (v.resolved ? ' resolved' : '') + (confirmed ? ' confirmed' : '')}
               style={v.resolved ? { borderColor: accent } : undefined}
               onClick={onSeek ? () => onSeek(v.t_sec) : undefined}
-              title={v.label}
+              title={confirmed ? `✓ Community confirmed · ${v.likes} likes · ${v.label}` : v.label}
             >
               <span className="jb-id-ts" style={{ color: accent }}>{formatTs(v.t_sec)}</span>
-              <span className="jb-id-label">{v.resolved ? v.label : 'ID?'}</span>
+              <span className="jb-id-label">
+                {confirmed && <span style={{ color: accent, marginRight: 3, fontSize: 10 }}>✓</span>}
+                {v.resolved ? v.label : 'ID?'}
+              </span>
               {v.likes > 0 && <span className="jb-id-likes">▲{v.likes}</span>}
             </Tag>
           );
