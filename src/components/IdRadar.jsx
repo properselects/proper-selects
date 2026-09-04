@@ -23,12 +23,14 @@ const mineAttempted = new Set();
 export default function IdRadar({ videoId, accent = '#F4A93C', onSeek }) {
   const [moments, setMoments] = useState(null);
   const [mining, setMining] = useState(false);
+  const [rescanning, setRescanning] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     if (!videoId) { setMoments(null); setMining(false); return; }
     setMoments(null);
     setMining(false);
+    setRescanning(false);
 
     fetch(
       `${SUPABASE_URL}/rest/v1/set_id_moments?select=*&video_id=eq.${encodeURIComponent(videoId)}&order=likes.desc&limit=200`,
@@ -56,6 +58,20 @@ export default function IdRadar({ videoId, accent = '#F4A93C', onSeek }) {
     return () => { cancelled = true; };
   }, [videoId]);
 
+  // Manual re-scan: force-re-mine the set's comments to pick up tracklists posted
+  // after the first pass. Bypasses the once-per-session guard and the "already has
+  // IDs" short-circuit; duplicates are ignored server-side.
+  function rescan() {
+    if (!videoId || rescanning) return;
+    setRescanning(true);
+    mineAttempted.add(videoId);
+    fetch(`/api/radar?mine=${encodeURIComponent(videoId)}&force=1`)
+      .then((r) => (r.ok ? r.json() : { moments: [] }))
+      .then((data) => setMoments(Array.isArray(data.moments) ? data.moments : (moments || [])))
+      .catch(() => {})
+      .finally(() => setRescanning(false));
+  }
+
   // While mining a fresh set, show a subtle placeholder so it doesn't feel broken.
   if (mining && (!moments || moments.length === 0)) {
     return (
@@ -68,8 +84,37 @@ export default function IdRadar({ videoId, accent = '#F4A93C', onSeek }) {
     );
   }
 
-  // Nothing to show → render nothing (keeps the UI clean for un-mined sets)
-  if (!moments || moments.length === 0) return null;
+  const rescanBtn = (
+    <button
+      type="button"
+      className="jb-radar-rescan"
+      onClick={rescan}
+      disabled={rescanning}
+      title="Re-scan the YouTube comments for new track IDs"
+      style={{
+        background: 'none', border: 'none', cursor: rescanning ? 'default' : 'pointer',
+        color: accent, opacity: rescanning ? 0.5 : 0.8, fontSize: 11,
+        fontFamily: 'inherit', padding: 0, letterSpacing: '0.02em',
+      }}
+    >
+      {rescanning ? 'scanning…' : '⟳ re-scan'}
+    </button>
+  );
+
+  // Nothing to show → still offer a re-scan so a set that got a tracklist comment
+  // after its first (empty) mine can be refreshed without reloading.
+  if (!moments || moments.length === 0) {
+    return (
+      <div className="jb-radar">
+        <div className="jb-radar-head">
+          <span style={{ color: accent }}>ID Radar</span>
+          <span className="jb-radar-sub" style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            No IDs yet{rescanBtn}
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   // Sort by timestamp for a natural top-to-bottom read
   const ordered = [...moments].sort((a, b) => (a.t_sec || 0) - (b.t_sec || 0));
@@ -78,8 +123,8 @@ export default function IdRadar({ videoId, accent = '#F4A93C', onSeek }) {
     <div className="jb-radar">
       <div className="jb-radar-head">
         <span style={{ color: accent }}>ID Radar</span>
-        <span className="jb-radar-sub">
-          Mined IDs{onSeek ? ' · tap to jump' : ''}
+        <span className="jb-radar-sub" style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          Mined IDs{onSeek ? ' · tap to jump' : ''}{rescanBtn}
         </span>
       </div>
       <div className="jb-radar-row">

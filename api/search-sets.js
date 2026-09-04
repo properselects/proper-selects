@@ -3,6 +3,7 @@
 // Fires only when the local DB search returns few/no results.
 
 import { parseVenue, parseCity, cleanArtist } from './_region.js';
+import { mineAndStore } from './_mine.js';
 
 export const maxDuration = 20;
 
@@ -195,7 +196,13 @@ export default async function handler(req, res) {
         };
       });
 
-    if (newSets.length) await sbInsert(newSets);
+    if (newSets.length) {
+      await sbInsert(newSets);
+      // Mine the freshly-inserted sets' comments for IDs so ID Radar is populated
+      // the moment they show up in search (mirrors the search-ingest cron behavior).
+      // Fire-and-forget-ish: awaited but never throws, and capped so it stays under maxDuration.
+      try { await mineAndStore(newSets.map((s) => s.video_id), 10); } catch {}
+    }
   }
 
   // Return all matching sets (new + existing that match the query)

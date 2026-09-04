@@ -108,7 +108,7 @@ function dedupeByVideo(rows) {
 
 // On-demand ID-Radar miner for a single set. Returns the set's mined moments,
 // mining its YouTube comments live if it has none yet.
-async function handleMine(res, videoId) {
+async function handleMine(res, videoId, force = false) {
   const headers = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` };
   const q = `${SUPABASE_URL}/rest/v1/set_id_moments?select=*&video_id=eq.${encodeURIComponent(videoId)}&order=likes.desc&limit=200`;
   const read = async () => {
@@ -116,7 +116,10 @@ async function handleMine(res, videoId) {
     catch { return []; }
   };
   let moments = await read();
-  if (Array.isArray(moments) && moments.length) return res.json({ mined: false, moments });
+  // Normally we skip mining if IDs already exist. A forced re-scan (manual "re-scan
+  // comments" button) always re-mines to pick up tracklist comments posted after the
+  // first pass — inserts ignore duplicates, so existing IDs are preserved.
+  if (!force && Array.isArray(moments) && moments.length) return res.json({ mined: false, moments });
   await mineAndStore([videoId], 1);
   moments = await read();
   return res.json({ mined: true, moments: Array.isArray(moments) ? moments : [] });
@@ -125,7 +128,7 @@ async function handleMine(res, videoId) {
 export default async function handler(req, res) {
   // On-demand single-set mining branch
   const mineId = req.query && req.query.mine;
-  if (mineId) return handleMine(res, String(mineId).trim());
+  if (mineId) return handleMine(res, String(mineId).trim(), req.query.force === '1' || req.query.force === 'true');
 
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
 
