@@ -41,33 +41,21 @@ export default function IdRadar({ videoId, accent = '#F4A93C', onSeek }) {
         if (cancelled) return;
         const list = Array.isArray(rows) ? rows : [];
 
-        // Stale re-mine: if the set has <30 IDs, force a fresh comment scan.
-        // Zero-ID sets always get force=1 (prior mine ran before comments existed).
-        // Non-zero sets with <30 IDs get force=1 only if last ID is >48h old.
-        const STALE_MS = 48 * 60 * 60 * 1000;
-        const FEW_IDS = 30;
-        if (list.length < FEW_IDS && !mineAttempted.has(videoId)) {
-          const shouldForce = list.length === 0 || (() => {
-            const newestCreatedAt = list.reduce((max, m) => {
-              const t = m.created_at ? new Date(m.created_at).getTime() : 0;
-              return t > max ? t : max;
-            }, 0);
-            return newestCreatedAt && Date.now() - newestCreatedAt > STALE_MS;
-          })();
-          if (shouldForce) {
-            mineAttempted.add(videoId);
-            setMining(true);
-            fetch(`/api/radar?mine=${encodeURIComponent(videoId)}&force=1`)
-              .then((r) => (r.ok ? r.json() : null))
-              .then((data) => {
-                if (cancelled) return;
-                setMoments(Array.isArray(data?.moments) ? data.moments : list);
-              })
-              .catch(() => { setMoments(list); })
-              .finally(() => { if (!cancelled) setMining(false); });
-            if (list.length > 0) setMoments(list);
-            return;
-          }
+        // Always force a fresh comment scan once per session per set.
+        // Duplicates are ignored server-side; mineAttempted prevents looping.
+        if (!mineAttempted.has(videoId)) {
+          mineAttempted.add(videoId);
+          setMining(true);
+          fetch(`/api/radar?mine=${encodeURIComponent(videoId)}&force=1`)
+            .then((r) => (r.ok ? r.json() : null))
+            .then((data) => {
+              if (cancelled) return;
+              setMoments(Array.isArray(data?.moments) ? data.moments : list);
+            })
+            .catch(() => { setMoments(list); })
+            .finally(() => { if (!cancelled) setMining(false); });
+          if (list.length > 0) setMoments(list);
+          return;
         }
 
         if (list.length > 0) { setMoments(list); return; }
