@@ -106,6 +106,49 @@ function dedupeByVideo(rows) {
   return [...best.values()];
 }
 
+// Ensure the video exists in the sets table so mineAndStore can find its set_id.
+// If missing, fetch metadata from YouTube and insert a minimal row.
+async function ensureSetExists(videoId) {
+  const headers = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` };
+  const existing = await fetch(`${SUPABASE_URL}/rest/v1/sets?select=id&video_id=eq.${encodeURIComponent(videoId)}&limit=1`, { headers });
+  if (existing.ok) {
+    const rows = await existing.json();
+    if (rows.length) return; // already in DB
+  }
+  // Fetch video metadata from YouTube so we can insert a complete row
+  if (!YOUTUBE_API_KEY) return;
+  try {
+    const yt = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${encodeURIComponent(videoId)}&key=${YOUTUBE_API_KEY}`);
+    if (!yt.ok) return;
+    const data = await yt.json();
+    const item = data.items?.[0];
+    if (!item) return;
+    const snippet = item.snippet || {};
+    const dur = item.contentDetails?.duration || 'PT0S';
+    const m = dur.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+    const duration_sec = (+(m?.[1]||0))*3600 + (+(m?.[2]||0))*60 + (+(m?.[3]||0));
+    const payload = [{
+      video_id: videoId,
+      festival_id: 'discovered',
+      artist: snippet.title || videoId,
+      title: snippet.title || videoId,
+      source: 'youtube',
+      duration_sec,
+      status: 'live',
+      embeddable: true,
+      published_at: snippet.publishedAt || new Date().toISOString(),
+      venue: snippet.title || null,
+      city: null,
+      region: 'worldwide',
+    }];
+    await fetch(`${SUPABASE_URL}/rest/v1/sets`, {
+      method: 'POST',
+      headers: { ...headers, 'Content-Type': 'application/json', Prefer: 'return=minimal,resolution=ignore-duplicates' },
+      body: JSON.stringify(payload),
+    });
+  } catch { /* best-effort */ }
+}
+
 // On-demand ID-Radar miner for a single set. Returns the set's mined moments,
 // mining its YouTube comments live if it has none yet.
 async function handleMine(res, videoId, force = false) {
@@ -120,6 +163,8 @@ async function handleMine(res, videoId, force = false) {
   // comments" button) always re-mines to pick up tracklist comments posted after the
   // first pass — inserts ignore duplicates, so existing IDs are preserved.
   if (!force && Array.isArray(moments) && moments.length) return res.json({ mined: false, moments });
+  // Make sure the set is in the DB before mining (mineAndStore silently skips unknown video_ids)
+  await ensureSetExists(videoId);
   await mineAndStore([videoId], 1);
   moments = await read();
   return res.json({ mined: true, moments: Array.isArray(moments) ? moments : [] });
