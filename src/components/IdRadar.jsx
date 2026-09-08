@@ -41,27 +41,31 @@ export default function IdRadar({ videoId, accent = '#F4A93C', onSeek }) {
         if (cancelled) return;
         const list = Array.isArray(rows) ? rows : [];
 
-        // Stale re-mine: if the set has few IDs and the last mine was > 48h ago,
-        // automatically re-scan comments — catches tracklists posted after first ingest.
+        // Stale re-mine: if the set has <10 IDs, force a fresh comment scan.
+        // Zero-ID sets always get force=1 (prior mine ran before comments existed).
+        // Non-zero sets with <10 IDs get force=1 only if last ID is >48h old.
         const STALE_MS = 48 * 60 * 60 * 1000;
         const FEW_IDS = 10;
-        if (list.length > 0 && list.length < FEW_IDS && !mineAttempted.has(videoId)) {
-          const newestCreatedAt = list.reduce((max, m) => {
-            const t = m.created_at ? new Date(m.created_at).getTime() : 0;
-            return t > max ? t : max;
-          }, 0);
-          if (newestCreatedAt && Date.now() - newestCreatedAt > STALE_MS) {
-            // Mark as attempted so we don't loop, then force re-mine in background.
+        if (list.length < FEW_IDS && !mineAttempted.has(videoId)) {
+          const shouldForce = list.length === 0 || (() => {
+            const newestCreatedAt = list.reduce((max, m) => {
+              const t = m.created_at ? new Date(m.created_at).getTime() : 0;
+              return t > max ? t : max;
+            }, 0);
+            return newestCreatedAt && Date.now() - newestCreatedAt > STALE_MS;
+          })();
+          if (shouldForce) {
             mineAttempted.add(videoId);
+            setMining(true);
             fetch(`/api/radar?mine=${encodeURIComponent(videoId)}&force=1`)
               .then((r) => (r.ok ? r.json() : null))
               .then((data) => {
-                if (cancelled || !data?.moments?.length) return;
-                setMoments(data.moments);
+                if (cancelled) return;
+                setMoments(Array.isArray(data?.moments) ? data.moments : list);
               })
-              .catch(() => {});
-            // Show what we have immediately; the state update above will refresh if more arrive.
-            setMoments(list);
+              .catch(() => { setMoments(list); })
+              .finally(() => { if (!cancelled) setMining(false); });
+            if (list.length > 0) setMoments(list);
             return;
           }
         }
