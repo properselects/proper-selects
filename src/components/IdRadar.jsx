@@ -41,11 +41,11 @@ export default function IdRadar({ videoId, accent = '#F4A93C', onSeek }) {
         if (cancelled) return;
         const list = Array.isArray(rows) ? rows : [];
 
-        // Stale re-mine: if the set has <10 IDs, force a fresh comment scan.
+        // Stale re-mine: if the set has <30 IDs, force a fresh comment scan.
         // Zero-ID sets always get force=1 (prior mine ran before comments existed).
-        // Non-zero sets with <10 IDs get force=1 only if last ID is >48h old.
+        // Non-zero sets with <30 IDs get force=1 only if last ID is >48h old.
         const STALE_MS = 48 * 60 * 60 * 1000;
-        const FEW_IDS = 10;
+        const FEW_IDS = 30;
         if (list.length < FEW_IDS && !mineAttempted.has(videoId)) {
           const shouldForce = list.length === 0 || (() => {
             const newestCreatedAt = list.reduce((max, m) => {
