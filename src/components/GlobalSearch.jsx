@@ -45,19 +45,26 @@ export default function GlobalSearch({ open, onClose, lineup, onLineupChange, on
         const rows = await searchDB(query);
         logSearch(query);
         setResults(rows);
-        // Also run the YouTube finder when catalog matches are thin — a couple of tangential
-        // hits (e.g. an artist appearing only in group/festival sets) shouldn't hide their solo sets.
+        // Always run the YouTube finder in the background so any missing sets get
+        // ingested — even when the catalog already has >= 5 results (e.g. an artist
+        // with catalog hits but a specific recent set not yet indexed).
+        // When results are thin (< 5) we await and merge; otherwise fire-and-forget
+        // so the user gets their catalog results immediately.
+        const ytPromise = fetch(`/api/search-sets?q=${encodeURIComponent(query)}`)
+          .then(r => r.ok ? r.json() : null)
+          .catch(() => null);
         if (rows.length < 5) {
           // Keep spinner while YouTube search runs
-          const data = await fetch(`/api/search-sets?q=${encodeURIComponent(query)}`)
-            .then(r => r.ok ? r.json() : null)
-            .catch(() => null);
+          const data = await ytPromise;
           if (data?.sets?.length) {
             const seen = new Set(rows.map(r => r.video_id));
             const fresh = data.sets.filter(s => !seen.has(s.video_id));
             if (fresh.length) setResults(prev => [...prev, ...fresh]);
           }
         }
+        // If rows.length >= 5 the ytPromise is still running in the background —
+        // it will insert any missing sets into the DB even though we don't wait for
+        // or display the result (the next search will find them in the catalog).
       } finally {
         setSearching(false);
       }
