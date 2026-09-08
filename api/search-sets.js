@@ -137,7 +137,9 @@ async function sbInsert(rows) {
     },
     body: JSON.stringify(payload),
   });
-  if (!res.ok) console.error('search-sets insert failed:', res.status, await res.text().catch(() => ''));
+  const body = await res.text().catch(() => '');
+  if (!res.ok) console.error('search-sets insert failed:', res.status, body);
+  return { ok: res.ok, status: res.status, body };
 }
 
 export default async function handler(req, res) {
@@ -197,8 +199,9 @@ export default async function handler(req, res) {
         };
       });
 
+    let insertResult = null;
     if (newSets.length) {
-      await sbInsert(newSets);
+      insertResult = await sbInsert(newSets);
       // Mine the freshly-inserted sets' comments for IDs so ID Radar is populated
       // the moment they show up in search (mirrors the search-ingest cron behavior).
       // Fire-and-forget-ish: awaited but never throws, and capped so it stays under maxDuration.
@@ -224,5 +227,5 @@ export default async function handler(req, res) {
       };
     });
 
-  return res.json({ sets: allSets, inserted: newSets.length });
+  return res.json({ sets: allSets, inserted: newSets.length, _insertResult: insertResult });
 }
