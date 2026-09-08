@@ -25,7 +25,7 @@ function parseComment(text) {
     const ts = line.match(TS_RE);
     if (!ts) continue;
     const t_sec = (parseInt(ts[1] || 0) * 3600) + (parseInt(ts[2]) * 60) + parseInt(ts[3]);
-    if (t_sec < 30) continue; // skip intro / 0:00
+    // t_sec === 0 is valid — legitimate tracklists start at 00:00
     let after = line.slice(line.indexOf(ts[0]) + ts[0].length).replace(/^[\s.·•\-–—)\]|:>»]+/, '').trim();
     after = after.replace(/\s+/g, ' ').slice(0, 120);
     if (after.length < 2 || !/[a-z]/i.test(after)) continue;
