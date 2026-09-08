@@ -2,7 +2,7 @@
 // Real-time YouTube search → filter → insert new sets → return results
 // Fires only when the local DB search returns few/no results.
 
-import { parseVenue, parseCity, cleanArtist } from './_region.js';
+import { parseVenue, parseCity, cleanArtist, classifyRegion } from './_region.js';
 import { mineAndStore } from './_mine.js';
 
 export const maxDuration = 20;
@@ -126,6 +126,7 @@ async function sbInsert(rows) {
     // MISC rows persist venue=null (no fake venue for channel/show uploads).
     venue: r.festival_id === 'discovered' ? (venueFromTitle(r.title) || cleanArtist(r.title)) : null,
     city: r.festival_id === 'misc' ? null : (parseCity(r.title) || null),
+    region: classifyRegion(`${r.title || ''} ${r.festival_name || ''}`),
   }));
   const res = await fetch(`${SUPABASE_URL}/rest/v1/sets`, {
     method: 'POST',
