@@ -101,7 +101,11 @@ export default function App() {
   }
 
   // ID Tracker page
-  if (isIdsPage()) return <IdsPage />;
+  if (isIdsPage()) {
+    document.documentElement.style.overflow = 'auto';
+    document.body.style.overflow = 'auto';
+    return <IdsPage />;
+  }
 
   // Stays/ARC page
   if (isStaysArc()) return <StaysArc />;
