@@ -102,6 +102,17 @@ const CHANNELS = [
   { channelId: 'UCQdCIrTpkhEH5Z8KPsn7NvQ', festival_id: 'mixmag-lab',     festival_name: 'Mixmag Lab',            city: 'London',           vibe: 'europe' },
   { channelId: 'UCcsRjloqh4gIHCCnDZtoniQ', festival_id: 'crimson-kid',    festival_name: "Crimson Kid Studio's",  city: '',                 vibe: 'worldwide' },
   { channelId: 'UCveda-9Yg2L9SS5NbdNBNpg', festival_id: 'stillmoving',    festival_name: 'StillMoving',           city: 'Netherlands',      vibe: 'europe' },
+  // Underground tech-house / Solid Grooves circuit added 2026-09-10
+  { channelId: 'UCump5lf15GQjl643J7VwPAw', festival_id: 'fuse-london',    festival_name: 'FUSE London',           city: 'London',           vibe: 'europe' },
+  { channelId: 'UCA_ciEAIe5hjq8lSBHVebig', festival_id: 'solid-grooves',  festival_name: 'Solid Grooves RAW',     city: 'London',           vibe: 'europe' },
+  { channelId: 'UCYZqGVWsupt9MS1lc1ZdwGA', festival_id: 'xoyo',           festival_name: 'XOYO London',           city: 'London',           vibe: 'europe' },
+  { channelId: 'UC8eXqFK48M3bBSmMO1FRgIA', festival_id: 'drumcode',       festival_name: 'Drumcode',              city: 'Worldwide',        vibe: 'worldwide' },
+  { channelId: 'UCi89poKJgpJwL-23OZBnHDQ', festival_id: 'east-end-dubs',  festival_name: 'East End Dubs',         city: 'London',           vibe: 'europe' },
+  { channelId: 'UCVCDyug97fCruUeK250eTCg', festival_id: 'hot-since-82',   festival_name: 'Hot Since 82',          city: 'Leeds',            vibe: 'europe' },
+  { channelId: 'UCoaha48kxAZ4--gboIVXgoQ', festival_id: 'michael-bibi',   festival_name: 'Michael Bibi',          city: 'London',           vibe: 'europe' },
+  { channelId: 'UC-VLsQ7ZAgHGKNuFe_brN_Q', festival_id: 'pawsa',          festival_name: 'PAWSA',                 city: 'Barcelona',        vibe: 'europe' },
+  { channelId: 'UCqeV7Tv3jJHeBQlkzYXkj_A', festival_id: 'dennis-cruz',    festival_name: 'Dennis Cruz',           city: 'Barcelona',        vibe: 'europe' },
+  { channelId: 'UCS3qvota6dcOg-LJFmBiGDQ', festival_id: 'rossi',          festival_name: 'Rossi.',                city: 'London',           vibe: 'europe' },
 ];
 
 const MIN_SECS = 45 * 60;

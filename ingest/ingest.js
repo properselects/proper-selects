@@ -39,6 +39,17 @@ const CHANNELS = [
   { channelId: 'UCfyFtw01Nf973V9gggJVi_Q', festival_id: 'unum',             festival_name: 'UNUM Festival',      city: 'Shëngjin',    vibe: 'europe' },
   // Miami venues added 2026-08-14
   { channelId: 'UCD2yZhDoieQ4TP5xKeRft-g', festival_id: 'club-space-miami', festival_name: 'Club Space Miami',   city: 'Miami',       vibe: 'americas' },
+  // Underground tech-house / Solid Grooves circuit added 2026-09-10
+  { channelId: 'UCump5lf15GQjl643J7VwPAw', festival_id: 'fuse-london',     festival_name: 'FUSE London',        city: 'London',      vibe: 'europe' },
+  { channelId: 'UCA_ciEAIe5hjq8lSBHVebig', festival_id: 'solid-grooves',   festival_name: 'Solid Grooves RAW',  city: 'London',      vibe: 'europe' },
+  { channelId: 'UCYZqGVWsupt9MS1lc1ZdwGA', festival_id: 'xoyo',            festival_name: 'XOYO London',        city: 'London',      vibe: 'europe' },
+  { channelId: 'UC8eXqFK48M3bBSmMO1FRgIA', festival_id: 'drumcode',        festival_name: 'Drumcode',           city: 'Worldwide',   vibe: 'worldwide' },
+  { channelId: 'UCi89poKJgpJwL-23OZBnHDQ', festival_id: 'east-end-dubs',   festival_name: 'East End Dubs',      city: 'London',      vibe: 'europe' },
+  { channelId: 'UCVCDyug97fCruUeK250eTCg', festival_id: 'hot-since-82',    festival_name: 'Hot Since 82',       city: 'Leeds',       vibe: 'europe' },
+  { channelId: 'UCoaha48kxAZ4--gboIVXgoQ', festival_id: 'michael-bibi',    festival_name: 'Michael Bibi',       city: 'London',      vibe: 'europe' },
+  { channelId: 'UC-VLsQ7ZAgHGKNuFe_brN_Q', festival_id: 'pawsa',           festival_name: 'PAWSA',              city: 'Barcelona',   vibe: 'europe' },
+  { channelId: 'UCqeV7Tv3jJHeBQlkzYXkj_A', festival_id: 'dennis-cruz',     festival_name: 'Dennis Cruz',        city: 'Barcelona',   vibe: 'europe' },
+  { channelId: 'UCS3qvota6dcOg-LJFmBiGDQ', festival_id: 'rossi',           festival_name: 'Rossi.',             city: 'London',      vibe: 'europe' },
 ];
 
 const MIN_DURATION_SECONDS = 45 * 60; // 45 minutes minimum for a full set
