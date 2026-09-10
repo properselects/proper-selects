@@ -3,7 +3,8 @@
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/l/:slug", "destination": "/index.html" },
-    { "source": "/stays/:path*", "destination": "/index.html" }
+    { "source": "/stays/:path*", "destination": "/index.html" },
+    { "source": "/ids", "destination": "/index.html" }
   ],
   "headers": [
     {
