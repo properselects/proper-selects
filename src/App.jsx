@@ -3,7 +3,7 @@ import { TABS } from './data/stages.js';
 import { supabaseHeaders, SUPABASE_URL } from './lib/supabase.js';
 import LandingGate from './components/LandingGate.jsx';
 import RadarTab from './components/RadarTab.jsx';
-import VaultTab from './components/VaultTab.jsx';
+import IdsVaultTab from './components/IdsPage.jsx';
 import TodayTab from './components/TodayTab.jsx';
 import AtlasTab from './components/AtlasTab.jsx';
 import SubscribeModal from './components/SubscribeModal.jsx';
@@ -268,8 +268,8 @@ export default function App() {
             onPlayingChange={setIsPlaying}
           />
         </div>
-        <div className="tab-scroll" style={{ display: tab === 'grid' ? 'flex' : 'none', position: 'absolute', inset: 0, background: '#0a0a0e', flexDirection: 'column', overflowY: 'auto', zIndex: 5 }}>
-          <VaultTab lineup={lineup} onLineupChange={setLineup} onNowPlaying={setNowPlaying} />
+        <div className="tab-scroll" style={{ display: tab === 'grid' ? 'flex' : 'none', position: 'absolute', inset: 0, background: '#07080d', flexDirection: 'column', overflowY: 'auto', zIndex: 5 }}>
+          <IdsVaultTab embedded />
         </div>
         {/* Atlas: position absolute so Leaflet map gets real pixel dimensions */}
         <div style={{ display: tab === 'atlas' ? 'block' : 'none', position: 'absolute', inset: 0, background: '#06080c', zIndex: 5 }}>

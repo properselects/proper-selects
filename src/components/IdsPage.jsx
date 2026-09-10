@@ -242,7 +242,7 @@ function TrackRow({ track, onClick }) {
 
 // ── IdsPage ────────────────────────────────────────────────────────────────
 
-export default function IdsPage() {
+export default function IdsPage({ embedded = false }) {
   const [tracks, setTracks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
@@ -272,7 +272,7 @@ export default function IdsPage() {
   });
 
   return (
-    <div style={{ position: 'fixed', inset: 0, background: '#07080d', color: '#edeae2', fontFamily: "'Helvetica Neue', Arial, sans-serif", overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
+    <div style={embedded ? { background: '#07080d', color: '#edeae2', fontFamily: "'Helvetica Neue', Arial, sans-serif", flex: 1, minHeight: 0 } : { position: 'fixed', inset: 0, background: '#07080d', color: '#edeae2', fontFamily: "'Helvetica Neue', Arial, sans-serif", overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
 
       {selected && (
         <TrackDetail
