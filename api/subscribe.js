@@ -240,6 +240,23 @@ export default async function handler(req, res) {
 
 
 
+  // GET /api/subscribe?unsubscribe=<token> — unsubscribe flow (merged from unsubscribe.js to stay under 12-fn cap)
+  if (req.method === 'GET' && req.query.unsubscribe) {
+    const token = req.query.unsubscribe;
+    if (!/^[0-9a-f-]{36}$/i.test(token)) return res.status(400).send('Invalid link.');
+    await fetch(`${SUPABASE_URL}/rest/v1/subscribers?id=eq.${encodeURIComponent(token)}`, {
+      method: 'PATCH',
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify({ unsubscribed_at: new Date().toISOString() }),
+    });
+    res.setHeader('Content-Type', 'text/html');
+    return res.status(200).send(`<!doctype html><html><head><meta charset="UTF-8"><title>Unsubscribed — Proper Selects</title>
+      <style>body{margin:0;background:#0a0a0e;color:#EDEAE2;font-family:'Helvetica Neue',Arial,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:24px;}</style></head>
+      <body><div><div style="font-weight:800;letter-spacing:.16em;font-size:13px;opacity:.6;margin-bottom:16px;">PROPER SELECTS</div>
+      <h2 style="font-size:22px;font-weight:700;margin:0 0 12px">You've been unsubscribed.</h2>
+      <p style="opacity:.5;font-size:14px;margin:0">You won't receive any more emails from us.</p></div></body></html>`);
+  }
+
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   // Rate limit: 5 requests per hour per IP

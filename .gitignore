@@ -9,3 +9,4 @@ dist/
 .env.dev
 .env.service
 .env.prod
+.vercel

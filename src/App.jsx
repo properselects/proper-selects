@@ -17,6 +17,12 @@ import StaysSeismic from './components/StaysSeismic.jsx';
 import StaysB2B from './components/StaysB2B.jsx';
 import StaysVIP from './components/StaysVIP.jsx';
 import StayDealCard from './components/StayDealCard.jsx';
+import IdsPage from './components/IdsPage.jsx';
+
+// Detect /ids page
+function isIdsPage() {
+  return window.location.pathname.replace(/\/$/, '') === '/ids';
+}
 
 // Detect /l/{slug} share pages
 function getShareSlug() {
@@ -93,6 +99,9 @@ export default function App() {
       try { localStorage.setItem('psLineupTipSeen', '1'); } catch {}
     }
   }
+
+  // ID Tracker page
+  if (isIdsPage()) return <IdsPage />;
 
   // Stays/ARC page
   if (isStaysArc()) return <StaysArc />;
