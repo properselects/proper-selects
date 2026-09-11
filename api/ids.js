@@ -4,6 +4,32 @@
 
 export const maxDuration = 10;
 
+// Filter out noise titles — comment reactions, question marks, generic labels
+const NOISE_PATTERNS = [
+  /^what a tune[!.]*/i,
+  /^track\s*\?+$/i,
+  /^track\s*id\s*\??$/i,
+  /^id\s*\??$/i,
+  /^\?+$/,
+  /^banger[!.]*/i,
+  /^fire[!.]*/i,
+  /^omg[!.]*/i,
+  /^wow[!.]*/i,
+  /^anyone(\s+know)?[!.?]*/i,
+  /^what('?s)?\s+this[!.?]*/i,
+  /^name[!.?]*/i,
+  /^unknown[!.?]*/i,
+  /^song\s*\??$/i,
+  /^music[!.?]*/i,
+  /^please\s+id/i,
+  /^\s*-\s*$/,
+];
+
+function isNoise(title) {
+  if (!title || title.trim().length < 2) return true;
+  return NOISE_PATTERNS.some(p => p.test(title.trim()));
+}
+
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
@@ -34,7 +60,8 @@ export default async function handler(req, res) {
     { headers: H(SUPABASE_KEY) }
   );
   if (!r.ok) return res.status(500).json({ error: 'db error', detail: await r.text() });
-  const ids = await r.json();
+  const raw = await r.json();
+  const ids = raw.filter(t => !isNoise(t.title));
   res.setHeader('Cache-Control', 'public, s-maxage=300');
   return res.json({ count: ids.length, ids });
 }
