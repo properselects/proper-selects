@@ -191,6 +191,35 @@ function TrackDetail({ track, appearances, onClose }) {
   );
 }
 
+// ── Section ────────────────────────────────────────────────────────────────
+
+function Section({ label, sublabel, accent, collapsible = false, defaultCollapsed = false, children }) {
+  const [collapsed, setCollapsed] = React.useState(defaultCollapsed);
+  return (
+    <div style={{ marginTop: 8 }}>
+      <div
+        onClick={collapsible ? () => setCollapsed(c => !c) : undefined}
+        style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '12px 16px 10px',
+          borderBottom: `1px solid ${accent}30`,
+          cursor: collapsible ? 'pointer' : 'default',
+          userSelect: 'none',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontSize: 13, fontWeight: 800, color: accent, letterSpacing: '-.01em' }}>{label}</span>
+          <span style={{ fontSize: 10, color: 'rgba(237,234,226,.28)', letterSpacing: '.06em', textTransform: 'uppercase' }}>{sublabel}</span>
+        </div>
+        {collapsible && (
+          <span style={{ fontSize: 11, color: 'rgba(237,234,226,.3)', transform: collapsed ? 'rotate(-90deg)' : 'rotate(0deg)', transition: 'transform .2s' }}>▾</span>
+        )}
+      </div>
+      {!collapsed && <div>{children}</div>}
+    </div>
+  );
+}
+
 // ── TrackRow ───────────────────────────────────────────────────────────────
 
 function TrackRow({ track, onClick }) {
@@ -271,6 +300,11 @@ export default function IdsPage({ embedded = false }) {
     return true;
   });
 
+  // Heat tiers
+  const hot     = filtered.filter(t => t.set_count >= 5);
+  const rising  = filtered.filter(t => t.set_count >= 3 && t.set_count < 5);
+  const spotted = filtered.filter(t => t.set_count === 2);
+
   return (
     <div style={embedded ? { background: '#07080d', color: '#edeae2', fontFamily: "'Helvetica Neue', Arial, sans-serif", flex: 1, minHeight: 0 } : { position: 'fixed', inset: 0, background: '#07080d', color: '#edeae2', fontFamily: "'Helvetica Neue', Arial, sans-serif", overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
 
@@ -286,7 +320,7 @@ export default function IdsPage({ embedded = false }) {
       <div style={{ padding: '22px 16px 0', background: 'linear-gradient(180deg, rgba(167,139,250,.07) 0%, transparent 100%)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 6 }}>
           <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: '#a78bfa', boxShadow: '0 0 8px #a78bfa' }} />
-          <span style={{ fontSize: 10, letterSpacing: '.18em', textTransform: 'uppercase', color: 'rgba(237,234,226,.38)', fontWeight: 600 }}>ID Tracker</span>
+          <span style={{ fontSize: 10, letterSpacing: '.18em', textTransform: 'uppercase', color: 'rgba(237,234,226,.38)', fontWeight: 600 }}>ID Vault</span>
         </div>
         <h1 style={{ fontSize: 'clamp(26px,7vw,38px)', fontWeight: 800, letterSpacing: '-.03em', lineHeight: 1.05, margin: '0 0 6px' }}>
           Tracks in the mix
@@ -297,7 +331,7 @@ export default function IdsPage({ embedded = false }) {
 
         {/* filter pills */}
         <div style={{ display: 'flex', gap: 8, paddingBottom: 14, borderBottom: '1px solid rgba(255,255,255,.06)' }}>
-          {[['all','All'], ['named','Named'], ['id','Unreleased ID']].map(([v, label]) => (
+          {[['all','All'], ['named','Named'], ['id','Unreleased']].map(([v, label]) => (
             <button
               key={v}
               onClick={() => setFilter(v)}
@@ -314,28 +348,41 @@ export default function IdsPage({ embedded = false }) {
         </div>
       </div>
 
-      {!loading && filtered.length > 0 && (
-        <div style={{ padding: '10px 16px 4px', fontSize: 11, color: 'rgba(237,234,226,.22)', letterSpacing: '.04em' }}>
-          {filtered.length} tracks
-        </div>
+      {loading && (
+        <div style={{ padding: '80px 16px', textAlign: 'center', color: 'rgba(237,234,226,.2)', fontSize: 13 }}>Loading…</div>
       )}
 
-      <div>
-        {loading && (
-          <div style={{ padding: '80px 16px', textAlign: 'center', color: 'rgba(237,234,226,.2)', fontSize: 13 }}>Loading…</div>
-        )}
-        {!loading && filtered.length === 0 && (
-          <div style={{ padding: '80px 16px', textAlign: 'center', color: 'rgba(237,234,226,.2)', fontSize: 13 }}>No tracks found.</div>
-        )}
-        {filtered.map(t => (
-          <TrackRow key={t.id} track={t} onClick={selectTrack} />
-        ))}
-      </div>
+      {!loading && filtered.length === 0 && (
+        <div style={{ padding: '80px 16px', textAlign: 'center', color: 'rgba(237,234,226,.2)', fontSize: 13 }}>No tracks found.</div>
+      )}
 
       {!loading && filtered.length > 0 && (
-        <div style={{ padding: '24px 16px 60px', textAlign: 'center', fontSize: 10, color: 'rgba(237,234,226,.12)', letterSpacing: '.1em' }}>
-          PROPER SELECTS
-        </div>
+        <>
+          {/* Heating Up — 5+ sets */}
+          {hot.length > 0 && (
+            <Section label="🔥 Heating Up" sublabel={`${hot.length} tracks · 5+ sets`} accent="#f472b6">
+              {hot.map(t => <TrackRow key={t.id} track={t} onClick={selectTrack} />)}
+            </Section>
+          )}
+
+          {/* Rising — 3–4 sets */}
+          {rising.length > 0 && (
+            <Section label="Rising" sublabel={`${rising.length} tracks · 3–4 sets`} accent="#60a5fa">
+              {rising.map(t => <TrackRow key={t.id} track={t} onClick={selectTrack} />)}
+            </Section>
+          )}
+
+          {/* Spotted — 2 sets, collapsed */}
+          {spotted.length > 0 && (
+            <Section label="Spotted" sublabel={`${spotted.length} tracks · 2 sets`} accent="rgba(237,234,226,.3)" collapsible defaultCollapsed>
+              {spotted.map(t => <TrackRow key={t.id} track={t} onClick={selectTrack} />)}
+            </Section>
+          )}
+
+          <div style={{ padding: '24px 16px 60px', textAlign: 'center', fontSize: 10, color: 'rgba(237,234,226,.12)', letterSpacing: '.1em' }}>
+            PROPER SELECTS
+          </div>
+        </>
       )}
     </div>
   );
